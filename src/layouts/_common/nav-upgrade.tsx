@@ -60,7 +60,7 @@ export default function NavUpgrade() {
               borderBottomLeftRadius: 2,
             }}
           >
-            {user?.role_id === 0 ? 'Nhân viên' : "Quản lý"}
+            {user?.role_id === 2 ? 'Nhân viên' : "Quản lý"}
           </Label>
         </Box>
 

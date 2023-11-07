@@ -23,11 +23,9 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import IconButton from '@mui/material/IconButton';
 import Iconify from 'src/components/iconify';
 // _mock
-import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
 import { RouterLink } from 'src/routes/components';
 import Scrollbar from 'src/components/scrollbar';
-//
-import ServiceTableRow from '../service-table-row';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -42,7 +40,8 @@ import { useGetServices } from 'src/api/product';
 import { useRouter } from 'src/routes/hooks';
 // components
 import { useSettingsContext } from 'src/components/settings';
-
+//
+import ServiceTableRow from '../service-table-row';
 // import ProductTableToolbar from '../product-table-toolbar';
 // import ProductTableFiltersResult from '../product-table-filters-result';
 
@@ -140,7 +139,7 @@ export default function TypeRoomListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      // router.push(paths.dashboard.service.details(id));
+      router.push(paths.dashboard.service.edit(id));
     },
     [router]
   );
