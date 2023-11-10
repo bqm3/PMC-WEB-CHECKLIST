@@ -1,10 +1,6 @@
 import * as Yup from 'yup';
 
 import FormProvider, {
-  RHFAutocomplete,
-  RHFEditor,
-  RHFMultiCheckbox,
-  RHFMultiSelect,
   RHFSelect,
   RHFSwitch,
   RHFTextField,
@@ -13,25 +9,15 @@ import FormProvider, {
 import { IService, ITypeRoom } from 'src/types/room';
 // _mock
 import {
-  PRODUCT_CATEGORY_GROUP_OPTIONS,
-  PRODUCT_COLOR_NAME_OPTIONS,
-  PRODUCT_GENDER_OPTIONS,
-  PRODUCT_SIZE_OPTIONS,
   _roles,
   _tags,
+  STATUS_STATUS_OPTIONS
 } from 'src/_mock';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Unstable_Grid2';
-// types
-import { IProductItem } from 'src/types/product';
-import InputAdornment from '@mui/material/InputAdornment';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import { MenuItem } from '@mui/material';
@@ -74,7 +60,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   }, [typeservices]);
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Tên dịch vụ phải có'),
+    name: Yup.string().required('Name is required'),
   });
 
   const defaultValues = useMemo(
@@ -82,6 +68,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       name: currentProduct?.name || '',
       unit: currentProduct?.unit || '',
       price: currentProduct?.price || 0,
+      status: currentProduct?.status || 1,
       type_service_id: currentProduct?.type_service_id || null,
     }),
     [currentProduct]
@@ -137,7 +124,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Tên loại dịch vụ...
+            Name, unit, price...
           </Typography>
         </Grid>
       )}
@@ -147,19 +134,26 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField name="name" label="Tên dịch vụ" />
-            <RHFTextField name="unit" label="Đơn vị" />
-            <RHFTextField name="price" label="Giá tiền" />
+            <RHFTextField name="name" label="Name" />
+            <RHFTextField name="unit" label="Unit" />
+            <RHFTextField name="price" label="Price" />
+            <RHFSelect fullWidth name="status" label="Status" InputLabelProps={{ shrink: true }} PaperPropsSx={{ textTransform: 'capitalize' }}>
+              {STATUS_STATUS_OPTIONS?.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </RHFSelect>
 
             <RHFSelect
               fullWidth
               name="type_service_id"
-              label="Loại dịch vụ"
+              label="Type Service"
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
             >
-              {typeservices.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
+              {tableDataTypeRoom?.map((option) => (
+                <MenuItem key={option?.id} value={option?.id}>
                   {option.name}
                 </MenuItem>
               ))}

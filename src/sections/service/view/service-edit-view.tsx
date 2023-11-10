@@ -26,14 +26,14 @@ export default function ServiceEditView({ id }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={id === 'undefined' ? 'Tạo mới' : 'Cập nhật'}
+        heading='Update'
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'Dịch vụ',
+            name: 'Service',
             href: paths.dashboard.service.root,
           },
-          { name: currentProduct.name ? currentProduct.name : 'Tạo mới dịch vụ' },
+          { name: currentProduct?.name },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

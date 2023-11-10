@@ -72,9 +72,9 @@ export default function OrderBookingEditAddress() {
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Thông tin khách hàng
+              Information Customer
             </Typography>
-            Họ tên: {values?.fullname}
+            Fullname: {values?.fullname}
             <br />
             Email: {values?.email}
             <br />
@@ -86,14 +86,14 @@ export default function OrderBookingEditAddress() {
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Ngày tạo đơn
+              Create Date Order Booking
             </Typography>
             {fDate(values?.createdDate)}
           </Stack>
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Ghi chú
+              Note
             </Typography>
             {values?.note === '' ? 'Không có ghi chú' : values?.note}
           </Stack>

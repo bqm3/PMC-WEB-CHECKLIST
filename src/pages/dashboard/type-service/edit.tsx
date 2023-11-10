@@ -14,7 +14,7 @@ export default function TypeServiceEditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Cập nhật loại dịch vụ</title>
+        <title> Dashboard: Update service type</title>
       </Helmet>
 
       <TypeServiceEditView id={`${id}`} />

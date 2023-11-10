@@ -44,7 +44,7 @@ export default function TypeRoomTableRow({
   onViewRow,
 }: Props) {
   const {
-    name, unit, price, type_service, type_service_id
+    name, unit, price, type_service, type_service_id, status
   } = row;
 
   const confirm = useBoolean();
@@ -104,11 +104,16 @@ export default function TypeRoomTableRow({
           />
           {!!available && available} {inventoryType}
         </TableCell> */}
+        <TableCell>
+          <Label variant="soft" color={(status === 1 && 'success') || 'warning'}>
+            {status === 1 ? 'Active' : 'Rejected'}
+          </Label>
+        </TableCell>
 
         <TableCell>{fCurrency(price)}</TableCell>
 
         <TableCell>
-          <Label variant="soft" color={(type_service_id === 1 && 'info') || 'default'}>
+          <Label variant="soft" color={(type_service_id === 1 && 'info') || (type_service_id === 2 && 'primary') || (type_service_id === 3 && 'secondary') || 'default'}>
             {type_service}
           </Label>
         </TableCell>

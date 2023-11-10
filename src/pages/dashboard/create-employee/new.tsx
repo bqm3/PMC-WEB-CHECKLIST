@@ -8,7 +8,7 @@ export default function UserCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo mới nhân viên</title>
+        <title> Dashboard: Create New Employee</title>
       </Helmet>
 
       <UserCreateView />

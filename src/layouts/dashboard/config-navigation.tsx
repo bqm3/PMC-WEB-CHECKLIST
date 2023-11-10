@@ -103,59 +103,59 @@ export function useNavData() {
           items: [
             // TYPE ROOM
             {
-              title: t('Loại Phòng'),
+              title: t('type room'),
               path: paths.dashboard.typeRoom.root,
               icon: ICONS.menuItem,
               children: [
-                { title: t('Danh sách'), path: paths.dashboard.typeRoom.root },
-                { title: t('Tạo mới'), path: paths.dashboard.typeRoom.new },
+                { title: t('list'), path: paths.dashboard.typeRoom.root },
+                { title: t('create'), path: paths.dashboard.typeRoom.new },
               ],
             },
             // TYPE SERVICE
             {
-              title: t('Loại Dịch Vụ'),
+              title: t('type service'),
               path: paths.dashboard.typeService.root,
               icon: ICONS.menuItem,
               children: [
-                { title: t('Danh sách'), path: paths.dashboard.typeService.root },
-                { title: t('Tạo mới'), path: paths.dashboard.typeService.new },
+                { title: t('list'), path: paths.dashboard.typeService.root },
+                { title: t('create'), path: paths.dashboard.typeService.new },
               ],
             },
             // SERVICE
             {
-              title: t('Dịch Vụ'),
+              title: t('service'),
               path: paths.dashboard.service.root,
               icon: ICONS.label,
               children: [
-                { title: t('Danh sách'), path: paths.dashboard.service.root },
-                { title: t('Tạo mới'), path: paths.dashboard.service.new },
+                { title: t('list'), path: paths.dashboard.service.root },
+                { title: t('create'), path: paths.dashboard.service.new },
               ],
             },
             // ROOM
             {
-              title: t('Phòng'),
+              title: t('room'),
               path: paths.dashboard.room.root,
               icon: ICONS.job,
               children: [
-                { title: t('Danh sách'), path: paths.dashboard.room.root },
-                { title: t('Tạo mới'), path: paths.dashboard.room.new },
+                { title: t('list'), path: paths.dashboard.room.root },
+                { title: t('create'), path: paths.dashboard.room.new },
               ],
             },
             // ORDER
             {
-              title: t('Đặt phòng'),
+              title: t('booking'),
               path: paths.dashboard.orderBooking.root,
               icon: ICONS.invoice,
               children: [
-                { title: t('Danh sách'), path: paths.dashboard.orderBooking.root },
+                { title: t('list'), path: paths.dashboard.orderBooking.root },
               ],
             },
             {
-              title: t('Cá nhân'),
+              title: t('User'),
               path: paths.dashboard.accountEmployee.root,
               icon: ICONS.user,
               children: [
-                { title: t('Cá nhân'), path: paths.dashboard.accountEmployee.root },
+                { title: t('Profile'), path: paths.dashboard.accountEmployee.root },
               ],
             }
           ],
@@ -165,12 +165,12 @@ export function useNavData() {
       // Conditionally add "Tạo tài khoản" tab if user's role_id is 1
       if (user?.role_id === 1) {
         navigationData[1].items.push({
-          title: t('Tạo tài khoản'),
+          title: t('Create Account'),
           path: paths.dashboard.createEmployee.root,
           icon: ICONS.user,
           children: [
             { title: t('create'), path: paths.dashboard.createEmployee.root },
-            { title: t('List'), path: paths.dashboard.createEmployee.list }
+            { title: t('list'), path: paths.dashboard.createEmployee.list }
           ],
         });
       }

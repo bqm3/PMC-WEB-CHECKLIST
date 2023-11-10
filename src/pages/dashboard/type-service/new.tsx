@@ -8,7 +8,7 @@ export default function TypeServiceCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo mới loại dịch vụ</title>
+        <title> Dashboard: Create a new service type</title>
       </Helmet>
 
       <TypeServiceCreateView />

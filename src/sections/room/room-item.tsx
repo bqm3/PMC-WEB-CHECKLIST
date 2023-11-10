@@ -59,14 +59,6 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
     createdAt,
     priceSale,
   } = room;
-  // const shortLabel = shortDateLabel(available.startDate, available.endDate);
-  // const imagedata = window.URL.createObjectURL(image);
-  // console.log('imagedata', imagedata)
-  const [arrImages, setArrImages] = useState<IRoomImage[]>([]);
-
-  useEffect(() => {
-    setArrImages(roomImages);
-  }, [roomImages]);
 
   const renderRating = (
     <Stack
@@ -131,7 +123,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
     >
       {
         (label === 1 && 'Excellent') ||
-        (label === 2 && 'Very good') ||
+        (label === 2 && 'Very Good') ||
         (label === 3 && 'Exceptional') ||
         'default'
       }
@@ -146,7 +138,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
         p: (theme) => theme.spacing(1, 1, 0, 1),
       }}
     >
-      {arrImages && (
+      {roomImages && (
         <>
           <Stack flexGrow={1} sx={{ position: 'relative' }}>
             {renderPrice}
@@ -159,14 +151,14 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
           </Stack>
           <Stack spacing={0.5}>
             <Image
-              alt={`${arrImages[0]?.name}`}
-              src={`${arrImages[0]?.name}`}
+              alt={`${roomImages[0]?.name}`}
+              src={`${roomImages[0]?.name}`}
               ratio="1/1"
               sx={{ borderRadius: 1, width: 80 }}
             />
             <Image
-              alt={`${arrImages[1]?.name}`}
-              src={`${arrImages[1]?.name}`}
+              alt={`${roomImages[1]?.name}`}
+              src={`${roomImages[1]?.name}`}
               ratio="1/1"
               sx={{ borderRadius: 1, width: 80 }}
             />
@@ -215,7 +207,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
 
       {[
         {
-          label: `${totalRating} Đánh giá`,
+          label: `${totalRating} Reviews`,
           icon: <Iconify icon="ic:baseline-rate-review" sx={{ color: 'error.main' }} />,
         },
         // {
@@ -223,7 +215,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
         //   icon: <Iconify icon="solar:clock-circle-bold" sx={{ color: 'info.main' }} />,
         // },
         {
-          label: `${numberBed} Giường`,
+          label: `${numberBed} Bed`,
           icon: <Iconify icon="ic:round-single-bed" sx={{ color: 'primary.main' }} />,
         },
       ].map((item) => (
@@ -278,7 +270,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
           Edit
         </MenuItem>
 
-        {/* <MenuItem
+        <MenuItem
           onClick={() => {
             popover.onClose();
             onDelete();
@@ -287,7 +279,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
-        </MenuItem> */}
+        </MenuItem>
       </CustomPopover>
     </>
   );

@@ -73,9 +73,6 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
     }
   }, [roomImages]);
 
-
-  console.log('slides', images, roomImages)
-
   const {
     selected: selectedImage,
     open: openLightbox,
@@ -171,7 +168,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
         <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'subtitle2' }}>
           <Iconify icon="ic:baseline-price-change" color="red" />
           <Box component="span" sx={{ typography: 'body2', color: 'text.secondary' }}>
-            Giá tiền
+            Price
           </Box>
           {!!price && (
             <Box
@@ -192,10 +189,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
           <Link sx={{ color: 'text.secondary' }}>({totalRating} reviews)</Link>
         </Stack>
 
-        {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'body2' }}>
-          <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }} />
-          {title}
-        </Stack> */}
+
       </Stack>
     </>
   );
@@ -211,22 +205,22 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
     >
       {[
         {
-          label: 'Tổng lượt đánh giá',
+          label: 'Total Ratings',
           value: `${totalRating}`,
           icon: <Iconify icon="ic:round-star-rate" />,
         },
         {
-          label: 'Số điện thoại liên hệ',
+          label: 'Phone Number Contact',
           value: '365-374-4961',
           icon: <Iconify icon="solar:phone-bold" />,
         },
         {
-          label: 'Tổng lượt nhận xét',
+          label: 'Total Reviews',
           value: `${totalReview}`,
           icon: <Iconify icon="ic:baseline-rate-review" />,
         },
         {
-          label: 'Thông tin liên hệ',
+          label: 'Information',
           value: 'Nhân viên tư vấn',
           icon: <Iconify icon="solar:user-rounded-bold" />,
         },

@@ -55,11 +55,11 @@ import InvoiceTableFiltersResult from '../order-booking-table-filters-result';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'invoiceNumber', label: 'Khách hàng' },
-  { id: 'createdDate', label: 'Ngày tạo' },
-  { id: 'price', label: 'Tổng tiền' },
-  { id: 'sent', label: 'Số lượng phòng đặt', align: 'center' },
-  { id: 'status', label: 'Trạng thái' },
+  { id: 'invoiceNumber', label: 'Customer' },
+  { id: 'createdDate', label: 'Create Date' },
+  { id: 'price', label: 'Total Payment' },
+  { id: 'sent', label: 'Count Room', align: 'center' },
+  { id: 'status', label: 'Status' },
   { id: '' },
 ];
 
@@ -224,14 +224,14 @@ export default function OrderBookingListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Danh sách đặt phòng"
+          heading="List Booking"
           links={[
             {
               name: 'Dashboard',
               href: paths.dashboard.root
             },
             {
-              name: 'Đơn đặt phòng',
+              name: 'Order Booking',
               href: paths.dashboard.orderBooking.root,
             },
             {

@@ -28,6 +28,7 @@ export type IService = {
   name: string;
   unit: string;
   price: number;
+  status: number;
   type_service_id: number | null;
   type_service: string;
 };

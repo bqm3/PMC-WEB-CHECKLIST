@@ -94,7 +94,7 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
       <Grid xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
         <Typography variant="subtitle2">Have a Question?</Typography>
 
-        <Typography variant="body2">minh.dev@gmail.com</Typography>
+        <Typography variant="body2">minh.dev.30@gmail.com</Typography>
       </Grid>
     </Grid>
   );
@@ -107,13 +107,13 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
             <TableRow>
               <TableCell width={40}>#</TableCell>
 
-              <TableCell sx={{ typography: 'subtitle2' }}>Tên phòng</TableCell>
+              <TableCell sx={{ typography: 'subtitle2' }}>Name Room</TableCell>
 
-              <TableCell>Số lượng</TableCell>
+              <TableCell>Count</TableCell>
 
-              <TableCell align="right">Giá tiền phòng</TableCell>
+              <TableCell align="right">Price</TableCell>
 
-              <TableCell align="right">Tổng tiền</TableCell>
+              <TableCell align="right">Total</TableCell>
             </TableRow>
           </TableHead>
 
@@ -134,7 +134,7 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
 
                 <TableCell>{row.dateCount}</TableCell>
 
-                <TableCell align="right">{fCurrency(row.total)} /ngày</TableCell>
+                <TableCell align="right">{fCurrency(row.total)} /day</TableCell>
 
                 <TableCell align="right">{fCurrency((Number(row.total)) * Number(row.dateCount))}</TableCell>
               </TableRow>
@@ -196,9 +196,9 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Thông tin khách hàng
+              Information Customer
             </Typography>
-            Họ tên: {order?.fullname}
+            Fullname: {order?.fullname}
             <br />
             Email: {order?.email}
             <br />
@@ -208,25 +208,25 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Thông tin nhân viên
+              Information Employee
             </Typography>
-            Họ tên: {order?.emp_fullname}
+            FullName: {order?.emp_fullname}
             <br />
             Email: {order?.emp_email}
           </Stack>
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Ngày tạo đơn
+              Create Date Order Booking
             </Typography>
             {fDate(order?.createdDate)}
           </Stack>
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Ghi chú
+              Note
             </Typography>
-            {order?.note === '' ? 'Không có ghi chú' : order?.note}
+            {order?.note === '' ? 'No note' : order?.note}
           </Stack>
         </Box>
 

@@ -16,17 +16,17 @@ export default function TourCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Tạo loại phòng"
+        heading="Create type room"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Loại phòng',
+            name: 'Type Room',
             href: paths.dashboard.typeRoom.root,
           },
-          { name: "Loại phòng mới" },
+          { name: "New type room" },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

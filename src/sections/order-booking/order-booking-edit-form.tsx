@@ -125,14 +125,14 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
       enqueueSnackbar({
         variant: 'success',
         autoHideDuration: 3000,
-        message: 'Cập nhật hóa đơn thành công!',
+        message: 'Update Success!',
       });
     } catch (error) {
       console.error(error);
       enqueueSnackbar({
         variant: 'error',
         autoHideDuration: 3000,
-        message: 'Cập nhật hóa đơn thất bại',
+        message: 'Update Faild',
       });
       loadingSend.onFalse();
     }

@@ -14,7 +14,7 @@ export default function TourDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Chi tiết phòng</title>
+        <title> Dashboard: Room Details</title>
       </Helmet>
 
       <RoomDetailsView id={`${id}`} />

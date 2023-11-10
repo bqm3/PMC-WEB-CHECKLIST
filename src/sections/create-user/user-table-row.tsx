@@ -71,7 +71,7 @@ export default function UserTableRow({
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{address}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          {(role_id === 1 && 'Quản lý') || (role_id === 2 && 'Nhân viên ')}
+          {(role_id === 1 && 'Admin') || (role_id === 2 && 'Staff ')}
         </TableCell>
 
         <TableCell>

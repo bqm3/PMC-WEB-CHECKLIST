@@ -8,7 +8,7 @@ export default function ProductListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Danh sách loại phòng</title>
+        <title> Dashboard: List of room types</title>
       </Helmet>
 
       <TypeRoomListView />

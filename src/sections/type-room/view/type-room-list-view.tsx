@@ -47,7 +47,7 @@ import TypeRoomTableRow from '../type-room-table-row';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Loại Phòng', },
+  { id: 'name', label: 'Name', },
   { id: '', width: 100 },
 ];
 
@@ -147,12 +147,12 @@ export default function TypeRoomListView() {
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Quản lý', href: paths.dashboard.root },
+            { name: 'Dashboard', href: paths.dashboard.root },
             {
-              name: 'Loại Phòng',
+              name: 'Type Room',
               href: paths.dashboard.typeRoom.root,
             },
-            { name: 'Danh sách' },
+            { name: 'List' },
           ]}
           action={
             <Button
@@ -161,7 +161,7 @@ export default function TypeRoomListView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              Tạo loại phòng
+              Create type room
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}

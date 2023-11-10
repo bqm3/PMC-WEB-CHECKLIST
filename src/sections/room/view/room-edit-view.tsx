@@ -32,7 +32,7 @@ export default function RoomEditView({ id }: Props) {
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'Phòng',
+            name: 'Room',
             href: paths.dashboard.room.root,
           },
           { name: currentRoom?.data.name },

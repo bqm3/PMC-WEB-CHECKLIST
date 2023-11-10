@@ -24,12 +24,12 @@ export default function TypeRoomEditView({ id }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Cập nhật"
+        heading="Create"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'Loại phòng',
-            href: paths.dashboard.typeRoom.root,
+            name: 'Type Service',
+            href: paths.dashboard.typeService.root,
           },
           { name: currentProduct?.name },
         ]}

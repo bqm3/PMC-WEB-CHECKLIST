@@ -59,7 +59,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Loại phòng phải có'),
+    name: Yup.string().required('Name is required'),
   });
 
   const defaultValues = useMemo(
@@ -120,7 +120,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Tên loại phòng...
+            Name...
           </Typography>
         </Grid>
       )}
@@ -130,7 +130,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField name="name" label="Loại phòng" />
+            <RHFTextField name="name" label="Name" />
           </Stack>
         </Card>
       </Grid>
@@ -142,7 +142,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       {mdUp && <Grid md={4} />}
       <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-          {!currentProduct ? 'Tạo Loại phòng' : 'Lưu thay đổi'}
+          {!currentProduct ? 'Create Type Room' : 'Save Changes'}
         </LoadingButton>
       </Grid>
     </>

@@ -8,7 +8,7 @@ export default function ProductCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo mới loại phòng</title>
+        <title> Dashboard: Create a new room type</title>
       </Helmet>
 
       <TypeRoomCreateView />

@@ -152,15 +152,13 @@ export default function InvoiceNewEditDetails() {
               <TableRow>
                 <TableCell width={40}>#</TableCell>
 
-                <TableCell sx={{ typography: 'subtitle2' }}>Tên phòng</TableCell>
+                <TableCell sx={{ typography: 'subtitle2' }}>Name Room</TableCell>
 
-                <TableCell align="left">Số lượng người</TableCell>
+                <TableCell>Count</TableCell>
 
-                <TableCell align="left">Ngày thuê</TableCell>
+                <TableCell align="right">Price</TableCell>
 
-                <TableCell align="right">Giá tiền phòng</TableCell>
-
-                <TableCell align="right">Tổng tiền</TableCell>
+                <TableCell align="right">Total</TableCell>
               </TableRow>
             </TableHead>
 
@@ -183,7 +181,7 @@ export default function InvoiceNewEditDetails() {
 
                   <TableCell align="center">{row.dateCount} days</TableCell>
 
-                  <TableCell align="right">{fCurrency(row.total)} /ngày</TableCell>
+                  <TableCell align="right">{fCurrency(row.total)} /day</TableCell>
 
                   <TableCell align="right">{fCurrency((Number(row.total)) * Number(row.dateCount))}</TableCell>
                 </TableRow>

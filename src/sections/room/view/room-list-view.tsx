@@ -177,10 +177,10 @@ export default function RoomListView() {
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'Phòng',
+            name: 'Room',
             href: paths.dashboard.room.root,
           },
-          { name: 'Danh sách' },
+          { name: 'List' },
         ]}
         action={
           <Button
@@ -189,7 +189,7 @@ export default function RoomListView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            Tạo phòng
+            Create Room
           </Button>
         }
         sx={{

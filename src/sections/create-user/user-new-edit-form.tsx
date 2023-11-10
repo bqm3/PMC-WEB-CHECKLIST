@@ -275,7 +275,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentUser ? 'Tạo mới nhân viên' : 'Save Changes'}
+                {!currentUser ? 'Create New Employee' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>

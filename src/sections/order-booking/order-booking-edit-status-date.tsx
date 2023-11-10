@@ -37,7 +37,7 @@ export default function InvoiceNewEditStatusDate() {
         fullWidth
         select
         name="status"
-        label="Trạng thái đơn"
+        label="Status"
         InputLabelProps={{ shrink: true }}
         PaperPropsSx={{ textTransform: 'capitalize' }}
       >
@@ -68,7 +68,7 @@ export default function InvoiceNewEditStatusDate() {
       <RHFTextField
         disabled
         name="createdDate"
-        label="Ngày đặt đơn"
+        label="Create Date"
         value={fDateTime(values.createdDate)}
       />
 

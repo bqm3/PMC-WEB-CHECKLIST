@@ -14,7 +14,7 @@ export default function TypeRoomEditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Cập nhật dịch vụ phòng</title>
+        <title> Dashboard: Room service updates</title>
       </Helmet>
 
       <ServiceEditPage id={`${id}`} />

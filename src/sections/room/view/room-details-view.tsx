@@ -40,8 +40,6 @@ export default function RoomDetailsView({ id }: Props) {
     setCurrentTab(newValue);
   }, []);
 
-  console.log('room', room)
-
   const renderSkeleton = <RoomDetailsSkeleton />;
 
   const renderTabs = (

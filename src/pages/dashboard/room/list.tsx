@@ -8,7 +8,7 @@ export default function TourListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Danh Sách Phòng</title>
+        <title> Dashboard: Room List</title>
       </Helmet>
 
       <RoomListView />

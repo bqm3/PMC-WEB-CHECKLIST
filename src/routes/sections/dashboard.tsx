@@ -7,6 +7,7 @@ import DashboardLayout from 'src/layouts/dashboard';
 // components
 import { LoadingScreen } from 'src/components/loading-screen';
 import { Outlet } from 'react-router-dom';
+import { ServiceNewView } from 'src/sections/service/view';
 
 // ----------------------------------------------------------------------
 
@@ -137,7 +138,7 @@ export const dashboardRoutes = [
           { element: <ServiceListPage />, index: true },
           { path: 'list', element: <ServiceListPage /> },
           { path: ':id/edit', element: <ServiceEditPage /> },
-          { path: 'new', element: <ServiceEditPage /> }
+          { path: 'new', element: <ServiceNewView /> }
         ]
       },
       {

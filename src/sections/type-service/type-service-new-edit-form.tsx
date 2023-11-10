@@ -4,17 +4,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Switch from '@mui/material/Switch';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControlLabel from '@mui/material/FormControlLabel';
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
@@ -22,10 +16,6 @@ import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
 import {
   _tags,
-  PRODUCT_SIZE_OPTIONS,
-  PRODUCT_GENDER_OPTIONS,
-  PRODUCT_COLOR_NAME_OPTIONS,
-  PRODUCT_CATEGORY_GROUP_OPTIONS,
 } from 'src/_mock';
 // components
 import { useSnackbar } from 'src/components/snackbar';
@@ -59,7 +49,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Loại phòng phải có'),
+    name: Yup.string().required('Name is required'),
   });
 
   const defaultValues = useMemo(
@@ -120,7 +110,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Tên loại dịch vụ...
+            Name...
           </Typography>
         </Grid>
       )}
@@ -130,7 +120,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField name="name" label="Loại dịch vụ" />
+            <RHFTextField name="name" label="Name" />
           </Stack>
         </Card>
       </Grid>
@@ -142,7 +132,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       {mdUp && <Grid md={4} />}
       <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-          {!currentProduct ? 'Tạo Loại dịch vụ' : 'Lưu thay đổi'}
+          {!currentProduct ? 'Create Type Service' : 'Save Changes'}
         </LoadingButton>
       </Grid>
     </>

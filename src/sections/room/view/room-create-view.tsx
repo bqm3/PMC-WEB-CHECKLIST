@@ -16,17 +16,17 @@ export default function ProductCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Tạo mới phòng"
+        heading="Create"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Phòng',
+            name: 'Room',
             href: paths.dashboard.room.root,
           },
-          { name: 'Tạo mới phòng' },
+          { name: 'Create New Room' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

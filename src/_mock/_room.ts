@@ -15,6 +15,11 @@ export const EMPLOYEE_STATUS_OPTIONS = [
   { value: '1', label: 'Active' },
   { value: '0', label: 'Rejected' },
 ];
+export const STATUS_STATUS_OPTIONS = [
+  { value: '1', label: 'Active' },
+  { value: '0', label: 'Rejected' },
+];
+
 
 export const ROOM_LABEL_OPTIONS = [
   { value: '1', label: 'Excellent' },

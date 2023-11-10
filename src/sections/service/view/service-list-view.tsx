@@ -48,10 +48,11 @@ import ServiceTableRow from '../service-table-row';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Dịch vụ' },
-  { id: 'unit', label: 'Đơn vị', width: 160 },
-  { id: 'price', label: 'Giá tiền', width: 140 },
-  { id: 'type_service', label: 'Loại dịch vụ', width: 160 },
+  { id: 'name', label: 'Name' },
+  { id: 'unit', label: 'Unit', width: 160 },
+  { id: 'price', label: 'Price', width: 140 },
+  { id: 'status', label: 'Status', width: 140 },
+  { id: 'type_service', label: 'Type Service', width: 160 },
   { id: '', width: 88 },
 ];
 
@@ -151,12 +152,12 @@ export default function TypeRoomListView() {
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Quản lý', href: paths.dashboard.root },
+            { name: 'Dashboard', href: paths.dashboard.root },
             {
-              name: 'Dịch vụ',
+              name: 'Service',
               href: paths.dashboard.service.root,
             },
-            { name: 'Danh sách' },
+            { name: 'List' },
           ]}
           action={
             <Button
@@ -165,7 +166,7 @@ export default function TypeRoomListView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              Tạo Dịch vụ
+              Create Service
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}

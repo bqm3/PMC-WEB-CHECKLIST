@@ -8,7 +8,7 @@ export default function TourCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo mới phòng</title>
+        <title> Dashboard: Room New</title>
       </Helmet>
 
       <RoomNewView />

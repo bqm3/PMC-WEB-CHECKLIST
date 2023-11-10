@@ -34,14 +34,14 @@ export default function OrderBookingEditView({ id }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={`Cập nhật đơn đặt phòng HD-${order?.data?.id}`}
+        heading={`Update Order Booking HD-${order?.data?.id}`}
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Chi tiết đơn đặt phòng',
+            name: 'Detail Order Booking',
             href: paths.dashboard.orderBooking.root,
           },
           { name: `HD-${order?.data?.id}` },

@@ -47,7 +47,7 @@ import TypeRoomTableRow from '../type-service-table-row';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Loại Dịch vụ', },
+  { id: 'name', label: 'Name', },
   { id: '', width: 100 },
 ];
 
@@ -147,12 +147,12 @@ export default function TypeRoomListView() {
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Quản lý', href: paths.dashboard.root },
+            { name: 'Dashboard', href: paths.dashboard.root },
             {
-              name: 'Loại Dịch vụ',
+              name: 'Type Service',
               href: paths.dashboard.typeService.root,
             },
-            { name: 'Danh sách' },
+            { name: 'List' },
           ]}
           action={
             <Button
@@ -161,7 +161,7 @@ export default function TypeRoomListView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              Tạo loại dịch vụ
+              Create Type Service
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}

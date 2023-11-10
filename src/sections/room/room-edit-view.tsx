@@ -83,7 +83,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    title: Yup.string().required('Name is required'),
+    title: Yup.string().required('Title is required'),
     description: Yup.string().required('Description is required'),
     image: Yup.mixed<any>().nullable().required('Image is required'),
     status: Yup.number().required('Status is required'),
@@ -173,14 +173,14 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
         const res2 = await axios.put('https://be-nodejs-project.vercel.app/api/room-image/update', formData, config);
         const res3 = await axios.post(`https://be-nodejs-project.vercel.app/api/room_service/update/${currentRoom?.id}`, data.service);
         if (res1.status === 200 && res2.status === 200 && res3.status === 200) {
-          enqueueSnackbar('Cập nhật phòng thành công!');
+          enqueueSnackbar('Update Success!!!');
           reset();
 
         } else {
           enqueueSnackbar({
             variant: 'error',
             autoHideDuration: 3000,
-            message: 'Cập nhật phòng thất bại',
+            message: 'Update Faild!!!',
           });
         }
       }
@@ -251,11 +251,11 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField name="name" label="Tên phòng" />
-            <RHFTextField name="title" label="Tiêu đề phòng" multiline rows={4} />
+            <RHFTextField name="name" label="Name" />
+            <RHFTextField name="title" label="Title" multiline rows={4} />
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Content</Typography>
+              <Typography variant="subtitle2">Description</Typography>
               <RHFEditor simple name="description" />
             </Stack>
 
@@ -282,7 +282,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
             Properties
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Thông tin phòng...
+            Information...
           </Typography>
         </Grid>
       )}
@@ -303,7 +303,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
             >
               <RHFTextField
                 name="price"
-                label="Giá gốc"
+                label="Price"
                 placeholder="0.00"
                 type="number"
                 InputLabelProps={{ shrink: true }}
@@ -320,7 +320,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
 
               <RHFTextField
                 name="priceSale"
-                label="Giá ưu đãi"
+                label="Price Sale"
                 placeholder="0.00"
                 type="number"
                 InputLabelProps={{ shrink: true }}
@@ -335,8 +335,8 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
                 }}
               />
 
-              <RHFTextField name="numberBed" label="Số lượng giường" />
-              <RHFTextField name="numberPeople" label="Số người ở tối đa" />
+              <RHFTextField name="numberBed" label="Number Bed" />
+              <RHFTextField name="numberPeople" label="Number People Max" />
 
               <RHFSelect
                 name="label"
@@ -354,7 +354,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
 
               <RHFSelect
                 name="type_room_id"
-                label="Loại phòng"
+                label="Type Room"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
@@ -389,17 +389,17 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Dịch vụ và ảnh phòng
+            Services and Images
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {!currentRoom ? 'Thêm dịch vụ và ảnh phòng' : 'Sửa dịch vụ và ảnh phòng'}
+            {!currentRoom ? 'Create Services and Images' : 'Update Services and Images'}
           </Typography>
         </Grid>
       )}
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title="Dịch vụ và ảnh phòng" />}
+          {!mdUp && <CardHeader title="Services and Images" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1}>
@@ -436,7 +436,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
 
       <Grid xs={12} md={12} sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-          {!currentRoom ? 'Tạo phòng' : 'Save Changes'}
+          {!currentRoom ? 'Create Room' : 'Save Changes'}
         </LoadingButton>
       </Grid>
     </>

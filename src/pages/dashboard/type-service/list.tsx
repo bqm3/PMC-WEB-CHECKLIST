@@ -8,7 +8,7 @@ export default function ProductListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Danh sách loại dịch vụ</title>
+        <title> Dashboard: List of service types</title>
       </Helmet>
 
       <TypeServiceListView />
