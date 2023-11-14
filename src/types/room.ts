@@ -83,6 +83,7 @@ export type IRoom = {
   totalReview: number;
   numberBed: number;
   numberPeople: number;
+  numberChildren: number;
   status: number;
   label: number;
   isLiked: number;

@@ -79,7 +79,7 @@ export default function RoomDetailsView({ id }: Props) {
       {renderTabs}
       {roomLoading && renderSkeleton}
 
-      {currentTab === 'content' && room && <RoomDetailsContent data={room.data} images={room.images} services={room.services} />}
+      {currentTab === 'content' && room && <RoomDetailsContent data={room?.data} images={room?.images} services={room?.services} />}
 
       {currentTab === 'reviews' && <RoomDetailsReview reviews={reviews} />}
     </Container>

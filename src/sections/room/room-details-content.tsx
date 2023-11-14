@@ -43,6 +43,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
     numberBed,
     numberPeople,
     rating,
+    numberChildren,
     image,
     roomImages,
     service,
@@ -191,6 +192,40 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
 
 
       </Stack>
+      <Stack spacing={3} direction="row" flexWrap="wrap" alignItems="center">
+        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'subtitle2' }}>
+          <Iconify icon="ic:baseline-bed" color="green" />
+
+          <Box component="span" sx={{ typography: 'subtitle2' }}>
+            {numberBed}
+          </Box>
+          <Box component="span" sx={{ typography: 'body2', color: 'text.secondary' }}>
+            Bed
+          </Box>
+        </Stack>
+
+        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'body2' }}>
+          <Iconify icon="ic:baseline-supervisor-account" sx={{ color: 'black' }} />
+          <Box component="span" sx={{ typography: 'subtitle2' }}>
+            {numberPeople}
+          </Box>
+          <Box component="span" sx={{ typography: 'body2', color: 'text.secondary' }}>
+            Adults
+          </Box>
+        </Stack>
+
+        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'body2' }}>
+          <Iconify icon="fa6-solid:children" sx={{ color: 'black' }} />
+          <Box component="span" sx={{ typography: 'subtitle2' }}>
+            {numberChildren}
+          </Box>
+          <Box component="span" sx={{ typography: 'body2', color: 'text.secondary' }}>
+            Childrens
+          </Box>
+        </Stack>
+
+
+      </Stack>
     </>
   );
 
@@ -221,7 +256,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
         },
         {
           label: 'Information',
-          value: 'Nhân viên tư vấn',
+          value: 'Customer Service Advisor',
           icon: <Iconify icon="solar:user-rounded-bold" />,
         },
       ].map((item) => (
@@ -248,8 +283,6 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
 
   const renderContent = (
     <>
-      <Markdown children={description} />
-
       <Stack spacing={2}>
         <Typography variant="h6"> Services</Typography>
 
@@ -272,7 +305,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
               <Iconify
                 icon="eva:checkmark-circle-2-outline"
                 sx={{
-                  color: 'primary.main',
+                  color: 'green',
                 }}
               />
               {ser.name}
@@ -280,6 +313,13 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
           ))}
         </Box>
       </Stack>
+      <Divider sx={{ borderStyle: 'dashed', my: 2 }} />
+
+      <Markdown children={description} />
+
+
+
+
     </>
   );
 
@@ -294,7 +334,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
 
         {renderOverview}
 
-        <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
+        <Divider sx={{ borderStyle: 'dashed', my: 2 }} />
 
         {renderContent}
       </Stack>

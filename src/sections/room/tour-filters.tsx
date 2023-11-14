@@ -125,25 +125,25 @@ export default function TourFilters({
     </Stack>
   );
 
-  const renderServices = (
-    <Stack>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Services
-      </Typography>
-      {serviceOptions.map((option) => (
-        <FormControlLabel
-          key={option}
-          control={
-            <Checkbox
-              checked={filters.services.includes(option)}
-              onClick={() => handleFilterServices(option)}
-            />
-          }
-          label={option}
-        />
-      ))}
-    </Stack>
-  );
+  // const renderServices = (
+  //   <Stack>
+  //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
+  //       Services
+  //     </Typography>
+  //     {serviceOptions.map((option) => (
+  //       <FormControlLabel
+  //         key={option}
+  //         control={
+  //           <Checkbox
+  //             checked={filters.services.includes(option)}
+  //             onClick={() => handleFilterServices(option)}
+  //           />
+  //         }
+  //         label={option}
+  //       />
+  //     ))}
+  //   </Stack>
+  // );
 
   return (
     <>
@@ -179,7 +179,7 @@ export default function TourFilters({
           <Stack spacing={3}>
 
             {renderExperience}
-            {renderServices}
+            {/* {renderServices} */}
           </Stack>
         </Scrollbar>
       </Drawer>

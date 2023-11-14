@@ -10,12 +10,12 @@ import FormProvider, {
   RHFTextField,
   RHFUpload,
 } from 'src/components/hook-form';
-import { IRoom, IRoomImage, IRoomService, ITypeRoom, IVoucher } from 'src/types/room';
+import { IRoom, IRoomImage, IRoomService, ITypeRoom } from 'src/types/room';
 // _mock
 import { ROOM_LABEL_OPTIONS, _tags } from 'src/_mock';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 // api
-import { useGetServices, useGetTypeRooms, useGetVouchers } from 'src/api/product';
+import { useGetServices, useGetTypeRooms } from 'src/api/product';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -51,31 +51,33 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
   const router = useRouter();
   const [tableDataServices, setTableDataServices] = useState<any>([]);
   const [tableDataTypeRoom, setTableDataTypeRoom] = useState<ITypeRoom[]>([]);
-  const [tableDataVoucher, setTableDataVoucher] = useState<any>([]);
 
   const { typerooms, typeroomsLoading, typeroomsEmpty } = useGetTypeRooms();
   const { services, servicesLoading } = useGetServices();
-  const { vouchers, vouchersLoading } = useGetVouchers();
 
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    setTableDataTypeRoom(typerooms);
+    if (typerooms && Array.isArray(typerooms)) {
+      setTableDataTypeRoom(typerooms);
+    } else {
+      // Handle the case where typerooms is undefined or not an array
+      console.error("typerooms is undefined or not an array");
+    }
   }, [typerooms]);
 
   useEffect(() => {
-    setTableDataVoucher(vouchers);
-  }, [vouchers]);
-
-  useEffect(() => {
-    if (services) {
+    if (services && Array.isArray(services)) {
       const options = services?.map((option) => ({
         value: option.id,
         label: option.name,
       }));
       setTableDataServices(options);
+    } else {
+      // Handle the case where typerooms is undefined or not an array
+      console.error("services is undefined or not an array");
     }
   }, [services]);
 
@@ -88,7 +90,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
     image: Yup.mixed<any>().nullable().required('Image is required'),
     status: Yup.number().required('Status is required'),
     type_room_id: Yup.number(),
-    voucher_id: Yup.number(),
+    numberChildren: Yup.number(),
     price: Yup.number().moreThan(0, 'Price should not be $0.00'),
     priceSale: Yup.number(),
     label: Yup.number(),
@@ -112,7 +114,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
       status: currentRoom?.status || 0,
       label: currentRoom?.label || 0,
       isLiked: currentRoom?.isLiked || 0,
-      voucher_id: currentRoom?.voucher_id || undefined,
+      numberChildren: currentRoom?.numberChildren || 0,
       type_room_id: currentRoom?.type_room_id || undefined,
       service: currentRoom?.service || [],
       roomImages: currentRoom?.roomImages || [],
@@ -144,6 +146,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
 
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log('data', data)
     const formData = new FormData();
     formData.append('image', typeof data.image === 'string' ? data.image : JSON.stringify(data.image));
     formData.append('name', data.name);
@@ -153,11 +156,11 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
     formData.append('priceSale', JSON.stringify(data.priceSale));
     formData.append('numberBed', JSON.stringify(data.numberBed));
     formData.append('numberPeople', JSON.stringify(data.numberPeople));
+    formData.append('numberChildren', JSON.stringify(data.numberChildren));
     formData.append('status', JSON.stringify(data.status));
     formData.append('label', JSON.stringify(data.label));
     formData.append('isLiked', JSON.stringify(data.isLiked));
     formData.append('type_room_id', JSON.stringify(data.type_room_id));
-    formData.append('voucher_id', JSON.stringify(data?.voucher_id));
     formData.append('roomImage', JSON.stringify(data.roomImages));
     const config = {
       withCredentials: false,
@@ -168,7 +171,6 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
     };
     try {
       if (currentRoom) {
-        formData.append('id', currentRoom?.id);
         const res1 = await axios.put(`https://be-nodejs-project.vercel.app/api/rooms/update/${currentRoom.id}`, formData, config);
         const res2 = await axios.put('https://be-nodejs-project.vercel.app/api/room-image/update', formData, config);
         const res3 = await axios.post(`https://be-nodejs-project.vercel.app/api/room_service/update/${currentRoom?.id}`, data.service);
@@ -335,8 +337,9 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
                 }}
               />
 
-              <RHFTextField name="numberBed" label="Number Bed" />
-              <RHFTextField name="numberPeople" label="Number People Max" />
+              <RHFTextField type="number" name="numberBed" label="Number Bed" />
+              <RHFTextField type="number" name="numberPeople" label="Number Adults Max" />
+              <RHFTextField type="number" name="numberChildren" label="Number Children Max" />
 
               <RHFSelect
                 name="label"
@@ -351,32 +354,21 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
               </RHFSelect>
 
 
+              {tableDataTypeRoom.length > 0 && (
+                <RHFSelect
+                  name="type_room_id"
+                  label="Type Room"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {tableDataTypeRoom?.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>)
+              }
 
-              <RHFSelect
-                name="type_room_id"
-                label="Type Room"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {tableDataTypeRoom?.map((item) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-
-              <RHFSelect
-                name="voucher_id"
-                label="Vouchers"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {tableDataVoucher?.map((item: any) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
             </Box>
           </Stack>
         </Card>
