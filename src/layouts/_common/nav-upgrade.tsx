@@ -38,7 +38,7 @@ export default function NavUpgrade() {
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
           <Avatar
-            src='https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg'
+            src={user?.avatar ? user?.avatar : 'https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg'}
             alt={user?.fullname}
             sx={{
               width: 36,

@@ -16,7 +16,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // auth
 import { useAuthContext } from 'src/auth/hooks';
 // _mock
-import { USER_ROLE_STATUS_OPTIONS } from 'src/_mock';
+import { USER_ROLE_STATUS_OPTIONS, USER_GENDER_OPTIONS } from 'src/_mock';
 // utils
 import { fData } from 'src/utils/format-number';
 // routes
@@ -32,6 +32,8 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
   RHFSelect,
+  RHFMultiCheckbox,
+  RHFRadioGroup
 } from 'src/components/hook-form';
 import axios from 'axios';
 
@@ -55,6 +57,7 @@ export default function AccountGeneral() {
     birthday: Yup.mixed<any>().nullable().required('Expired date is required'),
     // not required
     status: Yup.string(),
+    experience: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -65,6 +68,7 @@ export default function AccountGeneral() {
       phonenumber: user?.phonenumber || '',
       address: user?.address || '',
       role_id: user?.role_id || '',
+      gender: user?.gender || '',
       code: user?.code || '',
       avatar: user?.avatar || null,
       birthday: user?.birthday || null,
@@ -92,14 +96,16 @@ export default function AccountGeneral() {
   const onSubmit = handleSubmit(async (data) => {
     const formData = new FormData();
     formData.append('fullname', data.fullname);
-    formData.append('image', data.avatar);
+
     formData.append('birthday', data.birthday);
     formData.append('email', data.email);
     formData.append('phonenumber', data.phonenumber);
     formData.append('code', data.code);
+    formData.append('gender', data.gender);
     formData.append('role_id', data.role_id);
     formData.append('status', data.status);
     formData.append('address', data.address);
+    formData.append('avatar', typeof data.avatar === 'string' ? data.avatar : JSON.stringify(data.avatar));
     const config = {
       withCredentials: false,
       headers: {
@@ -211,6 +217,11 @@ export default function AccountGeneral() {
 
               <RHFTextField name="address" label="Address" />
               <RHFTextField name="code" label="Zip/Code" />
+
+              <Stack spacing={1}>
+                <Typography variant="subtitle2">Gender</Typography>
+                <RHFRadioGroup row name="gender" spacing={2} options={USER_GENDER_OPTIONS} />
+              </Stack>
               {/* <RHFSelect
                 fullWidth
                 name="role_id"

@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // _mock
-import { USER_ROLE_STATUS_OPTIONS } from 'src/_mock';
+import { USER_ROLE_STATUS_OPTIONS, USER_GENDER_OPTIONS } from 'src/_mock';
 // utils
 import { fData } from 'src/utils/format-number';
 // routes
@@ -29,7 +29,7 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
   RHFAutocomplete,
-  RHFSelect
+  RHFSelect, RHFRadioGroup
 } from 'src/components/hook-form';
 import axios from 'axios';
 
@@ -56,6 +56,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     birthday: Yup.mixed<any>().nullable().required('Expired date is required'),
     // not required
     status: Yup.string(),
+    gender: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -70,6 +71,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       avatarUrl: currentUser?.avatarUrl || null,
       birthday: currentUser?.birthday || null,
       phoneNumber: currentUser?.phoneNumber || '',
+      gender: currentUser?.gender || '',
     }),
     [currentUser]
   );
@@ -98,6 +100,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     formData.append('email', data.email);
     formData.append('password', data.password);
     formData.append('phonenumber', data.phoneNumber);
+    formData.append('gender', JSON.stringify(data.gender));
     formData.append('code', data.zipCode);
     formData.append('role_id', data.role);
     formData.append('status', JSON.stringify(data.status));
@@ -269,6 +272,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
                   </MenuItem>
                 ))}
               </RHFSelect>
+
+              <Stack spacing={1}>
+                <Typography variant="subtitle2">Gender</Typography>
+                <RHFRadioGroup row name="gender" spacing={2} options={USER_GENDER_OPTIONS} />
+              </Stack>
             </Box>
 
 

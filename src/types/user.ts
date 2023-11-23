@@ -120,6 +120,7 @@ export type IUserItem_2 = {
   address: string;
   country: string;
   zipCode: string;
+  gender?: string;
   company: string;
   avatarUrl: string;
   phoneNumber: string;
