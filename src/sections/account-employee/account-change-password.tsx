@@ -15,11 +15,13 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
+  const accessToken = sessionStorage.getItem('accessToken');
 
   const { user, logout } = useAuthContext();
 
@@ -29,7 +31,7 @@ export default function AccountChangePassword() {
     oldPassword: Yup.string().required('Old Password is required'),
     newPassword: Yup.string()
       .required('New Password is required')
-      .min(6, 'Password must be at least 6 characters')
+      .min(3, 'Password must be at least 3 characters')
       .test(
         'no-match',
         'New password must be different than old password',
@@ -56,11 +58,32 @@ export default function AccountChangePassword() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
+    const dataPath = {
+      currentPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    };
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      const response = await axios.post(
+        `https://be-nodejs-project.vercel.app/api/employee/change-password`,
+        dataPath,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      if (response.status === 200) {
+        enqueueSnackbar({
+          variant: 'success',
+          autoHideDuration: 3000,
+          message: 'Update success',
+        });
+        // reset();
+      } else {
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 3000,
+          message: 'Update error',
+        });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -100,7 +123,7 @@ export default function AccountChangePassword() {
           helperText={
             <Stack component="span" direction="row" alignItems="center">
               <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Password must be minimum
-              6+
+              3+
             </Stack>
           }
         />

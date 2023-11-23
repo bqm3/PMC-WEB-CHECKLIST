@@ -25,7 +25,7 @@ export default function AccountChangePassword() {
     oldPassword: Yup.string().required('Old Password is required'),
     newPassword: Yup.string()
       .required('New Password is required')
-      .min(6, 'Password must be at least 6 characters')
+      .min(3, 'Password must be at least 3 characters')
       .test(
         'no-match',
         'New password must be different than old password',
@@ -96,7 +96,7 @@ export default function AccountChangePassword() {
           helperText={
             <Stack component="span" direction="row" alignItems="center">
               <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Password must be minimum
-              6+
+              3+
             </Stack>
           }
         />
