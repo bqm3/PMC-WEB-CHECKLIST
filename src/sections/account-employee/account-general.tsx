@@ -115,7 +115,7 @@ export default function AccountGeneral() {
     };
     try {
       const response = await axios.put(
-        `https://be-nodejs-project.vercel.app/api/employee/update/${defaultValues.id}`,
+        `http://localhost:6969/api/employee/update/${defaultValues.id}`,
         formData,
         config
       );
