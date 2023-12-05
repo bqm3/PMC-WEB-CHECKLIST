@@ -26,6 +26,7 @@ export type ITypeRoom = {
 export type IService = {
   id: string;
   name: string;
+  detail: string;
   unit: string;
   price: number;
   status: number;

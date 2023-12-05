@@ -181,7 +181,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
           if (id) {
             const formData2 = new FormData();
             formData2.append('room_id', JSON.stringify(id));
-            formData2.append('roomImage', JSON.stringify(data.roomImages));
+            formData2.append('roomImages', JSON.stringify(data.roomImages));
             await axios.post('https://be-nodejs-project.vercel.app/api/room-image/create', formData2, config);
             await axios.post(
               `https://be-nodejs-project.vercel.app/api/room_service/create-mul/${id}`,

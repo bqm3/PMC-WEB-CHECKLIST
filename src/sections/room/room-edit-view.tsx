@@ -97,7 +97,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
     isLiked: Yup.number(),
     numberBed: Yup.number(),
     numberPeople: Yup.number(),
-    roomImages: Yup.array(),
+    roomImages: Yup.mixed<any>().nullable().required('Image Room is required'),
     service: Yup.array(),
   });
 
@@ -146,9 +146,8 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
 
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data', data)
     const formData = new FormData();
-    formData.append('image', typeof data.image === 'string' ? data.image : JSON.stringify(data.image));
+    formData.append('image', data.image);
     formData.append('name', data.name);
     formData.append('title', data.title);
     formData.append('description', data.description);
@@ -161,7 +160,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
     formData.append('label', JSON.stringify(data.label));
     formData.append('isLiked', JSON.stringify(data.isLiked));
     formData.append('type_room_id', JSON.stringify(data.type_room_id));
-    formData.append('roomImage', JSON.stringify(data.roomImages));
+    formData.append('roomImages', JSON.stringify(data.roomImages));
     const config = {
       withCredentials: false,
       headers: {
@@ -169,11 +168,14 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
         'Content-Type': 'multipart/form-data',
       },
     };
+
+
     try {
       if (currentRoom) {
-        const res1 = await axios.put(`https://be-nodejs-project.vercel.app/api/rooms/update/${currentRoom.id}`, formData, config);
-        const res2 = await axios.put('https://be-nodejs-project.vercel.app/api/room-image/update', formData, config);
-        const res3 = await axios.post(`https://be-nodejs-project.vercel.app/api/room_service/update/${currentRoom?.id}`, data.service);
+        const res1 = await axios.put(`http://localhost:6969/api/rooms/update/${currentRoom.id}`, formData, config);
+        const res2 = await axios.put(`http://localhost:6969/api/room-image/update/${currentRoom.id}`, formData, config);
+        console.log('res2', res2)
+        const res3 = await axios.post(`http://localhost:6969/api/room_service/update/${currentRoom?.id}`, data.service);
         if (res1.status === 200 && res2.status === 200 && res3.status === 200) {
           enqueueSnackbar('Update Success!!!');
           reset();

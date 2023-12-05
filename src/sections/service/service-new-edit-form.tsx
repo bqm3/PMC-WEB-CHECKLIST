@@ -5,6 +5,7 @@ import FormProvider, {
   RHFSwitch,
   RHFTextField,
   RHFUpload,
+  RHFEditor,
 } from 'src/components/hook-form';
 import { IService, ITypeRoom } from 'src/types/room';
 // _mock
@@ -67,6 +68,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
     () => ({
       name: currentProduct?.name || '',
       unit: currentProduct?.unit || '',
+      detail: currentProduct?.detail || '',
       price: currentProduct?.price || 0,
       status: currentProduct?.status || 1,
       type_service_id: currentProduct?.type_service_id || null,
@@ -96,16 +98,15 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   }, [currentProduct, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('dât', data, currentProduct)
     try {
       if (currentProduct?.id !== undefined) {
-        axios.put(`https://be-nodejs-project.vercel.app/api/services/${currentProduct.id}`, data).then((res) => {
+        axios.put(`http://localhost:6969/api/services/${currentProduct.id}`, data).then((res) => {
           reset();
           enqueueSnackbar('Update success!');
           router.push(paths.dashboard.service.root);
         });
       } else {
-        axios.post(`https://be-nodejs-project.vercel.app/api/services`, data).then((res) => {
+        axios.post(`http://localhost:6969/api/services`, data).then((res) => {
           reset();
           enqueueSnackbar('Create success!');
           router.push(paths.dashboard.service.root);
@@ -124,7 +125,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Name, unit, price...
+            Name,detail, unit, price...
           </Typography>
         </Grid>
       )}
@@ -135,6 +136,10 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField name="name" label="Name" />
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Detail</Typography>
+              <RHFEditor simple name="detail" />
+            </Stack>
             <RHFTextField name="unit" label="Unit" />
             <RHFTextField name="price" label="Price" />
             <RHFSelect fullWidth name="status" label="Status" InputLabelProps={{ shrink: true }} PaperPropsSx={{ textTransform: 'capitalize' }}>
