@@ -70,7 +70,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const resTotal = async () => {
       try {
-        const res = await axios.post('http://localhost:6969/api/orders/widget-order-header');
+        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header');
         if (res.status === 200) {
           setDataTotalHeader(res.data[0].order_stats);
         }
@@ -84,7 +84,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const resTotal = async () => {
       try {
-        const res = await axios.post('http://localhost:6969/api/orders/widget-order-service');
+        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service');
         if (res.status === 200) {
           setDataTotalService(res.data);
         }
@@ -98,7 +98,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const resTotal = async () => {
       try {
-        const res = await axios.post('http://localhost:6969/api/orders/widget-order-review');
+        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review');
         if (res.status === 200) {
           setDataTotalReview(res.data);
         }
@@ -113,7 +113,7 @@ export default function OverviewAnalyticsView() {
     const resTotal = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.post('http://localhost:6969/api/orders/widget-order-year');
+        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
         if (res.status === 200) {
           setDataTotalYear(res.data[0]);
           setIsLoading(false);
