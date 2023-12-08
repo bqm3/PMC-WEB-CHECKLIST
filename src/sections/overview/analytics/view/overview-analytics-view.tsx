@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 // @mui
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
@@ -11,6 +12,8 @@ import {
 } from 'src/_mock';
 // components
 import { useSettingsContext } from 'src/components/settings';
+// api
+import axios from 'axios';
 //
 import AnalyticsNews from '../analytics-news';
 import AnalyticsTasks from '../analytics-tasks';
@@ -22,10 +25,108 @@ import AnalyticsTrafficBySite from '../analytics-traffic-by-site';
 import AnalyticsCurrentSubject from '../analytics-current-subject';
 import AnalyticsConversionRates from '../analytics-conversion-rates';
 
+import EcommerceYearlySales from '../../e-commerce/ecommerce-yearly-sales';
+
 // ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+type widgetData = {
+  percent: number;
+  chart: number[] | any;
+  chart_month: string[];
+  total_orders_this_week: number | any;
+  total_users: number | any;
+  total_orders_status_4: number | any;
+  total_orders: number | any;
+  series: any | number;
+  result: any | number;
+};
 
 export default function OverviewAnalyticsView() {
   const settings = useSettingsContext();
+
+  const [dataTotalUser, setDataTotalUser] = useState<widgetData>();
+  const [dataTotalHeader, setDataTotalHeader] = useState<widgetData>();
+  const [dataTotalYear, setDataTotalYear] = useState<widgetData>();
+  const [dataTotalService, setDataTotalService] = useState<widgetData>();
+  const [dataTotalReview, setDataTotalReview] = useState<widgetData>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const resTotal = async () => {
+      try {
+        const res = await axios.post(
+          'https://be-nodejs-project.vercel.app/api/orders/widget-order'
+        );
+        if (res.status === 200) {
+          setDataTotalUser(res.data);
+        }
+      } catch (err) {
+        console.log('error', err);
+      }
+    };
+    resTotal();
+  }, []);
+
+  useEffect(() => {
+    const resTotal = async () => {
+      try {
+        const res = await axios.post('http://localhost:6969/api/orders/widget-order-header');
+        if (res.status === 200) {
+          setDataTotalHeader(res.data[0].order_stats);
+        }
+      } catch (err) {
+        console.log('error', err);
+      }
+    };
+    resTotal();
+  }, []);
+
+  useEffect(() => {
+    const resTotal = async () => {
+      try {
+        const res = await axios.post('http://localhost:6969/api/orders/widget-order-service');
+        if (res.status === 200) {
+          setDataTotalService(res.data);
+        }
+      } catch (err) {
+        console.log('error', err);
+      }
+    };
+    resTotal();
+  }, []);
+
+  useEffect(() => {
+    const resTotal = async () => {
+      try {
+        const res = await axios.post('http://localhost:6969/api/orders/widget-order-review');
+        if (res.status === 200) {
+          setDataTotalReview(res.data);
+        }
+      } catch (err) {
+        console.log('error', err);
+      }
+    };
+    resTotal();
+  }, []);
+
+  useEffect(() => {
+    const resTotal = async () => {
+      setIsLoading(true);
+      try {
+        const res = await axios.post('http://localhost:6969/api/orders/widget-order-year');
+        if (res.status === 200) {
+          setDataTotalYear(res.data[0]);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        console.log('error', err);
+        setIsLoading(false);
+      }
+    };
+    resTotal();
+  }, []);
+
+  console.log('dataTotalUser', dataTotalReview?.result[0]?.value);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -40,16 +141,16 @@ export default function OverviewAnalyticsView() {
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Weekly Sales"
-            total={714000}
+            title="Rooms"
+            total={dataTotalHeader?.total_orders_this_week}
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
           />
         </Grid>
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="New Users"
-            total={1352831}
+            title="Total Users"
+            total={dataTotalHeader?.total_users}
             color="info"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
           />
@@ -58,7 +159,7 @@ export default function OverviewAnalyticsView() {
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="Item Orders"
-            total={1723315}
+            total={dataTotalHeader?.total_orders}
             color="warning"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
           />
@@ -66,85 +167,93 @@ export default function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Bug Reports"
-            total={234}
+            title="Draf Orders"
+            total={dataTotalHeader?.total_orders_status_4}
             color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
           />
         </Grid>
 
         <Grid xs={12} md={6} lg={8}>
-          <AnalyticsWebsiteVisits
-            title="Website Visits"
-            subheader="(+43%) than last year"
-            chart={{
-              labels: [
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ],
-              series: [
-                {
-                  name: 'Team A',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-                {
-                  name: 'Team B',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                },
-                {
-                  name: 'Team C',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
-              ],
-            }}
-          />
+          {dataTotalYear && isLoading === false && (
+            <EcommerceYearlySales
+              title="Yearly"
+              subheader=""
+              chart={{
+                categories: [
+                  'Jan',
+                  'Feb',
+                  'Mar',
+                  'Apr',
+                  'May',
+                  'Jun',
+                  'Jul',
+                  'Aug',
+                  'Sep',
+                  'Oct',
+                  'Nov',
+                  'Dec',
+                ],
+                series: [
+                  {
+                    year: '2022',
+                    data: [
+                      {
+                        name: 'Total Orders',
+                        data: dataTotalYear?.chart?.series[0]?.data ? dataTotalYear?.chart?.series[0]?.data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      },
+
+                    ],
+                  },
+                  {
+                    year: '2023',
+                    data: [
+                      {
+                        name: 'Total Orders',
+                        data: dataTotalYear?.chart?.series[1]?.data ? dataTotalYear?.chart?.series[1]?.data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      },
+
+                    ],
+                  },
+                ],
+              }}
+            />
+          )}
         </Grid>
 
+
         <Grid xs={12} md={6} lg={4}>
-          <AnalyticsCurrentVisits
-            title="Current Visits"
-            chart={{
-              series: [
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
-              ],
-            }}
-          />
+          {dataTotalService && (
+            <AnalyticsCurrentVisits
+              title="Current Services"
+              chart={{
+                series: [
+                  { label: 'Double Bed', value: Number(dataTotalService?.series['Double Bed']) },
+                  { label: 'Single Bed', value: Number(dataTotalService?.series['Single Bed']) },
+                ],
+              }}
+            />
+          )}
         </Grid>
 
         <Grid xs={12} md={6} lg={8}>
           <AnalyticsConversionRates
             title="Conversion Rates"
-            subheader="(+43%) than last year"
+            subheader=""
             chart={{
               series: [
-                { label: 'Italy', value: 400 },
-                { label: 'Japan', value: 430 },
-                { label: 'China', value: 448 },
-                { label: 'Canada', value: 470 },
-                { label: 'France', value: 540 },
-                { label: 'Germany', value: 580 },
-                { label: 'South Korea', value: 690 },
-                { label: 'Netherlands', value: 1100 },
-                { label: 'United States', value: 1200 },
-                { label: 'United Kingdom', value: 1380 },
+                { label: '1 to 2', value: dataTotalReview?.result[0]?.value ? dataTotalReview?.result[0]?.value : 0 },
+                { label: '2 to 3', value: dataTotalReview?.result[1]?.value ? dataTotalReview?.result[1]?.value : 0 },
+                { label: '3 to 4', value: dataTotalReview?.result[2]?.value ? dataTotalReview?.result[2]?.value : 0 },
+                { label: '4 to 5', value: dataTotalReview?.result[3]?.value ? dataTotalReview?.result[3]?.value : 0 },
+                // { label: 'China', value: 448 },
+                // { label: 'Canada', value: 470 },
+                // { label: 'France', value: 540 },
+                // { label: 'Germany', value: 580 },
+                // { label: 'South Korea', value: 690 },
+                // { label: 'Netherlands', value: 1100 },
+                // { label: 'United States', value: 1200 },
+                // { label: 'United Kingdom', value: 1380 },
               ],
             }}
           />
@@ -164,21 +273,7 @@ export default function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={8}>
-          <AnalyticsNews title="News" list={_analyticPosts} />
-        </Grid>
 
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsOrderTimeline title="Order Timeline" list={_analyticOrderTimeline} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsTrafficBySite title="Traffic by Site" list={_analyticTraffic} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AnalyticsTasks title="Tasks" list={_analyticTasks} />
-        </Grid>
       </Grid>
     </Container>
   );

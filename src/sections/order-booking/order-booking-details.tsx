@@ -35,6 +35,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     borderBottom: 'none',
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+    width: '100%'
   },
 }));
 
@@ -48,7 +49,6 @@ type Props = {
 export default function InvoiceDetails({ order, order_detail }: Props) {
   const [currentStatus, setCurrentStatus] = useState(order?.status);
 
-
   useEffect(() => {
     setCurrentStatus(order?.status)
   }, [order?.status])
@@ -56,6 +56,9 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
   const handleChangeStatus = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentStatus(event.target.value);
   }, []);
+
+  const total = order?.total ?? 0; // Nếu values?.total không tồn tại, gán giá trị mặc định là 0
+  const serviceCharge = order?.service_charge ?? 0;
 
   const renderTotal = (
     <>
@@ -67,15 +70,32 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
         </TableCell>
         <TableCell width={120} sx={{ typography: 'subtitle2' }}>
           <Box sx={{ mt: 2 }} />
-          {fCurrency(order?.total)}
+          {fCurrency(total - serviceCharge)}
         </TableCell>
       </StyledTableRow>
+
+
+      {
+        serviceCharge !== 0 &&
+
+        <StyledTableRow>
+          <TableCell colSpan={3} />
+          <TableCell sx={{ color: 'text.secondary' }}>
+            <Box sx={{ mt: 2 }} />
+            Service Charge
+          </TableCell>
+          <TableCell width={120} sx={{ typography: 'subtitle2' }}>
+            <Box sx={{ mt: 2 }} />
+            {fCurrency(serviceCharge)}
+          </TableCell>
+        </StyledTableRow>
+      }
 
       <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ typography: 'subtitle1' }}>Total</TableCell>
         <TableCell width={140} sx={{ typography: 'subtitle1' }}>
-          {fCurrency(order?.total)}
+          {fCurrency(total)}
         </TableCell>
       </StyledTableRow>
     </>
@@ -111,6 +131,8 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
 
               <TableCell>Count</TableCell>
 
+              <TableCell align="center">Days Count</TableCell>
+
               <TableCell align="right">Price</TableCell>
 
               <TableCell align="right">Total</TableCell>
@@ -132,11 +154,13 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
                   </Box>
                 </TableCell>
 
-                <TableCell>{row.dateCount}</TableCell>
+                <TableCell align="center">{row.personCount}</TableCell>
 
-                <TableCell align="right">{fCurrency(row.total)} /day</TableCell>
+                <TableCell align="center">{row.dateCount} days</TableCell>
 
-                <TableCell align="right">{fCurrency((Number(row.total)) * Number(row.dateCount))}</TableCell>
+                <TableCell align="right">{fCurrency(row.price)} /day</TableCell>
+
+                <TableCell align="right">{fCurrency(row.total)}</TableCell>
               </TableRow>
             ))}
 

@@ -35,7 +35,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
 
   const popover = usePopover();
 
-  const [seriesData, setSeriesData] = useState('2019');
+  const [seriesData, setSeriesData] = useState('2023');
 
   const chartOptions = useChart({
     colors,

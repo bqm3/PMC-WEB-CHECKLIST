@@ -72,7 +72,7 @@ export default function InvoiceToolbar({
 
           {/* <PDFDownloadLink
             document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
-            fileName={invoice.invoiceNumber}
+            fileName={order?.id}
             style={{ textDecoration: 'none' }}
           >
             {({ loading }) => (
@@ -88,7 +88,7 @@ export default function InvoiceToolbar({
             )}
           </PDFDownloadLink> */}
 
-          <Tooltip title="Print">
+          {/* <Tooltip title="Print">
             <IconButton>
               <Iconify icon="solar:printer-minimalistic-bold" />
             </IconButton>
@@ -104,10 +104,10 @@ export default function InvoiceToolbar({
             <IconButton>
               <Iconify icon="solar:share-bold" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </Stack>
 
-        {currentStatus !== undefined && (
+        {/* {currentStatus !== undefined && (
           <TextField
             fullWidth
             select
@@ -124,7 +124,7 @@ export default function InvoiceToolbar({
               </MenuItem>
             ))}
           </TextField>
-        )}
+        )} */}
       </Stack>
 
       <Dialog fullScreen open={view.value}>

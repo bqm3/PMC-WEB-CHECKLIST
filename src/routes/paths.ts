@@ -144,8 +144,11 @@ export const paths = {
     },
     orderBooking: {
       root: `${ROOTS.DASHBOARD}/order-booking`,
+      list: `${ROOTS.DASHBOARD}/order-booking/services`,
       details: (id: string|number) => `${ROOTS.DASHBOARD}/order-booking/${id}`,
       edit: (id: string| number) => `${ROOTS.DASHBOARD}/order-booking/${id}/edit`,
+      detail_service: (id: string|number) => `${ROOTS.DASHBOARD}/order-booking/services/${id}`,
+      edit_service: (id: string| number) => `${ROOTS.DASHBOARD}/order-booking/services/${id}/edit`,
       demo: {
         details: `${ROOTS.DASHBOARD}/order-booking/${MOCK_ID}`,
         edit: `${ROOTS.DASHBOARD}/order-booking/${MOCK_ID}/edit`,

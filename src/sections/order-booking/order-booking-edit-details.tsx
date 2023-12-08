@@ -49,75 +49,8 @@ export default function InvoiceNewEditDetails() {
 
   const values = watch();
 
-  // const totalOnRow = values.items.map((item: IInvoiceItem) => item.quantity * item.price);
-
-  // const subTotal = sum(totalOnRow);
-
-  // const totalAmount = subTotal - values.discount - values.shipping + values.taxes;
-
-  // useEffect(() => {
-  //   setValue('totalAmount', totalAmount);
-  // }, [setValue, totalAmount]);
-
-  // const handleAdd = () => {
-  //   append({
-  //     title: '',
-  //     description: '',
-  //     service: '',
-  //     quantity: 1,
-  //     price: 0,
-  //     total: 0,
-  //   });
-  // };
-
-  // const handleRemove = (index: number) => {
-  //   remove(index);
-  // };
-
-  // const handleClearService = useCallback(
-  //   (index: number) => {
-  //     resetField(`items[${index}].quantity`);
-  //     resetField(`items[${index}].price`);
-  //     resetField(`items[${index}].total`);
-  //   },
-  //   [resetField]
-  // );
-
-  // const handleSelectService = useCallback(
-  //   (index: number, option: string) => {
-  //     setValue(
-  //       `items[${index}].price`,
-  //       INVOICE_SERVICE_OPTIONS.find((service) => service.name === option)?.price
-  //     );
-  //     setValue(
-  //       `items[${index}].total`,
-  //       values.items.map((item: IInvoiceItem) => item.quantity * item.price)[index]
-  //     );
-  //   },
-  //   [setValue, values.items]
-  // );
-
-  // const handleChangeQuantity = useCallback(
-  //   (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-  //     setValue(`items[${index}].quantity`, Number(event.target.value));
-  //     setValue(
-  //       `items[${index}].total`,
-  //       values.items.map((item: IInvoiceItem) => item.quantity * item.price)[index]
-  //     );
-  //   },
-  //   [setValue, values.items]
-  // );
-
-  // const handleChangePrice = useCallback(
-  //   (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-  //     setValue(`items[${index}].price`, Number(event.target.value));
-  //     setValue(
-  //       `items[${index}].total`,
-  //       values.items.map((item: IInvoiceItem) => item.quantity * item.price)[index]
-  //     );
-  //   },
-  //   [setValue, values.items]
-  // );
+  const total = values?.total ?? 0; // Nếu values?.total không tồn tại, gán giá trị mặc định là 0
+  const serviceCharge = values?.service_charge ?? 0;
 
   const renderTotal = (
     <>
@@ -129,15 +62,32 @@ export default function InvoiceNewEditDetails() {
         </TableCell>
         <TableCell width={120} sx={{ typography: 'subtitle2' }}>
           <Box sx={{ mt: 2 }} />
-          {fCurrency(values?.total)}
+          {fCurrency(total - serviceCharge)}
         </TableCell>
       </StyledTableRow>
+
+
+      {
+        serviceCharge !== 0 &&
+
+        <StyledTableRow>
+          <TableCell colSpan={3} />
+          <TableCell sx={{ color: 'text.secondary' }}>
+            <Box sx={{ mt: 2 }} />
+            Service Charge
+          </TableCell>
+          <TableCell width={120} sx={{ typography: 'subtitle2' }}>
+            <Box sx={{ mt: 2 }} />
+            {fCurrency(serviceCharge)}
+          </TableCell>
+        </StyledTableRow>
+      }
 
       <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ typography: 'subtitle1' }}>Total</TableCell>
         <TableCell width={140} sx={{ typography: 'subtitle1' }}>
-          {fCurrency(values?.total)}
+          {fCurrency(total)}
         </TableCell>
       </StyledTableRow>
     </>
@@ -155,6 +105,8 @@ export default function InvoiceNewEditDetails() {
                 <TableCell sx={{ typography: 'subtitle2' }}>Name Room</TableCell>
 
                 <TableCell>Count</TableCell>
+
+                <TableCell align="center">Days Count</TableCell>
 
                 <TableCell align="right">Price</TableCell>
 
@@ -181,9 +133,9 @@ export default function InvoiceNewEditDetails() {
 
                   <TableCell align="center">{row.dateCount} days</TableCell>
 
-                  <TableCell align="right">{fCurrency(row.total)} /day</TableCell>
+                  <TableCell align="right">{fCurrency(row.price)} /day</TableCell>
 
-                  <TableCell align="right">{fCurrency((Number(row.total)) * Number(row.dateCount))}</TableCell>
+                  <TableCell align="right">{fCurrency(row.total)}</TableCell>
                 </TableRow>
               ))}
 

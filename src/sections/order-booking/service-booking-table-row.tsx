@@ -22,12 +22,12 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { IBookingOrder } from 'src/types/room';
+import { IBookingOrder, IBookingService } from 'src/types/room';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IBookingOrder;
+  row: IBookingService;
   selected: boolean;
   onSelectRow: VoidFunction;
   onViewRow: VoidFunction;
@@ -43,8 +43,8 @@ export default function InvoiceTableRow({
   onEditRow,
   onDeleteRow,
 }: Props) {
-  const { createdDate, count, total, service_charge, note, status, customer_id, employee_id, createdAt, updatedAt, customer } = row;
-  const cus = JSON.parse(customer)
+  const { quantity, email, room_id, name, price, fullname, active, customer_id, order_id, createdAt, updatedAt } = row;
+  // const cus = JSON.parse(customer)
 
   const confirm = useBoolean();
 
@@ -58,15 +58,15 @@ export default function InvoiceTableRow({
         </TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={cus[0].fullname} sx={{ mr: 2 }}>
-            {cus[0].fullname.charAt(0).toUpperCase()}
-          </Avatar>
+          {/* <Avatar alt={fullname} sx={{ mr: 2 }}>
+            {fullname.charAt(0).toUpperCase()}
+          </Avatar> */}
 
           <ListItemText
             disableTypography
             primary={
               <Typography variant="body2" noWrap>
-                {cus[0].fullname}
+                {fullname}
               </Typography>
             }
             secondary={
@@ -76,7 +76,7 @@ export default function InvoiceTableRow({
                 onClick={onViewRow}
                 sx={{ color: 'text.disabled', cursor: 'pointer' }}
               >
-                {cus[0].email}
+                {email}
               </Link>
             }
           />
@@ -84,8 +84,8 @@ export default function InvoiceTableRow({
 
         <TableCell>
           <ListItemText
-            primary={format(new Date(createdDate), 'dd MMM yyyy')}
-            secondary={format(new Date(createdDate), 'p')}
+            primary={format(new Date(createdAt), 'dd MMM yyyy')}
+            secondary={format(new Date(createdAt), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -96,26 +96,27 @@ export default function InvoiceTableRow({
         </TableCell>
 
 
-        <TableCell>{fCurrency(total)}</TableCell>
+        <TableCell>{fCurrency(price)}</TableCell>
 
-        <TableCell align="center">{count}</TableCell>
+        <TableCell align="center">{name}</TableCell>
+        <TableCell align="center">HD-{order_id}</TableCell>
 
         <TableCell>
           <Label
             variant="soft"
             color={
-              (status === 1 && 'success') ||
-              (status === 0 && 'warning') ||
-              (status === 2 && 'error') ||
-              (status === 3 && 'default') ||
+              (active === 1 && 'success') ||
+              (active === 0 && 'warning') ||
+              (active === 2 && 'error') ||
+              (active === 3 && 'default') ||
               'default'
             }
           >
             {
-              (status === 1 && 'paid') ||
-              (status === 0 && 'pending') ||
-              (status === 2 && 'overdue') ||
-              (status === 3 && 'draft') ||
+              (active === 1 && 'paid') ||
+              (active === 0 && 'pending') ||
+              (active === 2 && 'overdue') ||
+              (active === 3 && 'draft') ||
               'default'
             }
           </Label>
@@ -134,7 +135,7 @@ export default function InvoiceTableRow({
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             onViewRow();
             popover.onClose();
@@ -143,7 +144,7 @@ export default function InvoiceTableRow({
           <Iconify icon="solar:eye-bold" />
           View
         </MenuItem>
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: 'dashed' }} /> */}
         <MenuItem
           onClick={() => {
             onEditRow();

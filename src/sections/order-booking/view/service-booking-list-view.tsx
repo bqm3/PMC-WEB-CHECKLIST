@@ -24,7 +24,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fTimestamp } from 'src/utils/format-time';
 // _mock
 import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-import { useGetOrderBookings } from 'src/api/order';
+import { useGetOrderBookings, useGetOrderBookingService } from 'src/api/order';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -43,23 +43,22 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 // types
-import { IBookingOrder, IOrderBookingTableFilters, IOrderBookingTableFilterValue } from 'src/types/room';
+import { IBookingOrder, IBookingService, IOrderBookingTableFilters, IOrderBookingTableFilterValue } from 'src/types/room';
 //
-import InvoiceAnalytic from '../invoice-analytic';
-import InvoiceTableRow from '../order-booking-table-row';
+import InvoiceAnalytic from '../service-analytic';
+import InvoiceTableRow from '../service-booking-table-row';
 import InvoiceTableToolbar from '../order-booking-table-toolbar';
-import InvoiceTableFiltersResult from '../order-booking-table-filters-result';
-
-
+import InvoiceTableFiltersResult from '../service-booking-table-filters-result';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'invoiceNumber', label: 'Customer' },
-  { id: 'createdDate', label: 'Create Date' },
-  { id: 'price', label: 'Total Payment' },
-  { id: 'sent', label: 'Count Room', align: 'center' },
-  { id: 'status', label: 'Status' },
+  { id: 'id', label: 'Information' },
+  { id: 'createdAt', label: 'Create At' },
+  { id: 'price', label: 'Price' },
+  { id: 'name', label: 'Name Room', align: 'center' },
+  { id: 'order_id', label: 'OrderId', align: 'center' },
+  { id: 'active', label: 'Status' },
   { id: '' },
 ];
 
@@ -74,7 +73,7 @@ const defaultFilters: IOrderBookingTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function OrderBookingListView() {
+export default function ServiceBookingListView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -85,15 +84,15 @@ export default function OrderBookingListView() {
 
   const confirm = useBoolean();
 
-  const [tableDataOrder, setTableDataOrder] = useState<IBookingOrder[]>([]);
+  const [tableDataOrder, setTableDataOrder] = useState<IBookingService[]>([]);
 
-  const { orders, ordersLoading, ordersEmpty, ordersError } = useGetOrderBookings()
+  const { services, servicesLoading, servicesEmpty, servicesError } = useGetOrderBookingService()
 
   useEffect(() => {
-    if (orders.length) {
-      setTableDataOrder(orders)
+    if (services.length) {
+      setTableDataOrder(services)
     }
-  }, [orders])
+  }, [services])
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -124,11 +123,11 @@ export default function OrderBookingListView() {
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const getInvoiceLength = (status: string) =>
-    tableDataOrder.filter((item) => Number(item?.status) === Number(status)).length;
+    tableDataOrder.filter((item) => Number(item?.active) === Number(status)).length;
 
   const getTotalAmount = (status: string) =>
     sumBy(
-      tableDataOrder.filter((item) => Number(item?.status) === Number(status)),
+      tableDataOrder.filter((item) => Number(item?.active) === Number(status)),
       'total'
     );
 
@@ -198,21 +197,21 @@ export default function OrderBookingListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.orderBooking.edit(id));
+      router.push(paths.dashboard.orderBooking.edit_service(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.orderBooking.details(id));
+      router.push(paths.dashboard.orderBooking.detail_service(id));
     },
     [router]
   );
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
-      handleFilters('status', newValue);
+      handleFilters('active', newValue);
     },
     [handleFilters]
   );
@@ -225,14 +224,14 @@ export default function OrderBookingListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="List Booking"
+          heading="List Service"
           links={[
             {
               name: 'Dashboard',
               href: paths.dashboard.root
             },
             {
-              name: 'Order Booking',
+              name: 'Order Service',
               href: paths.dashboard.orderBooking.root,
             },
             {
@@ -305,7 +304,7 @@ export default function OrderBookingListView() {
 
         <Card>
           <Tabs
-            value={filters.status}
+            value={filters.active}
             onChange={handleFilterStatus}
             sx={{
               px: 2.5,
@@ -483,12 +482,12 @@ function applyFilter({
   filters,
   dateError,
 }: {
-  inputData: IBookingOrder[];
+  inputData: IBookingService[];
   comparator: (a: any, b: any) => number;
   filters: IOrderBookingTableFilters;
   dateError: boolean;
 }) {
-  const { customer, status, service, createdDate, endDate } = filters;
+  const { customer, status, service, active, createdDate, endDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -503,15 +502,16 @@ function applyFilter({
   if (customer) {
     inputData = inputData.filter(
       (data) =>
-        data.customer.toLowerCase().indexOf(customer.toLowerCase()) !== -1
+        data.name.toLowerCase().indexOf(customer.toLowerCase()) !== -1 ||
+        customer.includes(`${data?.order_id}`)
     );
   }
 
-  if (status !== -1) {
-    inputData = inputData.filter((data) => data.status === status);
+  if (active !== -1) {
+    inputData = inputData.filter((data) => data.active === active);
   }
 
-  // if (service.length) {
+  // if (order_id) {
   //   inputData = inputData.filter((invoice) =>
   //     invoice.items.some((filterItem) => service.includes(filterItem.service))
   //   );
@@ -521,8 +521,8 @@ function applyFilter({
     if (createdDate && endDate) {
       inputData = inputData.filter(
         (data) =>
-          fTimestamp(data.createdDate) >= fTimestamp(createdDate) &&
-          fTimestamp(data.createdDate) <= fTimestamp(endDate)
+          fTimestamp(data.createdAt) >= fTimestamp(createdDate) &&
+          fTimestamp(data.createdAt) <= fTimestamp(endDate)
       );
     }
   }

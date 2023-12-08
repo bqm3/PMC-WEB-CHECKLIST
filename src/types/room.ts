@@ -104,12 +104,29 @@ export type IBookingOrder = {
   status: number;
   total: number;
   note: string;
+  service_charge: number | null;
   customer_id: number;
   employee_id: number | null;
   createdAt: Date | null;
   updatedAt: Date | null;
   customer: string;
 };
+export type IBookingService = {
+  id: string;
+  quantity: number;
+  active: number;
+  room_id: number;
+  order_id: number;
+  service_id: string;
+  customer_id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  name: string;
+  price: number;
+  fullname: string;
+  email: string;
+};
+
 
 export type IBookingOrderData = {
   id: number | string;
@@ -123,7 +140,10 @@ export type IBookingOrderData = {
   createdAt: Date;
   updatedAt: Date | null;
   od_detail: string;
+  service_charge: number;
   email: string;
+  code: string;
+  phone: string;
   phonenumber: string;
   fullname: string;
   emp_email: string;
@@ -136,7 +156,9 @@ export type IBookingOrderDetail = {
   status: string;
   dateCount: string;
   personCount: string;
+  childCount: string;
   total: string;
+  price: string;
   room_name: string;
   room_id: string;
 };
@@ -149,6 +171,7 @@ export type IOrderBookingTableFilters = {
   status: number | string;
   createdDate: Date | null;
   endDate: Date | null;
+  active: number;
 };
 
 export type IUser = {

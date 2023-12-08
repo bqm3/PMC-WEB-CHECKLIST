@@ -1,4 +1,4 @@
-import { IBookingOrder, IBookingOrderDetail , IBookingOrderData} from 'src/types/room';
+import { IBookingOrder, IBookingOrderDetail , IBookingOrderData, IBookingService} from 'src/types/room';
 import axios, { AxiosRequestConfig } from 'axios';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
@@ -28,6 +28,44 @@ export function useGetOrderBookings() {
 
   return memoizedValue;
 }
+export function useGetOrderBookingService() {
+  const URL = 'https://be-nodejs-project.vercel.app/api/room_service'
+  const fetCher = (url: string) => fetch(url).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      services: data as IBookingService[] || [],
+      servicesLoading: isLoading,
+      servicesError: error,
+      servicesValidating: isValidating,
+      servicesEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetOrderBookingServiceDetail(id: string) {
+  const URL = `https://be-nodejs-project.vercel.app/api/room_service/${id}`
+  const fetCher = (url: string) => fetch(url).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      services: data as IBookingService|| [],
+      servicesLoading: isLoading,
+      servicesError: error,
+      servicesValidating: isValidating,
+      servicesEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 
 export function useGetOrderDetail(id: string) {
   const URL = id ? [`https://be-nodejs-project.vercel.app/api/orders/${id}` ] : null;

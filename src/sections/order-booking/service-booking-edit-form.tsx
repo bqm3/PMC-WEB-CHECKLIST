@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // types
-import { IBookingOrderData, IBookingOrderDetail } from 'src/types/room';
+import { IBookingOrderData, IBookingOrderDetail, IBookingService } from 'src/types/room';
 // _mock
 import { _addressBooks } from 'src/_mock';
 // hooks
@@ -21,19 +21,18 @@ import { useAuthContext } from 'src/auth/hooks';
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 //
-import OrderBookingEditDetails from './order-booking-edit-details';
-import OrderBookingEditAddress from './order-booking-edit-address';
-import OrderBookingEditStatusDate from './order-booking-edit-status-date';
+import OrderBookingEditDetails from './service-booking-edit-details';
+import OrderBookingEditAddress from './service-booking-edit-address';
+import OrderBookingEditStatusDate from './service-booking-edit-status-date';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  order: IBookingOrderData;
-  order_detail: IBookingOrderDetail;
+  tableDataOrder: IBookingService;
 };
 
-export default function OrderBookingEditForm({ order, order_detail }: Props) {
+export default function OrderBookingEditForm({ tableDataOrder }: Props) {
 
 
   const router = useRouter();
@@ -51,33 +50,23 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
 
   const defaultValues = useMemo(
     () => ({
-      id: order?.id || '',
-      createdDate: order?.createdDate || new Date(),
-      count: order?.count || 0,
-      status: order?.status || 0,
-      total: order?.total || 0,
-      service_charge: order?.service_charge || 0,
-      note: order?.note || '',
-      employee: order?.employee,
-      od_detail: order?.od_detail || '',
-      email: order?.email || '',
-      phonenumber: order?.phonenumber || '',
-      fullname: order?.fullname || '',
-      emp_fullname: order?.emp_fullname || '',
-      emp_email: order?.emp_email || '',
-      order_details: order_detail || [
-        {
-          checkinDate: new Date(),
-          checkoutDate: new Date(),
-          statusDetail: '',
-          dateCount: '',
-          total: '',
-          room_name: '',
-        }
-      ]
+      id: tableDataOrder?.id || '',
+      createdAt: tableDataOrder?.createdAt || new Date(),
+      updatedAt: tableDataOrder?.updatedAt || new Date(),
+      room_id: tableDataOrder?.room_id || 0,
+      active: tableDataOrder?.active || 0,
+      quantity: tableDataOrder?.quantity || 0,
+      service_id: tableDataOrder?.service_id || 0,
+      order_id: tableDataOrder?.order_id || 0,
+      name: tableDataOrder?.name || '',
+      price: tableDataOrder?.price,
+      fullname: tableDataOrder?.fullname || '',
+      email: tableDataOrder?.email || '',
+      customer_id: tableDataOrder?.customer_id || '',
+
 
     }),
-    [order, order_detail]
+    [tableDataOrder]
   );
 
 
@@ -100,8 +89,7 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       loadingSave.onFalse();
-      router.push(paths.dashboard.orderBooking.root);
-      console.info('DATA', JSON.stringify(data, null, 2));
+      router.push(paths.dashboard.orderBooking.list);
     } catch (error) {
       console.error(error);
       loadingSave.onFalse();
@@ -109,27 +97,27 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
   });
 
   const handleCreateAndSend = handleSubmit(async (data) => {
-    console.log('data', data)
+
     loadingSend.onTrue();
 
     try {
 
       await axios.put(
-        `https://be-nodejs-project.vercel.app/api/orders/status`,
+        `https://be-nodejs-project.vercel.app/api/room_service/status`,
+        // `http://localhost:6969/api/room_service/status`,
         {
           user, data
         }
       );
       reset();
       loadingSend.onFalse();
-      router.push(paths.dashboard.orderBooking.root);
+      router.push(paths.dashboard.orderBooking.list);
       enqueueSnackbar({
         variant: 'success',
         autoHideDuration: 3000,
         message: 'Update Success!',
       });
     } catch (error) {
-      console.error(error);
       enqueueSnackbar({
         variant: 'error',
         autoHideDuration: 3000,
@@ -157,7 +145,7 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
           loading={loadingSend.value && isSubmitting}
           onClick={handleCreateAndSend}
         >
-          {order && order_detail ? 'Update' : 'Create'} & Send
+          {tableDataOrder ? 'Update' : 'Create'} & Send
         </LoadingButton>
       </Stack>
     </FormProvider>

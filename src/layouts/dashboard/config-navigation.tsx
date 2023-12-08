@@ -61,40 +61,10 @@ export function useNavData() {
           subheader: t('overview'),
           items: [
             {
-              title: t('app'),
-              path: paths.dashboard.root,
-              icon: ICONS.dashboard,
+              title: t('analytics'),
+              path: paths.dashboard.general.analytics,
+              icon: ICONS.analytics,
             },
-            // {
-            //   title: t('ecommerce'),
-            //   path: paths.dashboard.general.ecommerce,
-            //   icon: ICONS.ecommerce,
-            // },
-            // {
-            //   title: t('analytics'),
-            //   path: paths.dashboard.general.analytics,
-            //   icon: ICONS.analytics,
-            // },
-            // {
-            //   title: t('banking'),
-            //   path: paths.dashboard.general.banking,
-            //   icon: ICONS.banking,
-            // },
-            // {
-            //   title: t('booking'),
-            //   path: paths.dashboard.general.booking,
-            //   icon: ICONS.booking,
-            // },
-            // {
-            //   title: t('file'),
-            //   path: paths.dashboard.general.file,
-            //   icon: ICONS.file,
-            // },
-            // {
-            //   title: t('ficilities'),
-            //   path: paths.dashboard.general.ficilities,
-            //   icon: ICONS.banking,
-            // },
           ],
         },
         // MANAGEMENT
@@ -147,8 +117,10 @@ export function useNavData() {
               path: paths.dashboard.orderBooking.root,
               icon: ICONS.invoice,
               children: [
-                { title: t('list'), path: paths.dashboard.orderBooking.root },
+                { title: t('list-booking'), path: paths.dashboard.orderBooking.root },
+                { title: t('list-service'), path: paths.dashboard.orderBooking.list },
               ],
+
             },
             {
               title: t('User'),

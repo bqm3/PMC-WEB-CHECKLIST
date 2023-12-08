@@ -131,10 +131,7 @@ export default function OverviewEcommerceView() {
                       name: 'Total Income',
                       data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 35, 51, 49],
                     },
-                    {
-                      name: 'Total Expenses',
-                      data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 13, 56, 77],
-                    },
+
                   ],
                 },
                 {
