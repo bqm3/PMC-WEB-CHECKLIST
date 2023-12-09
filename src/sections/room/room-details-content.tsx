@@ -28,11 +28,11 @@ import { useEffect, useState } from 'react';
 
 type Props = {
   data: IRoom;
-  services: IService[];
+  // services: IService[];
   images: IRoomImage[];
 };
 
-export default function RoomDetailsContent({ data, services, images }: Props) {
+export default function RoomDetailsContent({ data, images }: Props) {
   const {
     id,
     name,
@@ -46,6 +46,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
     numberChildren,
     image,
     roomImages,
+    roomRatings,
     service,
     status,
     title,
@@ -61,9 +62,22 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
   // Initialize slides with an empty array
   const [slides, setSlides] = useState<IRoomImage[] | any>([]);
 
+  const [ratingTB, setRatingTB] = useState(0)
+  useEffect(() => {
+    if (roomRatings && roomRatings.length > 0) {
+      const total = roomRatings.reduce((acc, roomRating) => {
+        const parsedRating = parseInt(roomRating.name, 10);
+        return isNaN(parsedRating) ? acc : acc + parsedRating;
+      }, 0);
+      const average = total / roomRatings.length || 0; // Ensure no division by zero
+      setRatingTB(average);
+    } else {
+      setRatingTB(0);
+    }
+  }, [roomRatings]);
+
+
   const [arrImages, setArrImages] = useState<IRoomImage[]>([]);
-
-
 
   useEffect(() => {
     if (roomImages) {
@@ -185,9 +199,9 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
         <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'body2' }}>
           <Iconify icon="eva:star-fill" sx={{ color: 'warning.main' }} />
           <Box component="span" sx={{ typography: 'subtitle2' }}>
-            {rating}
+            {ratingTB}
           </Box>
-          <Link sx={{ color: 'text.secondary' }}>({totalRating} reviews)</Link>
+          <Link sx={{ color: 'text.secondary' }}>({roomRatings ? roomRatings.length : 0} reviews)</Link>
         </Stack>
 
 
@@ -241,7 +255,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
       {[
         {
           label: 'Total Ratings',
-          value: `${totalRating}`,
+          value: `${roomRatings ? roomRatings.length : 0} `,
           icon: <Iconify icon="ic:round-star-rate" />,
         },
         {
@@ -251,7 +265,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
         },
         {
           label: 'Total Reviews',
-          value: `${totalReview}`,
+          value: `${roomRatings ? roomRatings.length : 0} `,
           icon: <Iconify icon="ic:baseline-rate-review" />,
         },
         {
@@ -283,7 +297,7 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
 
   const renderContent = (
     <>
-      <Stack spacing={2}>
+      {/* <Stack spacing={2}>
         <Typography variant="h6"> Services</Typography>
 
         <Box
@@ -313,12 +327,9 @@ export default function RoomDetailsContent({ data, services, images }: Props) {
           ))}
         </Box>
       </Stack>
-      <Divider sx={{ borderStyle: 'dashed', my: 2 }} />
+      <Divider sx={{ borderStyle: 'dashed', my: 2 }} /> */}
 
       <Markdown children={description} />
-
-
-
 
     </>
   );

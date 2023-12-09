@@ -58,7 +58,24 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
     voucher_id,
     createdAt,
     priceSale,
+    roomRatings,
   } = room;
+
+  const [ratingTB, setRatingTB] = useState(0)
+  useEffect(() => {
+    if (roomRatings && roomRatings.length > 0) {
+      const total = roomRatings.reduce((acc, roomRating) => {
+        const parsedRating = parseInt(roomRating.name, 10);
+        return isNaN(parsedRating) ? acc : acc + parsedRating;
+      }, 0);
+      const average = total / roomRatings.length || 0; // Ensure no division by zero
+      setRatingTB(average);
+    } else {
+      setRatingTB(0);
+    }
+  }, [roomRatings]);
+
+
 
   const renderRating = (
     <Stack
@@ -76,7 +93,9 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
       }}
     >
       <Iconify icon="eva:star-fill" sx={{ color: 'warning.main', mr: 0.25 }} />
-      {rating}
+      {ratingTB}
+
+      {/* {rating} */}
     </Stack>
   );
 
@@ -121,12 +140,10 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
         typography: 'subtitle2',
       }}
     >
-      {
-        (label === 1 && 'Excellent') ||
+      {(label === 1 && 'Excellent') ||
         (label === 2 && 'Very Good') ||
         (label === 3 && 'Exceptional') ||
-        'default'
-      }
+        'default'}
     </Stack>
   );
 
@@ -210,10 +227,6 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
           label: `${totalRating} Reviews`,
           icon: <Iconify icon="ic:baseline-rate-review" sx={{ color: 'error.main' }} />,
         },
-        // {
-        //   label: shortLabel,
-        //   icon: <Iconify icon="solar:clock-circle-bold" sx={{ color: 'info.main' }} />,
-        // },
         {
           label: `${numberBed} Bed`,
           icon: <Iconify icon="ic:round-single-bed" sx={{ color: 'primary.main' }} />,
@@ -270,7 +283,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
           Edit
         </MenuItem>
 
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             popover.onClose();
             onDelete();
@@ -279,7 +292,7 @@ export default function RoomItem({ room, onView, onEdit, onDelete }: Props) {
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
     </>
   );

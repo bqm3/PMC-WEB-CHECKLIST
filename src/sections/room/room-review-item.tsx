@@ -5,23 +5,33 @@ import Rating from '@mui/material/Rating';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import MenuItem from '@mui/material/MenuItem';
+
+import IconButton from '@mui/material/IconButton';
+import Iconify from 'src/components/iconify';
 // utils
 import { fDate } from 'src/utils/format-time';
 // types
 // import { IProductReview } from 'src/types/product';
 import { IRoomReview } from 'src/types/room';
 // components
-import Iconify from 'src/components/iconify';
-
+// import Iconify from 'src/components/iconify';
+// auth
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   review: IRoomReview;
+  handleAction: VoidFunction | any;
 };
 
-export default function ProductReviewItem({ review }: Props) {
-  const { rating, content, customer_id, image, status, room_id, createdAt, updatedAt } = review;
+export default function ProductReviewItem({ review, handleAction }: Props) {
+  const popover = usePopover();
+
+  const { user, logout } = useAuthContext();
+  const { id, rating, content, customer_id, image, status, room_id, createdAt, updatedAt } = review;
 
   const renderInfo = (
     <Stack
@@ -81,31 +91,38 @@ export default function ProductReviewItem({ review }: Props) {
 
       <Typography variant="body2">{content}</Typography>
 
-      {!!image?.length && (
-        <Stack direction="row" flexWrap="wrap" spacing={1} sx={{ pt: 1 }}>
-          {/* {image.map((attachment) => ( */}
-          <Box
-            component="img"
-            key={image}
-            alt={image}
-            src={image}
-            sx={{ width: 64, height: 64, borderRadius: 1.5 }}
-          />
-          {/* ))} */}
-        </Stack>
-      )}
 
-      {/* <Stack direction="row" spacing={2} sx={{ pt: 1.5 }}>
-        <Stack direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-          <Iconify icon="solar:like-outline" width={16} sx={{ mr: 0.5 }} />
-          123
-        </Stack>
 
-        <Stack direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-          <Iconify icon="solar:dislike-outline" width={16} sx={{ mr: 0.5 }} />
-          34
-        </Stack>
-      </Stack> */}
+      <Stack direction="row" >
+        {/* {user?.role_id && ( */}
+        <IconButton onClick={popover.onOpen} >
+          <Iconify icon="solar:pen-bold" />
+        </IconButton>
+        <>
+
+          <CustomPopover
+            open={popover.open}
+            onClose={popover.onClose}
+            arrow="right-top"
+            sx={{ width: 140 }}
+          >
+            <MenuItem
+              onClick={() => {
+                popover.onClose();
+                // onView();
+                handleAction(id)
+              }}
+            >
+              <Iconify icon="solar:eye-bold" />
+              Hidden
+            </MenuItem>
+
+
+          </CustomPopover>
+        </>
+
+        {/* )} */}
+      </Stack>
     </Stack>
   );
 

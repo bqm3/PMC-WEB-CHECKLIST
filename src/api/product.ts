@@ -223,7 +223,7 @@ export function useGetService(id: string) {
 
 
 export function useGetRooms() {
-  const URL = 'https://be-nodejs-project.vercel.app/api/rooms'
+  const URL = 'https://be-nodejs-project.vercel.app/api/rooms/'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 

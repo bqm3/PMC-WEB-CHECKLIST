@@ -49,6 +49,12 @@ export type IRoomService = {
   id: string;
   name: string;
 };
+export type IRoomRating = {
+  id: string;
+  name: string;
+  status: string;
+};
+
 export type IRoomImage = {
   id: string;
   type: string;
@@ -95,6 +101,7 @@ export type IRoom = {
   updatedAt: Date;
   service: IRoomService[];
   roomImages: IRoomImage[];
+  roomRatings: IRoomRating[]
 };
 
 export type IBookingOrder = {

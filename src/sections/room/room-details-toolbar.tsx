@@ -91,20 +91,20 @@ export default function RoomDetailsToolbar({
         arrow="top-right"
         sx={{ width: 140 }}
       >
-        {/* {publishOptions.map((option) => (
+        {publishOptions.map((option) => (
           <MenuItem
             key={option.value}
-            selected={option.value === publish}
-            onClick={() => {
-              popover.onClose();
-              onChangePublish(option.value);
-            }}
+          // selected={option.value === publish}
+          // onClick={() => {
+          //   popover.onClose();
+          //   onChangePublish(option.value);
+          // }}
           >
             {option.value === 'published' && <Iconify icon="eva:cloud-upload-fill" />}
             {option.value === 'draft' && <Iconify icon="solar:file-text-bold" />}
             {option.label}
           </MenuItem>
-        ))} */}
+        ))}
       </CustomPopover>
     </>
   );

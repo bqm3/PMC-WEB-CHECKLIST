@@ -71,9 +71,6 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
     }
   }, [typerooms]);
 
-
-  console.log('tableDataTypeRoom', tableDataTypeRoom, typerooms, services, tableDataServices)
-
   useEffect(() => {
     if (services && Array.isArray(services)) {
       const options = services?.map((option) => ({

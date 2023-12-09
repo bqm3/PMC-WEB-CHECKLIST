@@ -37,12 +37,8 @@ import TourFiltersResult from '../tour-filters-result';
 // ----------------------------------------------------------------------
 
 const defaultFilters: IRoomFilters = {
-  // destination: [],
-  // tourGuides: [],
   labels: 'all',
   services: [],
-  // startDate: null,
-  // endDate: null,
 };
 
 // ----------------------------------------------------------------------
@@ -59,6 +55,8 @@ export default function RoomListView() {
     query: '',
     results: [],
   });
+
+  console.log('tableDataRoom', tableDataRoom)
 
   const [filters, setFilters] = useState(defaultFilters);
 

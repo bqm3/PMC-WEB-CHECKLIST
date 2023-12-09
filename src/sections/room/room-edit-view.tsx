@@ -174,7 +174,6 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
       if (currentRoom) {
         const res1 = await axios.put(`https://be-nodejs-project.vercel.app/api/rooms/update/${currentRoom.id}`, formData, config);
         const res2 = await axios.put(`https://be-nodejs-project.vercel.app/api/room-image/update/${currentRoom.id}`, formData, config);
-        console.log('res2', res2)
         const res3 = await axios.post(`https://be-nodejs-project.vercel.app/api/room_service/update/${currentRoom?.id}`, data.service);
         if (res1.status === 200 && res2.status === 200 && res3.status === 200) {
           enqueueSnackbar('Update Success!!!');
