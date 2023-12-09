@@ -67,7 +67,7 @@ export default function RoomDetailsContent({ data, images }: Props) {
     if (roomRatings && roomRatings.length > 0) {
       const total = roomRatings.reduce((acc, roomRating) => {
         const parsedRating = parseInt(roomRating.name, 10);
-        return isNaN(parsedRating) ? acc : acc + parsedRating;
+        return Number.isNaN(parsedRating) ? acc : acc + parsedRating;
       }, 0);
       const average = total / roomRatings.length || 0; // Ensure no division by zero
       setRatingTB(average);

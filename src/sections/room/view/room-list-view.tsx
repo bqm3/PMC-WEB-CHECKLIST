@@ -56,8 +56,6 @@ export default function RoomListView() {
     results: [],
   });
 
-  console.log('tableDataRoom', tableDataRoom)
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const { rooms, roomsLoading, roomsEmpty } = useGetRooms()

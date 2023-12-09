@@ -174,8 +174,8 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
       if (currentRoom) {
         const res1 = await axios.put(`https://be-nodejs-project.vercel.app/api/rooms/update/${currentRoom.id}`, formData, config);
         const res2 = await axios.put(`https://be-nodejs-project.vercel.app/api/room-image/update/${currentRoom.id}`, formData, config);
-        const res3 = await axios.post(`https://be-nodejs-project.vercel.app/api/room_service/update/${currentRoom?.id}`, data.service);
-        if (res1.status === 200 && res2.status === 200 && res3.status === 200) {
+        // const res3 = await axios.post(`https://be-nodejs-project.vercel.app/api/room_service/update/${currentRoom?.id}`, data.service);
+        if (res1.status === 200 && res2.status === 200) {
           enqueueSnackbar('Update Success!!!');
           reset();
 
@@ -395,7 +395,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
           {!mdUp && <CardHeader title="Services and Images" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <Stack spacing={1}>
+            {/* <Stack spacing={1}>
               <Typography variant="subtitle2">Services</Typography>
               {servicesLoading === false && tableDataServices.length > 0 && (
                 <>
@@ -409,7 +409,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
                   />
                 </>
               )}
-            </Stack>
+            </Stack> */}
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Images</Typography>
               <RHFUpload

@@ -76,7 +76,7 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
 
 
       {
-        serviceCharge !== 0 &&
+        serviceCharge !== null &&
 
         <StyledTableRow>
           <TableCell colSpan={3} />
@@ -204,6 +204,7 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
                 (currentStatus === 1 && 'success') ||
                 (currentStatus === 0 && 'warning') ||
                 (currentStatus === 2 && 'error') ||
+                (currentStatus === 3 && 'default') ||
                 'default'
               }
             >
@@ -211,6 +212,7 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
                 (currentStatus === 1 && 'paid') ||
                 (currentStatus === 0 && 'pending') ||
                 (currentStatus === 2 && 'overdue') ||
+                (currentStatus === 3 && 'draft') ||
                 'default'
               }
             </Label>
