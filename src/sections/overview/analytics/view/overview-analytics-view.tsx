@@ -224,57 +224,7 @@ export default function OverviewAnalyticsView() {
   //   });
   // });
 
-  const rawData = [
-    { year: 2023, month: 1, total: 120, service_charge: 25 },
-    { year: 2023, month: 10, total: 180, service_charge: 35 },
-    // ... other data
-  ];
 
-  interface DataItem {
-    year: number;
-    month: number;
-    total: number;
-    service_charge: number;
-  }
-  // Khởi tạo một object lưu trữ dữ liệu theo từng năm
-  const yearData: { [key: number]: Array<{ total: number; service_charge: number }> } = {};
-
-  // Loop through rawData and populate yearData
-  rawData.forEach((item) => {
-    const { year, month, total, service_charge } = item;
-    if (!yearData[year]) {
-      yearData[year] = Array(12).fill({ total: 0, service_charge: 0 });
-    }
-
-    const index = month - 1; // Month index starts from 0
-
-    if (yearData[year][index]) {
-      yearData[year][index] = {
-        total: yearData[year][index].total + total,
-        service_charge: yearData[year][index].service_charge + service_charge,
-      };
-    }
-  });
-
-  // Convert yearData to the desired format
-  const serieswd = Object.entries(yearData).map(([year, data]) => ({
-    type: `${year}`,
-    data: [
-      {
-        name: 'Total Booking',
-        data: data.map((monthData) => monthData.total),
-      },
-      {
-        name: 'Total Service',
-        data: data.map((monthData) => monthData.service_charge),
-      },
-    ],
-  }));
-
-  console.log('serieswd', serieswd);
-
-
-  console.log('dataTotalUser', dataTotal);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -376,8 +326,9 @@ export default function OverviewAnalyticsView() {
               title="Current Services"
               chart={{
                 series: [
-                  { label: 'Double Bed', value: Number(dataTotalService?.series['Double Bed']) },
-                  { label: 'Single Bed', value: Number(dataTotalService?.series['Single Bed']) },
+                  { label: 'Double Bed', value: Number(dataTotalService?.series['Double Bed'] ? dataTotalService?.series['Double Bed'] : 0) },
+                  { label: 'Single Bed', value: Number(dataTotalService?.series['Single Bed'] ? dataTotalService?.series['Single Bed'] : 0) },
+                  { label: "Children's Beds", value: Number(dataTotalService?.series["Children's Beds"] ? dataTotalService?.series["Children's Beds"] : 0) },
                 ],
               }}
             />
