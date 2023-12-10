@@ -43,7 +43,7 @@ export default function InvoiceTableRow({
   onEditRow,
   onDeleteRow,
 }: Props) {
-  const { quantity, email, room_id, name, price, fullname, active, customer_id, order_id, createdAt, updatedAt } = row;
+  const { quantity, email, room_id, name, price, fullname, active, customer_id, order_id, createdAt, updatedAt, id } = row;
   // const cus = JSON.parse(customer)
 
   const confirm = useBoolean();
@@ -56,6 +56,7 @@ export default function InvoiceTableRow({
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
+        <TableCell align="center">S-{id}</TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
           {/* <Avatar alt={fullname} sx={{ mr: 2 }}>

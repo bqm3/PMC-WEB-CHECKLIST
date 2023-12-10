@@ -65,10 +65,10 @@ const TABLE_HEAD = [
 const defaultFilters: IOrderBookingTableFilters = {
   customer: '',
   service: [],
-  status: -1,
+  status: 0,
   createdDate: null,
   endDate: null,
-  active: -1
+  active: 0
 };
 
 // ----------------------------------------------------------------------

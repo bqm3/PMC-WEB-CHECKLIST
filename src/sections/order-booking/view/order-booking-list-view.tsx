@@ -55,6 +55,7 @@ import InvoiceTableFiltersResult from '../order-booking-table-filters-result';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'Invoice Code' },
   { id: 'invoiceNumber', label: 'Customer' },
   { id: 'createdDate', label: 'Create Date' },
   { id: 'price', label: 'Total Payment' },
@@ -66,7 +67,7 @@ const TABLE_HEAD = [
 const defaultFilters: IOrderBookingTableFilters = {
   customer: '',
   service: [],
-  status: -1,
+  status: 0,
   createdDate: null,
   endDate: null,
   active: -1
@@ -88,6 +89,10 @@ export default function OrderBookingListView() {
   const [tableDataOrder, setTableDataOrder] = useState<IBookingOrder[]>([]);
 
   const { orders, ordersLoading, ordersEmpty, ordersError } = useGetOrderBookings()
+
+  const [selectedTab, setSelectedTab] = useState(0); // State để lưu trữ tab được chọn
+
+
 
   useEffect(() => {
     if (orders.length) {
@@ -217,6 +222,15 @@ export default function OrderBookingListView() {
     [handleFilters]
   );
 
+  console.log('filters', filters)
+  // useEffect(() => {
+  //   if (!filters.status) {
+  //     // Nếu filters.status chưa được đặt, chọn giá trị mặc định là 0
+  //     handleFilters('status', "0"); // Gọi hàm handleFilterStatus với giá trị 0
+  //     setSelectedTab(0); // Cập nhật selectedTab thành 0
+  //   }
+  // }, []);
+
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -305,7 +319,7 @@ export default function OrderBookingListView() {
 
         <Card>
           <Tabs
-            value={filters.status}
+            value={filters.status ? filters.status : selectedTab}
             onChange={handleFilterStatus}
             sx={{
               px: 2.5,
@@ -488,7 +502,7 @@ function applyFilter({
   filters: IOrderBookingTableFilters;
   dateError: boolean;
 }) {
-  const { customer, status, service, createdDate, endDate } = filters;
+  const { customer, status, active, createdDate, endDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -503,13 +517,19 @@ function applyFilter({
   if (customer) {
     inputData = inputData.filter(
       (data) =>
-        data.customer.toLowerCase().indexOf(customer.toLowerCase()) !== -1
+        data.customer.toLowerCase().indexOf(customer.toLowerCase()) !== -1 ||
+        customer.includes(`${data?.id}`)
     );
   }
+
 
   if (status !== -1) {
     inputData = inputData.filter((data) => data.status === status);
   }
+
+  // if (active !== -1) {
+  //   inputData = inputData.filter((data) => data.id === active);
+  // }
 
   // if (service.length) {
   //   inputData = inputData.filter((invoice) =>

@@ -94,42 +94,30 @@ export default function OverviewBankingView() {
               chart={{
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
                 series: [
+
                   {
-                    type: 'Week',
+                    type: '2023',
                     data: [
                       {
-                        name: 'Income',
-                        data: [10, 41, 35, 151, 49, 62, 69, 91, 48],
-                      },
-                      {
-                        name: 'Expenses',
-                        data: [10, 34, 13, 56, 77, 88, 99, 77, 45],
-                      },
-                    ],
-                  },
-                  {
-                    type: 'Month',
-                    data: [
-                      {
-                        name: 'Income',
+                        name: 'Total Booking',
                         data: [148, 91, 69, 62, 49, 51, 35, 41, 10],
                       },
                       {
-                        name: 'Expenses',
+                        name: 'Total Service',
                         data: [45, 77, 99, 88, 77, 56, 13, 34, 10],
                       },
                     ],
                   },
                   {
-                    type: 'Year',
+                    type: '2022',
                     data: [
                       {
-                        name: 'Income',
-                        data: [76, 42, 29, 41, 27, 138, 117, 86, 63],
+                        name: 'Total Booking',
+                        data: [148, 45, 69, 62, 49, 56, 35, 2, 10],
                       },
                       {
-                        name: 'Expenses',
-                        data: [80, 55, 34, 114, 80, 130, 15, 28, 55],
+                        name: 'Total Service',
+                        data: [45, 77, 99, 88, 3, 56, 13, 34, 10],
                       },
                     ],
                   },
