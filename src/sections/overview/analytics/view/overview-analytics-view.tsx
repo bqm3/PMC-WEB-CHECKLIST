@@ -297,10 +297,11 @@ export default function OverviewAnalyticsView() {
               title="Current Services"
               chart={{
                 series: [
-                  { label: 'Double Bed', value: Number(dataTotalService?.series['Double Bed'] ? dataTotalService?.series['Double Bed'] : 0) },
-                  { label: 'Single Bed', value: Number(dataTotalService?.series['Single Bed'] ? dataTotalService?.series['Single Bed'] : 0) },
-                  { label: "Children's Beds", value: Number(dataTotalService?.series["Children's Beds"] ? dataTotalService?.series["Children's Beds"] : 0) },
+                  { label: 'Double Bed', value: Number(dataTotalService?.series && dataTotalService.series['Double Bed'] ? dataTotalService.series['Double Bed'] : 0) },
+                  { label: 'Single Bed', value: Number(dataTotalService?.series && dataTotalService.series['Single Bed'] ? dataTotalService.series['Single Bed'] : 0) },
+                  { label: "Children's Beds", value: Number(dataTotalService?.series && dataTotalService.series["Children's Beds"] ? dataTotalService.series["Children's Beds"] : 0) },
                 ],
+
               }}
             />
           )}
