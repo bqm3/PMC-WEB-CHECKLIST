@@ -76,7 +76,7 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
 
 
       {
-        serviceCharge !== null &&
+        serviceCharge !== 0 &&
 
         <StyledTableRow>
           <TableCell colSpan={3} />
@@ -129,9 +129,9 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
 
               <TableCell sx={{ typography: 'subtitle2' }}>Name Room</TableCell>
 
-              <TableCell>Count</TableCell>
+              <TableCell align="center">Count</TableCell>
 
-              <TableCell align="center">Days Count</TableCell>
+              <TableCell align="left">Days Count</TableCell>
 
               <TableCell align="right">Price</TableCell>
 
@@ -175,7 +175,12 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
     <>
       <OrderBookingToolbar
         order={order}
-        currentStatus={currentStatus}
+        order_detail={order_detail}
+        currentStatus={(currentStatus === 1 && 'paid') ||
+          (currentStatus === 0 && 'pending') ||
+          (currentStatus === 2 && 'overdue') ||
+          (currentStatus === 3 && 'draft') ||
+          'default'}
         onChangeStatus={handleChangeStatus}
         statusOptions={ORDER_BOOKING_STATUS_OPTIONS}
       />

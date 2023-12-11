@@ -49,15 +49,19 @@ export default function OverviewAnalyticsView() {
   const theme = useTheme();
   const settings = useSettingsContext();
 
-  const [dataTotalUser, setDataTotalUser] = useState<widgetData>();
   const [dataTotalHeader, setDataTotalHeader] = useState<widgetData>();
   const [dataTotalYear, setDataTotalYear] = useState<widgetData>();
   const [dataTotalService, setDataTotalService] = useState<widgetData>();
   const [dataTotalReview, setDataTotalReview] = useState<widgetData>();
   const [dataTotal, setDataTotal] = useState<any>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
+  const [isLoading3, setIsLoading3] = useState(false);
+  const [isLoading4, setIsLoading4] = useState(false);
+  const [isLoading5, setIsLoading5] = useState(false);
 
   useEffect(() => {
+    setIsLoading1(true)
     const resTotal = async () => {
       try {
         const res = await axios.post(
@@ -98,68 +102,63 @@ export default function OverviewAnalyticsView() {
             ],
           }));
           setDataTotal(serieswd);
+          setIsLoading1(false)
         }
       } catch (err) {
         console.log('error', err);
+        setIsLoading1(false)
       }
     };
     resTotal();
   }, []);
 
   useEffect(() => {
-    const resTotal = async () => {
-      try {
-        const res = await axios.post(
-          'https://be-nodejs-project.vercel.app/api/orders/widget-order'
-        );
-        if (res.status === 200) {
-          setDataTotalUser(res.data);
-        }
-      } catch (err) {
-        console.log('error', err);
-      }
-    };
-    resTotal();
-  }, []);
-
-  useEffect(() => {
+    setIsLoading2(true)
     const resTotal = async () => {
       try {
         const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header');
         if (res.status === 200) {
           console.log('success', res.data);
           setDataTotalHeader(res.data[0].order_stats);
+          setIsLoading2(false)
         }
       } catch (err) {
         console.log('error', err);
+        setIsLoading2(false)
       }
     };
     resTotal();
   }, []);
 
   useEffect(() => {
+    setIsLoading3(true)
     const resTotal = async () => {
       try {
         const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service');
         if (res.status === 200) {
           setDataTotalService(res.data);
+          setIsLoading3(false)
         }
       } catch (err) {
         console.log('error', err);
+        setIsLoading3(false)
       }
     };
     resTotal();
   }, []);
 
   useEffect(() => {
+    setIsLoading4(true);
     const resTotal = async () => {
       try {
         const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review');
         if (res.status === 200) {
           setDataTotalReview(res.data);
+          setIsLoading4(false);
         }
       } catch (err) {
         console.log('error', err);
+        setIsLoading4(false);
       }
     };
     resTotal();
@@ -167,16 +166,16 @@ export default function OverviewAnalyticsView() {
 
   useEffect(() => {
     const resTotal = async () => {
-      setIsLoading(true);
+      setIsLoading5(true);
       try {
         const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
         if (res.status === 200) {
           setDataTotalYear(res.data[0]);
-          setIsLoading(false);
+          setIsLoading5(false);
         }
       } catch (err) {
         console.log('error', err);
-        setIsLoading(false);
+        setIsLoading5(false);
       }
     };
     resTotal();
@@ -224,6 +223,8 @@ export default function OverviewAnalyticsView() {
   //   });
   // });
 
+  // console.log('dataTotalReview?.result[0]?.value', dataTotalReview?.result[3]?.value)
+
 
 
   return (
@@ -237,46 +238,50 @@ export default function OverviewAnalyticsView() {
         Hi, Welcome back 👋
       </Typography>
       <Grid container spacing={3}>
-        <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary
-            title="Rooms"
-            total={dataTotalHeader?.total_orders_this_week ? dataTotalHeader?.total_orders_this_week : 0}
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
-          />
-        </Grid>
+        {isLoading2 === false &&
+          (
+            <>
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidgetSummary
+                  title="Rooms"
+                  total={dataTotalHeader?.total_orders_this_week ? dataTotalHeader?.total_orders_this_week : 0}
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+                />
+              </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary
-            title="Total Users"
-            total={dataTotalHeader?.total_users ? dataTotalHeader?.total_users : 0}
-            color="info"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-          />
-        </Grid>
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidgetSummary
+                  title="Total Users"
+                  total={dataTotalHeader?.total_users ? dataTotalHeader?.total_users : 0}
+                  color="info"
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+                />
+              </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary
-            title="Item Orders"
-            total={dataTotalHeader?.total_orders ? dataTotalHeader?.total_orders : 0}
-            color="warning"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-          />
-        </Grid>
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidgetSummary
+                  title="Item Orders"
+                  total={dataTotalHeader?.total_orders ? dataTotalHeader?.total_orders : 0}
+                  color="warning"
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+                />
+              </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
-          <AnalyticsWidgetSummary
-            title="Draf Orders"
-            total={dataTotalHeader?.total_orders_status_4 ? dataTotalHeader?.total_orders_status_4 : 0}
-            color="error"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-          />
-        </Grid>
+              <Grid xs={12} sm={6} md={3}>
+                <AnalyticsWidgetSummary
+                  title="Draf Orders"
+                  total={dataTotalHeader?.total_orders_status_4 ? dataTotalHeader?.total_orders_status_4 : 0}
+                  color="error"
+                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+                />
+              </Grid>
+            </>
+          )}
 
         <Grid xs={12} md={6} lg={8}>
-          {dataTotalYear && isLoading === false && (
+          {dataTotalYear && isLoading5 === false && (
             <EcommerceYearlySales
               title="Yearly"
-              subheader=""
               chart={{
                 categories: [
                   'Jan',
@@ -321,7 +326,7 @@ export default function OverviewAnalyticsView() {
 
 
         <Grid xs={12} md={6} lg={4}>
-          {dataTotalService && (
+          {dataTotalService && isLoading3 === false && (
             <AnalyticsCurrentVisits
               title="Current Services"
               chart={{
@@ -336,45 +341,49 @@ export default function OverviewAnalyticsView() {
         </Grid>
 
         <Grid xs={12} md={6} lg={12}>
-          <AnalyticsConversionRates
-            title="Conversion Rates"
-            subheader=""
-            chart={{
-              series: [
-                { label: '1 to 2', value: dataTotalReview?.result[0]?.value ? dataTotalReview?.result[0]?.value : 0 },
-                { label: '2 to 3', value: dataTotalReview?.result[1]?.value ? dataTotalReview?.result[1]?.value : 0 },
-                { label: '3 to 4', value: dataTotalReview?.result[2]?.value ? dataTotalReview?.result[2]?.value : 0 },
-                { label: '4 to 5', value: dataTotalReview?.result[3]?.value ? dataTotalReview?.result[3]?.value : 0 },
+          {dataTotalReview && isLoading4 === false && (
+            <AnalyticsConversionRates
+              title="Conversion Rates"
+              subheader=""
+              chart={{
+                series: [
+                  { label: '1 to 2', value: dataTotalReview?.result[0]?.value ? dataTotalReview?.result[0]?.value : 0.1 },
+                  { label: '2 to 3', value: dataTotalReview?.result[1]?.value ? dataTotalReview?.result[1]?.value : 0.1 },
+                  { label: '3 to 4', value: dataTotalReview?.result[2]?.value ? dataTotalReview?.result[2]?.value : 0.1 },
+                  { label: '4 to 5', value: dataTotalReview?.result[3]?.value ? dataTotalReview?.result[3]?.value : 0.1 },
 
-              ],
-            }}
-          />
+                ],
+              }}
+            />
+          )}
         </Grid>
 
         <Grid xs={12} md={12}>
-          <Stack spacing={3}>
-            <BankingBalanceStatistics
-              title="Total Payment Booking"
-              chart={{
-                categories:
-                  ['Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',],
-                series: dataTotal || [],
-              }}
-            />
+          {isLoading1 === false && dataTotal &&
+            <Stack spacing={3}>
+              <BankingBalanceStatistics
+                title="Total Payment Booking"
+                chart={{
+                  categories:
+                    ['Jan',
+                      'Feb',
+                      'Mar',
+                      'Apr',
+                      'May',
+                      'Jun',
+                      'Jul',
+                      'Aug',
+                      'Sep',
+                      'Oct',
+                      'Nov',
+                      'Dec',],
+                  series: dataTotal || [],
+                }}
+              />
 
 
-          </Stack>
+            </Stack>}
+
         </Grid>
 
 

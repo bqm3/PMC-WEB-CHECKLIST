@@ -17,7 +17,7 @@ import { useRouter } from 'src/routes/hooks';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // types
-import { IBookingOrderData } from 'src/types/room';
+import { IBookingOrderData, IBookingOrderDetail } from 'src/types/room';
 // components
 import Iconify from 'src/components/iconify';
 //
@@ -27,6 +27,7 @@ import InvoicePDF from './invoice-pdf';
 
 type Props = {
   order: IBookingOrderData;
+  order_detail: IBookingOrderDetail[];
   currentStatus: string | number;
   onChangeStatus: (event: React.ChangeEvent<HTMLInputElement>) => void;
   statusOptions: {
@@ -37,6 +38,7 @@ type Props = {
 
 export default function InvoiceToolbar({
   order,
+  order_detail,
   currentStatus,
   statusOptions,
   onChangeStatus,
@@ -70,9 +72,9 @@ export default function InvoiceToolbar({
             </IconButton>
           </Tooltip>
 
-          {/* <PDFDownloadLink
-            document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
-            fileName={order?.id}
+          <PDFDownloadLink
+            document={<InvoicePDF invoice={order} order_detail={order_detail} currentStatus={`${currentStatus}`} />}
+            fileName={`HD-${order?.id}`}
             style={{ textDecoration: 'none' }}
           >
             {({ loading }) => (
@@ -86,7 +88,7 @@ export default function InvoiceToolbar({
                 </IconButton>
               </Tooltip>
             )}
-          </PDFDownloadLink> */}
+          </PDFDownloadLink>
 
           {/* <Tooltip title="Print">
             <IconButton>
