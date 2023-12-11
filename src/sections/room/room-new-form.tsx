@@ -180,10 +180,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
             formData2.append('room_id', JSON.stringify(id));
             formData2.append('roomImages', JSON.stringify(data.roomImages));
             await axios.post('https://be-nodejs-project.vercel.app/api/room-image/create', formData2, config);
-            await axios.post(
-              `https://be-nodejs-project.vercel.app/api/room_service/create-mul/${id}`,
-              data.service
-            );
+
             enqueueSnackbar('Tạo phòng thành công!');
             reset();
           }
@@ -386,34 +383,20 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Services and Images
+            Images
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {!currentRoom ? 'Add Services and Images' : 'Update Services and Images'}
+            {!currentRoom ? 'Add Images' : 'Update Images'}
           </Typography>
         </Grid>
       )}
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title="Dịch vụ và ảnh phòng" />}
+          {!mdUp && <CardHeader title="Images" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <Stack spacing={1}>
-              <Typography variant="subtitle2">Services</Typography>
-              {/* {servicesLoading === false && isLoadingServices === false && (
-                <> */}
-              <RHFMultiCheckbox
-                name="service"
-                options={tableDataServices}
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                }}
-              />
-              {/* </>
-              )} */}
-            </Stack>
+
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Images</Typography>
               <RHFUpload

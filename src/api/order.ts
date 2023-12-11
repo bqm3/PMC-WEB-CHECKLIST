@@ -68,7 +68,7 @@ export function useGetOrderBookingServiceDetail(id: string) {
 
 
 export function useGetOrderDetail(id: string) {
-  const URL = id ? [`https://be-nodejs-project.vercel.app/api/orders/${id}` ] : null;
+  const URL = id ? [`http://localhost:6969/api/orders/${id}` ] : null;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
