@@ -61,17 +61,27 @@ export default function OverviewAnalyticsView() {
   const [isLoading5, setIsLoading5] = useState(false);
 
   useEffect(() => {
-    setIsLoading1(true)
-    const resTotal = async () => {
+    const fetchData = async () => {
+      setIsLoading1(true);
+      setIsLoading2(true);
+      setIsLoading3(true);
+      setIsLoading4(true);
+      setIsLoading5(true);
+
       try {
-        const res = await axios.post(
-          'https://be-nodejs-project.vercel.app/api/orders/widget-order-total'
-        );
-        if (res.status === 200) {
+        const [totalRes, headerRes, serviceRes, reviewRes, yearRes] = await Promise.all([
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-total'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year'),
+        ]);
+
+        if (totalRes.status === 200) {
           const yearData: { [key: number]: Array<{ total: number; service_charge: number }> } = {};
 
           // Loop through rawData and populate yearData
-          res.data.forEach((item: any) => {
+          totalRes.data.forEach((item: any) => {
             const { year, month, total, service_charge } = item;
             if (!yearData[year]) {
               yearData[year] = Array(12).fill({ total: 0, service_charge: 0 });
@@ -102,84 +112,162 @@ export default function OverviewAnalyticsView() {
             ],
           }));
           setDataTotal(serieswd);
-          setIsLoading1(false)
+          setIsLoading1(false);
         }
-      } catch (err) {
-        console.log('error', err);
-        setIsLoading1(false)
-      }
-    };
-    resTotal();
-  }, []);
 
-  useEffect(() => {
-    setIsLoading2(true)
-    const resTotal = async () => {
-      try {
-        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header');
-        if (res.status === 200) {
-          console.log('success', res.data);
-          setDataTotalHeader(res.data[0].order_stats);
-          setIsLoading2(false)
+        if (headerRes.status === 200) {
+          setDataTotalHeader(headerRes.data[0].order_stats);
+          setIsLoading2(false);
         }
-      } catch (err) {
-        console.log('error', err);
-        setIsLoading2(false)
-      }
-    };
-    resTotal();
-  }, []);
 
-  useEffect(() => {
-    setIsLoading3(true)
-    const resTotal = async () => {
-      try {
-        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service');
-        if (res.status === 200) {
-          setDataTotalService(res.data);
-          setIsLoading3(false)
+        if (serviceRes.status === 200) {
+          setDataTotalService(serviceRes.data);
+          setIsLoading3(false);
         }
-      } catch (err) {
-        console.log('error', err);
-        setIsLoading3(false)
-      }
-    };
-    resTotal();
-  }, []);
 
-  useEffect(() => {
-    setIsLoading4(true);
-    const resTotal = async () => {
-      try {
-        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review');
-        if (res.status === 200) {
-          setDataTotalReview(res.data);
+        if (reviewRes.status === 200) {
+          setDataTotalReview(reviewRes.data);
           setIsLoading4(false);
         }
-      } catch (err) {
-        console.log('error', err);
-        setIsLoading4(false);
-      }
-    };
-    resTotal();
-  }, []);
 
-  useEffect(() => {
-    const resTotal = async () => {
-      setIsLoading5(true);
-      try {
-        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
-        if (res.status === 200) {
-          setDataTotalYear(res.data[0]);
+        if (yearRes.status === 200) {
+          setDataTotalYear(yearRes.data[0]);
           setIsLoading5(false);
         }
       } catch (err) {
-        console.log('error', err);
+        console.error('Error fetching data:', err);
+        setIsLoading1(false);
+        setIsLoading2(false);
+        setIsLoading3(false);
+        setIsLoading4(false);
         setIsLoading5(false);
       }
     };
-    resTotal();
+
+    fetchData();
   }, []);
+
+
+  // useEffect(() => {
+  //   setIsLoading1(true)
+  //   const resTotal = async () => {
+  //     try {
+  //       const res = await axios.post(
+  //         'https://be-nodejs-project.vercel.app/api/orders/widget-order-total'
+  //       );
+  //       if (res.status === 200) {
+  //         const yearData: { [key: number]: Array<{ total: number; service_charge: number }> } = {};
+
+  //         // Loop through rawData and populate yearData
+  //         res.data.forEach((item: any) => {
+  //           const { year, month, total, service_charge } = item;
+  //           if (!yearData[year]) {
+  //             yearData[year] = Array(12).fill({ total: 0, service_charge: 0 });
+  //           }
+
+  //           const index = month - 1; // Month index starts from 0
+
+  //           if (yearData[year][index]) {
+  //             yearData[year][index] = {
+  //               total: yearData[year][index].total + total,
+  //               service_charge: yearData[year][index].service_charge + service_charge,
+  //             };
+  //           }
+  //         });
+
+  //         // Convert yearData to the desired format
+  //         const serieswd = Object.entries(yearData).map(([year, data]) => ({
+  //           type: `${year}`,
+  //           data: [
+  //             {
+  //               name: 'Total Booking',
+  //               data: data.map((monthData) => monthData.total),
+  //             },
+  //             {
+  //               name: 'Total Service',
+  //               data: data.map((monthData) => monthData.service_charge),
+  //             },
+  //           ],
+  //         }));
+  //         setDataTotal(serieswd);
+  //         setIsLoading1(false)
+  //       }
+  //     } catch (err) {
+  //       console.log('error', err);
+  //       setIsLoading1(false)
+  //     }
+  //   };
+  //   resTotal();
+  // }, []);
+
+  // useEffect(() => {
+  //   setIsLoading2(true)
+  //   const resTotal = async () => {
+  //     try {
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header');
+  //       if (res.status === 200) {
+  //         console.log('success', res.data);
+  //         setDataTotalHeader(res.data[0].order_stats);
+  //         setIsLoading2(false)
+  //       }
+  //     } catch (err) {
+  //       console.log('error', err);
+  //       setIsLoading2(false)
+  //     }
+  //   };
+  //   resTotal();
+  // }, []);
+
+  // useEffect(() => {
+  //   setIsLoading3(true)
+  //   const resTotal = async () => {
+  //     try {
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service');
+  //       if (res.status === 200) {
+  //         setDataTotalService(res.data);
+  //         setIsLoading3(false)
+  //       }
+  //     } catch (err) {
+  //       console.log('error', err);
+  //       setIsLoading3(false)
+  //     }
+  //   };
+  //   resTotal();
+  // }, []);
+
+  // useEffect(() => {
+  //   setIsLoading4(true);
+  //   const resTotal = async () => {
+  //     try {
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review');
+  //       if (res.status === 200) {
+  //         setDataTotalReview(res.data);
+  //         setIsLoading4(false);
+  //       }
+  //     } catch (err) {
+  //       console.log('error', err);
+  //       setIsLoading4(false);
+  //     }
+  //   };
+  //   resTotal();
+  // }, []);
+
+  // useEffect(() => {
+  //   const resTotal = async () => {
+  //     setIsLoading5(true);
+  //     try {
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
+  //       if (res.status === 200) {
+  //         setDataTotalYear(res.data[0]);
+  //         setIsLoading5(false);
+  //       }
+  //     } catch (err) {
+  //       console.log('error', err);
+  //       setIsLoading5(false);
+  //     }
+  //   };
+  //   resTotal();
+  // }, []);
 
 
   return (
