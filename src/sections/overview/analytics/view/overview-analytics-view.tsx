@@ -274,6 +274,16 @@ export default function OverviewAnalyticsView() {
 
                     ],
                   },
+                  {
+                    year: '2024',
+                    data: [
+                      {
+                        name: 'Total Orders',
+                        data: dataTotalYear?.chart?.series[2]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      },
+
+                    ],
+                  },
                 ],
               }}
             />
