@@ -402,11 +402,10 @@ export default function OverviewAnalyticsView() {
               subheader=""
               chart={{
                 series: [
-                  { label: '1 to 2', value: dataTotalReview?.result[0]?.value ? dataTotalReview?.result[0]?.value : 0.1 },
-                  { label: '2 to 3', value: dataTotalReview?.result[1]?.value ? dataTotalReview?.result[1]?.value : 0.1 },
-                  { label: '3 to 4', value: dataTotalReview?.result[2]?.value ? dataTotalReview?.result[2]?.value : 0.1 },
-                  { label: '4 to 5', value: dataTotalReview?.result[3]?.value ? dataTotalReview?.result[3]?.value : 0.1 },
-
+                  { label: '1 to 2', value: dataTotalReview.result[0]?.value || 0.1 },
+                  { label: '2 to 3', value: dataTotalReview.result[1]?.value || 0.1 },
+                  { label: '3 to 4', value: dataTotalReview.result[2]?.value || 0.1 },
+                  { label: '4 to 5', value: dataTotalReview.result[3]?.value || 0.1 },
                 ],
               }}
             />
