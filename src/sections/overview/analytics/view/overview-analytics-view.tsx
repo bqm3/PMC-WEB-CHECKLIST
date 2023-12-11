@@ -181,51 +181,6 @@ export default function OverviewAnalyticsView() {
     resTotal();
   }, []);
 
-  // const rawData = [
-  //   { year: 2022, month: 1, total: 100, service_charge: 20 },
-  //   { year: 2022, month: 2, total: 150, service_charge: 30 },
-  //   // ...
-  //   { year: 2023, month: 1, total: 120, service_charge: 25 },
-  //   { year: 2023, month: 2, total: 180, service_charge: 35 },
-  //   // ...
-  // ];
-
-  // const serieswd: any = [];
-
-  // // const uniqueYears = [...new Set(rawData.map((item) => item.year))];
-  // const uniqueYears = Array.from(new Set(rawData.map((item) => item.year)));
-
-
-  // uniqueYears.forEach((year) => {
-  //   const yearData = rawData.filter((item) => item.year === year);
-
-  //   const totalBookingData = Array.from({ length: 12 }, () => 0);
-  //   const totalServiceData = Array.from({ length: 12 }, () => 0);
-
-  //   yearData.forEach((item) => {
-  //     const index = item.month - 1;
-  //     totalBookingData[index] = item.total;
-  //     totalServiceData[index] = item.service_charge;
-  //   });
-
-  //   serieswd.push({
-  //     type: `${year}`,
-  //     data: [
-  //       {
-  //         name: 'Total Booking',
-  //         data: totalBookingData,
-  //       },
-  //       {
-  //         name: 'Total Service',
-  //         data: totalServiceData,
-  //       },
-  //     ],
-  //   });
-  // });
-
-  // console.log('dataTotalReview?.result[0]?.value', dataTotalReview?.result[3]?.value)
-
-
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -238,7 +193,7 @@ export default function OverviewAnalyticsView() {
         Hi, Welcome back 👋
       </Typography>
       <Grid container spacing={3}>
-        {isLoading2 === false &&
+        {isLoading2 === false && dataTotalHeader &&
           (
             <>
               <Grid xs={12} sm={6} md={3}>
@@ -282,6 +237,7 @@ export default function OverviewAnalyticsView() {
           {dataTotalYear && isLoading5 === false && (
             <EcommerceYearlySales
               title="Yearly"
+              subheader="Number of booking invoices"
               chart={{
                 categories: [
                   'Jan',
@@ -303,7 +259,7 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear?.chart?.series[0]?.data ? dataTotalYear?.chart?.series[0]?.data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        data: dataTotalYear?.chart?.series[0]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },
 
                     ],
@@ -313,7 +269,7 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear?.chart?.series[1]?.data ? dataTotalYear?.chart?.series[1]?.data : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        data: dataTotalYear?.chart?.series[1]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },
 
                     ],
@@ -340,7 +296,7 @@ export default function OverviewAnalyticsView() {
           )}
         </Grid>
 
-        <Grid xs={12} md={6} lg={12}>
+        <Grid xs={12} md={12} lg={12}>
           {dataTotalReview && isLoading4 === false && (
             <AnalyticsConversionRates
               title="Conversion Rates"
