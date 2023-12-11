@@ -356,9 +356,6 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
                 ))}
               </RHFSelect>
 
-
-
-
               <RHFSelect
                 name="type_room_id"
                 label="Type Room"

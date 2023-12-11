@@ -50,7 +50,7 @@ export default function OverviewAnalyticsView() {
   const settings = useSettingsContext();
 
   const [dataTotalHeader, setDataTotalHeader] = useState<widgetData>();
-  const [dataTotalYear, setDataTotalYear] = useState<widgetData>();
+  const [dataTotalYear, setDataTotalYear] = useState<any>();
   const [dataTotalService, setDataTotalService] = useState<widgetData>();
   const [dataTotalReview, setDataTotalReview] = useState<widgetData>();
   const [dataTotal, setDataTotal] = useState<any>();
@@ -66,15 +66,15 @@ export default function OverviewAnalyticsView() {
       setIsLoading2(true);
       setIsLoading3(true);
       setIsLoading4(true);
-      setIsLoading5(true);
+      // setIsLoading5(true);
 
       try {
-        const [totalRes, headerRes, serviceRes, reviewRes, yearRes] = await Promise.all([
+        const [totalRes, headerRes, serviceRes, reviewRes] = await Promise.all([
           axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-total'),
           axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header'),
           axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service'),
           axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review'),
-          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year'),
+          // axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year'),
         ]);
 
         if (totalRes.status === 200) {
@@ -130,23 +130,26 @@ export default function OverviewAnalyticsView() {
           setIsLoading4(false);
         }
 
-        if (yearRes.status === 200) {
-          setDataTotalYear(yearRes.data[0]);
-          setIsLoading5(false);
-        }
+        // console.log('yearRes', yearRes.status, yearRes.data);
+
+        // if (yearRes.status === 200) {
+        //   setDataTotalYear(yearRes.data[0]);
+        //   setIsLoading5(false);
+        // }
       } catch (err) {
         console.error('Error fetching data:', err);
         setIsLoading1(false);
         setIsLoading2(false);
         setIsLoading3(false);
         setIsLoading4(false);
-        setIsLoading5(false);
+        // setIsLoading5(false);
       }
     };
 
     fetchData();
   }, []);
 
+  console.log('dataTotalYear', dataTotalYear, 'sdf', dataTotalReview);
 
   // useEffect(() => {
   //   setIsLoading1(true)
@@ -252,23 +255,24 @@ export default function OverviewAnalyticsView() {
   //   resTotal();
   // }, []);
 
-  // useEffect(() => {
-  //   const resTotal = async () => {
-  //     setIsLoading5(true);
-  //     try {
-  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
-  //       if (res.status === 200) {
-  //         setDataTotalYear(res.data[0]);
-  //         setIsLoading5(false);
-  //       }
-  //     } catch (err) {
-  //       console.log('error', err);
-  //       setIsLoading5(false);
-  //     }
-  //   };
-  //   resTotal();
-  // }, []);
+  useEffect(() => {
+    const resTotal = async () => {
+      setIsLoading5(true);
+      try {
+        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
+        if (res.status === 200) {
+          setDataTotalYear(res.data[0]);
+          setIsLoading5(false);
+        }
+      } catch (err) {
+        console.log('error', err);
+        setIsLoading5(false);
+      }
+    };
+    resTotal();
+  }, [dataTotalService]);
 
+  console.log('data', dataTotalYear)
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -281,45 +285,52 @@ export default function OverviewAnalyticsView() {
         Hi, Welcome back 👋
       </Typography>
       <Grid container spacing={3}>
-        {isLoading2 === false && dataTotalHeader &&
-          (
-            <>
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidgetSummary
-                  title="Rooms"
-                  total={dataTotalHeader?.total_orders_this_week ? dataTotalHeader?.total_orders_this_week : 0}
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
-                />
-              </Grid>
+        {isLoading2 === false && dataTotalHeader && (
+          <>
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidgetSummary
+                title="Rooms"
+                total={
+                  dataTotalHeader?.total_orders_this_week
+                    ? dataTotalHeader?.total_orders_this_week
+                    : 0
+                }
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+              />
+            </Grid>
 
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidgetSummary
-                  title="Total Users"
-                  total={dataTotalHeader?.total_users ? dataTotalHeader?.total_users : 0}
-                  color="info"
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-                />
-              </Grid>
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidgetSummary
+                title="Total Users"
+                total={dataTotalHeader?.total_users ? dataTotalHeader?.total_users : 0}
+                color="info"
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+              />
+            </Grid>
 
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidgetSummary
-                  title="Item Orders"
-                  total={dataTotalHeader?.total_orders ? dataTotalHeader?.total_orders : 0}
-                  color="warning"
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-                />
-              </Grid>
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidgetSummary
+                title="Item Orders"
+                total={dataTotalHeader?.total_orders ? dataTotalHeader?.total_orders : 0}
+                color="warning"
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+              />
+            </Grid>
 
-              <Grid xs={12} sm={6} md={3}>
-                <AnalyticsWidgetSummary
-                  title="Draf Orders"
-                  total={dataTotalHeader?.total_orders_status_4 ? dataTotalHeader?.total_orders_status_4 : 0}
-                  color="error"
-                  icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-                />
-              </Grid>
-            </>
-          )}
+            <Grid xs={12} sm={6} md={3}>
+              <AnalyticsWidgetSummary
+                title="Draf Orders"
+                total={
+                  dataTotalHeader?.total_orders_status_4
+                    ? dataTotalHeader?.total_orders_status_4
+                    : 0
+                }
+                color="error"
+                icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+              />
+            </Grid>
+          </>
+        )}
 
         <Grid xs={12} md={6} lg={8}>
           {dataTotalYear && isLoading5 === false && (
@@ -347,9 +358,10 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear?.chart?.series[0]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        data: dataTotalYear && dataTotalYear.chart['2022']
+                          ? dataTotalYear.chart['2022']
+                          : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },
-
                     ],
                   },
                   {
@@ -357,9 +369,10 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear?.chart?.series[1]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        data: dataTotalYear && dataTotalYear.chart['2023']
+                          ? dataTotalYear.chart['2023']
+                          : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },
-
                     ],
                   },
                   {
@@ -367,9 +380,10 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear?.chart?.series[2]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        data: dataTotalYear && dataTotalYear.chart['2024']
+                          ? dataTotalYear.chart['2024']
+                          : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },
-
                     ],
                   },
                 ],
@@ -378,18 +392,37 @@ export default function OverviewAnalyticsView() {
           )}
         </Grid>
 
-
         <Grid xs={12} md={6} lg={4}>
           {dataTotalService && isLoading3 === false && (
             <AnalyticsCurrentVisits
               title="Current Services"
               chart={{
                 series: [
-                  { label: 'Double Bed', value: Number(dataTotalService?.series && dataTotalService.series['Double Bed'] ? dataTotalService.series['Double Bed'] : 0) },
-                  { label: 'Single Bed', value: Number(dataTotalService?.series && dataTotalService.series['Single Bed'] ? dataTotalService.series['Single Bed'] : 0) },
-                  { label: "Children's Beds", value: Number(dataTotalService?.series && dataTotalService.series["Children's Beds"] ? dataTotalService.series["Children's Beds"] : 0) },
+                  {
+                    label: 'Double Bed',
+                    value: Number(
+                      dataTotalService?.series && dataTotalService.series['Double Bed']
+                        ? dataTotalService.series['Double Bed']
+                        : 0
+                    ),
+                  },
+                  {
+                    label: 'Single Bed',
+                    value: Number(
+                      dataTotalService?.series && dataTotalService.series['Single Bed']
+                        ? dataTotalService.series['Single Bed']
+                        : 0
+                    ),
+                  },
+                  {
+                    label: "Children's Beds",
+                    value: Number(
+                      dataTotalService?.series && dataTotalService.series["Children's Beds"]
+                        ? dataTotalService.series["Children's Beds"]
+                        : 0
+                    ),
+                  },
                 ],
-
               }}
             />
           )}
@@ -402,10 +435,10 @@ export default function OverviewAnalyticsView() {
               subheader=""
               chart={{
                 series: [
-                  { label: '1 to 2', value: dataTotalReview.result[0]?.value || 0.1 },
-                  { label: '2 to 3', value: dataTotalReview.result[1]?.value || 0.1 },
-                  { label: '3 to 4', value: dataTotalReview.result[2]?.value || 0.1 },
-                  { label: '4 to 5', value: dataTotalReview.result[3]?.value || 0.1 },
+                  { label: '1 to 2', value: dataTotalReview?.result[0]?.value || 0.1 },
+                  { label: '2 to 3', value: dataTotalReview?.result[1]?.value || 0.1 },
+                  { label: '3 to 4', value: dataTotalReview?.result[2]?.value || 0.1 },
+                  { label: '4 to 5', value: dataTotalReview?.result[3]?.value || 0.1 },
                 ],
               }}
             />
@@ -413,34 +446,31 @@ export default function OverviewAnalyticsView() {
         </Grid>
 
         <Grid xs={12} md={12}>
-          {isLoading1 === false && dataTotal &&
+          {isLoading1 === false && dataTotal && (
             <Stack spacing={3}>
               <BankingBalanceStatistics
                 title="Total Payment Booking"
                 chart={{
-                  categories:
-                    ['Jan',
-                      'Feb',
-                      'Mar',
-                      'Apr',
-                      'May',
-                      'Jun',
-                      'Jul',
-                      'Aug',
-                      'Sep',
-                      'Oct',
-                      'Nov',
-                      'Dec',],
+                  categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec',
+                  ],
                   series: dataTotal || [],
                 }}
               />
-
-
-            </Stack>}
-
+            </Stack>
+          )}
         </Grid>
-
-
       </Grid>
     </Container>
   );
