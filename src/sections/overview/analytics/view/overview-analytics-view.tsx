@@ -70,11 +70,11 @@ export default function OverviewAnalyticsView() {
 
       try {
         const [totalRes, headerRes, serviceRes, reviewRes] = await Promise.all([
-          axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-total'),
-          axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-header'),
-          axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-service'),
-          axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-review'),
-          // axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-year'),
+          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-total'),
+          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-header'),
+          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-service'),
+          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-review'),
+          // axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-year'),
         ]);
 
         if (totalRes.status === 200) {
@@ -149,14 +149,13 @@ export default function OverviewAnalyticsView() {
     fetchData();
   }, []);
 
-  console.log('dataTotalYear', dataTotalYear, 'sdf', dataTotalReview);
 
   // useEffect(() => {
   //   setIsLoading1(true)
   //   const resTotal = async () => {
   //     try {
   //       const res = await axios.post(
-  //         'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-total'
+  //         'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-total'
   //       );
   //       if (res.status === 200) {
   //         const yearData: { [key: number]: Array<{ total: number; service_charge: number }> } = {};
@@ -207,7 +206,7 @@ export default function OverviewAnalyticsView() {
   //   setIsLoading2(true)
   //   const resTotal = async () => {
   //     try {
-  //       const res = await axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-header');
+  //       const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-header');
   //       if (res.status === 200) {
   //         console.log('success', res.data);
   //         setDataTotalHeader(res.data[0].order_stats);
@@ -225,7 +224,7 @@ export default function OverviewAnalyticsView() {
   //   setIsLoading3(true)
   //   const resTotal = async () => {
   //     try {
-  //       const res = await axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-service');
+  //       const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-service');
   //       if (res.status === 200) {
   //         setDataTotalService(res.data);
   //         setIsLoading3(false)
@@ -242,7 +241,7 @@ export default function OverviewAnalyticsView() {
   //   setIsLoading4(true);
   //   const resTotal = async () => {
   //     try {
-  //       const res = await axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-review');
+  //       const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-review');
   //       if (res.status === 200) {
   //         setDataTotalReview(res.data);
   //         setIsLoading4(false);
@@ -259,7 +258,8 @@ export default function OverviewAnalyticsView() {
     const resTotal = async () => {
       setIsLoading5(true);
       try {
-        const res = await axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order-year');
+        const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-year');
+        console.log('res', res)
         if (res.status === 200) {
           setDataTotalYear(res.data[0]);
           setIsLoading5(false);
@@ -270,7 +270,7 @@ export default function OverviewAnalyticsView() {
       }
     };
     resTotal();
-  }, [dataTotalService]);
+  }, []);
 
   console.log('data', dataTotalYear)
 
@@ -358,8 +358,8 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear && dataTotalYear.chart['2022']
-                          ? dataTotalYear.chart['2022']
+                        data: dataTotalYear
+                          ? dataTotalYear?.chart['2022']
                           : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },
                     ],
@@ -369,8 +369,8 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear && dataTotalYear.chart['2023']
-                          ? dataTotalYear.chart['2023']
+                        data: dataTotalYear
+                          ? dataTotalYear?.chart['2023']
                           : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },
                     ],
@@ -380,7 +380,7 @@ export default function OverviewAnalyticsView() {
                     data: [
                       {
                         name: 'Total Orders',
-                        data: dataTotalYear && dataTotalYear.chart['2024']
+                        data: dataTotalYear
                           ? dataTotalYear.chart['2024']
                           : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       },

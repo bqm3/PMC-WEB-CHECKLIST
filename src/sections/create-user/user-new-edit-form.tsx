@@ -113,7 +113,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       },
     };
     try {
-      const response = await axios.post('https://be-nodejs-project.vercel.app/api/employee/register', formData, config);
+      const response = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/employee/register', formData, config);
       if (response.status === 200) {
         enqueueSnackbar('Create success!');
         reset();

@@ -30,7 +30,7 @@ export function useGetProducts() {
 }
 
 export function useGetFacilities() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/facilities'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/facilities'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -49,7 +49,7 @@ export function useGetFacilities() {
 }
 
 export function useGetTypeRooms() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/typerooms'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/typerooms'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -68,7 +68,7 @@ export function useGetTypeRooms() {
 }
 
 export function useGetVouchers() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/voucher/'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/voucher/'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -87,7 +87,7 @@ export function useGetVouchers() {
 }
 
 export function useGetTypeServices() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/typeservices'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/typeservices'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -106,7 +106,7 @@ export function useGetTypeServices() {
 }
 
 export function useGetTypeRoom(id: string) {
-  const URL = id ? [`https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/typerooms/${id}` ] : null;
+  const URL = id ? [`https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/typerooms/${id}` ] : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
@@ -124,7 +124,7 @@ export function useGetTypeRoom(id: string) {
 }
 
 export function useGetTypeService(id: string) {
-  const URL = id ? [`https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/typeservices/${id}` ] : null;
+  const URL = id ? [`https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/typeservices/${id}` ] : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
@@ -144,7 +144,7 @@ export function useGetTypeService(id: string) {
 // ----------------------------------------------------------------------
 
 export function useGetEmployees() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/employee/list'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/employee/list'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -165,7 +165,7 @@ export function useGetEmployees() {
 // ----------------------------------------------------------------------
 
 export function useGetServices() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/services'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/services'
   const fetCher = (url: string) => fetch(url).then((res) => res.json()).catch((err) => console.log('err', err));
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -184,7 +184,7 @@ export function useGetServices() {
 }
 
 export function useGetRoomServices() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/services'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/services'
   const fetCher = (url: string) => fetch(url).then((res) => res.json()).catch((err) => console.log('err', err));
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -203,7 +203,7 @@ export function useGetRoomServices() {
 }
 
 export function useGetService(id: string) {
-  const URL = id ? [`https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/services/${id}` ] : null;
+  const URL = id ? [`https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/services/${id}` ] : null;
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -223,7 +223,7 @@ export function useGetService(id: string) {
 
 
 export function useGetRooms() {
-  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/rooms/'
+  const URL = 'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/rooms/'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -244,7 +244,7 @@ export function useGetRooms() {
 // ----------------------------------------------------------------------
 
 export function useGetRoom(id: string) {
-  const URL = id ? [`https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/rooms/${id}` ] : null;
+  const URL = id ? [`https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/rooms/${id}` ] : null;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
@@ -264,7 +264,7 @@ export function useGetRoom(id: string) {
 // ----------------------------------------------------------------------
 
 export function useGetReview(id: string) {
-  const URL = id ? [`https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/reviews/${id}` ] : null;
+  const URL = id ? [`https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/reviews/${id}` ] : null;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
