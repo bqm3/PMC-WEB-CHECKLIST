@@ -100,13 +100,13 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentProduct?.id !== undefined) {
-        axios.put(`https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/services/${currentProduct.id}`, data).then((res) => {
+        axios.put(`https://be-nodejs-project.vercel.app/api/services/${currentProduct.id}`, data).then((res) => {
           reset();
           enqueueSnackbar('Update success!');
           router.push(paths.dashboard.service.root);
         });
       } else {
-        axios.post(`https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/services`, data).then((res) => {
+        axios.post(`https://be-nodejs-project.vercel.app/api/services`, data).then((res) => {
           reset();
           enqueueSnackbar('Create success!');
           router.push(paths.dashboard.service.root);

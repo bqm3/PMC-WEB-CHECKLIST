@@ -114,8 +114,8 @@ export default function InvoiceTableRow({
             }
           >
             {
-              (status === 1 && 'paid') ||
-              (status === 0 && 'pending') ||
+              (status === 1 && 'check in') ||
+              (status === 0 && 'paid') ||
               (status === 2 && 'overdue') ||
               (status === 3 && 'draft') ||
               'default'

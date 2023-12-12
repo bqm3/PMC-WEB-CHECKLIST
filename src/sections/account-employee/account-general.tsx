@@ -115,7 +115,7 @@ export default function AccountGeneral() {
     };
     try {
       const response = await axios.put(
-        `https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/employee/update/${defaultValues.id}`,
+        `https://be-nodejs-project.vercel.app/api/employee/update/${defaultValues.id}`,
         formData,
         config
       );

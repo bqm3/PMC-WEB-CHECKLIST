@@ -176,8 +176,8 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
       <OrderBookingToolbar
         order={order}
         order_detail={order_detail}
-        currentStatus={(currentStatus === 1 && 'paid') ||
-          (currentStatus === 0 && 'pending') ||
+        currentStatus={(currentStatus === 1 && 'check in') ||
+          (currentStatus === 0 && 'paid') ||
           (currentStatus === 2 && 'overdue') ||
           (currentStatus === 3 && 'draft') ||
           'default'}

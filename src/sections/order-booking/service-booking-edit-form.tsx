@@ -103,9 +103,9 @@ export default function OrderBookingEditForm({ tableDataOrder }: Props) {
     try {
 
       await axios.put(
-        // `https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/room_service/status`,
-        `https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/room_service/status`,
-        // `https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/room_service/status`,
+        // `https://be-nodejs-project.vercel.app/api/room_service/status`,
+        `https://be-nodejs-project.vercel.app/api/room_service/status`,
+        // `https://be-nodejs-project.vercel.app/api/room_service/status`,
         {
           user, data
         }

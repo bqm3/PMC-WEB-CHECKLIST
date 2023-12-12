@@ -70,11 +70,11 @@ export default function OverviewAnalyticsView() {
 
       try {
         const [totalRes, headerRes, serviceRes, reviewRes] = await Promise.all([
-          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-total'),
-          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-header'),
-          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-service'),
-          axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-review'),
-          // axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-year'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-total'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service'),
+          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review'),
+          // axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year'),
         ]);
 
         if (totalRes.status === 200) {
@@ -155,7 +155,7 @@ export default function OverviewAnalyticsView() {
   //   const resTotal = async () => {
   //     try {
   //       const res = await axios.post(
-  //         'https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-total'
+  //         'https://be-nodejs-project.vercel.app/api/orders/widget-order-total'
   //       );
   //       if (res.status === 200) {
   //         const yearData: { [key: number]: Array<{ total: number; service_charge: number }> } = {};
@@ -206,7 +206,7 @@ export default function OverviewAnalyticsView() {
   //   setIsLoading2(true)
   //   const resTotal = async () => {
   //     try {
-  //       const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-header');
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header');
   //       if (res.status === 200) {
   //         console.log('success', res.data);
   //         setDataTotalHeader(res.data[0].order_stats);
@@ -224,7 +224,7 @@ export default function OverviewAnalyticsView() {
   //   setIsLoading3(true)
   //   const resTotal = async () => {
   //     try {
-  //       const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-service');
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service');
   //       if (res.status === 200) {
   //         setDataTotalService(res.data);
   //         setIsLoading3(false)
@@ -241,7 +241,7 @@ export default function OverviewAnalyticsView() {
   //   setIsLoading4(true);
   //   const resTotal = async () => {
   //     try {
-  //       const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-review');
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review');
   //       if (res.status === 200) {
   //         setDataTotalReview(res.data);
   //         setIsLoading4(false);
@@ -258,7 +258,7 @@ export default function OverviewAnalyticsView() {
     const resTotal = async () => {
       setIsLoading5(true);
       try {
-        const res = await axios.post('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/widget-order-year');
+        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
         console.log('res', res)
         if (res.status === 200) {
           setDataTotalYear(res.data[0]);

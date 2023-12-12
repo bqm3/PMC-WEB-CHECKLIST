@@ -145,13 +145,13 @@ export default function OrderBookingListView() {
 
     {
       value: 0,
-      label: 'Pending',
+      label: 'Paid',
       color: 'warning',
       count: getInvoiceLength('0'),
     },
     {
       value: 1,
-      label: 'Paid',
+      label: 'Check in',
       color: 'success',
       count: getInvoiceLength('1'),
     },
@@ -279,7 +279,7 @@ export default function OrderBookingListView() {
               />
 
               <InvoiceAnalytic
-                title="Pending"
+                title="Paid"
                 total={getInvoiceLength('0')}
                 percent={getPercentByStatus('0')}
                 price={getTotalAmount('0')}
@@ -288,7 +288,7 @@ export default function OrderBookingListView() {
               />
 
               <InvoiceAnalytic
-                title="Paid"
+                title="Check in"
                 total={getInvoiceLength('1')}
                 percent={getPercentByStatus('1')}
                 price={getTotalAmount('1')}

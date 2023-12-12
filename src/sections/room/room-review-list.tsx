@@ -21,7 +21,7 @@ export default function ProductReviewList({ reviews }: Props) {
 
   const handleAction = async (id: any) => {
     const res = await axios.put(
-      `https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/reviews/hidden-review/${id}`
+      `https://be-nodejs-project.vercel.app/api/reviews/hidden-review/${id}`
     );
     if (res.status === 200) {
       window.location.reload();

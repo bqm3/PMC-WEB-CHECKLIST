@@ -64,7 +64,7 @@ export default function AccountChangePassword() {
     };
     try {
       const response = await axios.post(
-        `https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/employee/change-password`,
+        `https://be-nodejs-project.vercel.app/api/employee/change-password`,
         dataPath,
         {
           headers: { Authorization: `Bearer ${accessToken}` },

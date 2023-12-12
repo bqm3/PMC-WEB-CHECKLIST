@@ -115,7 +115,7 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
     try {
 
       await axios.put(
-        `https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/orders/status`,
+        `https://be-nodejs-project.vercel.app/api/orders/status`,
         {
           user, data
         }

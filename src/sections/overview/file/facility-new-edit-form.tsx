@@ -114,7 +114,7 @@ export default function PacilityNewEditForm({ currentFacilities }: Props) {
       },
     };
     try {
-      const response = await axios.put('https://1fe2-2402-800-b00a-d641-f9dc-b3c0-4a1b-e98f.ngrok-free.app/api/facilities/update', formData, config);
+      const response = await axios.put('https://be-nodejs-project.vercel.app/api/facilities/update', formData, config);
       if (response.status === 200) {
         enqueueSnackbar({
           variant: 'success',

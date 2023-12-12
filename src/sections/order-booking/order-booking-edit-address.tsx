@@ -60,8 +60,8 @@ export default function OrderBookingEditAddress() {
               }
             >
               {
-                (values.status === 1 && 'paid') ||
-                (values.status === 0 && 'pending') ||
+                (values.status === 1 && 'check in') ||
+                (values.status === 0 && 'paid') ||
                 (values.status === 2 && 'overdue') ||
                 'default'
               }
