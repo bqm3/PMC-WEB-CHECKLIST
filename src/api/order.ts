@@ -11,7 +11,7 @@ import useSWR from 'swr';
 // ----------------------------------------------------------------------
 
 export function useGetOrderBookings() {
-  const URL = 'https://be-nodejs-project.vercel.app/api/orders'
+  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -29,7 +29,7 @@ export function useGetOrderBookings() {
   return memoizedValue;
 }
 export function useGetOrderBookingService() {
-  const URL = 'https://be-nodejs-project.vercel.app/api/room_service'
+  const URL = 'https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/room_service'
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
@@ -48,7 +48,7 @@ export function useGetOrderBookingService() {
 }
 
 export function useGetOrderBookingServiceDetail(id: string) {
-  const URL = `https://be-nodejs-project.vercel.app/api/room_service/${id}`
+  const URL = `https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/room_service/${id}`
   const fetCher = (url: string) => fetch(url).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 

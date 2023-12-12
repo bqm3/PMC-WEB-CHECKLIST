@@ -84,14 +84,14 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
     try {
       if (currentProduct !== undefined) {
         axios
-          .put(`https://be-nodejs-project.vercel.app/api/typeservices/${currentProduct.id}`, data)
+          .put(`https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/typeservices/${currentProduct.id}`, data)
           .then((res) => {
             reset();
             enqueueSnackbar('Update success!');
             router.push(paths.dashboard.typeService.root);
           });
       } else {
-        axios.post(`https://be-nodejs-project.vercel.app/api/typeservices`, data).then((res) => {
+        axios.post(`https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/typeservices`, data).then((res) => {
           reset();
           enqueueSnackbar('Create success!');
           router.push(paths.dashboard.typeService.root);

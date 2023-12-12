@@ -172,14 +172,14 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
       if (currentRoom) {
         console.info('DATA', data);
       } else {
-        const response = await axios.post('https://be-nodejs-project.vercel.app/api/rooms/create', formData, config);
+        const response = await axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/rooms/create', formData, config);
         if (response.status === 200) {
           const id = response.data.data.id;
           if (id) {
             const formData2 = new FormData();
             formData2.append('room_id', JSON.stringify(id));
             formData2.append('roomImages', JSON.stringify(data.roomImages));
-            await axios.post('https://be-nodejs-project.vercel.app/api/room-image/create', formData2, config);
+            await axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/room-image/create', formData2, config);
 
             enqueueSnackbar('Tạo phòng thành công!');
             reset();

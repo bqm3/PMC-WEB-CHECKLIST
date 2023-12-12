@@ -50,7 +50,7 @@ export default function OverviewAppView() {
   useEffect(() => {
     const resTotal = async () => {
       try {
-        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order')
+        const res = await axios.post('https://f313-2402-800-b00a-d641-b8fb-e418-2098-4591.ngrok-free.app/api/orders/widget-order')
         if (res.status === 200) {
           setDataTotalUser(res.data)
         }
