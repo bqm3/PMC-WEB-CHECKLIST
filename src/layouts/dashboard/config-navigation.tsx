@@ -70,7 +70,18 @@ export function useNavData() {
         // MANAGEMENT
         {
           subheader: t('management'),
+
           items: [
+            // KHU VUC
+            {
+              title: t('khuvuc'),
+              path: paths.dashboard.khuvuc.root,
+              icon: ICONS.tour,
+              children: [
+                { title: t('list'), path: paths.dashboard.khuvuc.root },
+                { title: t('create'), path: paths.dashboard.khuvuc.new },
+              ],
+            },
             // TYPE ROOM
             {
               title: t('type room'),
@@ -111,6 +122,7 @@ export function useNavData() {
                 { title: t('create'), path: paths.dashboard.room.new },
               ],
             },
+
             // ORDER
             {
               title: t('booking'),

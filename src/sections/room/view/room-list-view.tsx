@@ -61,7 +61,7 @@ export default function RoomListView() {
   const { rooms, roomsLoading, roomsEmpty } = useGetRooms()
 
   useEffect(() => {
-    if (rooms.length) {
+    if (rooms?.length > 0) {
       setTableDataRoom(rooms)
     }
   }, [rooms])

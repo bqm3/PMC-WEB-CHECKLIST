@@ -2,7 +2,7 @@
   "name": "@fithou/cra-ts",
   "author": "Quang Minh",
   "version": "5.5.0",
-  "description": "Hệ thống quản lý đặt phòng khách sạn Marriott",
+  "description": "Hệ thống quản lý đặt phòng khách sạn PMC",
   "private": true,
   "scripts": {
     "start": "react-scripts start",

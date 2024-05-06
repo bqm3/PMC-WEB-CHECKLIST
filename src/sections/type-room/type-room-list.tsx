@@ -47,7 +47,7 @@ export default function TypeRoomList({ products, loading, ...other }: Props) {
         {/* {loading ? renderSkeleton : renderList} */}
       </Box>
 
-      {products.length > 8 && (
+      {products?.length > 8 && (
         <Pagination
           count={8}
           sx={{

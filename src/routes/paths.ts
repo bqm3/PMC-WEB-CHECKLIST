@@ -132,6 +132,10 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/service/${MOCK_ID}/edit`,
       },
     },
+    khuvuc: {
+      root: `${ROOTS.DASHBOARD}/khuvuc`,
+      new: `${ROOTS.DASHBOARD}/khuvuc/new`,
+    },
     room: {
       root: `${ROOTS.DASHBOARD}/room`,
       new: `${ROOTS.DASHBOARD}/room/new`,

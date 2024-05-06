@@ -101,7 +101,7 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
       }}
     >
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
-        {title || 'Center Marriott'}
+        {title || 'Center PMC'}
       </Typography>
 
       <Box

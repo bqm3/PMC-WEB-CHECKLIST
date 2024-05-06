@@ -27,7 +27,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const logo = (
       <Box
         component="img"
-        src="/logo/logo.png"
+        src="/logo/pmc.png"
         sx={{ width: 40, height: 40, cursor: 'pointer', ...sx }}
       />
     );

@@ -95,6 +95,14 @@ const EmployeeAccountPage = lazy(() => import('src/pages/dashboard/account/accou
 
 // FICILITIES
 const OverviewFicilitiesPage = lazy(() => import('src/pages/dashboard/facilities'))
+
+
+
+// Khu vực
+const KhuvVucListsPage = lazy(() => import('src/pages/dashboard/khuvuc/list'));
+// const RoomDetailPage = lazy(() => import('src/pages/dashboard/room/details'));
+// const RoomNewPage = lazy(() => import('src/pages/dashboard/room/new'));
+// const RoomEditPage = lazy(() => import('src/pages/dashboard/room/edit'));
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -152,6 +160,17 @@ export const dashboardRoutes = [
           { path: ':id', element: <RoomDetailPage /> },
           { path: ':id/edit', element: <RoomEditPage /> },
           { path: 'new', element: <RoomNewPage /> },
+
+        ],
+      },
+      {
+        path: 'khuvuc',
+        children: [
+          { element: <KhuvVucListsPage />, index: true },
+          // { path: 'list', element: <RoomListsPage /> },
+          // { path: ':id', element: <RoomDetailPage /> },
+          // { path: ':id/edit', element: <RoomEditPage /> },
+          // { path: 'new', element: <RoomNewPage /> },
 
         ],
       },

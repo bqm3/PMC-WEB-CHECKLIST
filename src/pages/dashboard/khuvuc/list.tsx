@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { HomeView } from 'src/sections/home/view';
+import { OrderListView } from 'src/sections/khuvuc/view';
 
 // ----------------------------------------------------------------------
 
-export default function HomePage() {
+export default function OrderListPage() {
   return (
     <>
       <Helmet>
-        <title> PMC: The starting point for your next project</title>
+        <title> Dashboard: Khu vực</title>
       </Helmet>
 
-      <HomeView />
+      <OrderListView />
     </>
   );
 }

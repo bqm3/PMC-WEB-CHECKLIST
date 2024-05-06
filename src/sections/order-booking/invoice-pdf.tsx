@@ -102,7 +102,7 @@ export default function InvoicePDF({ invoice, currentStatus, order_detail }: Pro
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
-          <Image source="/logo/logo.png" style={{ width: 48, height: 48 }} />
+          <Image source="/logo/pmc.png" style={{ width: 48, height: 48 }} />
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text style={styles.h3}>{currentStatus}</Text>

@@ -198,7 +198,7 @@ export default function InvoiceDetails({ order, order_detail }: Props) {
           <Box
             component="img"
             alt="logo"
-            src="/logo/logo.png"
+            src="/logo/pmc.png"
             sx={{ width: 48, height: 48 }}
           />
 

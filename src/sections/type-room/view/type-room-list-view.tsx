@@ -83,13 +83,13 @@ export default function TypeRoomListView() {
 
 
   useEffect(() => {
-    if (typerooms.length) {
+    if (typerooms?.length > 0) {
       setTableDataTypeRoom(typerooms)
     }
   }, [typerooms])
 
   const dataFiltered = applyFilter({
-    inputData: typerooms,
+    inputData: typerooms || [],
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -107,7 +107,7 @@ export default function TypeRoomListView() {
 
   const handleDeleteRow = useCallback(
     (id: string) => {
-      const deleteRow = tableDataTypeRoom.filter((row) => row.id !== id);
+      const deleteRow = tableDataTypeRoom?.filter((row) => row.id !== id);
       setTableDataTypeRoom(deleteRow);
 
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -116,11 +116,11 @@ export default function TypeRoomListView() {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableDataTypeRoom.filter((row) => !table.selected.includes(row.id));
+    const deleteRows = tableDataTypeRoom?.filter((row) => !table.selected.includes(row.id));
     setTableDataTypeRoom(deleteRows);
 
     table.onUpdatePageDeleteRows({
-      totalRows: tableDataTypeRoom.length,
+      totalRows: tableDataTypeRoom?.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -173,11 +173,11 @@ export default function TypeRoomListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableDataTypeRoom.length}
+              rowCount={tableDataTypeRoom?.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  tableDataTypeRoom.map((row) => row.id)
+                  tableDataTypeRoom?.map((row) => row.id)
                 )
               }
               action={
@@ -195,13 +195,13 @@ export default function TypeRoomListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableDataTypeRoom.length}
+                  rowCount={tableDataTypeRoom?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      tableDataTypeRoom.map((row) => row.id)
+                      tableDataTypeRoom?.map((row) => row.id)
                     )
                   }
                 />
@@ -234,7 +234,7 @@ export default function TypeRoomListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableDataTypeRoom.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableDataTypeRoom?.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -295,18 +295,18 @@ function applyFilter({
 }) {
   const { name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
+  const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
-    inputData = inputData.filter(
+    inputData = inputData?.filter(
       (product) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
