@@ -12,7 +12,7 @@ const STORAGE_KEY = 'accessToken';
 
 export function useGetToanha() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://localhost:6868/api/ent_toanha/';
+  const URL = 'http://93.127.199.152:6868/api/ent_toanha/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -39,7 +39,7 @@ export function useGetToanha() {
 
 export function useGetKhoiCV() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://localhost:6868/api/ent_khoicv/';
+  const URL = 'http://93.127.199.152:6868/api/ent_khoicv/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -66,7 +66,7 @@ export function useGetKhoiCV() {
 
 export function useGetKhuVuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://localhost:6868/api/ent_khuvuc/filter';
+  const URL = 'http://93.127.199.152:6868/api/ent_khuvuc/filter';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'post',
@@ -93,7 +93,7 @@ export function useGetKhuVuc() {
 
 export function useGetKhuVucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `http://localhost:6868/api/ent_khuvuc/${id}`;
+  const URL = `http://93.127.199.152:6868/api/ent_khuvuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -121,7 +121,7 @@ export function useGetKhuVucDetail(id: string) {
 
 export function useGetHangMuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://localhost:6868/api/ent_hangmuc/';
+  const URL = 'http://93.127.199.152:6868/api/ent_hangmuc/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -148,7 +148,7 @@ export function useGetHangMuc() {
 
 export function useGetHangMucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `http://localhost:6868/api/ent_hangmuc/${id}`;
+  const URL = `http://93.127.199.152:6868/api/ent_hangmuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',

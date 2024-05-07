@@ -144,6 +144,12 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/hangmuc/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/hangmuc/${id}/edit`,
     },
+    checklist: {
+      root: `${ROOTS.DASHBOARD}/checklist`,
+      new: `${ROOTS.DASHBOARD}/checklist/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
+    },
     room: {
       root: `${ROOTS.DASHBOARD}/room`,
       new: `${ROOTS.DASHBOARD}/room/new`,

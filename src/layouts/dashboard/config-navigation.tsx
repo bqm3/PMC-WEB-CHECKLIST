@@ -91,6 +91,15 @@ export function useNavData() {
                 { title: t('create'), path: paths.dashboard.hangmuc.new },
               ],
             },
+            {
+              title: t('checklist'),
+              path: paths.dashboard.checklist.root,
+              icon: ICONS.lock,
+              children: [
+                { title: t('list'), path: paths.dashboard.checklist.root },
+                { title: t('create'), path: paths.dashboard.checklist.new },
+              ],
+            },
             // TYPE ROOM
             // {
             //   title: t('type room'),

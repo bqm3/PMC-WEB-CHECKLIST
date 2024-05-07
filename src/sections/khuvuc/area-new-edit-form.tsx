@@ -135,7 +135,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
       console.log('data', data);
       if (currentArea !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
+          .put(`http://93.127.199.152:6868/api/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -171,7 +171,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/ent_khuvuc/create`, data, {
+          .post(`http://93.127.199.152:6868/api/ent_khuvuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

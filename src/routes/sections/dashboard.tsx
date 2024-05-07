@@ -106,6 +106,10 @@ const KhuvucEditPage = lazy(() => import('src/pages/dashboard/khuvuc/edit'));
 const HangMucListsPage = lazy(() => import('src/pages/dashboard/hangmuc/list'));
 const HangMucNewPage = lazy(() => import('src/pages/dashboard/hangmuc/new'));
 const HangMucEditPage = lazy(() => import('src/pages/dashboard/hangmuc/edit'));
+
+const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list'));
+const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
+const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'));
 // const RoomNewPage = lazy(() => import('src/pages/dashboard/room/new'));
 // const RoomEditPage = lazy(() => import('src/pages/dashboard/room/edit'));
 // ----------------------------------------------------------------------
@@ -185,6 +189,16 @@ export const dashboardRoutes = [
           { path: 'list', element: <HangMucListsPage /> },
           { path: ':id/edit', element: <HangMucEditPage /> },
           { path: 'new', element: <HangMucNewPage /> },
+
+        ],
+      },
+      {
+        path: 'checklist',
+        children: [
+          { element: <CheckListListsPage />, index: true },
+          { path: 'list', element: <CheckListListsPage /> },
+          { path: ':id/edit', element: <CheckListEditPage /> },
+          { path: 'new', element: <CheckListNewPage /> },
 
         ],
       },
