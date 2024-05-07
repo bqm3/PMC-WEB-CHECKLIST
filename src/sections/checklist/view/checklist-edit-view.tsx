@@ -12,7 +12,7 @@ import {useGetKhuVucDetail, useGetHangMucDetail} from 'src/api/khuvuc'
 import { useSettingsContext } from 'src/components/settings';
 
 //
-import ArticleNewEditForm from '../article-new-edit-form';
+// import ArticleNewEditForm from '../article-new-edit-form';
 
 
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@ export default function ArticleEditView({ id }: Props) {
         }}
       />
 
-      <ArticleNewEditForm currentArticle={currentArticle} />
+      {/* <ArticleNewEditForm currentArticle={currentArticle} /> */}
     </Container>
   );
 }

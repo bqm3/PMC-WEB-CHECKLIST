@@ -44,8 +44,8 @@ import { useSnackbar } from 'src/components/snackbar';
 import { IHangMuc, IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
 import OrderTableRow from '../article-table-row';
-import OrderTableToolbar from '../area-table-toolbar';
-import OrderTableFiltersResult from '../area-table-filters-result';
+import OrderTableToolbar from '../article-table-toolbar';
+import OrderTableFiltersResult from '../article-table-filters-result';
 
 // ----------------------------------------------------------------------
 

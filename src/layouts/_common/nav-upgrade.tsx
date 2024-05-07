@@ -37,16 +37,8 @@ export default function NavUpgrade() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar
-            src={user?.avatar ? user?.avatar : 'https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg'}
-            alt={user?.fullname}
-            sx={{
-              width: 36,
-              height: 36,
-              border: (theme) => `solid 2px ${theme.palette.background.default}`,
-            }}
-          >
-            {user?.fullname?.charAt(0).toUpperCase()}
+        <Avatar alt={user?.UserName} sx={{ mr: 2 }}>
+            {user?.UserName.charAt(0).toUpperCase()}
           </Avatar>
           <Label
             color="success"
@@ -60,17 +52,19 @@ export default function NavUpgrade() {
               borderBottomLeftRadius: 2,
             }}
           >
-            {user?.role_id === 2 ? 'Staff' : "Admin"}
+            {user?.Permission === 1 && 'Giám đốc dự án' }
+            {user?.Permission === 2 && 'Giám sát' }
+            {user?.Permission === 3 && 'Phòng Số Hóa' }
           </Label>
         </Box>
 
         <Stack spacing={0.5} sx={{ mt: 1.5, mb: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.fullname}
+            {user?.UserName}
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            {user?.email}
+            {user?.Emails}
           </Typography>
         </Stack>
 

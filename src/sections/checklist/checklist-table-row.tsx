@@ -18,7 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 // types
 import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IHangMuc } from 'src/types/khuvuc';
+import { IKhuvuc, IHangMuc, IChecklist } from 'src/types/khuvuc';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -28,7 +28,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IHangMuc;
+  row: IChecklist;
   selected: boolean;
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -45,10 +45,12 @@ export default function AreaTableRow({
   const {
     ID_Khuvuc,
     ID_Hangmuc,
-    Hangmuc,
-    Tieuchuankt,
+    Checklist,
+    Giatridinhdanh,
+    Giatrinhan,
+    Tieuchuan,
     MaQrCode,
-    ent_khuvuc,
+    ent_hangmuc,
   } = row;
 
   const confirm = useBoolean();
@@ -63,7 +65,7 @@ export default function AreaTableRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      {/* <TableCell>
         <Box
           onClick={onViewRow}
           sx={{
@@ -75,12 +77,12 @@ export default function AreaTableRow({
         >
           {ID_Hangmuc}
         </Box>
-      </TableCell>
+      </TableCell> */}
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
 
         <ListItemText
-          primary={Hangmuc}
+          primary={Checklist}
           // secondary={ent_khoicv?.KhoiCV}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
@@ -90,7 +92,7 @@ export default function AreaTableRow({
         />
       </TableCell>
       <TableCell align="center"> {MaQrCode} </TableCell>
-      <TableCell> {ent_khuvuc?.Tenkhuvuc} </TableCell>
+      <TableCell> {ent_hangmuc?.Hangmuc} </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

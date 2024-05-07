@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 // routes
 import { useParams } from 'src/routes/hooks';
 // sections
-import { ArticleEditView } from 'src/sections/hangmuc/view';
+import { ChecklistEditView } from 'src/sections/checklist/view';
 
 // ----------------------------------------------------------------------
 
@@ -14,10 +14,10 @@ export default function ArticleEditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Cập nhật hạng mục</title>
+        <title> Dashboard: Cập nhật Checklist</title>
       </Helmet>
 
-      <ArticleEditView id={`${id}`} />
+      <ChecklistEditView id={`${id}`} />
     </>
   );
 }

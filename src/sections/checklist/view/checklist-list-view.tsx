@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetHangMuc, useGetKhoiCV, useGetChecklist } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -41,21 +41,23 @@ import {
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 // types
-import { IHangMuc, IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
+import { IChecklist, IHangMuc, IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
-import OrderTableRow from '../article-table-row';
-import OrderTableToolbar from '../area-table-toolbar';
-import OrderTableFiltersResult from '../area-table-filters-result';
+import OrderTableRow from '../checklist-table-row';
+import OrderTableToolbar from '../checklist-table-toolbar';
+import OrderTableFiltersResult from '../checklist-table-filters-result';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'ID_Hangmuc', label: 'Mã hạng mục', width: 150 },
-  { id: 'Hangmuc', label: 'Tên hạng mục' },
+  // { id: 'ID_Checklist', label: '', width: 1 },
+  { id: 'Checklist', label: 'Tên checklist' },
+  { id: 'Giatridinhdanh', label: 'Giá trị định danh', width: 140, align: 'center' },
+  { id: 'Giatrinhan', label: 'Giá trị nhận', width: 140, align: 'center' },
+  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 140, align: 'center' },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
-  { id: 'ID_Khuvuc', label: 'Khu vực', width: 140, align: 'center' },
   { id: '', width: 88 },
 ];
 
@@ -68,7 +70,7 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function AreaListView() {
-  const table = useTable({ defaultOrderBy: 'ID_Hangmuc' });
+  const table = useTable({ defaultOrderBy: 'ID_Checklist' });
 
   const settings = useSettingsContext();
 
@@ -84,13 +86,16 @@ export default function AreaListView() {
 
   const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
 
-  const [tableData, setTableData] = useState<IHangMuc[]>([]);
+  const {checkList} = useGetChecklist( {page: '1', limit: '10'});
+
+  const [tableData, setTableData] = useState<IChecklist[]>([]);
+
 
   useEffect(() => {
-    if (hangMuc?.length > 0) {
-      setTableData(hangMuc);
+    if (checkList?.length > 0) {
+      setTableData(checkList);
     }
-  }, [hangMuc]);
+  }, [checkList]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -316,12 +321,12 @@ export default function AreaListView() {
                     )
                     .map((row) => (
                       <OrderTableRow
-                        key={row.ID_Hangmuc}
+                        key={row.ID_Checklist}
                         row={row}
-                        selected={table.selected.includes(row.ID_Hangmuc)}
-                        onSelectRow={() => table.onSelectRow(row.ID_Hangmuc)}
-                        onDeleteRow={() => handleDeleteRow(row.ID_Hangmuc)}
-                        onViewRow={() => handleViewRow(row.ID_Hangmuc)}
+                        selected={table.selected.includes(row.ID_Checklist)}
+                        onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
+                        onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
+                        onViewRow={() => handleViewRow(row.ID_Checklist)}
                       />
                     ))}
 
@@ -382,7 +387,7 @@ function applyFilter({
   comparator,
   filters, // dateError,
 }: {
-  inputData: IHangMuc[];
+  inputData: IChecklist[];
   comparator: (a: any, b: any) => number;
   filters: IKhuvucTableFilters;
   // dateError: boolean;
@@ -402,9 +407,9 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.ent_khuvuc.Tenkhuvuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        order.ent_hangmuc.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

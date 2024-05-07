@@ -1,3 +1,3 @@
-export { default as ArticleListView } from './article-list-view';
-export { default as ArticleCreateView } from './article-create-view';
-export { default as ArticleEditView } from './article-edit-view';
+export { default as ChecklistListView } from './checklist-list-view';
+export { default as ChecklistCreateView } from './checklist-create-view';
+export { default as ChecklistEditView } from './checklist-edit-view';

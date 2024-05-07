@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import ArticleNewEditForm from '../article-new-edit-form';
+// import ArticleNewEditForm from '../article-new-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ export default function ArticleCreateView() {
         }}
       />
 
-      <ArticleNewEditForm />
+      {/* <ArticleNewEditForm /> */}
     </Container>
   );
 }

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { ArticleListView } from 'src/sections/hangmuc/view';
+import { ChecklistListView } from 'src/sections/checklist/view';
 
 // ----------------------------------------------------------------------
 
@@ -8,10 +8,10 @@ export default function OrderListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Hạng mục</title>
+        <title> Dashboard: Checklists</title>
       </Helmet>
 
-      <ArticleListView />
+      <ChecklistListView />
     </>
   );
 }

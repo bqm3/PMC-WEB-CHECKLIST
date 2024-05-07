@@ -47,7 +47,7 @@ export default function OrderBookingEditAddress() {
           <Box
             component="img"
             alt="logo"
-            src="/logo/pmc.png"
+            src="/logo/pmc 192px-01.png"
             sx={{ width: 48, height: 48 }}
           />
 

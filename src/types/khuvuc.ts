@@ -63,3 +63,28 @@ export type IHangMuc = {
   isDelete: string;
   ent_khuvuc: IKhuvuc
 };
+
+export type IChecklist = {
+  ID_Checklist: string;
+  ID_Khuvuc: string;
+  ID_Hangmuc: string;
+  ID_Tang: string;
+  Sothutu: string;
+  Maso: string;
+  MaQrCode: string;
+  Checklist: string;
+  Giatridinhdanh: string;
+  Giatrinhan: string;
+  Ghichu: string;
+  Tieuchuan: string;
+  ID_User: string;
+  sCalv: string;
+  calv_1: string;
+  calv_2: string;
+  calv_3: string;
+  calv_4: string;
+  isDelete: string;
+  ent_khoicv: E_KhoiCV;
+  ent_toanha: E_Toanha;
+  ent_hangmuc: IHangMuc;
+};
