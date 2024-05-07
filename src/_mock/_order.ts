@@ -17,6 +17,13 @@ export const ORDER_STATUS_OPTIONS = [
   { value: 'refunded', label: 'Refunded' },
 ];
 
+export const KHUVUC_STATUS_OPTIONS = [
+  { value: '1', label: 'Khối làm sạch' },
+  { value: '2', label: 'Khối kỹ thuật' },
+  { value: '3', label: 'Khối bảo vệ' },
+  // { value: 'refunded', label: 'Refunded' },
+];
+
 const ITEMS = [...Array(3)].map((_, index) => ({
   id: _mock.id(index),
   sku: `16H9UR${index}`,

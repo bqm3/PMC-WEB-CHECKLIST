@@ -10,6 +10,8 @@
   "mail": "mail",
   "chat": "chat",
   "file": "file",
+  "area": "area",
+  "article": "article",
   "tour": "tour",
   "cards": "cards",
   "blank": "blank",

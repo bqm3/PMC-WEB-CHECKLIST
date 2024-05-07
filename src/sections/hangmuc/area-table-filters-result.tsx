@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Stack, { StackProps } from '@mui/material/Stack';
 // types
 import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
+import { IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
@@ -13,8 +14,8 @@ import { shortDateLabel } from 'src/components/custom-date-range-picker';
 // ----------------------------------------------------------------------
 
 type Props = StackProps & {
-  filters: IOrderTableFilters;
-  onFilters: (name: string, value: IOrderTableFilterValue) => void;
+  filters: IKhuvucTableFilters;
+  onFilters: (name: string, value: IKhuvucTableFilterValue) => void;
   //
   onResetFilters: VoidFunction;
   //
@@ -30,7 +31,7 @@ export default function OrderTableFiltersResult({
   results,
   ...other
 }: Props) {
-  const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
+  // const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
@@ -46,22 +47,30 @@ export default function OrderTableFiltersResult({
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          kết quả được tìm thấy
         </Box>
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {filters.status !== 'all' && (
-          <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+          <Block label="Khối làm việc:">
+            <Chip
+              size="small"
+              label={
+                (`${filters.status}` === '1' && 'Khối làm sạch') ||
+                (`${filters.status}` === '2' && 'Khối kỹ thuật') ||
+                (`${filters.status}` === '3' && 'Khối bảo vệ')
+              }
+              onDelete={handleRemoveStatus}
+            />
           </Block>
         )}
 
-        {filters.startDate && filters.endDate && (
+        {/* {filters.startDate && filters.endDate && (
           <Block label="Date:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
-        )}
+        )} */}
 
         <Button
           color="error"

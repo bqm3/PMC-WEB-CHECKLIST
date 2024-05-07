@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 // types
-import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
+import {IKhuvucTableFilters, IKhuvucTableFilterValue} from 'src/types/khuvuc'
 // components
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -16,8 +16,8 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 type Props = {
-  filters: IOrderTableFilters;
-  onFilters: (name: string, value: IOrderTableFilterValue) => void;
+  filters: IKhuvucTableFilters;
+  onFilters: (name: string, value: IKhuvucTableFilterValue) => void;
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
@@ -39,20 +39,6 @@ export default function OrderTableToolbar({
     [onFilters]
   );
 
-  const handleFilterStartDate = useCallback(
-    (newValue: Date | null) => {
-      onFilters('startDate', newValue);
-    },
-    [onFilters]
-  );
-
-  const handleFilterEndDate = useCallback(
-    (newValue: Date | null) => {
-      onFilters('endDate', newValue);
-    },
-    [onFilters]
-  );
-
   return (
     <>
       <Stack
@@ -67,7 +53,7 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <DatePicker
+        {/* <DatePicker
           label="Start date"
           value={filters.startDate}
           onChange={handleFilterStartDate}
@@ -89,14 +75,14 @@ export default function OrderTableToolbar({
           sx={{
             maxWidth: { md: 200 },
           }}
-        />
+        /> */}
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or order number..."
+            placeholder="Tìm kiếm theo tên khu vực, mã qr code, tòa nhà..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

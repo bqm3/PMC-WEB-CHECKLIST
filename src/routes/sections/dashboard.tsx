@@ -49,7 +49,6 @@ const ProductCreatePage = lazy(() => import('src/pages/dashboard/product/new'));
 const ProductEditPage = lazy(() => import('src/pages/dashboard/product/edit'));
 // ORDER
 const OrderListPage = lazy(() => import('src/pages/dashboard/order/list'));
-const OrderDetailsPage = lazy(() => import('src/pages/dashboard/order/details'));
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
@@ -99,8 +98,14 @@ const OverviewFicilitiesPage = lazy(() => import('src/pages/dashboard/facilities
 
 
 // Khu vực
-const KhuvVucListsPage = lazy(() => import('src/pages/dashboard/khuvuc/list'));
-// const RoomDetailPage = lazy(() => import('src/pages/dashboard/room/details'));
+const KhuVucListsPage = lazy(() => import('src/pages/dashboard/khuvuc/list'));
+const KhuVucNewPage = lazy(() => import('src/pages/dashboard/khuvuc/new'));
+const KhuvucEditPage = lazy(() => import('src/pages/dashboard/khuvuc/edit'));
+
+// Hạng mục
+const HangMucListsPage = lazy(() => import('src/pages/dashboard/hangmuc/list'));
+const HangMucNewPage = lazy(() => import('src/pages/dashboard/hangmuc/new'));
+const HangMucEditPage = lazy(() => import('src/pages/dashboard/hangmuc/edit'));
 // const RoomNewPage = lazy(() => import('src/pages/dashboard/room/new'));
 // const RoomEditPage = lazy(() => import('src/pages/dashboard/room/edit'));
 // ----------------------------------------------------------------------
@@ -166,11 +171,20 @@ export const dashboardRoutes = [
       {
         path: 'khuvuc',
         children: [
-          { element: <KhuvVucListsPage />, index: true },
-          // { path: 'list', element: <RoomListsPage /> },
-          // { path: ':id', element: <RoomDetailPage /> },
-          // { path: ':id/edit', element: <RoomEditPage /> },
-          // { path: 'new', element: <RoomNewPage /> },
+          { element: <KhuVucListsPage />, index: true },
+          { path: 'list', element: <KhuVucListsPage /> },
+          { path: ':id/edit', element: <KhuvucEditPage /> },
+          { path: 'new', element: <KhuVucNewPage /> },
+
+        ],
+      },
+      {
+        path: 'hangmuc',
+        children: [
+          { element: <HangMucListsPage />, index: true },
+          { path: 'list', element: <HangMucListsPage /> },
+          { path: ':id/edit', element: <HangMucEditPage /> },
+          { path: 'new', element: <HangMucNewPage /> },
 
         ],
       },
@@ -226,7 +240,7 @@ export const dashboardRoutes = [
         children: [
           { element: <OrderListPage />, index: true },
           { path: 'list', element: <OrderListPage /> },
-          { path: ':id', element: <OrderDetailsPage /> },
+          // { path: ':id', element: <OrderDetailsPage /> },
         ],
       },
       {

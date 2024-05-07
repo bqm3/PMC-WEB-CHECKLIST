@@ -135,6 +135,14 @@ export const paths = {
     khuvuc: {
       root: `${ROOTS.DASHBOARD}/khuvuc`,
       new: `${ROOTS.DASHBOARD}/khuvuc/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/khuvuc/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/khuvuc/${id}/edit`,
+    },
+    hangmuc: {
+      root: `${ROOTS.DASHBOARD}/hangmuc`,
+      new: `${ROOTS.DASHBOARD}/hangmuc/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/hangmuc/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/hangmuc/${id}/edit`,
     },
     room: {
       root: `${ROOTS.DASHBOARD}/room`,

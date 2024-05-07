@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 // @mui
 import { alpha } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
@@ -15,7 +16,8 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
+import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
+import { useGetKhuVuc } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -37,38 +39,41 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+import { useSnackbar } from 'src/components/snackbar';
 // types
-import { IOrderItem, IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
+import { IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
-import OrderTableRow from '../order-table-row';
-import OrderTableToolbar from '../order-table-toolbar';
-import OrderTableFiltersResult from '../order-table-filters-result';
+import OrderTableRow from '../area-table-row';
+import OrderTableToolbar from '../area-table-toolbar';
+import OrderTableFiltersResult from '../area-table-filters-result';
+
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'orderNumber', label: 'Order', width: 116 },
-  { id: 'name', label: 'Customer' },
-  { id: 'createdAt', label: 'Date', width: 140 },
-  { id: 'totalQuantity', label: 'Items', width: 120, align: 'center' },
-  { id: 'totalAmount', label: 'Price', width: 140 },
-  { id: 'status', label: 'Status', width: 110 },
+  { id: 'ID_Khuvuc', label: 'Mã khu vực', width: 140 },
+  { id: 'Tenkhuvuc', label: 'Tên khu vực' },
+
+  { id: 'ID_Toanha', label: 'Tòa nhà', width: 140, align: 'center' },
+  { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 110 },
+  { id: 'Sothutu', label: 'Số thứ tự', width: 100 },
+  { id: 'Makhuvuc', label: 'Mã khu vực', width: 100 },
   { id: '', width: 88 },
 ];
 
-const defaultFilters: IOrderTableFilters = {
+const defaultFilters: IKhuvucTableFilters = {
   name: '',
   status: 'all',
-  startDate: null,
-  endDate: null,
 };
 
+const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
-export default function OrderListView() {
-  const table = useTable({ defaultOrderBy: 'orderNumber' });
+export default function AreaListView() {
+  const table = useTable({ defaultOrderBy: 'ID_Khuvuc' });
 
   const settings = useSettingsContext();
 
@@ -76,20 +81,29 @@ export default function OrderListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_orders);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+
+ 
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
+  const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
+
+  const [tableData, setTableData] = useState<IKhuvuc[]>([]);
+
+  useEffect(()=> {
+    if(khuvuc.length > 0){
+      setTableData(khuvuc)
+    }
+  },[khuvuc])
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
-    dateError,
+    // dateError,
   });
 
   const dataInPage = dataFiltered.slice(
@@ -99,13 +113,12 @@ export default function OrderListView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+  const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const handleFilters = useCallback(
-    (name: string, value: IOrderTableFilterValue) => {
+    (name: string, value: IKhuvucTableFilterValue) => {
       table.onResetPage();
       setFilters((prevState) => ({
         ...prevState,
@@ -116,17 +129,53 @@ export default function OrderListView() {
   );
 
   const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
+    async (id: string) => {
+      await axios
+        .put(`http://localhost:6868/api/ent_khuvuc/delete/${id}`, [], {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          // reset();
+          const deleteRow = tableData.filter((row) => row.ID_Khuvuc !== id);
+          setTableData(deleteRow);
+  
+          table.onUpdatePageDeleteRow(dataInPage.length);
+          enqueueSnackbar('Xóa thành công!');
+         
+        })
+        .catch((error) => {
+          if (error.response) {
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `${error.response.data.message}`,
+            });
+          } else if (error.request) {
+            // Lỗi không nhận được phản hồi từ server
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Không nhận được phản hồi từ máy chủ`,
+            });
+          } else {
+            // Lỗi khi cấu hình request
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Lỗi gửi yêu cầu`,
+            });
+          }
+        });
     },
-    [dataInPage.length, table, tableData]
+    [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
+  
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
+    const deleteRows = tableData.filter((row) => !table.selected.includes(row.ID_Khuvuc));
     setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
@@ -142,7 +191,7 @@ export default function OrderListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.order.details(id));
+      router.push(paths.dashboard.khuvuc.edit(id));
     },
     [router]
   );
@@ -158,17 +207,17 @@ export default function OrderListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="List"
+          heading="Khu vực"
           links={[
             {
               name: 'Dashboard',
               href: paths.dashboard.root,
             },
             {
-              name: 'Order',
-              href: paths.dashboard.order.root,
+              name: 'Khu vực',
+              href: paths.dashboard.khuvuc.root,
             },
-            { name: 'List' },
+            { name: 'Danh sách' },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -196,22 +245,22 @@ export default function OrderListView() {
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
                     color={
-                      (tab.value === 'completed' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'cancelled' && 'error') ||
+                      (tab.value === '1' && 'success') ||
+                      (tab.value === '2' && 'warning') ||
+                      (tab.value === '3' && 'error') ||
                       'default'
                     }
                   >
-                    {tab.value === 'all' && _orders.length}
-                    {tab.value === 'completed' &&
-                      _orders.filter((order) => order.status === 'completed').length}
+                    {tab.value === 'all' && khuvuc?.length}
+                    {tab.value === '1' &&
+                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '1').length}
 
-                    {tab.value === 'pending' &&
-                      _orders.filter((order) => order.status === 'pending').length}
-                    {tab.value === 'cancelled' &&
-                      _orders.filter((order) => order.status === 'cancelled').length}
+                    {tab.value === '2' &&
+                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '2').length}
+                    {tab.value === '3' &&
+                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '3').length}
                     {tab.value === 'refunded' &&
-                      _orders.filter((order) => order.status === 'refunded').length}
+                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '4').length}
                   </Label>
                 }
               />
@@ -242,12 +291,9 @@ export default function OrderListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData.length}
+              rowCount={khuvuc?.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
+                table.onSelectAllRows(checked, khuvuc?.map((row) => row?.ID_Khuvuc))
               }
               action={
                 <Tooltip title="Delete">
@@ -264,14 +310,11 @@ export default function OrderListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={khuvuc?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.id)
-                    )
+                    table.onSelectAllRows(checked, khuvuc?.map((row) => row.ID_Khuvuc))
                   }
                 />
 
@@ -283,12 +326,12 @@ export default function OrderListView() {
                     )
                     .map((row) => (
                       <OrderTableRow
-                        key={row.id}
+                        key={row.ID_Khuvuc}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
+                        selected={table.selected.includes(row.ID_Khuvuc)}
+                        onSelectRow={() => table.onSelectRow(row.ID_Khuvuc)}
+                        onDeleteRow={() => handleDeleteRow(row.ID_Khuvuc)}
+                        onViewRow={() => handleViewRow(row.ID_Khuvuc)}
                       />
                     ))}
 
@@ -347,15 +390,14 @@ export default function OrderListView() {
 function applyFilter({
   inputData,
   comparator,
-  filters,
-  dateError,
+  filters, // dateError,
 }: {
-  inputData: IOrderItem[];
+  inputData: IKhuvuc[];
   comparator: (a: any, b: any) => number;
-  filters: IOrderTableFilters;
-  dateError: boolean;
+  filters: IKhuvucTableFilters;
+  // dateError: boolean;
 }) {
-  const { status, name, startDate, endDate } = filters;
+  const { status, name } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -370,24 +412,14 @@ function applyFilter({
   if (name) {
     inputData = inputData.filter(
       (order) =>
-        order.orderNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        order.Tenkhuvuc.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.ent_toanha.Toanha.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
-  }
-
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter(
-        (order) =>
-          fTimestamp(order.createdAt) >= fTimestamp(startDate) &&
-          fTimestamp(order.createdAt) <= fTimestamp(endDate)
-      );
-    }
+    inputData = inputData.filter((order) => `${order?.ID_KhoiCV}` === status);
   }
 
   return inputData;

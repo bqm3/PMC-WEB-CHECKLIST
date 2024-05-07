@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { AreaListView } from 'src/sections/khuvuc/view';
+import { ArticleCreateView } from 'src/sections/hangmuc/view';
 
 // ----------------------------------------------------------------------
 
-export default function OrderListPage() {
+export default function ArticleCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Khu vực</title>
+        <title> Dashboard: Tạo mới</title>
       </Helmet>
 
-      <AreaListView />
+      <ArticleCreateView />
     </>
   );
 }

@@ -2,11 +2,11 @@ import { Helmet } from 'react-helmet-async';
 // routes
 import { useParams } from 'src/routes/hooks';
 // sections
-import { OrderDetailsView } from 'src/sections/order/view';
+import { ArticleEditView } from 'src/sections/hangmuc/view';
 
 // ----------------------------------------------------------------------
 
-export default function OrderDetailsPage() {
+export default function ArticleEditPage() {
   const params = useParams();
 
   const { id } = params;
@@ -14,10 +14,10 @@ export default function OrderDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Order Details</title>
+        <title> Dashboard: Cập nhật hạng mục</title>
       </Helmet>
 
-      <OrderDetailsView id={`${id}`} />
+      <ArticleEditView id={`${id}`} />
     </>
   );
 }
