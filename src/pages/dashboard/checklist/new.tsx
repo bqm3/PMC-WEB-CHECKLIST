@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { ArticleCreateView } from 'src/sections/hangmuc/view';
+import { ChecklistCreateView } from 'src/sections/checklist/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function ArticleCreatePage() {
         <title> Dashboard: Tạo mới</title>
       </Helmet>
 
-      <ArticleCreateView />
+      <ChecklistCreateView />
     </>
   );
 }

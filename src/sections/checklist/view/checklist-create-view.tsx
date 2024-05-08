@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-// import ArticleNewEditForm from '../article-new-edit-form';
+import ChecklistNewEditForm from '../checklist-new-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -16,15 +16,15 @@ export default function ArticleCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Tạo mới hạng mục"
+        heading="Tạo mới checklist"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Hạng mục',
-            href: paths.dashboard.hangmuc.root,
+            name: 'Checklist',
+            href: paths.dashboard.checklist.root,
           },
           { name: 'Tạo mới' },
         ]}
@@ -33,7 +33,7 @@ export default function ArticleCreateView() {
         }}
       />
 
-      {/* <ArticleNewEditForm /> */}
+      <ChecklistNewEditForm />
     </Container>
   );
 }

@@ -12,12 +12,15 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+// import { Menu, MenuItem, Select } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc, useGetKhoiCV, useGetChecklist } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetHangMuc, useGetKhoiCV, useGetChecklist, useGetCalv } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -41,11 +44,18 @@ import {
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 // types
-import { IChecklist, IHangMuc, IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
+import {
+  IChecklist,
+  IHangMuc,
+  IKhuvuc,
+  IKhuvucTableFilters,
+  IKhuvucTableFilterValue,
+} from 'src/types/khuvuc';
 //
-import OrderTableRow from '../checklist-table-row';
-import OrderTableToolbar from '../checklist-table-toolbar';
-import OrderTableFiltersResult from '../checklist-table-filters-result';
+import ChecklistTableRow from '../checklist-table-row';
+import ChecklistTableToolbar from '../checklist-table-toolbar';
+import ChecklistTableFiltersResult from '../checklist-table-filters-result';
+
 
 // ----------------------------------------------------------------------
 
@@ -54,10 +64,14 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_
 const TABLE_HEAD = [
   // { id: 'ID_Checklist', label: '', width: 1 },
   { id: 'Checklist', label: 'Tên checklist' },
-  { id: 'Giatridinhdanh', label: 'Giá trị định danh', width: 140, align: 'center' },
-  { id: 'Giatrinhan', label: 'Giá trị nhận', width: 140, align: 'center' },
-  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 140, align: 'center' },
+  { id: 'Giatridinhdanh', label: 'Giá trị định danh', width: 100, align: 'center' },
+  { id: 'Giatrinhan', label: 'Giá trị nhận', width: 120, align: 'center' },
+  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
+  { id: 'ID_Tang', label: 'Tầng', width: 100, align: 'center' },
+  { id: 'Sothutu', label: 'Số thứ tự', width: 100, align: 'center' },
+  { id: 'Maso', label: 'Mã số', width: 100, align: 'center' },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
+  { id: 'sCalv', label: 'Ca làm việc', width: 140, align: 'center' },
   { id: '', width: 88 },
 ];
 
@@ -84,18 +98,25 @@ export default function AreaListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
-
-  const {checkList} = useGetChecklist( {page: '1', limit: '10'});
+  // const {checkList} = useGetChecklist( {page: table.page, limit: table.rowsPerPage});
 
   const [tableData, setTableData] = useState<IChecklist[]>([]);
 
+  const { checkList, checkListTotalPages, checklistTotalCount } = useGetChecklist({
+    page: table.page,
+    limit: table.rowsPerPage,
+  });
 
+  const {calv} = useGetCalv()
+
+ 
+  // Use the checklist data in useEffect to set table data
   useEffect(() => {
-    if (checkList?.length > 0) {
+    if (checkList) {
       setTableData(checkList);
     }
-  }, [checkList]);
+    
+  }, [checkList, table.page, table.rowsPerPage]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -103,11 +124,12 @@ export default function AreaListView() {
     filters,
   });
 
-  const dataInPage = dataFiltered?.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
-
+ 
+  const dataInPage = dataFiltered.slice(
+    0,
+    table.rowsPerPage
+  )
+  
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters.name || filters.status !== 'all';
@@ -128,7 +150,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://93.127.199.152:6868/api/ent_hangmuc/delete/${id}`, [], {
+        .put(`http://localhost:6868/api/ent_hangmuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -178,7 +200,7 @@ export default function AreaListView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered?.length,
     });
-  }, [dataFiltered?.length, dataInPage.length, table, tableData]);
+  }, [dataFiltered?.length,dataInPage.length, table, tableData]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -186,7 +208,7 @@ export default function AreaListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.hangmuc.edit(id));
+      router.push(paths.dashboard.checklist.edit(id));
     },
     [router]
   );
@@ -202,15 +224,15 @@ export default function AreaListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Hạng mục"
+          heading="Checklists"
           links={[
             {
               name: 'Dashboard',
               href: paths.dashboard.root,
             },
             {
-              name: 'Hạng mục',
-              href: paths.dashboard.hangmuc.root,
+              name: 'Checklist',
+              href: paths.dashboard.checklist.root,
             },
             { name: 'Danh sách' },
           ]}
@@ -220,49 +242,8 @@ export default function AreaListView() {
         />
 
         <Card>
-          {/* <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === '1' && 'success') ||
-                      (tab.value === '2' && 'warning') ||
-                      (tab.value === '3' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && hangMuc?.length}
-                    {tab.value === '1' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '1').length}
-
-                    {tab.value === '2' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '2').length}
-                    {tab.value === '3' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '3').length}
-                    {tab.value === 'refunded' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '4').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs> */}
-
-          <OrderTableToolbar
+         
+          <ChecklistTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -271,7 +252,7 @@ export default function AreaListView() {
           />
 
           {canReset && (
-            <OrderTableFiltersResult
+            <ChecklistTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -314,14 +295,11 @@ export default function AreaListView() {
                 />
 
                 <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
+                  {dataInPage
                     .map((row) => (
-                      <OrderTableRow
+                      <ChecklistTableRow
                         key={row.ID_Checklist}
+                        calv={calv}
                         row={row}
                         selected={table.selected.includes(row.ID_Checklist)}
                         onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
@@ -332,7 +310,7 @@ export default function AreaListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData?.length)}
+                    emptyRows={emptyRows(0, table.rowsPerPage, tableData?.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -342,7 +320,8 @@ export default function AreaListView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered?.length}
+            count={checklistTotalCount}
+            rowsPerPageOptions={[20, 30, 50]}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -409,6 +388,8 @@ function applyFilter({
       (order) =>
         order.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.ent_hangmuc.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }

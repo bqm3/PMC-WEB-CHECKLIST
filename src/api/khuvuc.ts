@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang } from 'src/types/khuvuc';
 import axios, { AxiosRequestConfig } from 'axios';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
@@ -7,12 +7,75 @@ import { useEffect, useMemo } from 'react';
 
 // types
 import useSWR from 'swr';
+// const typePagination = {
+//   page: string;
+//   limit: string;
+// }
 
 const STORAGE_KEY = 'accessToken';
 
+export function useGetCalv() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'http://localhost:6868/api/ent_calv/';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      calv: (data?.data as ICalv[]) || [],
+      calvLoading: isLoading,
+      calvError: error,
+      calvValidating: isValidating,
+      calvEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetCalvFilter(inp : any) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const dataInput = {
+    ID_KhoiCV: inp?.ID_KhoiCV
+  }
+  console.log('dataInput',inp)
+  const URL = `http://localhost:6868/api/ent_calv/`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(dataInput),
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      calv: (data?.data as ICalv[]) || [],
+      calvLoading: isLoading,
+      calvError: error,
+      calvValidating: isValidating,
+      calvEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetToanha() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://93.127.199.152:6868/api/ent_toanha/';
+  const URL = 'http://localhost:6868/api/ent_toanha/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -37,9 +100,36 @@ export function useGetToanha() {
   return memoizedValue;
 }
 
+export function useGetTang() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'http://localhost:6868/api/ent_tang/';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      tang: (data?.data as E_Tang[]) || [],
+      tangLoading: isLoading,
+      tangError: error,
+      tangValidating: isValidating,
+      tangEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetKhoiCV() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://93.127.199.152:6868/api/ent_khoicv/';
+  const URL = `http://localhost:6868/api/ent_khoicv`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -66,7 +156,7 @@ export function useGetKhoiCV() {
 
 export function useGetKhuVuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://93.127.199.152:6868/api/ent_khuvuc/filter';
+  const URL = 'http://localhost:6868/api/ent_khuvuc/filter';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'post',
@@ -93,7 +183,7 @@ export function useGetKhuVuc() {
 
 export function useGetKhuVucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `http://93.127.199.152:6868/api/ent_khuvuc/${id}`;
+  const URL = `http://localhost:6868/api/ent_khuvuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -118,10 +208,9 @@ export function useGetKhuVucDetail(id: string) {
   return memoizedValue;
 }
 
-
 export function useGetHangMuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://93.127.199.152:6868/api/ent_hangmuc/';
+  const URL = 'http://localhost:6868/api/ent_hangmuc/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -148,7 +237,7 @@ export function useGetHangMuc() {
 
 export function useGetHangMucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `http://93.127.199.152:6868/api/ent_hangmuc/${id}`;
+  const URL = `http://localhost:6868/api/ent_hangmuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -175,7 +264,7 @@ export function useGetHangMucDetail(id: string) {
 
 export function useGetChecklist(pag: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `http://93.127.199.152:6868/api/ent_checklist/?page=${pag?.page}&limit=${pag?.limit}`;
+  const URL = `http://localhost:6868/api/ent_checklist/?page=${Number(pag?.page) + 1}&limit=${pag?.limit}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -193,9 +282,40 @@ export function useGetChecklist(pag: any) {
       checkListError: error,
       checkListValidating: isValidating,
       checkListEmpty: !isLoading && !data.length,
+      checkListTotalPages: data?.totalPages,
+      checklistPage: data?.page,
+      checklistTotalCount: data?.totalCount
     }),
     [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
 }
+
+export function useGetChecklistDetail(id: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/ent_checklist/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      checkList: (data?.data as IChecklist) || [],
+      checkListLoading: isLoading,
+      checkListError: error,
+      checkListValidating: isValidating,
+      checkListEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+

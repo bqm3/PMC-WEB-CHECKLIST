@@ -14,6 +14,7 @@ export type IKhuvucTableFilters = {
 
 export type E_KhoiCV = {
   KhoiCV: string;
+  ID_KhoiCV: string;
 }
 
 export type E_Toanha = {
@@ -24,6 +25,19 @@ export type E_Toanha = {
 
 export type E_Duan = {
   Duan: string;
+}
+
+export type E_Calv = {
+  Tenca: string;
+  ID_Calv: string;
+  Giobatdau: string;
+  Gioketthuc: string;
+}
+
+export type E_Tang = {
+  ID_Tang: string;
+  Tentang: string;
+  Sotang: string
 }
 
 export type IKhuvuc = {
@@ -52,6 +66,17 @@ export type IToanha = {
 export type IKhoiCV = {
   ID_Khoi: string;
   KhoiCV: string;
+}
+
+export type ICalv = {
+  ID_Calv: string;
+  ID_KhoiCV: string;
+  ID_Duan: string;
+  Tenca: string;
+  Giobatdau: string;
+  Gioketthuc: string;
+  ID_User: string;
+  isDelete: string;
 }
 
 export type IHangMuc = {
@@ -87,4 +112,6 @@ export type IChecklist = {
   ent_khoicv: E_KhoiCV;
   ent_toanha: E_Toanha;
   ent_hangmuc: IHangMuc;
+  ent_tang: E_Tang;
+  ent_calv: ICalv
 };

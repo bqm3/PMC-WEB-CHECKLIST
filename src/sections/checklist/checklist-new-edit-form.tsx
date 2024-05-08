@@ -30,7 +30,16 @@ import {
   PRODUCT_CATEGORY_GROUP_OPTIONS,
 } from 'src/_mock';
 // api
-import { useGetKhuVuc, useGetToanha, useGetKhoiCV } from 'src/api/khuvuc';
+import {
+  useGetKhuVuc,
+  useGetToanha,
+  useGetKhoiCV,
+  useGetChecklistDetail,
+  useGetTang,
+  useGetHangMuc,
+  useGetCalvFilter,
+  useGetCalv,
+} from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
@@ -45,19 +54,25 @@ import FormProvider, {
   RHFMultiCheckbox,
 } from 'src/components/hook-form';
 // types
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv } from 'src/types/khuvuc';
 import axios from 'axios';
+import Iconify from 'src/components/iconify';
+// auth
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentArticle?: IHangMuc;
+  currentChecklist?: IChecklist;
 };
 
 const STORAGE_KEY = 'accessToken';
 
-export default function ArticleNewEditForm({ currentArticle }: Props) {
+export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const router = useRouter();
+  const { user, logout } = useAuthContext();
+
+
 
   const mdUp = useResponsive('up', 'md');
 
@@ -65,32 +80,37 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [includeTaxes, setIncludeTaxes] = useState(false);
+  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { tang, tangLoading, tangEmpty } = useGetTang();
+  const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
 
-  const [khuVuc, setKhuVuc] = useState<IKhuvuc[]>([]);
-
-  const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
-
-  useEffect(() => {
-    if (khuvuc?.length > 0) {
-      setKhuVuc(khuvuc);
-    }
-  }, [khuvuc]);
+  const [Calv, setCalv] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const NewProductSchema = Yup.object().shape({
-    Hangmuc: Yup.string().required('Phải có tên hạng mục'),
-    Tieuchuankt: Yup.string().required('Phải có tiêu hạng mục'),
+    Checklist: Yup.string().required('Phải có tên checklist'),
+    ID_KhoiCV: Yup.string() ,
   });
 
   const defaultValues = useMemo(
     () => ({
-      Hangmuc: currentArticle?.Hangmuc || '',
-      Tieuchuankt: currentArticle?.Tieuchuankt || '',
-      MaQrCode: currentArticle?.MaQrCode || '',
-      ID_Khuvuc: currentArticle?.ID_Khuvuc || null,
+      Checklist: currentChecklist?.Checklist || '',
+      Giatridinhdanh: currentChecklist?.Giatridinhdanh || '',
+      Giatrinhan: currentChecklist?.Giatrinhan || '',
+      MaQrCode: currentChecklist?.MaQrCode || '',
+      Sothutu: currentChecklist?.Sothutu || '',
+      Maso: currentChecklist?.Maso || '',
+      Ghichu: currentChecklist?.Ghichu || '',
+      Tieuchuan: currentChecklist?.Tieuchuan || '',
+      ID_KhoiCV: currentChecklist?.ent_khoicv?.ID_KhoiCV || null || '',
+      ID_Hangmuc: currentChecklist?.ID_Hangmuc || null,
+      ID_Tang: currentChecklist?.ID_Tang || null,
+      sCalv: currentChecklist?.sCalv || [],
     }),
-    [currentArticle]
+    [currentChecklist]
   );
+
+  const { calv } = useGetCalv();
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -108,21 +128,53 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
   const values = watch();
 
   useEffect(() => {
-    if (currentArticle) {
+    // Set loading state to true at the beginning
+    setLoading(true);
+
+    // Declare an array to hold the filtered or full list of calv items
+    let filteredCalv;
+
+    if (values.ID_KhoiCV) {
+      // Filter the calv array based on ID_KhoiCV from values
+      filteredCalv = calv?.filter((item) => item.ID_KhoiCV === values.ID_KhoiCV) || [];
+    } else {
+      // Use the full calv array if ID_KhoiCV is not provided
+      filteredCalv = calv;
+    }
+
+    // Create a new array with the desired structure: { value: ID_Calv, label: Tenca }
+    const newArray = filteredCalv?.map((item) => ({
+      value: item.ID_Calv,
+      label: item.Tenca,
+    }));
+
+    // Update the state with the new array
+    setCalv(newArray);
+
+    // Set loading state to false at the end
+    setLoading(false);
+  }, [values.ID_KhoiCV, calv]);
+
+  useEffect(() => {
+    if (currentChecklist) {
       reset(defaultValues);
     }
-  }, [currentArticle, defaultValues, reset]);
+  }, [currentChecklist, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (currentArticle !== undefined) {
+      if (currentChecklist !== undefined) {
         await axios
-          .put(`http://93.127.199.152:6868/api/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`, data, {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
+          .put(
+            `http://localhost:6868/api/ent_checklist/update/${currentChecklist.ID_Checklist}`,
+            data,
+            {
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          )
           .then((res) => {
             reset();
             enqueueSnackbar('Cập nhật thành công!');
@@ -152,8 +204,9 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
             }
           });
       } else {
+        console.log('data', data);
         axios
-          .post(`http://93.127.199.152:6868/api/ent_hangmuc/create`, data, {
+          .post(`http://localhost:6868/api/ent_checklist/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -164,6 +217,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
             enqueueSnackbar('Tạo mới thành công!');
           })
           .catch((error) => {
+            console.log('error.response', error.response);
             if (error.response) {
               enqueueSnackbar({
                 variant: 'error',
@@ -196,6 +250,123 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
     }
   });
 
+  const renderPrimary = (
+    <>
+      {mdUp && (
+        <Grid md={3}>
+          <Typography variant="h6" sx={{ mb: 0.5 }}>
+            Thuộc tính
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Tên checklist, Mã Qr Code, Giá trị nhận/ định danh...
+          </Typography>
+        </Grid>
+      )}
+
+      <Grid xs={12} md={9}>
+        <Card>
+          {!mdUp && <CardHeader title="Thuộc tính" />}
+
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+              {khoiCV?.length > 0 && (
+                <RHFSelect
+                  name="ID_KhoiCV"
+                  label="Khối công việc"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {khoiCV?.map((item) => (
+                    <MenuItem key={item?.ID_Khoi} value={item?.ID_Khoi}>
+                      {item?.KhoiCV}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+
+              {tang?.length > 0 && (
+                <RHFSelect
+                  name="ID_Tang"
+                  label="Tầng"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {tang?.map((item) => (
+                    <MenuItem key={item?.ID_Tang} value={item?.ID_Tang}>
+                      {item?.Tentang}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+
+            <RHFSelect
+              name="ID_Hangmuc"
+              label="Hạng mục"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {hangMuc?.map((item) => (
+                <MenuItem key={item?.ID_Hangmuc} value={item?.ID_Hangmuc}>
+                  {item?.Hangmuc}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+
+            {loading === false && (
+              <>
+                {/* {(Calv ?? []).length > 0 ? (
+                  <RHFAutocomplete
+                    name="sCalv"
+                    label="Ca làm việc"
+                    placeholder="Ca làm việc"
+                    freeSolo
+                    options={Calv?.map((option: ICalv) => option.Tenca) ?? []}
+                    getOptionLabel={(option : any) => option}
+                    renderOption={(props, option) => {
+                      // Use optional chaining and provide default value to handle potential null or undefined
+                      const filteredResult = Calv?.filter((item: any) => item?.Tenca === option)[0];
+
+                      // Declare ID_Calv and Tenca using let
+                      let ID_Calv;
+                      let Tenca;
+
+                      // Check if filteredResult is not null and extract values
+                      if (filteredResult) {
+                        ID_Calv = filteredResult?.ID_Calv || '';
+                        Tenca = filteredResult?.Tenca || '';
+                      }
+
+                      // Check if Tenca is available
+                      if (!Tenca) {
+                        return null; // Return null if Tenca is not available
+                      }
+
+                      // Return list item with props and key
+                      return (
+                        <li {...props} key={ID_Calv}>
+                          {Tenca}
+                        </li>
+                      );
+                    }}
+                  />
+                ) : (
+                  <></>
+                )} */}
+
+                {Calv.length > 0 && Calv?.length > 0 ? (
+                  <RHFMultiSelect checkbox name="sCalv" label="Ca làm việc" options={Calv} />
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </Stack>
+        </Card>
+      </Grid>
+    </>
+  );
+
   const renderDetails = (
     <>
       {mdUp && (
@@ -204,7 +375,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
             Chi tiết
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Tên hạng mục, Mã Qr Code, Tiêu chuẩn kiểm tra...
+            Tên checklist, Mã Qr Code, Giá trị nhận/ định danh...
           </Typography>
         </Grid>
       )}
@@ -214,27 +385,27 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           {!mdUp && <CardHeader title="Chi tiết" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <Stack spacing={1.5}>
-              {khuVuc?.length > 0 && (
-                <RHFSelect
-                  name="ID_Khuvuc"
-                  label="Khu vực"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {khuVuc?.map((item) => (
-                    <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
-                      {item?.Tenkhuvuc} - {item?.ent_khoicv?.KhoiCV}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-            </Stack>
-
-            <RHFTextField name="Hangmuc" label="Tên hạng mục" />
+            <RHFTextField name="Checklist" label="Tên checklist *" />
             <RHFTextField name="MaQrCode" label="Mã Qr Code" />
-
-            <RHFTextField name="Tieuchuankt" label="Tiêu chuẩn kiểm tra" multiline rows={4} />
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+              <RHFTextField name="Sothutu" label="Số thứ tự" />
+              <RHFTextField name="Maso" label="Mã số" />
+            </Stack>
+            <Stack>
+              <RHFTextField name="Giatridinhdanh" label="Giá trị định danh" />
+              <Typography style={{ paddingTop: 10 }} variant="caption" color="primary">
+                Nếu không có không phải nhập
+              </Typography>
+            </Stack>
+            <Stack>
+              <RHFTextField name="Giatrinhan" label="Giá trị nhận" />
+              <Typography style={{ paddingTop: 10 }} variant="caption" color="red">
+                Tại ô Giá trị nhận nhập theo định dạng - Giá trị 1/Giá trị 2... (Ví dụ: Sáng/Tắt,
+                Bật/Tắt, Đạt/Không đạt, On/Off,...)
+              </Typography>
+            </Stack>
+            <RHFTextField name="Tieuchuan" label="Tiêu chuẩn kiểm tra" multiline rows={3} />
+            <RHFTextField name="Ghichu" label="Ghi chú" multiline rows={3} />
           </Stack>
         </Card>
       </Grid>
@@ -250,7 +421,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
         sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
       >
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-          {!currentArticle ? 'Tạo mới' : 'Lưu thay đổi'}
+          {!currentChecklist ? 'Tạo mới' : 'Lưu thay đổi'}
         </LoadingButton>
       </Grid>
     </>
@@ -259,6 +430,8 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
+        {renderPrimary}
+
         {renderDetails}
 
         {renderActions}

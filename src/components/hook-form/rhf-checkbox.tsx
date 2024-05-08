@@ -61,8 +61,8 @@ export function RHFMultiCheckbox({
   const { control } = useFormContext();
 
   const getSelected = (selectedItems: string[], item: string) =>
-    selectedItems.includes(item)
-      ? selectedItems.filter((value) => value !== item)
+    selectedItems?.includes(item)
+      ? selectedItems?.filter((value) => value !== item)
       : [...selectedItems, item];
 
   return (

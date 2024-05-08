@@ -7,12 +7,12 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 // api
 import { useGetRoom } from 'src/api/product';
-import {useGetKhuVucDetail, useGetHangMucDetail} from 'src/api/khuvuc'
+import {useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail} from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 
 //
-// import ArticleNewEditForm from '../article-new-edit-form';
+import ChecklistNewEditForm from '../checklist-new-edit-form';
 
 
 // ----------------------------------------------------------------------
@@ -21,10 +21,10 @@ type Props = {
   id: string;
 };
 
-export default function ArticleEditView({ id }: Props) {
+export default function ChecklistEditView({ id }: Props) {
   const settings = useSettingsContext();
 
-  const { hangMuc: currentArticle } = useGetHangMucDetail(id);
+  const { checkList: currentChecklist } = useGetChecklistDetail(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -34,16 +34,16 @@ export default function ArticleEditView({ id }: Props) {
           { name: 'Dashboard', href: paths.dashboard.root },
           {
             name: 'Khu vực',
-            href: paths.dashboard.hangmuc.root,
+            href: paths.dashboard.checklist.root,
           },
-          { name: currentArticle?.Hangmuc },
+          { name: currentChecklist?.Checklist },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      {/* <ArticleNewEditForm currentArticle={currentArticle} /> */}
+      <ChecklistNewEditForm currentChecklist={currentChecklist} />
     </Container>
   );
 }

@@ -18,7 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 // types
 import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IHangMuc, IChecklist } from 'src/types/khuvuc';
+import { IKhuvuc, IHangMuc, IChecklist, ICalv } from 'src/types/khuvuc';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -29,6 +29,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 type Props = {
   row: IChecklist;
+  calv: ICalv[];
   selected: boolean;
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -41,6 +42,7 @@ export default function AreaTableRow({
   onViewRow,
   onSelectRow,
   onDeleteRow,
+  calv,
 }: Props) {
   const {
     ID_Khuvuc,
@@ -51,6 +53,15 @@ export default function AreaTableRow({
     Tieuchuan,
     MaQrCode,
     ent_hangmuc,
+    ent_tang,
+    Sothutu,
+    Maso,
+    sCalv,
+    calv_1,
+    calv_2,
+    calv_3,
+    calv_4,
+    ent_calv,
   } = row;
 
   const confirm = useBoolean();
@@ -59,28 +70,24 @@ export default function AreaTableRow({
 
   const popover = usePopover();
 
+  const calvIds = [calv_1, calv_2, calv_3, calv_4];
+  const shiftNames = calvIds
+    .map((calvId) => {
+      // Tìm ca làm việc trong sCalv bằng ID_Calv
+      const workShift = calv?.find((shift) => `${shift.ID_Calv}` === `${calvId}`);
+      // Nếu tìm thấy, trả về tên của ca làm việc
+      return workShift ? workShift.Tenca : null;
+    })
+    // Lọc ra các phần tử null trong trường hợp ID_Calv không tồn tại trong sCalv
+    .filter((name) => name !== null)
+    // Kết hợp tên các ca làm việc thành một chuỗi với dấu phẩy
+    .join(', ');
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-
-      {/* <TableCell>
-        <Box
-          onClick={onViewRow}
-          sx={{
-            cursor: 'pointer',
-            '&:hover': {
-              textDecoration: 'underline',
-            },
-          }}
-        >
-          {ID_Hangmuc}
-        </Box>
-      </TableCell> */}
-
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-
         <ListItemText
           primary={Checklist}
           // secondary={ent_khoicv?.KhoiCV}
@@ -91,8 +98,22 @@ export default function AreaTableRow({
           }}
         />
       </TableCell>
-      <TableCell align="center"> {MaQrCode} </TableCell>
+      <TableCell align="center"> {Giatridinhdanh} </TableCell>
+      <TableCell align="center"> {Giatrinhan} </TableCell>
       <TableCell> {ent_hangmuc?.Hangmuc} </TableCell>
+      <TableCell align="center"> {ent_tang.Tentang} </TableCell>
+      <TableCell align="center"> {Sothutu} </TableCell>
+      <TableCell align="center"> {Maso} </TableCell>
+      <TableCell align="center"> {MaQrCode} </TableCell>
+      <TableCell width={140}>
+        <Label
+          variant="soft"
+          color='success'
+        >
+          {shiftNames}
+        </Label>
+      </TableCell>
+
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -101,7 +122,6 @@ export default function AreaTableRow({
     </TableRow>
   );
 
- 
   return (
     <>
       {renderPrimary}
@@ -112,7 +132,7 @@ export default function AreaTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-         <MenuItem
+        <MenuItem
           onClick={() => {
             onViewRow();
             popover.onClose();
@@ -131,8 +151,6 @@ export default function AreaTableRow({
           <Iconify icon="solar:trash-bin-trash-bold" />
           Xóa
         </MenuItem>
-
-       
       </CustomPopover>
 
       <ConfirmDialog
