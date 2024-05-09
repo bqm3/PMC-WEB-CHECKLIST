@@ -162,6 +162,20 @@ export function useNavData() {
             // }
           ],
         },
+
+        {
+        subheader: t('profile'),
+        items : [
+          {
+            title: t('user'),
+            path: paths.dashboard.userAdmin.root,
+            icon: ICONS.user,
+            children: [
+              { title: t('account'), path: paths.dashboard.userAdmin.root },
+            ],
+          },
+        ]
+        }
       ];
 
       // Conditionally add "Tạo tài khoản" tab if user's role_id is 1

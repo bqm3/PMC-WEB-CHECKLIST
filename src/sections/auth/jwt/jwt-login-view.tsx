@@ -40,13 +40,13 @@ export default function JwtLoginView() {
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    UserName: Yup.string().required('Phải có tên người dùng'),
+    Password: Yup.string().required('Phải có mật khẩu'),
   });
 
   const defaultValues = {
-    email: 'bqminh122@gmail.com',
-    password: '123123',
+    UserName: '',
+    Password: '',
   };
 
   const methods = useForm({
@@ -62,7 +62,7 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await login?.(data.email, data.password);
+      await login?.(data.UserName, data.Password);
 
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
@@ -75,14 +75,6 @@ export default function JwtLoginView() {
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
       <Typography variant="h4">Đăng nhập PMC</Typography>
-
-      {/* <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2">New user?</Typography>
-
-        <Link component={RouterLink} href={paths.auth.jwt.register} variant="subtitle2">
-          Create an account
-        </Link>
-      </Stack> */}
     </Stack>
   );
 
@@ -90,10 +82,10 @@ export default function JwtLoginView() {
     <Stack spacing={2.5}>
       {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="UserName" label="Tài khoản" />
 
       <RHFTextField
-        name="password"
+        name="Password"
         label="Password"
         type={password.value ? 'text' : 'password'}
         InputProps={{
@@ -106,10 +98,6 @@ export default function JwtLoginView() {
           ),
         }}
       />
-
-      {/* <Link variant="body2" color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
-        Forgot password?
-      </Link> */}
 
       <LoadingButton
         fullWidth

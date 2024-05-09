@@ -150,6 +150,10 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
     },
+    userAdmin: {
+      root: `${ROOTS.DASHBOARD}/user/`,
+      profile: `${ROOTS.DASHBOARD}/user/`,
+    },
     room: {
       root: `${ROOTS.DASHBOARD}/room`,
       new: `${ROOTS.DASHBOARD}/room/new`,
@@ -181,15 +185,15 @@ export const paths = {
     }
     ,
     user: {
-      root: `${ROOTS.DASHBOARD}/user`,
-      new: `${ROOTS.DASHBOARD}/user/new`,
-      list: `${ROOTS.DASHBOARD}/user/list`,
-      cards: `${ROOTS.DASHBOARD}/user/cards`,
-      profile: `${ROOTS.DASHBOARD}/user/profile`,
-      account: `${ROOTS.DASHBOARD}/user/account`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
+      root: `${ROOTS.DASHBOARD}/userMinimal`,
+      new: `${ROOTS.DASHBOARD}/userMinimal/new`,
+      list: `${ROOTS.DASHBOARD}/userMinimal/list`,
+      cards: `${ROOTS.DASHBOARD}/userMinimal/cards`,
+      profile: `${ROOTS.DASHBOARD}/userMinimal/profile`,
+      account: `${ROOTS.DASHBOARD}/userMinimal/account`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/userMinimal/${id}/edit`,
       demo: {
-        edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
+        edit: `${ROOTS.DASHBOARD}/userMinimal/${MOCK_ID}/edit`,
       },
     },
     product: {

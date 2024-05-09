@@ -35,7 +35,6 @@ const RoomNewPage = lazy(() => import('src/pages/dashboard/room/new'));
 const RoomEditPage = lazy(() => import('src/pages/dashboard/room/edit'));
 // ORDER BOOKING
 
-
 const OrderBookingListPage = lazy(() => import('src/pages/dashboard/order-booking/list'));
 const ServiceBookingListView = lazy(() => import('src/pages/dashboard/order-booking/list-service'));
 const OrderBookingDetailsPage = lazy(() => import('src/pages/dashboard/order-booking/details'));
@@ -93,9 +92,7 @@ const ListEmployeePage = lazy(() => import('src/pages/dashboard/create-employee/
 const EmployeeAccountPage = lazy(() => import('src/pages/dashboard/account/account'));
 
 // FICILITIES
-const OverviewFicilitiesPage = lazy(() => import('src/pages/dashboard/facilities'))
-
-
+const OverviewFicilitiesPage = lazy(() => import('src/pages/dashboard/facilities'));
 
 // Khu vực
 const KhuVucListsPage = lazy(() => import('src/pages/dashboard/khuvuc/list'));
@@ -110,8 +107,8 @@ const HangMucEditPage = lazy(() => import('src/pages/dashboard/hangmuc/edit'));
 const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list'));
 const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
 const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'));
-// const RoomNewPage = lazy(() => import('src/pages/dashboard/room/new'));
-// const RoomEditPage = lazy(() => import('src/pages/dashboard/room/edit'));
+
+const UserAdminProfilePage = lazy(() => import('src/pages/dashboard/userAdmin/profile'));
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -140,8 +137,8 @@ export const dashboardRoutes = [
           { element: <TypeRoomListPage />, index: true },
           { path: 'list', element: <TypeRoomListPage /> },
           { path: ':id/edit', element: <TypeRoomEditPage /> },
-          { path: 'new', element: <TypeRoomEditPage /> }
-        ]
+          { path: 'new', element: <TypeRoomEditPage /> },
+        ],
       },
       {
         path: 'type-service',
@@ -149,8 +146,8 @@ export const dashboardRoutes = [
           { element: <TypeServiceListPage />, index: true },
           { path: 'list', element: <TypeServiceListPage /> },
           { path: ':id/edit', element: <TypeServiceEditPage /> },
-          { path: 'new', element: <TypeServiceEditPage /> }
-        ]
+          { path: 'new', element: <TypeServiceEditPage /> },
+        ],
       },
       {
         path: 'service',
@@ -158,8 +155,8 @@ export const dashboardRoutes = [
           { element: <ServiceListPage />, index: true },
           { path: 'list', element: <ServiceListPage /> },
           { path: ':id/edit', element: <ServiceEditPage /> },
-          { path: 'new', element: <ServiceNewView /> }
-        ]
+          { path: 'new', element: <ServiceNewView /> },
+        ],
       },
       {
         path: 'room',
@@ -169,7 +166,6 @@ export const dashboardRoutes = [
           { path: ':id', element: <RoomDetailPage /> },
           { path: ':id/edit', element: <RoomEditPage /> },
           { path: 'new', element: <RoomNewPage /> },
-
         ],
       },
       {
@@ -179,7 +175,6 @@ export const dashboardRoutes = [
           { path: 'list', element: <KhuVucListsPage /> },
           { path: ':id/edit', element: <KhuvucEditPage /> },
           { path: 'new', element: <KhuVucNewPage /> },
-
         ],
       },
       {
@@ -189,7 +184,6 @@ export const dashboardRoutes = [
           { path: 'list', element: <HangMucListsPage /> },
           { path: ':id/edit', element: <HangMucEditPage /> },
           { path: 'new', element: <HangMucNewPage /> },
-
         ],
       },
       {
@@ -199,7 +193,13 @@ export const dashboardRoutes = [
           { path: 'list', element: <CheckListListsPage /> },
           { path: ':id/edit', element: <CheckListEditPage /> },
           { path: 'new', element: <CheckListNewPage /> },
-
+        ],
+      },
+      {
+        path: 'user',
+        children: [
+          { element: <UserAdminProfilePage />, index: true },
+          { path: 'profile', element: <UserAdminProfilePage /> },
         ],
       },
       {
@@ -216,9 +216,7 @@ export const dashboardRoutes = [
       },
       {
         path: 'account-employee',
-        children: [
-          { element: <EmployeeAccountPage />, index: true },
-        ],
+        children: [{ element: <EmployeeAccountPage />, index: true }],
       },
       {
         path: 'create-employee',
@@ -228,7 +226,7 @@ export const dashboardRoutes = [
         ],
       },
       {
-        path: 'user',
+        path: 'userMinimal',
         children: [
           { element: <UserProfilePage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },

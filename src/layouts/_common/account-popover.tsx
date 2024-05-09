@@ -21,18 +21,14 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 const OPTIONS = [
-  {
-    label: 'Home',
-    linkTo: '/',
-  },
-  {
-    label: 'Profile',
-    linkTo: paths.dashboard.accountEmployee.root,
-  },
   // {
-  //   label: 'Settings',
-  //   linkTo: paths.dashboard.user.account,
+  //   label: 'Home',
+  //   linkTo: '/',
   // },
+  {
+    label: 'Đổi mật khẩu',
+    linkTo: paths.dashboard.userAdmin.root,
+  },
 ];
 
 // ----------------------------------------------------------------------
@@ -81,26 +77,25 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={user?.avatar ? user?.avatar : 'https://api-dev-minimal-v510.vercel.app/assets/images/avatar/avatar_25.jpg'}
-          alt={user?.fullname}
+          alt={user?.UserName}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {user?.fullname?.charAt(0).toUpperCase()}
+          {user?.UserName?.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.fullname}
+            {user?.UserName}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
+            {user?.Emails}
           </Typography>
         </Box>
 

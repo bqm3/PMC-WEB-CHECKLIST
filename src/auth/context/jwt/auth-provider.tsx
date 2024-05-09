@@ -126,18 +126,14 @@ export function AuthProvider({ children }: Props) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (email: string, passwordHash: string) => {
+  const login = useCallback(async (UserName: string, Password: string) => {
     const data = {
-      email,
-      passwordHash,
+      UserName,
+      Password,
     };
 
     const urlHttp = 'https://checklist.pmcweb.vn/be/api/ent_user/login';
-    const res = await axios.post(urlHttp, {
-      UserName: 'AdminSolei',
-      Password: '123',
-    });
-    console.log('res', res);
+    const res = await axios.post(urlHttp, data);
     const { token, user } = res.data;
 
     setSession(token);
