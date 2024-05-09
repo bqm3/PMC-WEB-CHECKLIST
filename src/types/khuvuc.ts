@@ -77,6 +77,7 @@ export type ICalv = {
   Gioketthuc: string;
   ID_User: string;
   isDelete: string;
+  ent_khoicv: IKhoiCV;
 }
 
 export type IHangMuc = {
@@ -109,7 +110,6 @@ export type IChecklist = {
   calv_3: string;
   calv_4: string;
   isDelete: string;
-  ent_khoicv: E_KhoiCV;
   ent_toanha: E_Toanha;
   ent_hangmuc: IHangMuc;
   ent_tang: E_Tang;

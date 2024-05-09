@@ -12,21 +12,15 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-// import { Menu, MenuItem, Select } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc, useGetKhoiCV, useGetChecklist, useGetCalv } from 'src/api/khuvuc';
-// utils
-import { fTimestamp } from 'src/utils/format-time';
+import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
+import {  useGetChecklist, useGetCalv } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -46,8 +40,6 @@ import { useSnackbar } from 'src/components/snackbar';
 // types
 import {
   IChecklist,
-  IHangMuc,
-  IKhuvuc,
   IKhuvucTableFilters,
   IKhuvucTableFilterValue,
 } from 'src/types/khuvuc';
@@ -150,7 +142,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/ent_hangmuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/api/ent_hangmuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -385,17 +377,19 @@ function applyFilter({
 
   if (name) {
     inputData = inputData?.filter(
-      (order) =>
-        order.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.ent_hangmuc.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (checklist) =>
+        checklist.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        checklist.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        checklist.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        checklist.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        checklist.Ghichu.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        checklist.Tieuchuan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        checklist.ent_hangmuc.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.ID_Hangmuc}` === status);
+    inputData = inputData?.filter((checklist) => `${checklist?.ID_Hangmuc}` === status);
   }
 
   return inputData;

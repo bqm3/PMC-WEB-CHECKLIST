@@ -117,7 +117,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
     try {
       if (currentArticle !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`, data, {
+          .put(`https://checklist.pmcweb.vn/api/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -153,7 +153,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/ent_hangmuc/create`, data, {
+          .post(`https://checklist.pmcweb.vn/api/ent_hangmuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

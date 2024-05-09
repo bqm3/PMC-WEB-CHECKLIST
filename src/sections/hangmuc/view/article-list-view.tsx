@@ -123,7 +123,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/ent_hangmuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/api/ent_hangmuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

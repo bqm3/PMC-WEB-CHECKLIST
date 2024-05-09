@@ -72,8 +72,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const router = useRouter();
   const { user, logout } = useAuthContext();
 
-
-
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
@@ -85,11 +83,12 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
 
   const [Calv, setCalv] = useState<any>([]);
+  const [HangMuc, setHangMuc] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const NewProductSchema = Yup.object().shape({
     Checklist: Yup.string().required('Phải có tên checklist'),
-    ID_KhoiCV: Yup.string() ,
+    ID_KhoiCV: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -102,7 +101,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       Maso: currentChecklist?.Maso || '',
       Ghichu: currentChecklist?.Ghichu || '',
       Tieuchuan: currentChecklist?.Tieuchuan || '',
-      ID_KhoiCV: currentChecklist?.ent_khoicv?.ID_KhoiCV || null || '',
+      ID_KhoiCV: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_KhoiCV || null || '',
       ID_Hangmuc: currentChecklist?.ID_Hangmuc || null,
       ID_Tang: currentChecklist?.ID_Tang || null,
       sCalv: currentChecklist?.sCalv || [],
@@ -141,19 +140,64 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       // Use the full calv array if ID_KhoiCV is not provided
       filteredCalv = calv;
     }
+    const sCalvArray = Array.isArray(defaultValues.sCalv)
+      ? defaultValues.sCalv
+      : [defaultValues.sCalv];
+
+    // Merge sCalv with the list of ID_Calv from filteredCalv
+    const mergedIDCalv = sCalvArray.concat(filteredCalv?.map((item) => item.ID_Calv));
+
+    // Remove duplicates by creating a Set and converting it back to an array
+    const uniqueIDCalv = Array.from(new Set(mergedIDCalv));
 
     // Create a new array with the desired structure: { value: ID_Calv, label: Tenca }
-    const newArray = filteredCalv?.map((item) => ({
-      value: item.ID_Calv,
-      label: item.Tenca,
-    }));
+    const newArray = uniqueIDCalv
+      .map((idCalv) => {
+        // Find the corresponding item in the filteredCalv array
+        const item = calv.find((iTem) => iTem.ID_Calv === idCalv);
+
+        // If the item is found, return an object with the desired structure
+        if (item) {
+          return {
+            value: item.ID_Calv,
+            label: `${item.Tenca} - ${item.ent_khoicv.KhoiCV}`,
+          };
+        }
+
+        // If the item is not found, return null or handle it as needed
+        return null;
+      })
+      .filter((item) => item !== null);
 
     // Update the state with the new array
     setCalv(newArray);
 
     // Set loading state to false at the end
     setLoading(false);
-  }, [values.ID_KhoiCV, calv]);
+  }, [values.ID_KhoiCV, calv, defaultValues.sCalv]);
+
+  useEffect(() => {
+    let filteredKhoiCV;
+    if (values.ID_KhoiCV) {
+      // Filter the calv array based on ID_KhoiCV from values
+      filteredKhoiCV =
+        hangMuc?.filter((item) => item.ent_khuvuc.ID_KhoiCV === values.ID_KhoiCV) || [];
+    } else {
+      // Use the full calv array if ID_KhoiCV is not provided
+      filteredKhoiCV = hangMuc;
+    }
+
+    // Create a new array with the desired structure: { value: ID_Calv, label: Tenca }
+    const newArray = filteredKhoiCV?.map((item) => ({
+      ID_Hangmuc: item.ID_Hangmuc,
+      Hangmuc: item.Hangmuc,
+    }));
+
+    // Update the state with the new array
+    setHangMuc(newArray);
+
+    // Set loading state to
+  }, [values.ID_KhoiCV, hangMuc]);
 
   useEffect(() => {
     if (currentChecklist) {
@@ -162,11 +206,12 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   }, [currentChecklist, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log('data', data);
     try {
       if (currentChecklist !== undefined) {
         await axios
           .put(
-            `http://localhost:6868/api/ent_checklist/update/${currentChecklist.ID_Checklist}`,
+            `https://checklist.pmcweb.vn/api/ent_checklist/update/${currentChecklist.ID_Checklist}`,
             data,
             {
               headers: {
@@ -178,7 +223,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar('Cập nhật thành công!');
-            router.push(paths.dashboard.hangmuc.root);
+            router.push(paths.dashboard.checklist.root);
           })
           .catch((error) => {
             if (error.response) {
@@ -204,9 +249,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             }
           });
       } else {
-        console.log('data', data);
         axios
-          .post(`http://localhost:6868/api/ent_checklist/create`, data, {
+          .post(`https://checklist.pmcweb.vn/api/ent_checklist/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -306,7 +350,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
             >
-              {hangMuc?.map((item) => (
+              {HangMuc?.map((item: any) => (
                 <MenuItem key={item?.ID_Hangmuc} value={item?.ID_Hangmuc}>
                   {item?.Hangmuc}
                 </MenuItem>
@@ -315,45 +359,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
             {loading === false && (
               <>
-                {/* {(Calv ?? []).length > 0 ? (
-                  <RHFAutocomplete
-                    name="sCalv"
-                    label="Ca làm việc"
-                    placeholder="Ca làm việc"
-                    freeSolo
-                    options={Calv?.map((option: ICalv) => option.Tenca) ?? []}
-                    getOptionLabel={(option : any) => option}
-                    renderOption={(props, option) => {
-                      // Use optional chaining and provide default value to handle potential null or undefined
-                      const filteredResult = Calv?.filter((item: any) => item?.Tenca === option)[0];
-
-                      // Declare ID_Calv and Tenca using let
-                      let ID_Calv;
-                      let Tenca;
-
-                      // Check if filteredResult is not null and extract values
-                      if (filteredResult) {
-                        ID_Calv = filteredResult?.ID_Calv || '';
-                        Tenca = filteredResult?.Tenca || '';
-                      }
-
-                      // Check if Tenca is available
-                      if (!Tenca) {
-                        return null; // Return null if Tenca is not available
-                      }
-
-                      // Return list item with props and key
-                      return (
-                        <li {...props} key={ID_Calv}>
-                          {Tenca}
-                        </li>
-                      );
-                    }}
-                  />
-                ) : (
-                  <></>
-                )} */}
-
                 {Calv.length > 0 && Calv?.length > 0 ? (
                   <RHFMultiSelect checkbox name="sCalv" label="Ca làm việc" options={Calv} />
                 ) : (
