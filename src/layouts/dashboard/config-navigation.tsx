@@ -98,6 +98,7 @@ export function useNavData() {
               children: [
                 { title: t('list'), path: paths.dashboard.checklist.root },
                 { title: t('create'), path: paths.dashboard.checklist.new },
+                { title: t('calamviec'), path: paths.dashboard.checklist.lists },
               ],
             },
             

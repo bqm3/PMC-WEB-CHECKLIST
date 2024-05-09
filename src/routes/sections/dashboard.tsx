@@ -105,6 +105,7 @@ const HangMucNewPage = lazy(() => import('src/pages/dashboard/hangmuc/new'));
 const HangMucEditPage = lazy(() => import('src/pages/dashboard/hangmuc/edit'));
 
 const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list'));
+const TCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/tlist'));
 const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
 const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'));
 
@@ -193,6 +194,7 @@ export const dashboardRoutes = [
           { path: 'list', element: <CheckListListsPage /> },
           { path: ':id/edit', element: <CheckListEditPage /> },
           { path: 'new', element: <CheckListNewPage /> },
+          { path: 'lists', element: <TCheckListListsPage /> },
         ],
       },
       {
