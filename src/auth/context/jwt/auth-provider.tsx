@@ -89,7 +89,7 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.get('https://checklist.pmcweb.vn/api/ent_user/check-auth');
+        const res = await axios.get('https://checklist.pmcweb.vn/be/api/ent_user/check-auth');
 
         const { user } = res.data;
 
@@ -132,7 +132,7 @@ export function AuthProvider({ children }: Props) {
       passwordHash,
     };
 
-    const urlHttp = 'https://checklist.pmcweb.vn/api/ent_user/login';
+    const urlHttp = 'https://checklist.pmcweb.vn/be/api/ent_user/login';
     const res = await axios.post(urlHttp, {
       UserName: 'AdminSolei',
       Password: '123',
