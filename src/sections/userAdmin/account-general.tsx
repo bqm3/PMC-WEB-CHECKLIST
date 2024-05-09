@@ -36,6 +36,8 @@ export default function AccountGeneral() {
   const UpdateUserSchema = Yup.object().shape({});
 
   const defaultValues = {
+    UserName: user?.UserName,
+    Emails: user?.Emails,
     ent_duan: user?.ent_duan?.Duan || '',
     ent_chucvu: user?.ent_chucvu?.Chucvu || '',
     ent_khoicv: user?.ent_khoicv?.KhoiCV || null,
