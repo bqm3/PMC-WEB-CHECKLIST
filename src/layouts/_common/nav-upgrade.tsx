@@ -38,7 +38,7 @@ export default function NavUpgrade() {
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
         <Avatar alt={user?.UserName} sx={{ mr: 2 }}>
-            {user?.UserName.charAt(0).toUpperCase()}
+            {user?.UserName?.charAt(0).toUpperCase()}
           </Avatar>
           <Label
             color="success"
