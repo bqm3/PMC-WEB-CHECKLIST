@@ -82,6 +82,15 @@ export default function AreaTableRow({
     .filter((name) => name !== null)
     // Kết hợp tên các ca làm việc thành một chuỗi với dấu phẩy
     .join(', ');
+
+  const shiftNamesArray = shiftNames.split(', ');
+
+  // Tạo các nhãn từ mảng các tên ca làm việc
+  const labels = shiftNamesArray.map((name, index) => (
+    <Label key={index} variant="soft" color="success" style={{marginTop: 4}}>
+      {name}
+    </Label>
+  ));
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
@@ -105,14 +114,7 @@ export default function AreaTableRow({
       <TableCell align="center"> {Sothutu} </TableCell>
       <TableCell align="center"> {Maso} </TableCell>
       <TableCell align="center"> {MaQrCode} </TableCell>
-      <TableCell width={140}>
-        <Label
-          variant="soft"
-          color='success'
-        >
-          {shiftNames}
-        </Label>
-      </TableCell>
+      <TableCell width={140}>{labels}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
