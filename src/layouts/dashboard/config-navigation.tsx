@@ -100,66 +100,7 @@ export function useNavData() {
                 { title: t('create'), path: paths.dashboard.checklist.new },
               ],
             },
-            // TYPE ROOM
-            // {
-            //   title: t('type room'),
-            //   path: paths.dashboard.typeRoom.root,
-            //   icon: ICONS.menuItem,
-            //   children: [
-            //     { title: t('list'), path: paths.dashboard.typeRoom.root },
-            //     { title: t('create'), path: paths.dashboard.typeRoom.new },
-            //   ],
-            // },
-            // // TYPE SERVICE
-            // {
-            //   title: t('type service'),
-            //   path: paths.dashboard.typeService.root,
-            //   icon: ICONS.menuItem,
-            //   children: [
-            //     { title: t('list'), path: paths.dashboard.typeService.root },
-            //     { title: t('create'), path: paths.dashboard.typeService.new },
-            //   ],
-            // },
-            // // SERVICE
-            // {
-            //   title: t('service'),
-            //   path: paths.dashboard.service.root,
-            //   icon: ICONS.label,
-            //   children: [
-            //     { title: t('list'), path: paths.dashboard.service.root },
-            //     { title: t('create'), path: paths.dashboard.service.new },
-            //   ],
-            // },
-            // // ROOM
-            // {
-            //   title: t('room'),
-            //   path: paths.dashboard.room.root,
-            //   icon: ICONS.job,
-            //   children: [
-            //     { title: t('list'), path: paths.dashboard.room.root },
-            //     { title: t('create'), path: paths.dashboard.room.new },
-            //   ],
-            // },
-
-            // // ORDER
-            // {
-            //   title: t('booking'),
-            //   path: paths.dashboard.orderBooking.root,
-            //   icon: ICONS.invoice,
-            //   children: [
-            //     { title: t('list-booking'), path: paths.dashboard.orderBooking.root },
-            //     { title: t('list-service'), path: paths.dashboard.orderBooking.list },
-            //   ],
-
-            // },
-            // {
-            //   title: t('User'),
-            //   path: paths.dashboard.accountEmployee.root,
-            //   icon: ICONS.user,
-            //   children: [
-            //     { title: t('Profile'), path: paths.dashboard.accountEmployee.root },
-            //   ],
-            // }
+            
           ],
         },
 
@@ -179,21 +120,21 @@ export function useNavData() {
       ];
 
       // Conditionally add "Tạo tài khoản" tab if user's role_id is 1
-      if (user?.role_id === 1) {
-        navigationData[1].items.push({
-          title: t('Create Account'),
-          path: paths.dashboard.createEmployee.root,
-          icon: ICONS.user,
-          children: [
-            { title: t('create'), path: paths.dashboard.createEmployee.root },
-            { title: t('list'), path: paths.dashboard.createEmployee.list }
-          ],
-        });
-      }
+      // if (user?.role_id === 1) {
+      //   navigationData[1].items.push({
+      //     title: t('Create Account'),
+      //     path: paths.dashboard.createEmployee.root,
+      //     icon: ICONS.user,
+      //     children: [
+      //       { title: t('create'), path: paths.dashboard.createEmployee.root },
+      //       { title: t('list'), path: paths.dashboard.createEmployee.list }
+      //     ],
+      //   });
+      // }
 
       return navigationData;
     },
-    [t, user?.role_id]
+    [t]
   );
 
   return data;
