@@ -5,7 +5,7 @@ export type IRoomFilters = {
   services: string[];
 };
 
-export type IKhuvucTableFilterValue = string  | null;
+export type IKhuvucTableFilterValue = string | null;
 
 export type IKhuvucTableFilters = {
   name: string;
@@ -15,44 +15,64 @@ export type IKhuvucTableFilters = {
 export type E_KhoiCV = {
   KhoiCV: string;
   ID_KhoiCV: string;
-}
+};
+
+export type E_Chucvu = {
+  Chucvu: string;
+};
 
 export type E_Toanha = {
   ID_Toanha: string;
   Sotang: string;
   Toanha: string;
-}
+};
 
 export type E_Duan = {
   Duan: string;
-}
+};
 
 export type E_Calv = {
   Tenca: string;
   ID_Calv: string;
   Giobatdau: string;
   Gioketthuc: string;
-}
+};
 
 export type E_Tang = {
   ID_Tang: string;
   Tentang: string;
-  Sotang: string
-}
+  Sotang: string;
+};
+
+export type IGiamsat = {
+  ID_Giamsat: string;
+  ID_Duan: string;
+  ID_Chucvu: string;
+  ID_KhoiCV: string;
+  Hoten: string;
+  Ngaysinh: string;
+  Sodienthoai: string;
+  Gioitinh: string;
+  iQuyen: string;
+  ent_khoicv: E_KhoiCV;
+  ent_chucvu: E_Chucvu;
+  // ent_quyen: ;
+  isDelete: string;
+};
 
 export type IKhuvuc = {
-    ID_Khuvuc: string;
-    ID_Toanha: string;
-    ID_KhoiCV: string;
-    Sothutu: string;
-    Makhuvuc: string;
-    MaQrCode: string;
-    Tenkhuvuc: string;
-    ID_User: string;
-    isDelete: string;
-    ent_khoicv: E_KhoiCV;
-    ent_toanha: E_Toanha
-  };
+  ID_Khuvuc: string;
+  ID_Toanha: string;
+  ID_KhoiCV: string;
+  Sothutu: string;
+  Makhuvuc: string;
+  MaQrCode: string;
+  Tenkhuvuc: string;
+  ID_User: string;
+  isDelete: string;
+  ent_khoicv: E_KhoiCV;
+  ent_toanha: E_Toanha;
+};
 
 export type IToanha = {
   ID_Toanha: string;
@@ -61,12 +81,12 @@ export type IToanha = {
   Sotang: string;
   isDelete: string;
   ent_duan: E_Duan;
-}
+};
 
 export type IKhoiCV = {
   ID_Khoi: string;
   KhoiCV: string;
-}
+};
 
 export type ICalv = {
   ID_Calv: string;
@@ -78,7 +98,7 @@ export type ICalv = {
   ID_User: string;
   isDelete: string;
   ent_khoicv: IKhoiCV;
-}
+};
 
 export type IHangMuc = {
   ID_Hangmuc: string;
@@ -87,7 +107,7 @@ export type IHangMuc = {
   Hangmuc: string;
   Tieuchuankt: string;
   isDelete: string;
-  ent_khuvuc: IKhuvuc
+  ent_khuvuc: IKhuvuc;
 };
 
 export type IChecklist = {
@@ -113,5 +133,5 @@ export type IChecklist = {
   ent_toanha: E_Toanha;
   ent_hangmuc: IHangMuc;
   ent_tang: E_Tang;
-  ent_calv: ICalv
+  ent_calv: ICalv;
 };

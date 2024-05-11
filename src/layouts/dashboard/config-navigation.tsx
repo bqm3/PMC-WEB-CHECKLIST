@@ -53,91 +53,102 @@ export function useNavData() {
   const { t } = useLocales();
   const { user, logout } = useAuthContext();
 
-  const data = useMemo(
-    () => {
-      const navigationData = [
-        // OVERVIEW
-        {
-          subheader: t('overview'),
-          items: [
-            {
-              title: t('analytics'),
-              path: paths.dashboard.general.analytics,
-              icon: ICONS.analytics,
-            },
-          ],
-        },
-        // MANAGEMENT
-        {
-          subheader: t('management'),
+  const data = useMemo(() => {
+    const navigationData = [
+      // OVERVIEW
+      {
+        subheader: t('overview'),
+        items: [
+          {
+            title: t('analytics'),
+            path: paths.dashboard.general.analytics,
+            icon: ICONS.analytics,
+          },
+        ],
+      },
+      // MANAGEMENT
+      {
+        subheader: t('management'),
 
-          items: [
-            // KHU VUC
-            {
-              title: t('area'),
-              path: paths.dashboard.khuvuc.root,
-              icon: ICONS.tour,
-              children: [
-                { title: t('list'), path: paths.dashboard.khuvuc.root },
-                { title: t('create'), path: paths.dashboard.khuvuc.new },
-              ],
-            },
-            {
-              title: t('article'),
-              path: paths.dashboard.hangmuc.root,
-              icon: ICONS.kanban,
-              children: [
-                { title: t('list'), path: paths.dashboard.hangmuc.root },
-                { title: t('create'), path: paths.dashboard.hangmuc.new },
-              ],
-            },
-            {
-              title: t('checklist'),
-              path: paths.dashboard.checklist.root,
-              icon: ICONS.lock,
-              children: [
-                { title: t('list'), path: paths.dashboard.checklist.root },
-                { title: t('create'), path: paths.dashboard.checklist.new },
-                { title: t('calamviec'), path: paths.dashboard.checklist.lists },
-              ],
-            },
-            
-          ],
-        },
+        items: [
+          // KHU VUC
+          {
+            title: t('area'),
+            path: paths.dashboard.khuvuc.root,
+            icon: ICONS.tour,
+            children: [
+              { title: t('list'), path: paths.dashboard.khuvuc.root },
+              { title: t('create'), path: paths.dashboard.khuvuc.new },
+            ],
+          },
+          {
+            title: t('article'),
+            path: paths.dashboard.hangmuc.root,
+            icon: ICONS.kanban,
+            children: [
+              { title: t('list'), path: paths.dashboard.hangmuc.root },
+              { title: t('create'), path: paths.dashboard.hangmuc.new },
+            ],
+          },
+          {
+            title: t('calv'),
+            path: paths.dashboard.calv.root,
+            icon: ICONS.job,
+            children: [
+              { title: t('list'), path: paths.dashboard.calv.root },
+              { title: t('create'), path: paths.dashboard.calv.new },
+            ],
+          },
+          {
+            title: t('giamsat'),
+            path: paths.dashboard.giamsat.root,
+            icon: ICONS.user,
+            children: [
+              { title: t('list'), path: paths.dashboard.giamsat.root },
+              { title: t('create'), path: paths.dashboard.giamsat.new },
+            ],
+          },
+          {
+            title: t('checklist'),
+            path: paths.dashboard.checklist.root,
+            icon: ICONS.lock,
+            children: [
+              { title: t('list'), path: paths.dashboard.checklist.root },
+              { title: t('create'), path: paths.dashboard.checklist.new },
+              { title: t('calamviec'), path: paths.dashboard.checklist.lists },
+            ],
+          },
+        ],
+      },
 
-        {
+      {
         subheader: t('profile'),
-        items : [
+        items: [
           {
             title: t('user'),
             path: paths.dashboard.userAdmin.root,
             icon: ICONS.user,
-            children: [
-              { title: t('account'), path: paths.dashboard.userAdmin.root },
-            ],
+            children: [{ title: t('account'), path: paths.dashboard.userAdmin.root }],
           },
-        ]
-        }
-      ];
+        ],
+      },
+    ];
 
-      // Conditionally add "Tạo tài khoản" tab if user's role_id is 1
-      // if (user?.role_id === 1) {
-      //   navigationData[1].items.push({
-      //     title: t('Create Account'),
-      //     path: paths.dashboard.createEmployee.root,
-      //     icon: ICONS.user,
-      //     children: [
-      //       { title: t('create'), path: paths.dashboard.createEmployee.root },
-      //       { title: t('list'), path: paths.dashboard.createEmployee.list }
-      //     ],
-      //   });
-      // }
+    // Conditionally add "Tạo tài khoản" tab if user's role_id is 1
+    // if (user?.role_id === 1) {
+    //   navigationData[1].items.push({
+    //     title: t('Create Account'),
+    //     path: paths.dashboard.createEmployee.root,
+    //     icon: ICONS.user,
+    //     children: [
+    //       { title: t('create'), path: paths.dashboard.createEmployee.root },
+    //       { title: t('list'), path: paths.dashboard.createEmployee.list }
+    //     ],
+    //   });
+    // }
 
-      return navigationData;
-    },
-    [t]
-  );
+    return navigationData;
+  }, [t]);
 
   return data;
 }
-

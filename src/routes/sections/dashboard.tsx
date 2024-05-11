@@ -104,6 +104,17 @@ const HangMucListsPage = lazy(() => import('src/pages/dashboard/hangmuc/list'));
 const HangMucNewPage = lazy(() => import('src/pages/dashboard/hangmuc/new'));
 const HangMucEditPage = lazy(() => import('src/pages/dashboard/hangmuc/edit'));
 
+// Ca lam viec
+const CalvListsPage = lazy(() => import('src/pages/dashboard/calv/list'));
+const CalvNewPage = lazy(() => import('src/pages/dashboard/calv/new'));
+const CalvEditPage = lazy(() => import('src/pages/dashboard/calv/edit'));
+
+// Giam sat
+const GiamsatListsPage = lazy(() => import('src/pages/dashboard/giamsat/list'));
+const GiamsatNewPage = lazy(() => import('src/pages/dashboard/giamsat/new'));
+const GiamsatEditPage = lazy(() => import('src/pages/dashboard/giamsat/edit'));
+
+// Checklist
 const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list'));
 const TCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/tlist'));
 const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
@@ -185,6 +196,24 @@ export const dashboardRoutes = [
           { path: 'list', element: <HangMucListsPage /> },
           { path: ':id/edit', element: <HangMucEditPage /> },
           { path: 'new', element: <HangMucNewPage /> },
+        ],
+      },
+      {
+        path: 'calv',
+        children: [
+          { element: <CalvListsPage />, index: true },
+          { path: 'list', element: <CalvListsPage /> },
+          { path: ':id/edit', element: <CalvEditPage /> },
+          { path: 'new', element: <CalvNewPage /> },
+        ],
+      },
+      {
+        path: 'giamsat',
+        children: [
+          { element: <GiamsatListsPage />, index: true },
+          { path: 'list', element: <GiamsatListsPage /> },
+          { path: ':id/edit', element: <GiamsatEditPage /> },
+          { path: 'new', element: <GiamsatNewPage /> },
         ],
       },
       {

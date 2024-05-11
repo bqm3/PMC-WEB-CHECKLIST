@@ -144,6 +144,18 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/hangmuc/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/hangmuc/${id}/edit`,
     },
+    calv: {
+      root: `${ROOTS.DASHBOARD}/calv`,
+      new: `${ROOTS.DASHBOARD}/calv/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/calv/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/calv/${id}/edit`,
+    },
+    giamsat: {
+      root: `${ROOTS.DASHBOARD}/giamsat`,
+      new: `${ROOTS.DASHBOARD}/giamsat/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/giamsat/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/giamsat/${id}/edit`,
+    },
     checklist: {
       root: `${ROOTS.DASHBOARD}/checklist`,
       new: `${ROOTS.DASHBOARD}/checklist/new`,

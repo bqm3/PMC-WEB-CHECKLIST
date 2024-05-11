@@ -1,16 +1,11 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang } from 'src/types/khuvuc';
-import axios, { AxiosRequestConfig } from 'axios';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
 
 // types
 import useSWR from 'swr';
-// const typePagination = {
-//   page: string;
-//   limit: string;
-// }
 
 const STORAGE_KEY = 'accessToken';
 
@@ -30,6 +25,33 @@ export function useGetCalv() {
   const memoizedValue = useMemo(
     () => ({
       calv: (data?.data as ICalv[]) || [],
+      calvLoading: isLoading,
+      calvError: error,
+      calvValidating: isValidating,
+      calvEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetCalvDetail(id: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_calv/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      calv: (data?.data as ICalv) || [],
       calvLoading: isLoading,
       calvError: error,
       calvValidating: isValidating,
@@ -181,6 +203,60 @@ export function useGetKhuVuc() {
   return memoizedValue;
 }
 
+export function useGetGiamsat() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_giamsat/';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      giamsat: (data?.data as IGiamsat[]) || [],
+      giamsatLoading: isLoading,
+      giamsatError: error,
+      giamsatValidating: isValidating,
+      giamsatEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetGiamsatDetail(id: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_giamsat/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      giamsat: (data?.data as IGiamsat) || [],
+      giamsatLoading: isLoading,
+      giamsatError: error,
+      giamsatValidating: isValidating,
+      giamsatEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetKhuVucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = `https://checklist.pmcweb.vn/be/api/ent_khuvuc/${id}`;
@@ -318,4 +394,3 @@ export function useGetChecklistDetail(id: string) {
 
   return memoizedValue;
 }
-
