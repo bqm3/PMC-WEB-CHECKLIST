@@ -25,6 +25,11 @@ export const KHUVUC_STATUS_OPTIONS = [
   // { value: 'refunded', label: 'Refunded' },
 ];
 
+export const PERMISSION_STATUS_OPTIONS = [
+  { value: '1', label: 'Giám đốc dự án' },
+  { value: '2', label: 'Giám sát' },
+];
+
 const ITEMS = [...Array(3)].map((_, index) => ({
   id: _mock.id(index),
   sku: `16H9UR${index}`,

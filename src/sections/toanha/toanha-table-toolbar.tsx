@@ -53,36 +53,14 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        {/* <DatePicker
-          label="Start date"
-          // value={filters.startDate}
-          // onChange={handleFilterStartDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-            },
-          }}
-          sx={{
-            maxWidth: { md: 200 },
-          }}
-        />
-
-        <DatePicker
-          label="End date"
-          // value={filters.endDate}
-          // onChange={handleFilterEndDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            maxWidth: { md: 200 },
-          }}
-        /> */}
+       
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Tìm kiếm theo tên giám sát, số điện thoại,..."
+            placeholder="Tìm kiếm theo tên dự án, tên tòa nhà,..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

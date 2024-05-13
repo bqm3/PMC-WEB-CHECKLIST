@@ -2,46 +2,38 @@
 import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
-// _mock
-import { _userList } from 'src/_mock';
 // components
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import UserNewEditForm from '../user-new-edit-form';
+import DuanNewEditForm from '../duan-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-type Props = {
-  id: string;
-};
-
-export default function UserEditView({ id }: Props) {
+export default function DuanCreateView() {
   const settings = useSettingsContext();
-
-  const currentUser = _userList.find((user) => user.id === id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Tạo dự án"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'User',
-            href: paths.dashboard.user.root,
+            name: 'Dự án',
+            href: paths.dashboard.duan.root,
           },
-          { name: currentUser?.name },
+          { name: 'Tạo mới' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      {/* <UserNewEditForm currentUser={currentUser} /> */}
+      <DuanNewEditForm />
     </Container>
   );
 }

@@ -16,15 +16,8 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS, PERMISSION_STATUS_OPTIONS } from 'src/_mock';
-import {
-  useGetKhuVuc,
-  useGetHangMuc,
-  useGetCalv,
-  useGetGiamsat,
-  useGetDuan,
-  useGetUsers,
-} from 'src/api/khuvuc';
+import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
+import { useGetKhuVuc, useGetHangMuc, useGetCalv, useGetGiamsat, useGetDuan } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -56,25 +49,20 @@ import {
   IKhuvuc,
   IKhuvucTableFilters,
   IKhuvucTableFilterValue,
-  IUser,
 } from 'src/types/khuvuc';
 //
-import DuanTableRow from '../user-table-row';
-import DuanTableToolbar from '../user-table-toolbar';
-import DuanTableFiltersResult from '../user-table-filters-result';
+import DuanTableRow from '../duan-table-row';
+import DuanTableToolbar from '../duan-table-toolbar';
+import DuanTableFiltersResult from '../duan-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...PERMISSION_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'ID_User', label: 'Mã nhân viên', width: 80 },
-  { id: 'UserName', label: 'Tài khoản', width: 140 },
-  { id: 'Permission', label: 'Chức vụ', width: 140 },
-
-  { id: 'ID_Duan', label: 'Tên dự án', width: 140 },
-  { id: 'Emails', label: 'Email', width: 140 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 140 },
+  { id: 'ID_Duan', label: 'Mã dự án', width: 120 },
+  { id: 'Duan', label: 'Tên dự án'},
+  
   { id: '', width: 88 },
 ];
 
@@ -87,7 +75,7 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function GiamsatListView() {
-  const table = useTable({ defaultOrderBy: 'ID_User' });
+  const table = useTable({ defaultOrderBy: 'ID_Duan' });
 
   const settings = useSettingsContext();
 
@@ -101,16 +89,16 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { duan, duanLoading, duanEmpty } = useGetDuan();
-  const { user, userLoading, userEmpty } = useGetUsers();
+  const { duan, duanLoading, duanEmpty } =useGetDuan();
 
-  const [tableData, setTableData] = useState<IUser[]>([]);
+  const [tableData, setTableData] = useState<IDuan[]>([]);
+
 
   useEffect(() => {
-    if (user?.length > 0) {
-      setTableData(user);
+    if (duan?.length > 0) {
+      setTableData(duan);
     }
-  }, [user]);
+  }, [duan]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -151,7 +139,7 @@ export default function GiamsatListView() {
         })
         .then((res) => {
           // reset();
-          const deleteRow = tableData?.filter((row) => row.ID_User !== id);
+          const deleteRow = tableData?.filter((row) => row.ID_Duan !== id);
           setTableData(deleteRow);
 
           table.onUpdatePageDeleteRow(dataInPage.length);
@@ -185,7 +173,7 @@ export default function GiamsatListView() {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_User));
+    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Duan));
     setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
@@ -233,46 +221,9 @@ export default function GiamsatListView() {
             mb: { xs: 3, md: 5 },
           }}
         />
-        <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === '1' && 'success') ||
-                      (tab.value === '2' && 'warning') ||
-                      (tab.value === '3' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && user?.length}
-                    {tab.value === '1' &&
-                      user?.filter((order) => `${order.Permission}` === '1').length}
-
-                    {tab.value === '2' &&
-                      user?.filter((order) => `${order.Permission}` === '2').length}
-                   
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
 
         <Card>
+
           <DuanTableToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -299,7 +250,7 @@ export default function GiamsatListView() {
               numSelected={table.selected.length}
               rowCount={tableData?.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_User))
+                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_Duan))
               }
               action={
                 <Tooltip title="Delete">
@@ -320,7 +271,7 @@ export default function GiamsatListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row) => row.ID_User))
+                    table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Duan))
                   }
                 />
 
@@ -332,12 +283,12 @@ export default function GiamsatListView() {
                     )
                     .map((row) => (
                       <DuanTableRow
-                        key={row.ID_User}
+                        key={row.ID_Duan}
                         row={row}
-                        selected={table.selected.includes(row.ID_User)}
-                        onSelectRow={() => table.onSelectRow(row.ID_User)}
-                        onDeleteRow={() => handleDeleteRow(row.ID_User)}
-                        onViewRow={() => handleViewRow(row.ID_User)}
+                        selected={table.selected.includes(row.ID_Duan)}
+                        onSelectRow={() => table.onSelectRow(row.ID_Duan)}
+                        onDeleteRow={() => handleDeleteRow(row.ID_Duan)}
+                        onViewRow={() => handleViewRow(row.ID_Duan)}
                       />
                     ))}
 
@@ -398,7 +349,7 @@ function applyFilter({
   comparator,
   filters, // dateError,
 }: {
-  inputData: IUser[];
+  inputData: IDuan[];
   comparator: (a: any, b: any) => number;
   filters: IKhuvucTableFilters;
   // dateError: boolean;
@@ -418,15 +369,14 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.UserName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.ent_duan.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Emails.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        order.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 
+       
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.Permission}` === status);
-  }
+  // if (status !== 'all') {
+  //   inputData = inputData?.filter((order) => `${order?.ID_KhoiCV}` === status);
+  // }
 
   return inputData;
 }

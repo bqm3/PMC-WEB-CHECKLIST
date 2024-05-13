@@ -11,20 +11,21 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
 import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
-import { _tags, _roles } from 'src/_mock';
+import { _tags, _roles, USER_GENDER_OPTIONS } from 'src/_mock';
 // api
-import { useGetKhuVuc, useGetToanha, useGetKhoiCV } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetChucvu } from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
 // types
-import { IKhoiCV, ICalv, IGiamsat } from 'src/types/khuvuc';
+import { IKhoiCV, ICalv, IGiamsat, IChucvu } from 'src/types/khuvuc';
 import axios from 'axios';
 import { DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 // import moment from 'moment';
@@ -38,7 +39,7 @@ type Props = {
 
 const STORAGE_KEY = 'accessToken';
 
-export default function ArticleNewEditForm({ currentGiamsat }: Props) {
+export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
@@ -48,8 +49,10 @@ export default function ArticleNewEditForm({ currentGiamsat }: Props) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
+  const [chucvu, setChucVu] = useState<IChucvu[]>([]);
 
   const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { chucVu, chucVuLoading, chucVuEmpty } = useGetChucvu();
 
   useEffect(() => {
     if (khoiCV?.length > 0) {
@@ -57,29 +60,27 @@ export default function ArticleNewEditForm({ currentGiamsat }: Props) {
     }
   }, [khoiCV]);
 
+  useEffect(() => {
+    if (chucVu?.length > 0) {
+      setChucVu(chucVu);
+    }
+  }, [chucVu]);
+
   const NewProductSchema = Yup.object().shape({
     Hoten: Yup.string().required('Phải có tên giám sát'),
     ID_KhoiCV: Yup.string(),
-    // Giobatdau: Yup.mixed<any>().nullable().required('Phải có giờ bắt đầu'),
-    // Gioketthuc: Yup.mixed<any>()
-    //   .required('Phải có giờ kết thúc')
-    //   .test(
-    //     'is-later',
-    //     'Giờ kết thúc phải lớn hơn giờ bắt đầu',
-    //     (value, { parent }) => {
-    //       const { Giobatdau } = parent; // Lấy giá trị của trường Giobatdau từ parent object
-
-    //       return value.localeCompare(Giobatdau);
-    //     }
-    //   ),
+    Ngaysinh: Yup.string(),
+    Sodienthoai: Yup.string().required('Phone number is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       Hoten: currentGiamsat?.Hoten || '',
+      Sodienthoai: currentGiamsat?.Sodienthoai || '',
+      Gioitinh: currentGiamsat?.Gioitinh || '',
+      Ngaysinh: currentGiamsat?.Ngaysinh || '',
       ID_KhoiCV: `${currentGiamsat?.ID_KhoiCV}` || '' || null || undefined,
-      // Giobatdau: currentGiamsat?.Giobatdau || null || undefined,
-      // Gioketthuc: currentGiamsat?.Gioketthuc || null || undefined,
+      ID_Chucvu: `${currentGiamsat?.ID_Chucvu}` || '' || null || undefined,
     }),
     [currentGiamsat]
   );
@@ -107,40 +108,7 @@ export default function ArticleNewEditForm({ currentGiamsat }: Props) {
   }, [currentGiamsat, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    // let dateGiobatdau;
-    // let dateGioketthuc;
-
-    // if (data?.Giobatdau !== null) {
-    //   dateGiobatdau = new Date(data?.Giobatdau);
-    // }
-
-    // if (data?.Gioketthuc !== null) {
-    //   dateGioketthuc = new Date(data?.Gioketthuc);
-    // }
-
-    // // Sử dụng toLocaleTimeString để định dạng thời gian theo hh:mm:ss
-    // if (dateGiobatdau && dateGioketthuc) {
-    //   // Định dạng thời gian theo hh:mm:ss
-    //   const timeString1 = dateGiobatdau.toLocaleTimeString('vi-VN', {
-    //     hour: '2-digit',
-    //     minute: '2-digit',
-    //     second: '2-digit',
-    //     hour12: false,
-    //   });
-
-    //   const timeString2 = dateGioketthuc.toLocaleTimeString('vi-VN', {
-    //     hour: '2-digit',
-    //     minute: '2-digit',
-    //     second: '2-digit',
-    //     hour12: false,
-    //   });
-
-    //   const dataValue = {
-    //     Tenca: data.Tenca,
-    //     Giobatdau: timeString1,
-    //     Gioketthuc: timeString2,
-    //     ID_KhoiCV: data?.ID_KhoiCV,
-    //   };
+    
       try {
         if (currentGiamsat !== undefined) {
           await axios
@@ -157,7 +125,7 @@ export default function ArticleNewEditForm({ currentGiamsat }: Props) {
             .then((res) => {
               reset();
               enqueueSnackbar('Cập nhật thành công!');
-              router.push(paths.dashboard.calv.root);
+              router.push(paths.dashboard.giamsat.root);
             })
             .catch((error) => {
               if (error.response) {
@@ -184,7 +152,7 @@ export default function ArticleNewEditForm({ currentGiamsat }: Props) {
             });
         } else {
           axios
-            .post(`https://checklist.pmcweb.vn/be/api/ent_calv/create`, data, {
+            .post(`https://checklist.pmcweb.vn/be/api/ent_giamsat/create`, data, {
               headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -228,9 +196,6 @@ export default function ArticleNewEditForm({ currentGiamsat }: Props) {
     }
   }
 );
-  // const initialTime = defaultValues?.Giobatdau
-  // ? moment(defaultValues.Giobatdau, 'HH:mm:ss')
-  // : moment().startOf('day');
 
   console.log('defaultValues', values);
 
@@ -268,23 +233,53 @@ export default function ArticleNewEditForm({ currentGiamsat }: Props) {
                 </RHFSelect>
               )}
             </Stack>
+            <Stack spacing={1.5}>
+              {chucVu?.length > 0 && (
+                <RHFSelect
+                  name="ID_Chucvu"
+                  label="Chức vụ"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {chucVu?.map((item) => (
+                    <MenuItem key={`${item?.ID_Chucvu}`} value={`${item?.ID_Chucvu}`}>
+                      {item?.Chucvu}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
 
             <RHFTextField name="Hoten" label="Tên giám sát" />
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Giờ kiểm tra</Typography>
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                {/* <RHFTextField
-                  type="time"
-                  value={values?.Giobatdau || '23:59:00'}
-                  name="Giobatdau"
-                />
-                <RHFTextField
-                  type="time"
-                  value={values?.Gioketthuc || '23:59:00'}
-                  name="Gioketthuc"
-                /> */}
+            <RHFTextField name="Sodienthoai" label="Số điện thoại" />
+            <Stack spacing={1}>
+                <Typography variant="subtitle2">Giới tính</Typography>
+                <RHFRadioGroup row name="Gioitinh" spacing={2} options={USER_GENDER_OPTIONS} />
               </Stack>
-            </Stack>
+              <RHFTextField name="Ngaysinh" type='date' label="Năm sinh" />
+              {/* <Stack spacing={1.5}>
+                <Controller
+                  name="Ngaysinh"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      {...field}
+                      label="Ngày sinh"
+                      defaultValue={`${values.Ngaysinh}` || null}
+                      // format="yyyy-MM-dd"
+                      
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+              </Stack>
+            */}
           </Stack>
         </Card>
       </Grid>

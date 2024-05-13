@@ -16,14 +16,13 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS, PERMISSION_STATUS_OPTIONS } from 'src/_mock';
+import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
 import {
   useGetKhuVuc,
   useGetHangMuc,
   useGetCalv,
   useGetGiamsat,
-  useGetDuan,
-  useGetUsers,
+  useGetToanha,
 } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
@@ -50,31 +49,25 @@ import { useSnackbar } from 'src/components/snackbar';
 // types
 import {
   ICalv,
-  IDuan,
   IGiamsat,
   IHangMuc,
   IKhuvuc,
   IKhuvucTableFilters,
   IKhuvucTableFilterValue,
-  IUser,
+  IToanha,
 } from 'src/types/khuvuc';
 //
-import DuanTableRow from '../user-table-row';
-import DuanTableToolbar from '../user-table-toolbar';
-import DuanTableFiltersResult from '../user-table-filters-result';
+import GiamsatTableRow from '../toanha-table-row';
+import GiamsatTableToolbar from '../toanha-table-toolbar';
+import GiamsatTableFiltersResult from '../toanha-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...PERMISSION_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
-  { id: 'ID_User', label: 'Mã nhân viên', width: 80 },
-  { id: 'UserName', label: 'Tài khoản', width: 140 },
-  { id: 'Permission', label: 'Chức vụ', width: 140 },
-
+  { id: 'ID_Toanha', label: 'Mã tòa nhà', width: 120 },
   { id: 'ID_Duan', label: 'Tên dự án', width: 140 },
-  { id: 'Emails', label: 'Email', width: 140 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 140 },
+  { id: 'Toanha', label: 'Tên tòa nhà', width: 140, align: 'center' },
+  { id: 'Sotang', label: 'Số tầng', width: 100, align: 'center' },
   { id: '', width: 88 },
 ];
 
@@ -86,8 +79,8 @@ const defaultFilters: IKhuvucTableFilters = {
 const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
-export default function GiamsatListView() {
-  const table = useTable({ defaultOrderBy: 'ID_User' });
+export default function ToanhaListView() {
+  const table = useTable({ defaultOrderBy: 'ID_Toanha' });
 
   const settings = useSettingsContext();
 
@@ -101,16 +94,15 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { duan, duanLoading, duanEmpty } = useGetDuan();
-  const { user, userLoading, userEmpty } = useGetUsers();
+  const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
 
-  const [tableData, setTableData] = useState<IUser[]>([]);
+  const [tableData, setTableData] = useState<IToanha[]>([]);
 
   useEffect(() => {
-    if (user?.length > 0) {
-      setTableData(user);
+    if (toanha?.length > 0) {
+      setTableData(toanha);
     }
-  }, [user]);
+  }, [toanha]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -143,7 +135,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_duan/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/ent_giamsat/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -151,7 +143,7 @@ export default function GiamsatListView() {
         })
         .then((res) => {
           // reset();
-          const deleteRow = tableData?.filter((row) => row.ID_User !== id);
+          const deleteRow = tableData?.filter((row) => row.ID_Toanha !== id);
           setTableData(deleteRow);
 
           table.onUpdatePageDeleteRow(dataInPage.length);
@@ -185,7 +177,7 @@ export default function GiamsatListView() {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_User));
+    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Toanha));
     setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
@@ -201,7 +193,7 @@ export default function GiamsatListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.duan.edit(id));
+      router.push(paths.dashboard.toanha.edit(id));
     },
     [router]
   );
@@ -217,15 +209,15 @@ export default function GiamsatListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Danh sách dự án"
+          heading="Danh sách tòa nhà"
           links={[
             {
               name: 'Dashboard',
               href: paths.dashboard.root,
             },
             {
-              name: 'Dự án',
-              href: paths.dashboard.duan.root,
+              name: 'Tòa nhà',
+              href: paths.dashboard.toanha.root,
             },
             { name: 'Danh sách' },
           ]}
@@ -233,47 +225,9 @@ export default function GiamsatListView() {
             mb: { xs: 3, md: 5 },
           }}
         />
-        <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === '1' && 'success') ||
-                      (tab.value === '2' && 'warning') ||
-                      (tab.value === '3' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && user?.length}
-                    {tab.value === '1' &&
-                      user?.filter((order) => `${order.Permission}` === '1').length}
-
-                    {tab.value === '2' &&
-                      user?.filter((order) => `${order.Permission}` === '2').length}
-                   
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
 
         <Card>
-          <DuanTableToolbar
+          <GiamsatTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -282,7 +236,7 @@ export default function GiamsatListView() {
           />
 
           {canReset && (
-            <DuanTableFiltersResult
+            <GiamsatTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -299,7 +253,7 @@ export default function GiamsatListView() {
               numSelected={table.selected.length}
               rowCount={tableData?.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_User))
+                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_Toanha))
               }
               action={
                 <Tooltip title="Delete">
@@ -320,7 +274,7 @@ export default function GiamsatListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row) => row.ID_User))
+                    table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Toanha))
                   }
                 />
 
@@ -331,13 +285,13 @@ export default function GiamsatListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <DuanTableRow
-                        key={row.ID_User}
+                      <GiamsatTableRow
+                        key={row.ID_Toanha}
                         row={row}
-                        selected={table.selected.includes(row.ID_User)}
-                        onSelectRow={() => table.onSelectRow(row.ID_User)}
-                        onDeleteRow={() => handleDeleteRow(row.ID_User)}
-                        onViewRow={() => handleViewRow(row.ID_User)}
+                        selected={table.selected.includes(row.ID_Toanha)}
+                        onSelectRow={() => table.onSelectRow(row.ID_Toanha)}
+                        onDeleteRow={() => handleDeleteRow(row.ID_Toanha)}
+                        onViewRow={() => handleViewRow(row.ID_Toanha)}
                       />
                     ))}
 
@@ -398,7 +352,7 @@ function applyFilter({
   comparator,
   filters, // dateError,
 }: {
-  inputData: IUser[];
+  inputData: IToanha[];
   comparator: (a: any, b: any) => number;
   filters: IKhuvucTableFilters;
   // dateError: boolean;
@@ -418,14 +372,9 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.UserName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.ent_duan.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Emails.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        order.Toanha.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
-  }
-
-  if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.Permission}` === status);
   }
 
   return inputData;

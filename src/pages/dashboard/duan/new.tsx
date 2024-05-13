@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { UserCreateView } from 'src/sections/create-user/view';
+import { DuanCreateView } from 'src/sections/duan/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserCreatePage() {
+export default function DuanCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo tài khoản</title>
+        <title> Dashboard: Tạo mới dự án</title>
       </Helmet>
 
-      <UserCreateView />
+      <DuanCreateView />
     </>
   );
 }

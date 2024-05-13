@@ -70,55 +70,58 @@ export function useNavData() {
       {
         subheader: t('management'),
 
-        items: [
-          // KHU VUC
-          {
-            title: t('area'),
-            path: paths.dashboard.khuvuc.root,
-            icon: ICONS.tour,
-            children: [
-              { title: t('list'), path: paths.dashboard.khuvuc.root },
-              { title: t('create'), path: paths.dashboard.khuvuc.new },
-            ],
-          },
-          {
-            title: t('article'),
-            path: paths.dashboard.hangmuc.root,
-            icon: ICONS.kanban,
-            children: [
-              { title: t('list'), path: paths.dashboard.hangmuc.root },
-              { title: t('create'), path: paths.dashboard.hangmuc.new },
-            ],
-          },
-          {
-            title: t('calv'),
-            path: paths.dashboard.calv.root,
-            icon: ICONS.job,
-            children: [
-              { title: t('list'), path: paths.dashboard.calv.root },
-              { title: t('create'), path: paths.dashboard.calv.new },
-            ],
-          },
-          {
-            title: t('giamsat'),
-            path: paths.dashboard.giamsat.root,
-            icon: ICONS.user,
-            children: [
-              { title: t('list'), path: paths.dashboard.giamsat.root },
-              { title: t('create'), path: paths.dashboard.giamsat.new },
-            ],
-          },
-          {
-            title: t('checklist'),
-            path: paths.dashboard.checklist.root,
-            icon: ICONS.lock,
-            children: [
-              { title: t('list'), path: paths.dashboard.checklist.root },
-              { title: t('create'), path: paths.dashboard.checklist.new },
-              { title: t('calamviec'), path: paths.dashboard.checklist.lists },
-            ],
-          },
-        ],
+        items:
+          user?.Permission === 1
+            ? [
+                // KHU VUC
+                {
+                  title: t('area'),
+                  path: paths.dashboard.khuvuc.root,
+                  icon: ICONS.tour,
+                  children: [
+                    { title: t('list'), path: paths.dashboard.khuvuc.root },
+                    { title: t('create'), path: paths.dashboard.khuvuc.new },
+                  ],
+                },
+                {
+                  title: t('article'),
+                  path: paths.dashboard.hangmuc.root,
+                  icon: ICONS.kanban,
+                  children: [
+                    { title: t('list'), path: paths.dashboard.hangmuc.root },
+                    { title: t('create'), path: paths.dashboard.hangmuc.new },
+                  ],
+                },
+                {
+                  title: t('calv'),
+                  path: paths.dashboard.calv.root,
+                  icon: ICONS.job,
+                  children: [
+                    { title: t('list'), path: paths.dashboard.calv.root },
+                    { title: t('create'), path: paths.dashboard.calv.new },
+                  ],
+                },
+                {
+                  title: t('giamsat'),
+                  path: paths.dashboard.giamsat.root,
+                  icon: ICONS.user,
+                  children: [
+                    { title: t('list'), path: paths.dashboard.giamsat.root },
+                    { title: t('create'), path: paths.dashboard.giamsat.new },
+                  ],
+                },
+                {
+                  title: t('checklist'),
+                  path: paths.dashboard.checklist.root,
+                  icon: ICONS.lock,
+                  children: [
+                    { title: t('list'), path: paths.dashboard.checklist.root },
+                    { title: t('create'), path: paths.dashboard.checklist.new },
+                    { title: t('calamviec'), path: paths.dashboard.checklist.lists },
+                  ],
+                },
+              ]
+            : [],
       },
 
       {
@@ -135,20 +138,40 @@ export function useNavData() {
     ];
 
     // Conditionally add "Tạo tài khoản" tab if user's role_id is 1
-    // if (user?.role_id === 1) {
-    //   navigationData[1].items.push({
-    //     title: t('Create Account'),
-    //     path: paths.dashboard.createEmployee.root,
-    //     icon: ICONS.user,
-    //     children: [
-    //       { title: t('create'), path: paths.dashboard.createEmployee.root },
-    //       { title: t('list'), path: paths.dashboard.createEmployee.list }
-    //     ],
-    //   });
-    // }
+    if (user?.Permission === 3) {
+      navigationData[1].items.push(
+        {
+          title: t('project'),
+          path: paths.dashboard.duan.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('create'), path: paths.dashboard.duan.new },
+            { title: t('list'), path: paths.dashboard.duan.root },
+          ],
+        },
+        {
+          title: t('building'),
+          path: paths.dashboard.toanha.root,
+          icon: ICONS.banking,
+          children: [
+            { title: t('create'), path: paths.dashboard.toanha.new },
+            { title: t('list'), path: paths.dashboard.toanha.root },
+          ],
+        },
+        {
+          title: t('createaccount'),
+          path: paths.dashboard.createEmployee.root,
+          icon: ICONS.user,
+          children: [
+            { title: t('create'), path: paths.dashboard.createEmployee.root },
+            { title: t('list'), path: paths.dashboard.createEmployee.list },
+          ],
+        }
+      );
+    }
 
     return navigationData;
-  }, [t]);
+  }, [t, user]);
 
   return data;
 }

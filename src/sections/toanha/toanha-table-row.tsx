@@ -14,8 +14,13 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import {IDuan, IUser} from 'src/types/khuvuc';
+// utils
+import { fCurrency } from 'src/utils/format-number';
+// types
+import { IOrderItem } from 'src/types/order';
+import { IKhuvuc, IHangMuc, ICalv, IGiamsat, IToanha } from 'src/types/khuvuc';
 // components
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -23,7 +28,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IUser;
+  row: IToanha;
   selected: boolean;
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -37,7 +42,7 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Duan, UserName, Emails, ent_chucvu, ent_duan, ent_khoicv, Permission } = row;
+  const {  ID_Duan, ID_Toanha, Toanha, Sotang , ent_duan} = row;
 
   const confirm = useBoolean();
 
@@ -61,13 +66,13 @@ export default function CalvTableRow({
             },
           }}
         >
-          {ID_Duan}
+          {ID_Toanha}
         </Box>
       </TableCell>
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <ListItemText
-          primary={UserName}
+          primary={ent_duan?.Duan}
           // secondary={ent_khoicv?.KhoiCV}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
@@ -76,14 +81,11 @@ export default function CalvTableRow({
           }}
         />
       </TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{ent_chucvu?.Chucvu}</TableCell>
-      
-      <TableCell sx={{alignItems: 'center' }}>{ent_duan?.Duan}</TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{Emails}</TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{ent_khoicv?.KhoiCV}</TableCell>
+      <TableCell align="center"> {Toanha} </TableCell>
+      <TableCell align="center"> {Sotang} </TableCell>
       
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
       </TableCell>

@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import {IDuan, IUser} from 'src/types/khuvuc';
+import {IDuan} from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -23,7 +23,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IUser;
+  row: IDuan;
   selected: boolean;
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -37,7 +37,7 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Duan, UserName, Emails, ent_chucvu, ent_duan, ent_khoicv, Permission } = row;
+  const { ID_Duan, Duan } = row;
 
   const confirm = useBoolean();
 
@@ -67,7 +67,7 @@ export default function CalvTableRow({
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <ListItemText
-          primary={UserName}
+          primary={Duan}
           // secondary={ent_khoicv?.KhoiCV}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
@@ -76,14 +76,9 @@ export default function CalvTableRow({
           }}
         />
       </TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{ent_chucvu?.Chucvu}</TableCell>
-      
-      <TableCell sx={{alignItems: 'center' }}>{ent_duan?.Duan}</TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{Emails}</TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{ent_khoicv?.KhoiCV}</TableCell>
       
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
       </TableCell>

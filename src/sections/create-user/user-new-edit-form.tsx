@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -20,58 +20,81 @@ import { fData } from 'src/utils/format-number';
 // routes
 import { useRouter } from 'src/routes/hooks';
 // types
-import { IUserItem_2 } from 'src/types/user';
-// components
-import Label from 'src/components/label';
+import { IChucvu, IDuan, IKhoiCV, IUser } from 'src/types/khuvuc';
+// routes
+import { paths } from 'src/routes/paths';
+
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSwitch,
   RHFTextField,
   RHFUploadAvatar,
   RHFAutocomplete,
-  RHFSelect, RHFRadioGroup
+  RHFSelect,
+  RHFRadioGroup,
 } from 'src/components/hook-form';
 import axios from 'axios';
+import { useGetChucvu, useGetDuan, useGetKhoiCV } from 'src/api/khuvuc';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentUser?: IUserItem_2;
+  currentUser?: IUser;
 };
+
+const STORAGE_KEY = 'accessToken';
 
 export default function UserNewEditForm({ currentUser }: Props) {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+
+  const [KhoiCV, setKhoiCV] = useState<IKhoiCV[]>([]);
+  const [Duan, setDuan] = useState<IDuan[]>([]);
+  const [Chucvu, setChucvu] = useState<IChucvu[]>([]);
+
+  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { chucVu, chucVuLoading, chucVuEmpty } = useGetChucvu();
+  const { duan, duanLoading, duanEmpty } = useGetDuan();
+
+  useEffect(() => {
+    if (khoiCV?.length > 0) {
+      setKhoiCV(khoiCV);
+    }
+  }, [khoiCV]);
+
+  useEffect(() => {
+    if (duan?.length > 0) {
+      setDuan(duan);
+    }
+  }, [duan]);
+
+  useEffect(() => {
+    if (chucVu?.length > 0) {
+      setChucvu(chucVu);
+    }
+  }, [chucVu]);
+
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    password: Yup.string().required('Password is required'),
-    role: Yup.string().required('Role is required'),
-    zipCode: Yup.string().required('Zip code is required'),
-    avatarUrl: Yup.mixed<any>().nullable().required('Avatar is required'),
-    birthday: Yup.mixed<any>().nullable().required('Expired date is required'),
+    UserName: Yup.string().required('Tài khoản là bắt buộc'),
+    Emails: Yup.string().required('Email là bắt buộc').email('Chưa đúng định dang Email'),
+
+    Password: Yup.string().required('Mật khẩu là bắt buộc'),
     // not required
-    status: Yup.string(),
-    gender: Yup.string(),
+    Permission: Yup.string(),
+    ID_Duan: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
-      role: currentUser?.role || '',
-      email: currentUser?.email || '',
-      status: currentUser?.status || 'active',
-      address: currentUser?.address || '',
-      password: currentUser?.password || '',
-      zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      birthday: currentUser?.birthday || null,
-      phoneNumber: currentUser?.phoneNumber || '',
-      gender: currentUser?.gender || '',
+      UserName: currentUser?.UserName || '',
+      Emails: currentUser?.Emails || '',
+      Password: currentUser?.Password || '',
+      Permission: currentUser?.Permission,
+      ID_Duan: currentUser?.ID_Duan,
+      ID_KhoiCV: currentUser?.ID_KhoiCV || null || '' || undefined,
     }),
     [currentUser]
   );
@@ -93,134 +116,55 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
-    const formData = new FormData();
-    formData.append('fullname', data.name);
-    formData.append('image', JSON.stringify(data.avatarUrl));
-    formData.append('birthday', data.birthday);
-    formData.append('email', data.email);
-    formData.append('password', data.password);
-    formData.append('phonenumber', data.phoneNumber);
-    formData.append('gender', JSON.stringify(data.gender));
-    formData.append('code', data.zipCode);
-    formData.append('role_id', data.role);
-    formData.append('status', JSON.stringify(data.status));
-    formData.append('address', data.address);
-    const config = {
-      withCredentials: false,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'multipart/form-data',
-      },
-    };
     try {
-      const response = await axios.post('https://be-nodejs-project.vercel.app/api/employee/register', formData, config);
-      if (response.status === 200) {
-        enqueueSnackbar('Create success!');
-        reset();
-      }
-      else {
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 3000,
-          message: 'Tạo phòng thất bại',
+      await axios
+        .post(`https://checklist.pmcweb.vn/be/api/ent_user/register`, data, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          reset();
+          enqueueSnackbar('Tạo tài khoản thành công!');
+          router.push(paths.dashboard.createEmployee.list);
+        })
+        .catch((error) => {
+          if (error.response) {
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `${error.response.data.message}`,
+            });
+          } else if (error.request) {
+            // Lỗi không nhận được phản hồi từ server
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Không nhận được phản hồi từ máy chủ`,
+            });
+          } else {
+            // Lỗi khi cấu hình request
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Lỗi gửi yêu cầu`,
+            });
+          }
         });
-      }
     } catch (error) {
-      console.error(error);
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 3000,
+        message: `Lỗi gửi yêu cầu`,
+      });
+      // }
     }
   });
-
-
-  const handleDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile, { shouldValidate: true });
-      }
-    },
-    [setValue]
-  );
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-
-            <Label
-              color={
-                (values.status === 'active' && 'success') ||
-                (values.status === 'banned' && 'error') ||
-                'warning'
-              }
-              sx={{ position: 'absolute', top: 24, right: 24 }}
-            >
-              {values.status}
-            </Label>
-
-
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 3,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.disabled',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
-
-            <FormControlLabel
-              labelPlacement="start"
-              control={
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      {...field}
-                      checked={field.value !== 'active'}
-                      onChange={(event) =>
-                        field.onChange(event.target.checked ? 'banned' : 'active')
-                      }
-                    />
-                  )}
-                />
-              }
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Banned
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Apply disable account
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-            />
-
-          </Card>
-        </Grid>
-
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -231,59 +175,54 @@ export default function UserNewEditForm({ currentUser }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-              <RHFTextField name="password" label="Password" />
-
-              <Stack spacing={1.5}>
-                <Controller
-                  name="birthday"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <DatePicker
-                      {...field}
-                      label="Ngày sinh"
-                      format="dd/MM/yyyy"
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Stack>
-
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
               <RHFSelect
                 fullWidth
-                name="role"
-                label="Chức vụ"
+                name="ID_KhoiCV"
+                label="Khối công việc"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {USER_ROLE_STATUS_OPTIONS.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                {KhoiCV.map((option) => (
+                  <MenuItem key={option.ID_Khoi} value={option.ID_Khoi}>
+                    {option.KhoiCV}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect
+                fullWidth
+                name="ID_Duan"
+                label="Dự án"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {Duan.map((option) => (
+                  <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
+                    {option.Duan}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
-              <Stack spacing={1}>
-                <Typography variant="subtitle2">Gender</Typography>
-                <RHFRadioGroup row name="gender" spacing={2} options={USER_GENDER_OPTIONS} />
-              </Stack>
+              <RHFSelect
+                fullWidth
+                name="Permission"
+                label="Chức vụ"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {Chucvu.map((option) => (
+                  <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
+                    {option.Chucvu}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFTextField name="UserName" label="Tài khoản" />
+              <RHFTextField name="Emails" label="Email" />
+              <RHFTextField name="Password" label="Mật khẩu" />
             </Box>
-
-
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentUser ? 'Create New Employee' : 'Save Changes'}
+                Tạo tài khoản
               </LoadingButton>
             </Stack>
           </Card>

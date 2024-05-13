@@ -12,6 +12,11 @@
   "file": "file",
   "area": "area",
   "article": "article",
+  "giamsat": "Supervisor",
+  "building": "building",
+  "project": "project",
+  "createaccount": "create account",
+
   "tour": "tour",
   "calv": "shift",
   "cards": "cards",

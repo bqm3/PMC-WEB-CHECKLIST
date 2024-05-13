@@ -44,6 +44,11 @@ export type E_Tang = {
   Sotang: string;
 };
 
+export type IDuan = {
+  ID_Duan: string;
+  Duan: string;
+}
+
 export type IGiamsat = {
   ID_Giamsat: string;
   ID_Duan: string;
@@ -59,6 +64,27 @@ export type IGiamsat = {
   // ent_quyen: ;
   isDelete: string;
 };
+
+
+export type IUser = {
+  ID_User: string;
+  ID_Duan: string;
+  UserName: string;
+  Permission: string;
+  ID_KhoiCV: string | any;
+  Emails: string;
+  Password: string;
+  isDelete: string;
+  ent_khoicv: E_KhoiCV;
+  ent_duan: IDuan;
+  ent_chucvu: IChucvu;
+};
+
+export type IChucvu = {
+  ID_Chucvu: string;
+  Chucvu: string;
+}
+
 
 export type IKhuvuc = {
   ID_Khuvuc: string;

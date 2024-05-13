@@ -7,9 +7,9 @@ export const PRODUCT_GENDER_OPTIONS = [
 ];
 
 export const USER_GENDER_OPTIONS = [
-  { label: 'Men', value: 'Men' },
-  { label: 'Women', value: 'Women' },
-  { label: 'Others', value: 'Others' },
+  { label: 'Nam', value: 'nam' },
+  { label: 'Nữ', value: 'nu' },
+  { label: 'Khác', value: 'khac' },
 ];
 
 export const PRODUCT_CATEGORY_OPTIONS = ['Shose', 'Apparel', 'Accessories'];

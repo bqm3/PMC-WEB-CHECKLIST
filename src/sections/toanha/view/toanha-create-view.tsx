@@ -6,25 +6,25 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import GiamsatNewEditForm from '../giamsat-new-edit-form';
+import ToanhaNewEditForm from '../toanha-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function GiamsatCreateView() {
+export default function ToanhaCreateView() {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Tạo giám sát"
+        heading="Tạo tòa nhà"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Giám sát',
-            href: paths.dashboard.giamsat.root,
+            name: 'Tòa nhà',
+            href: paths.dashboard.toanha.root,
           },
           { name: 'Tạo mới' },
         ]}
@@ -33,7 +33,7 @@ export default function GiamsatCreateView() {
         }}
       />
 
-      <GiamsatNewEditForm />
+      <ToanhaNewEditForm />
     </Container>
   );
 }

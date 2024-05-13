@@ -11,20 +11,21 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
 import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
-import { _tags, _roles } from 'src/_mock';
+import { _tags, _roles, USER_GENDER_OPTIONS } from 'src/_mock';
 // api
-import { useGetKhuVuc, useGetToanha, useGetKhoiCV } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetChucvu, useGetDuan } from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
 // types
-import { IKhoiCV, ICalv } from 'src/types/khuvuc';
+import { IKhoiCV, ICalv, IGiamsat, IChucvu, IToanha, IDuan } from 'src/types/khuvuc';
 import axios from 'axios';
 import { DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 // import moment from 'moment';
@@ -33,12 +34,12 @@ import dayjs from 'dayjs';
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentCalv?: ICalv;
+  currentToanha?: IToanha;
 };
 
 const STORAGE_KEY = 'accessToken';
 
-export default function ArticleNewEditForm({ currentCalv }: Props) {
+export default function GiamsatNewEditForm({ currentToanha }: Props) {
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
@@ -47,41 +48,30 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
+  const [Duan, setDuan] = useState<IDuan[]>([]);
 
-  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { duan, duanLoading, duanEmpty } = useGetDuan();
 
   useEffect(() => {
-    if (khoiCV?.length > 0) {
-      setKhoiCv(khoiCV);
+    if (duan?.length > 0) {
+      setDuan(duan);
     }
-  }, [khoiCV]);
+  }, [duan]);
+
 
   const NewProductSchema = Yup.object().shape({
-    Tenca: Yup.string().required('Phải có tên làm việc'),
-    ID_KhoiCV: Yup.string(),
-    Giobatdau: Yup.mixed<any>().nullable().required('Phải có giờ bắt đầu'),
-    Gioketthuc: Yup.mixed<any>()
-      .required('Phải có giờ kết thúc')
-      .test(
-        'is-later',
-        'Giờ kết thúc phải lớn hơn giờ bắt đầu',
-        (value, { parent }) => {
-          const { Giobatdau } = parent; // Lấy giá trị của trường Giobatdau từ parent object
-
-          return value.localeCompare(Giobatdau);
-        }
-      ),
+    Toanha: Yup.string().required('Phải có tên tòa nhà'),
+    ID_Duan: Yup.string(),
+    Sotang: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      Tenca: currentCalv?.Tenca || '',
-      ID_KhoiCV: `${currentCalv?.ID_KhoiCV}` || '' || null || undefined,
-      Giobatdau: currentCalv?.Giobatdau || null || undefined,
-      Gioketthuc: currentCalv?.Gioketthuc || null || undefined,
+      Toanha: currentToanha?.Toanha || '',
+      Sotang: currentToanha?.Sotang || '',
+      ID_Duan: `${currentToanha?.ID_Duan}` || '' || null || undefined,
     }),
-    [currentCalv]
+    [currentToanha]
   );
 
   const methods = useForm({
@@ -101,17 +91,18 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
   const values = watch();
 
   useEffect(() => {
-    if (currentCalv) {
+    if (currentToanha) {
       reset(defaultValues);
     }
-  }, [currentCalv, defaultValues, reset]);
+  }, [currentToanha, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
+    
       try {
-        if (currentCalv !== undefined) {
+        if (currentToanha !== undefined) {
           await axios
             .put(
-              `https://checklist.pmcweb.vn/be/api/ent_calv/update/${currentCalv.ID_Calv}`,
+              `https://checklist.pmcweb.vn/be/api/ent_toanha/update/${currentToanha.ID_Toanha}`,
               data,
               {
                 headers: {
@@ -123,7 +114,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
             .then((res) => {
               reset();
               enqueueSnackbar('Cập nhật thành công!');
-              router.push(paths.dashboard.calv.root);
+              router.push(paths.dashboard.toanha.root);
             })
             .catch((error) => {
               if (error.response) {
@@ -150,7 +141,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
             });
         } else {
           axios
-            .post(`https://checklist.pmcweb.vn/be/api/ent_calv/create`, data, {
+            .post(`https://checklist.pmcweb.vn/be/api/ent_toanha/create`, data, {
               headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -195,8 +186,6 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
   }
 );
 
-  console.log('defaultValues', values);
-
   const renderDetails = (
     <>
       {mdUp && (
@@ -205,7 +194,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
             Chi tiết
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Tên ca làm việc, giờ bắt đầu, giờ kết thúc,...
+            Dự án, tên tòa nhà, số tầng...
           </Typography>
         </Grid>
       )}
@@ -216,38 +205,26 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
-              {khoiCv?.length > 0 && (
+              {Duan?.length > 0 && (
                 <RHFSelect
-                  name="ID_KhoiCV"
-                  label="Khối công việc"
+                  name="ID_Duan"
+                  label="Dự án"
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
-                  {khoiCv?.map((item) => (
-                    <MenuItem key={`${item?.ID_Khoi}`} value={`${item?.ID_Khoi}`}>
-                      {item?.KhoiCV}
+                  {Duan?.map((item) => (
+                    <MenuItem key={`${item?.ID_Duan}`} value={`${item?.ID_Duan}`}>
+                      {item?.Duan}
                     </MenuItem>
                   ))}
                 </RHFSelect>
               )}
             </Stack>
+          
 
-            <RHFTextField name="Tenca" label="Tên hạng mục" />
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Giờ kiểm tra</Typography>
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                <RHFTextField
-                  type="time"
-                  value={values?.Giobatdau || '23:59:00'}
-                  name="Giobatdau"
-                />
-                <RHFTextField
-                  type="time"
-                  value={values?.Gioketthuc || '23:59:00'}
-                  name="Gioketthuc"
-                />
-              </Stack>
-            </Stack>
+            <RHFTextField name="Toanha" label="Tên tòa nhà" />
+            <RHFTextField name="Sotang" label="Số tầng" />
+           
           </Stack>
         </Card>
       </Grid>
@@ -263,7 +240,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
         sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
       >
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-          {!currentCalv ? 'Tạo mới' : 'Lưu thay đổi'}
+          {!currentToanha ? 'Tạo mới' : 'Lưu thay đổi'}
         </LoadingButton>
       </Grid>
     </>

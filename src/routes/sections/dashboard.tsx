@@ -114,6 +114,16 @@ const GiamsatListsPage = lazy(() => import('src/pages/dashboard/giamsat/list'));
 const GiamsatNewPage = lazy(() => import('src/pages/dashboard/giamsat/new'));
 const GiamsatEditPage = lazy(() => import('src/pages/dashboard/giamsat/edit'));
 
+// Dự án
+const DuanListsPage = lazy(() => import('src/pages/dashboard/duan/list'));
+const DuanNewPage = lazy(() => import('src/pages/dashboard/duan/new'));
+const DuanEditPage = lazy(() => import('src/pages/dashboard/duan/edit'));
+
+// Tòa nhà
+const ToanhaListsPage = lazy(() => import('src/pages/dashboard/toanha/list'));
+const ToanhaNewPage = lazy(() => import('src/pages/dashboard/toanha/new'));
+const ToanhaEditPage = lazy(() => import('src/pages/dashboard/toanha/edit'));
+
 // Checklist
 const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list'));
 const TCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/tlist'));
@@ -224,6 +234,24 @@ export const dashboardRoutes = [
           { path: ':id/edit', element: <CheckListEditPage /> },
           { path: 'new', element: <CheckListNewPage /> },
           { path: 'lists', element: <TCheckListListsPage /> },
+        ],
+      },
+      {
+        path: 'toanha',
+        children: [
+          { element: <ToanhaListsPage />, index: true },
+          { path: 'list', element: <ToanhaListsPage /> },
+          { path: ':id/edit', element: <ToanhaEditPage /> },
+          { path: 'new', element: <ToanhaNewPage /> },
+        ],
+      },
+      {
+        path: 'duan',
+        children: [
+          { element: <DuanListsPage />, index: true },
+          { path: 'list', element: <DuanListsPage /> },
+          { path: ':id/edit', element: <DuanEditPage /> },
+          { path: 'new', element: <DuanNewPage /> },
         ],
       },
       {

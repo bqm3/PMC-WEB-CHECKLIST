@@ -156,12 +156,29 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/giamsat/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/giamsat/${id}/edit`,
     },
+
     checklist: {
       root: `${ROOTS.DASHBOARD}/checklist`,
       new: `${ROOTS.DASHBOARD}/checklist/new`,
       details: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
       lists :`${ROOTS.DASHBOARD}/checklist/lists`, 
+    },
+    createEmployee: {
+      root: `${ROOTS.DASHBOARD}/create-employee`,
+      list: `${ROOTS.DASHBOARD}/create-employee/list`,
+    },
+    duan: {
+      root: `${ROOTS.DASHBOARD}/duan`,
+      new: `${ROOTS.DASHBOARD}/duan/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/duan/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/duan/${id}/edit`,
+    },
+    toanha: {
+      root: `${ROOTS.DASHBOARD}/toanha`,
+      new: `${ROOTS.DASHBOARD}/toanha/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/toanha/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/toanha/${id}/edit`,
     },
     userAdmin: {
       root: `${ROOTS.DASHBOARD}/user/`,
@@ -192,11 +209,7 @@ export const paths = {
     accountEmployee: {
       root: `${ROOTS.DASHBOARD}/account-employee`,
     },
-    createEmployee: {
-      root: `${ROOTS.DASHBOARD}/create-employee`,
-      list: `${ROOTS.DASHBOARD}/create-employee/list`,
-    }
-    ,
+    
     user: {
       root: `${ROOTS.DASHBOARD}/userMinimal`,
       new: `${ROOTS.DASHBOARD}/userMinimal/new`,
