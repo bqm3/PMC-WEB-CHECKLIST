@@ -377,14 +377,10 @@ function applyFilter({
 
   if (name) {
     inputData = inputData?.filter(
-      (checklist) =>
-        checklist.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.Ghichu.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.Tieuchuan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.ent_hangmuc.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (order) =>
+        order.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+      order.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+      order.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
