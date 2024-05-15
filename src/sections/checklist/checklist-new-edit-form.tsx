@@ -190,7 +190,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     // Create a new array with the desired structure: { value: ID_Calv, label: Tenca }
     const newArray = filteredKhoiCV?.map((item) => ({
       ID_Hangmuc: item.ID_Hangmuc,
-      Hangmuc: item.Hangmuc,
+      Hangmuc: item,
     }));
 
     // Update the state with the new array
@@ -352,7 +352,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             >
               {HangMuc?.map((item: any) => (
                 <MenuItem key={item?.ID_Hangmuc} value={item?.ID_Hangmuc}>
-                  {item?.Hangmuc}
+                  {item?.Hangmuc?.Hangmuc} - {item?.Hangmuc?.MaQrCode}
                 </MenuItem>
               ))}
             </RHFSelect>
@@ -444,3 +444,4 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     </FormProvider>
   );
 }
+

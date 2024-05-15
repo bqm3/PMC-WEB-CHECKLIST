@@ -61,17 +61,18 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
     Tenca: Yup.string().required('Phải có tên làm việc'),
     ID_KhoiCV: Yup.string(),
     Giobatdau: Yup.mixed<any>().nullable().required('Phải có giờ bắt đầu'),
-    Gioketthuc: Yup.mixed<any>()
-      .required('Phải có giờ kết thúc')
-      .test(
-        'is-later',
-        'Giờ kết thúc phải lớn hơn giờ bắt đầu',
-        (value, { parent }) => {
-          const { Giobatdau } = parent; // Lấy giá trị của trường Giobatdau từ parent object
+    Gioketthuc: Yup.mixed<any>().nullable().required('Phải có giờ kết thúc'),
+    // Gioketthuc: Yup.mixed<any>()
+    //   .required('Phải có giờ kết thúc')
+    //   .test(
+    //     'is-later',
+    //     'Giờ kết thúc phải lớn hơn giờ bắt đầu',
+    //     (value, { parent }) => {
+    //       const { Giobatdau } = parent; // Lấy giá trị của trường Giobatdau từ parent object
 
-          return value.localeCompare(Giobatdau);
-        }
-      ),
+    //       return value.localeCompare(Giobatdau);
+    //     }
+    //   ),
   });
 
   const defaultValues = useMemo(
@@ -79,7 +80,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
       Tenca: currentCalv?.Tenca || '',
       ID_KhoiCV: `${currentCalv?.ID_KhoiCV}` || '' || null || undefined,
       Giobatdau: currentCalv?.Giobatdau || null || undefined,
-      Gioketthuc: currentCalv?.Gioketthuc || null || undefined,
+      Gioketthuc: currentCalv?.Gioketthuc || undefined,
     }),
     [currentCalv]
   );

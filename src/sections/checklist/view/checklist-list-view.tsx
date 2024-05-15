@@ -55,12 +55,12 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_
 
 const TABLE_HEAD = [
   // { id: 'ID_Checklist', label: '', width: 1 },
-  { id: 'Checklist', label: 'Tên checklist' },
+  { id: 'Checklist', label: 'Tên checklist' ,width: 200, },
   { id: 'Giatridinhdanh', label: 'Giá trị định danh', width: 100, align: 'center' },
-  { id: 'Giatrinhan', label: 'Giá trị nhận', width: 120, align: 'center' },
+  { id: 'Giatrinhan', label: 'Giá trị nhận', width: 100, align: 'center' },
   { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
-  { id: 'ID_Tang', label: 'Tầng', width: 100, align: 'center' },
-  { id: 'Sothutu', label: 'Số thứ tự', width: 100, align: 'center' },
+  { id: 'ID_Tang', label: 'Tầng', width: 80, align: 'center' },
+  { id: 'Sothutu', label: 'Số thứ tự', width: 40, align: 'center' },
   { id: 'Maso', label: 'Mã số', width: 100, align: 'center' },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
   { id: 'sCalv', label: 'Ca làm việc', width: 140, align: 'center' },
