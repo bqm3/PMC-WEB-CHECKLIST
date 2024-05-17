@@ -37,7 +37,7 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Duan, Duan } = row;
+  const { ID_Duan, Duan, Diachi } = row;
 
   const confirm = useBoolean();
 
@@ -75,6 +75,9 @@ export default function CalvTableRow({
             color: 'text.disabled',
           }}
         />
+      </TableCell>
+      <TableCell>
+      {Diachi}
       </TableCell>
       
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

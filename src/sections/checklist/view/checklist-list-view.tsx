@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import {  useGetChecklist, useGetCalv } from 'src/api/khuvuc';
+import { useGetChecklist, useGetCalv } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -38,16 +38,11 @@ import {
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 // types
-import {
-  IChecklist,
-  IKhuvucTableFilters,
-  IKhuvucTableFilterValue,
-} from 'src/types/khuvuc';
+import { IChecklist, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
 import ChecklistTableRow from '../checklist-table-row';
 import ChecklistTableToolbar from '../checklist-table-toolbar';
 import ChecklistTableFiltersResult from '../checklist-table-filters-result';
-
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +50,7 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_
 
 const TABLE_HEAD = [
   // { id: 'ID_Checklist', label: '', width: 1 },
-  { id: 'Checklist', label: 'Tên checklist' ,width: 200, },
+  { id: 'Checklist', label: 'Tên checklist', width: 200 },
   { id: 'Giatridinhdanh', label: 'Giá trị định danh', width: 100, align: 'center' },
   { id: 'Giatrinhan', label: 'Giá trị nhận', width: 100, align: 'center' },
   { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
@@ -99,15 +94,13 @@ export default function AreaListView() {
     limit: table.rowsPerPage,
   });
 
-  const {calv} = useGetCalv()
+  const { calv } = useGetCalv();
 
- 
   // Use the checklist data in useEffect to set table data
   useEffect(() => {
     if (checkList) {
       setTableData(checkList);
     }
-    
   }, [checkList, table.page, table.rowsPerPage]);
 
   const dataFiltered = applyFilter({
@@ -116,12 +109,8 @@ export default function AreaListView() {
     filters,
   });
 
- 
-  const dataInPage = dataFiltered.slice(
-    0,
-    table.rowsPerPage
-  )
-  
+  const dataInPage = dataFiltered.slice(0, table.rowsPerPage);
+
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters.name || filters.status !== 'all';
@@ -192,7 +181,7 @@ export default function AreaListView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered?.length,
     });
-  }, [dataFiltered?.length,dataInPage.length, table, tableData]);
+  }, [dataFiltered?.length, dataInPage.length, table, tableData]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -234,7 +223,6 @@ export default function AreaListView() {
         />
 
         <Card>
-         
           <ChecklistTableToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -287,18 +275,17 @@ export default function AreaListView() {
                 />
 
                 <TableBody>
-                  {dataInPage
-                    .map((row) => (
-                      <ChecklistTableRow
-                        key={row.ID_Checklist}
-                        calv={calv}
-                        row={row}
-                        selected={table.selected.includes(row.ID_Checklist)}
-                        onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
-                        onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
-                        onViewRow={() => handleViewRow(row.ID_Checklist)}
-                      />
-                    ))}
+                  {dataInPage.map((row) => (
+                    <ChecklistTableRow
+                      key={row.ID_Checklist}
+                      calv={calv}
+                      row={row}
+                      selected={table.selected.includes(row.ID_Checklist)}
+                      onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
+                      onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
+                      onViewRow={() => handleViewRow(row.ID_Checklist)}
+                    />
+                  ))}
 
                   <TableEmptyRows
                     height={denseHeight}
@@ -379,8 +366,8 @@ function applyFilter({
     inputData = inputData?.filter(
       (order) =>
         order.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-      order.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-      order.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        order.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

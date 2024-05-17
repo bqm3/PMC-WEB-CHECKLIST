@@ -62,6 +62,7 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_
 const TABLE_HEAD = [
   { id: 'ID_Duan', label: 'Mã dự án', width: 120 },
   { id: 'Duan', label: 'Tên dự án'},
+  { id: 'Diachi', label: 'Địa chỉ'},
   
   { id: '', width: 88 },
 ];

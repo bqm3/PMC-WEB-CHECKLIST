@@ -47,6 +47,9 @@ export type E_Tang = {
 export type IDuan = {
   ID_Duan: string;
   Duan: string;
+  Diachi: string;
+  Vido: string;
+  Kinhdo: string;
 }
 
 export type IGiamsat = {

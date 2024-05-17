@@ -55,6 +55,9 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
   const defaultValues = useMemo(
     () => ({
       Duan: currentDuan?.Duan || '',
+      Diachi: currentDuan?.Diachi || '',
+      Vido: currentDuan?.Vido || '',
+      Kinhdo: currentDuan?.Kinhdo || '',
     }),
     [currentDuan]
   );
@@ -188,6 +191,9 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField name="Duan" label="Tên dự án" />
+            <RHFTextField name="Diachi" label="Địa chỉ" />
+            <RHFTextField name="Vido" label="Vĩ độ" />
+            <RHFTextField name="Kinhdo" label="Kinh độ" />
           </Stack>
         </Card>
       </Grid>
