@@ -217,15 +217,15 @@ export default function GiamsatListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Danh sách dự án"
+          heading="Danh sách tài khoản"
           links={[
             {
               name: 'Dashboard',
               href: paths.dashboard.root,
             },
             {
-              name: 'Dự án',
-              href: paths.dashboard.duan.root,
+              name: 'Tài khoản',
+              href: paths.dashboard.createEmployee.root,
             },
             { name: 'Danh sách' },
           ]}

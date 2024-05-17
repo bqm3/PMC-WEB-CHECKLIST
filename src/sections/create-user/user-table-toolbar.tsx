@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 // types
-import {IKhuvucTableFilters, IKhuvucTableFilterValue} from 'src/types/khuvuc'
+import { IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -82,7 +82,7 @@ export default function OrderTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Tìm kiếm theo tên giám sát, số điện thoại,..."
+            placeholder="Tìm kiếm theo tài khoản, số điện thoại,..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

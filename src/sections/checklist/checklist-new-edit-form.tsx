@@ -444,4 +444,3 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     </FormProvider>
   );
 }
-

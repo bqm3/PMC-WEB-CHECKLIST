@@ -79,7 +79,6 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   const NewProductSchema = Yup.object().shape({
     Hangmuc: Yup.string().required('Phải có tên hạng mục'),
-    Tieuchuankt: Yup.string().required('Phải có tiêu hạng mục'),
   });
 
   const defaultValues = useMemo(
@@ -224,7 +223,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
                 >
                   {khuVuc?.map((item) => (
                     <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
-                      {item?.Tenkhuvuc} - {item?.ent_khoicv?.KhoiCV}
+                      {item?.Tenkhuvuc} - {item?.ent_toanha?.Toanha}
                     </MenuItem>
                   ))}
                 </RHFSelect>

@@ -403,7 +403,6 @@ function applyFilter({
     inputData = inputData?.filter(
       (order) =>
         order.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.ent_khuvuc.Tenkhuvuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }

@@ -61,9 +61,9 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_
 
 const TABLE_HEAD = [
   { id: 'ID_Duan', label: 'Mã dự án', width: 120 },
-  { id: 'Duan', label: 'Tên dự án'},
-  { id: 'Diachi', label: 'Địa chỉ'},
-  
+  { id: 'Duan', label: 'Tên dự án' },
+  { id: 'Diachi', label: 'Địa chỉ' },
+
   { id: '', width: 88 },
 ];
 
@@ -90,10 +90,9 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { duan, duanLoading, duanEmpty } =useGetDuan();
+  const { duan, duanLoading, duanEmpty } = useGetDuan();
 
   const [tableData, setTableData] = useState<IDuan[]>([]);
-
 
   useEffect(() => {
     if (duan?.length > 0) {
@@ -224,7 +223,6 @@ export default function GiamsatListView() {
         />
 
         <Card>
-
           <DuanTableToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -370,14 +368,10 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 
-       
+        order.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.Diachi.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
-
-  // if (status !== 'all') {
-  //   inputData = inputData?.filter((order) => `${order?.ID_KhoiCV}` === status);
-  // }
 
   return inputData;
 }
