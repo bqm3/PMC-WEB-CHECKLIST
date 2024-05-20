@@ -58,11 +58,10 @@ const TABLE_HEAD = [
   { id: 'Checklist', label: 'Tên checklist' },
   { id: 'Giatridinhdanh', label: 'Giá trị định danh', width: 100, align: 'center' },
   { id: 'Giatrinhan', label: 'Giá trị nhận', width: 120, align: 'center' },
-  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
   { id: 'ID_Tang', label: 'Tầng', width: 100, align: 'center' },
   { id: 'Sothutu', label: 'Số thứ tự', width: 100, align: 'center' },
   { id: 'Maso', label: 'Mã số', width: 100, align: 'center' },
-  { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
+  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
   { id: 'sCalv', label: 'Ca làm việc', width: 140, align: 'center' },
   { id: '', width: 88 },
 ];
@@ -142,7 +141,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_hangmuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -150,7 +149,7 @@ export default function ChecklistCalvListView() {
         })
         .then((res) => {
           // reset();
-          const deleteRow = tableData?.filter((row) => row.ID_Hangmuc !== id);
+          const deleteRow = tableData?.filter((row) => row.ID_Checklist !== id);
           setTableData(deleteRow);
 
           table.onUpdatePageDeleteRow(dataInPage.length);
@@ -182,6 +181,50 @@ export default function ChecklistCalvListView() {
     },
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
+
+  // const handleDeleteRow = useCallback(
+  //   async (id: string) => {
+  //     await axios
+  //       .put(`https://checklist.pmcweb.vn/be/api/ent_hangmuc/delete/${id}`, [], {
+  //         headers: {
+  //           Accept: 'application/json',
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       })
+  //       .then((res) => {
+  //         // reset();
+  //         const deleteRow = tableData?.filter((row) => row.ID_Hangmuc !== id);
+  //         setTableData(deleteRow);
+
+  //         table.onUpdatePageDeleteRow(dataInPage.length);
+  //         enqueueSnackbar('Xóa thành công!');
+  //       })
+  //       .catch((error) => {
+  //         if (error.response) {
+  //           enqueueSnackbar({
+  //             variant: 'error',
+  //             autoHideDuration: 3000,
+  //             message: `${error.response.data.message}`,
+  //           });
+  //         } else if (error.request) {
+  //           // Lỗi không nhận được phản hồi từ server
+  //           enqueueSnackbar({
+  //             variant: 'error',
+  //             autoHideDuration: 3000,
+  //             message: `Không nhận được phản hồi từ máy chủ`,
+  //           });
+  //         } else {
+  //           // Lỗi khi cấu hình request
+  //           enqueueSnackbar({
+  //             variant: 'error',
+  //             autoHideDuration: 3000,
+  //             message: `Lỗi gửi yêu cầu`,
+  //           });
+  //         }
+  //       });
+  //   },
+  //   [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
+  // );
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Hangmuc));

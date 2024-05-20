@@ -41,7 +41,7 @@ import {
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 // types
-import { IHangMuc, IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
+import { IHangMuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
 import OrderTableRow from '../article-table-row';
 import OrderTableToolbar from '../article-table-toolbar';
@@ -55,7 +55,8 @@ const TABLE_HEAD = [
   { id: 'ID_Hangmuc', label: 'Mã hạng mục', width: 150 },
   { id: 'Hangmuc', label: 'Tên hạng mục' },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
-  { id: 'ID_Khuvuc', label: 'Khu vực', width: 140, align: 'center' },
+  { id: 'ID_Khuvuc', label: 'Khu vực', width: 150, align: 'center' },
+  { id: 'ID_Toanha', label: 'Tòa nhà', width: 150, align: 'center' },
   { id: '', width: 88 },
 ];
 
@@ -403,7 +404,9 @@ function applyFilter({
     inputData = inputData?.filter(
       (order) =>
         order.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.ent_khuvuc.Tenkhuvuc.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        order.ent_khuvuc.Tenkhuvuc.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order?.MaQrCode?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.ent_khuvuc.ent_toanha.Toanha.toLowerCase().indexOf(name.toLowerCase()) !== -1 
     );
   }
 

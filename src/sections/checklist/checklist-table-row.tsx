@@ -99,7 +99,6 @@ export default function AreaTableRow({
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <ListItemText
           primary={Checklist}
-          // secondary={ent_khoicv?.KhoiCV}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
             component: 'span',
@@ -109,11 +108,18 @@ export default function AreaTableRow({
       </TableCell>
       <TableCell align="center"> {Giatridinhdanh} </TableCell>
       <TableCell align="center"> {Giatrinhan} </TableCell>
-      <TableCell> {ent_hangmuc?.Hangmuc} </TableCell>
       <TableCell align="center"> {ent_tang.Tentang} </TableCell>
       <TableCell align="center"> {Sothutu} </TableCell>
       <TableCell align="center"> {Maso} </TableCell>
-      <TableCell align="center"> {MaQrCode} </TableCell>
+      <TableCell align="center">  <ListItemText
+          primary={ent_hangmuc?.Hangmuc}
+          secondary={ent_hangmuc?.MaQrCode}
+          primaryTypographyProps={{ typography: 'body2' }}
+          secondaryTypographyProps={{
+            component: 'span',
+            color: 'text.disabled',
+          }}
+        /></TableCell>
       <TableCell width={140}>{labels}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

@@ -42,14 +42,7 @@ export default function AreaTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const {
-    ID_Khuvuc,
-    ID_Hangmuc,
-    Hangmuc,
-    Tieuchuankt,
-    MaQrCode,
-    ent_khuvuc,
-  } = row;
+  const { ID_Khuvuc, ID_Hangmuc, Hangmuc, Tieuchuankt, MaQrCode, ent_khuvuc } = row;
 
   const confirm = useBoolean();
 
@@ -78,7 +71,6 @@ export default function AreaTableRow({
       </TableCell>
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-
         <ListItemText
           primary={Hangmuc}
           // secondary={ent_khoicv?.KhoiCV}
@@ -91,6 +83,7 @@ export default function AreaTableRow({
       </TableCell>
       <TableCell align="center"> {MaQrCode} </TableCell>
       <TableCell> {ent_khuvuc?.Tenkhuvuc} </TableCell>
+      <TableCell> {ent_khuvuc?.ent_toanha?.Toanha} </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -99,7 +92,6 @@ export default function AreaTableRow({
     </TableRow>
   );
 
- 
   return (
     <>
       {renderPrimary}
@@ -110,7 +102,7 @@ export default function AreaTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-         <MenuItem
+        <MenuItem
           onClick={() => {
             onViewRow();
             popover.onClose();
@@ -129,8 +121,6 @@ export default function AreaTableRow({
           <Iconify icon="solar:trash-bin-trash-bold" />
           Xóa
         </MenuItem>
-
-       
       </CustomPopover>
 
       <ConfirmDialog

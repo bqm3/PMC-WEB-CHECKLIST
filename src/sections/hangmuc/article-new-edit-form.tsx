@@ -67,18 +67,27 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   const [includeTaxes, setIncludeTaxes] = useState(false);
 
-  const [khuVuc, setKhuVuc] = useState<IKhuvuc[]>([]);
+  const [khuVuc, setKhuVuc] = useState<any>([]);
+  const [toaNha, setToaNha] = useState<IToanha[]>([]);
 
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
+  const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
+
+  // useEffect(() => {
+  //   if (khuvuc?.length > 0) {
+  //     setKhuVuc(khuvuc);
+  //   }
+  // }, [khuvuc]);
 
   useEffect(() => {
-    if (khuvuc?.length > 0) {
-      setKhuVuc(khuvuc);
+    if (toanha?.length > 0) {
+      setToaNha(toanha);
     }
-  }, [khuvuc]);
+  }, [toanha]);
 
   const NewProductSchema = Yup.object().shape({
     Hangmuc: Yup.string().required('Phải có tên hạng mục'),
+    ID_Toanha: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -87,6 +96,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       Tieuchuankt: currentArticle?.Tieuchuankt || '',
       MaQrCode: currentArticle?.MaQrCode || '',
       ID_Khuvuc: currentArticle?.ID_Khuvuc || null,
+      ID_Toanha: currentArticle?.ent_khuvuc?.ID_Toanha || null || '',
     }),
     [currentArticle]
   );
@@ -107,23 +117,48 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
   const values = watch();
 
   useEffect(() => {
+    let filteredToanha;
+    // Filter the hangMuc array based on ID_KhoiCV from values
+    if (values.ID_Toanha) {
+      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha) || [];
+
+      // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
+     
+    } else {
+      filteredToanha = khuvuc;
+    }
+    const newArray = filteredToanha?.map((item: any) => ({
+      ID_Khuvuc: item.ID_Khuvuc,
+      Khuvuc: item,
+    }));
+
+    // Update the state with the new array
+    setKhuVuc(newArray);
+  }, [values.ID_Toanha, khuvuc]);
+
+  useEffect(() => {
     if (currentArticle) {
       reset(defaultValues);
     }
   }, [currentArticle, defaultValues, reset]);
 
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentArticle !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`, data, {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
+          .put(
+            `https://checklist.pmcweb.vn/be/api/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`,
+            data,
+            {
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          )
           .then((res) => {
-            reset();
+            // reset();
             enqueueSnackbar('Cập nhật thành công!');
             router.push(paths.dashboard.hangmuc.root);
           })
@@ -159,7 +194,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
             },
           })
           .then((res) => {
-            reset();
+            // reset();
             enqueueSnackbar('Tạo mới thành công!');
           })
           .catch((error) => {
@@ -214,6 +249,23 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
+              {toaNha?.length > 0 && (
+                <RHFSelect
+                  name="ID_Toanha"
+                  label="Tòa nhà"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {toaNha?.map((item) => (
+                    <MenuItem key={item?.ID_Toanha} value={item?.ID_Toanha}>
+                      {item?.Toanha}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+
+            <Stack spacing={1.5}>
               {khuVuc?.length > 0 && (
                 <RHFSelect
                   name="ID_Khuvuc"
@@ -221,9 +273,9 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
-                  {khuVuc?.map((item) => (
+                  {khuVuc?.map((item: any) => (
                     <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
-                      {item?.Tenkhuvuc} - {item?.ent_toanha?.Toanha}
+                      {item?.Khuvuc?.ent_toanha?.Toanha} - {item?.Khuvuc?.Tenkhuvuc}
                     </MenuItem>
                   ))}
                 </RHFSelect>

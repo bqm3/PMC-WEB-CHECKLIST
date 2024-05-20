@@ -83,12 +83,25 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
 
   const [Calv, setCalv] = useState<any>([]);
+  const [khuVuc, setKhuVuc] = useState<any>([]);
+  const [toaNha, setToaNha] = useState<IToanha[]>([]);
   const [HangMuc, setHangMuc] = useState<any>([]);
+
+  const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
+  const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (toanha?.length > 0) {
+      setToaNha(toanha);
+    }
+  }, [toanha]);
 
   const NewProductSchema = Yup.object().shape({
     Checklist: Yup.string().required('Phải có tên checklist'),
     ID_KhoiCV: Yup.string(),
+    ID_Khuvuc: Yup.string(),
+    ID_Toanha: Yup.string()
   });
 
   const defaultValues = useMemo(
@@ -102,6 +115,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       Ghichu: currentChecklist?.Ghichu || '',
       Tieuchuan: currentChecklist?.Tieuchuan || '',
       ID_KhoiCV: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_KhoiCV || null || '',
+      ID_Khuvuc: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_Khuvuc || null || '',
+      ID_Toanha: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_Toanha || null || '',
       ID_Hangmuc: currentChecklist?.ID_Hangmuc || null,
       ID_Tang: currentChecklist?.ID_Tang || null,
       sCalv: currentChecklist?.sCalv || [],
@@ -177,27 +192,49 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   }, [values.ID_KhoiCV, calv, defaultValues.sCalv]);
 
   useEffect(() => {
-    let filteredKhoiCV;
-    if (values.ID_KhoiCV) {
-      // Filter the calv array based on ID_KhoiCV from values
-      filteredKhoiCV =
-        hangMuc?.filter((item) => item.ent_khuvuc.ID_KhoiCV === values.ID_KhoiCV) || [];
-    } else {
-      // Use the full calv array if ID_KhoiCV is not provided
-      filteredKhoiCV = hangMuc;
-    }
+    let filteredToanha;
+    // Filter the hangMuc array based on ID_KhoiCV from values
+    if (values.ID_Toanha) {
+      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha) || [];
 
-    // Create a new array with the desired structure: { value: ID_Calv, label: Tenca }
-    const newArray = filteredKhoiCV?.map((item) => ({
-      ID_Hangmuc: item.ID_Hangmuc,
-      Hangmuc: item,
+      // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
+     
+    } else {
+      filteredToanha = khuvuc;
+    }
+    const newArray = filteredToanha?.map((item: any) => ({
+      ID_Khuvuc: item.ID_Khuvuc,
+      Khuvuc: item,
     }));
 
     // Update the state with the new array
-    setHangMuc(newArray);
+    setKhuVuc(newArray);
+  }, [values.ID_Toanha, khuvuc]);
 
-    // Set loading state to
-  }, [values.ID_KhoiCV, hangMuc]);
+  useEffect(() => {
+    let filteredKhoiCV;
+  
+    if (values.ID_KhoiCV) {
+      // Filter the hangMuc array based on ID_KhoiCV from values
+      filteredKhoiCV = hangMuc?.filter(item => item.ent_khuvuc.ID_KhoiCV === values.ID_KhoiCV) || [];
+      if (values.ID_Khuvuc) {
+        filteredKhoiCV = filteredKhoiCV.filter(item => item.ent_khuvuc.ID_Khuvuc === values.ID_Khuvuc);
+      }
+    } else {
+      // Use the full hangMuc array if ID_KhoiCV is not provided
+      filteredKhoiCV = hangMuc;
+    }
+  
+    // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
+    const newArray = filteredKhoiCV?.map(item => ({
+      ID_Hangmuc: item.ID_Hangmuc,
+      Hangmuc: item,
+    }));
+  
+    // Update the state with the new array
+    setHangMuc(newArray);
+  }, [values.ID_KhoiCV, values.ID_Khuvuc, hangMuc]);
+  
 
   useEffect(() => {
     if (currentChecklist) {
@@ -206,7 +243,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   }, [currentChecklist, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data', data);
     try {
       if (currentChecklist !== undefined) {
         await axios
@@ -221,7 +257,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             }
           )
           .then((res) => {
-            reset();
+            // reset();
             enqueueSnackbar('Cập nhật thành công!');
             router.push(paths.dashboard.checklist.root);
           })
@@ -257,7 +293,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             },
           })
           .then((res) => {
-            reset();
+            // reset();
             enqueueSnackbar('Tạo mới thành công!');
           })
           .catch((error) => {
@@ -343,6 +379,34 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
                 </RHFSelect>
               )}
             </Stack>
+
+            <RHFSelect
+              name="ID_Toanha"
+              label="Tòa nhà"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {toaNha?.map((item: any) => (
+                <MenuItem key={item?.ID_Toanha} value={item?.ID_Toanha}>
+                  {item?.Toanha}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+
+            {khuVuc?.length > 0 && (
+                <RHFSelect
+                  name="ID_Khuvuc"
+                  label="Khu vực"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {khuVuc?.map((item: any) => (
+                    <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
+                      {item?.Khuvuc?.ent_toanha?.Toanha} - {item?.Khuvuc?.Tenkhuvuc}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
 
             <RHFSelect
               name="ID_Hangmuc"
