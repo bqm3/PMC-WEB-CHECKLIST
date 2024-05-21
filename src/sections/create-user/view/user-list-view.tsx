@@ -201,7 +201,7 @@ export default function GiamsatListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.duan.edit(id));
+      router.push(paths.dashboard.createEmployee.edit(id));
     },
     [router]
   );

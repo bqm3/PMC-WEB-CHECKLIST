@@ -45,6 +45,8 @@ type Props = {
 const STORAGE_KEY = 'accessToken';
 
 export default function UserNewEditForm({ currentUser }: Props) {
+
+  console.log('currentUser',currentUser)
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -117,7 +119,44 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios
+      if(currentUser !== undefined){
+        await axios
+        .put(`https://checklist.pmcweb.vn/be/api/ent_user/update/${currentUser?.ID_User}`, data, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          reset();
+          enqueueSnackbar('Cập nhật tài khoản!');
+          router.push(paths.dashboard.createEmployee.list);
+        })
+        .catch((error) => {
+          if (error.response) {
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `${error.response.data.message}`,
+            });
+          } else if (error.request) {
+            // Lỗi không nhận được phản hồi từ server
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Không nhận được phản hồi từ máy chủ`,
+            });
+          } else {
+            // Lỗi khi cấu hình request
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Lỗi gửi yêu cầu`,
+            });
+          }
+        });
+      }else {
+        await axios
         .post(`https://checklist.pmcweb.vn/be/api/ent_user/register`, data, {
           headers: {
             Accept: 'application/json',
@@ -152,6 +191,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
             });
           }
         });
+      }
     } catch (error) {
       enqueueSnackbar({
         variant: 'error',
@@ -217,12 +257,15 @@ export default function UserNewEditForm({ currentUser }: Props) {
               </RHFSelect>
               <RHFTextField name="UserName" label="Tài khoản" />
               <RHFTextField name="Emails" label="Email" />
-              <RHFTextField name="Password" label="Mật khẩu" />
+              
+              {
+                currentUser == null && <RHFTextField name="Password" label="Mật khẩu" />
+              }
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Tạo tài khoản
+              {!currentUser ? 'Tạo mới' : 'Lưu thay đổi'}
               </LoadingButton>
             </Stack>
           </Card>
