@@ -58,9 +58,9 @@ const TABLE_HEAD = [
 
   { id: 'ID_Toanha', label: 'Tòa nhà', width: 140, align: 'center' },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 110 },
   { id: 'Sothutu', label: 'Số thứ tự', width: 100 },
   { id: 'Makhuvuc', label: 'Mã khu vực', width: 100 },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 100 },
   { id: '', width: 88 },
 ];
 

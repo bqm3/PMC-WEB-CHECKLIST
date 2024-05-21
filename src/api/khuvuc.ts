@@ -503,6 +503,34 @@ export function useGetChecklist(pag: any) {
   return memoizedValue;
 }
 
+export function useGetChecklistWeb() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_checklist/web`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+  console.log('data',data)
+
+  const memoizedValue = useMemo(
+    () => ({
+      checkList: (data?.data as IChecklist[]) || [],
+      checkListLoading: isLoading,
+      checkListError: error,
+      checkListValidating: isValidating,
+      checkListEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetChecklistDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = `https://checklist.pmcweb.vn/be/api/ent_checklist/${id}`;

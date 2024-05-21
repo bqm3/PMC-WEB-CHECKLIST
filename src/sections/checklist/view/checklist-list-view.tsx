@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 // @mui
 import { alpha } from '@mui/material/styles';
+import Label from 'src/components/label';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
@@ -17,7 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import {  useGetChecklist, useGetCalv } from 'src/api/khuvuc';
+import { useGetChecklistWeb, useGetCalv } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -38,16 +39,11 @@ import {
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 // types
-import {
-  IChecklist,
-  IKhuvucTableFilters,
-  IKhuvucTableFilterValue,
-} from 'src/types/khuvuc';
+import { IChecklist, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
 import ChecklistTableRow from '../checklist-table-row';
 import ChecklistTableToolbar from '../checklist-table-toolbar';
 import ChecklistTableFiltersResult from '../checklist-table-filters-result';
-
 
 // ----------------------------------------------------------------------
 
@@ -93,20 +89,15 @@ export default function ChecklistCalvListView() {
 
   const [tableData, setTableData] = useState<IChecklist[]>([]);
 
-  const { checkList, checkListTotalPages, checklistTotalCount } = useGetChecklist({
-    page: table.page,
-    limit: table.rowsPerPage,
-  });
+  const { checkList } = useGetChecklistWeb();
 
-  const {calv} = useGetCalv()
+  const { calv } = useGetCalv();
 
- 
   // Use the checklist data in useEffect to set table data
   useEffect(() => {
     if (checkList) {
       setTableData(checkList);
     }
-    
   }, [checkList, table.page, table.rowsPerPage]);
 
   const dataFiltered = applyFilter({
@@ -115,12 +106,11 @@ export default function ChecklistCalvListView() {
     filters,
   });
 
- 
   const dataInPage = dataFiltered.slice(
-    0,
-    table.rowsPerPage
-  )
-  
+    table.page * table.rowsPerPage,
+    table.page * table.rowsPerPage + table.rowsPerPage
+  );
+
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters.name || filters.status !== 'all';
@@ -190,7 +180,7 @@ export default function ChecklistCalvListView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered?.length,
     });
-  }, [dataFiltered?.length,dataInPage.length, table, tableData]);
+  }, [dataFiltered?.length, dataInPage.length, table, tableData]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -232,7 +222,55 @@ export default function ChecklistCalvListView() {
         />
 
         <Card>
-         
+          <Tabs
+            value={filters.status}
+            onChange={handleFilterStatus}
+            sx={{
+              px: 2.5,
+              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+            }}
+          >
+            {STATUS_OPTIONS.map((tab) => (
+              <Tab
+                key={tab.value}
+                iconPosition="end"
+                value={tab.value}
+                label={tab.label}
+                icon={
+                  <Label
+                    variant={
+                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                    }
+                    color={
+                      (tab.value === '1' && 'success') ||
+                      (tab.value === '2' && 'warning') ||
+                      (tab.value === '3' && 'error') ||
+                      'default'
+                    }
+                  >
+                    {tab.value === 'all' && checkList?.length}
+                    {tab.value === '1' &&
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '1'
+                      ).length}
+
+                    {tab.value === '2' &&
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '2'
+                      ).length}
+                    {tab.value === '3' &&
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '3'
+                      ).length}
+                    {tab.value === '4' &&
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '4'
+                      ).length}
+                  </Label>
+                }
+              />
+            ))}
+          </Tabs>
           <ChecklistTableToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -285,18 +323,17 @@ export default function ChecklistCalvListView() {
                 />
 
                 <TableBody>
-                  {dataInPage
-                    .map((row) => (
-                      <ChecklistTableRow
-                        key={row.ID_Checklist}
-                        calv={calv}
-                        row={row}
-                        selected={table.selected.includes(row.ID_Checklist)}
-                        onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
-                        onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
-                        onViewRow={() => handleViewRow(row.ID_Checklist)}
-                      />
-                    ))}
+                  {dataInPage.map((row) => (
+                    <ChecklistTableRow
+                      key={row.ID_Checklist}
+                      calv={calv}
+                      row={row}
+                      selected={table.selected.includes(row.ID_Checklist)}
+                      onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
+                      onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
+                      onViewRow={() => handleViewRow(row.ID_Checklist)}
+                    />
+                  ))}
 
                   <TableEmptyRows
                     height={denseHeight}
@@ -310,7 +347,7 @@ export default function ChecklistCalvListView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={checklistTotalCount}
+            count={dataFiltered.length}
             rowsPerPageOptions={[20, 30, 50]}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
@@ -376,17 +413,16 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (checklist) =>
-        checklist.Checklist.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.Giatridinhdanh.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.Maso.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.Giatrinhan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.ent_hangmuc.Hangmuc.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        checklist.ent_hangmuc.MaQrCode?.toLowerCase().indexOf(name?.toLowerCase()) !== -1 
+        `${checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.ent_hangmuc.MaQrCode}`.toLowerCase().indexOf(name?.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((checklist) => `${checklist?.ID_Checklist}` === status);
+    inputData = inputData?.filter((item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === status);
   }
 
   return inputData;

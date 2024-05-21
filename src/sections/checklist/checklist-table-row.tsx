@@ -91,6 +91,7 @@ export default function AreaTableRow({
       {name}
     </Label>
   ));
+
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
