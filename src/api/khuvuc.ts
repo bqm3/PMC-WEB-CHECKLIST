@@ -124,7 +124,7 @@ export function useGetToanha() {
 
 export function useGetTang() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/ent_tang/';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_tang/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
