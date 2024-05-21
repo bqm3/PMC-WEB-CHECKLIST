@@ -159,6 +159,15 @@ export function useNavData() {
           ],
         },
         {
+          title: t('tang'),
+          path: paths.dashboard.tang.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('create'), path: paths.dashboard.tang.new },
+            { title: t('list'), path: paths.dashboard.tang.root },
+          ],
+        },
+        {
           title: t('createaccount'),
           path: paths.dashboard.createEmployee.root,
           icon: ICONS.user,

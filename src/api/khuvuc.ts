@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -124,7 +124,7 @@ export function useGetToanha() {
 
 export function useGetTang() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/ent_tang/';
+  const URL = 'https://checklist.pmcweb.vn/be/ent_tang/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -137,11 +137,11 @@ export function useGetTang() {
 
   const memoizedValue = useMemo(
     () => ({
-      tang: (data?.data as E_Tang[]) || [],
+      tang: (data?.data as ITang[]) || [],
       tangLoading: isLoading,
       tangError: error,
       tangValidating: isValidating,
-      tangEmpty: !isLoading && !data.length,
+      tangEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );

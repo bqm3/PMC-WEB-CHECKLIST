@@ -88,6 +88,16 @@ export type IChucvu = {
   Chucvu: string;
 }
 
+export type ITang = {
+  ID_Tang: string;
+  Tentang: string;
+  Sotang: string;
+  ID_Duan: string;
+  ID_User: string;
+  ent_duan: IDuan;
+  ent_user: IUser;
+}
+
 
 export type IKhuvuc = {
   ID_Khuvuc: string;
