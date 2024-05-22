@@ -419,7 +419,7 @@ function applyFilter({
     inputData = inputData?.filter(
       (order) =>
         order.UserName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.ent_duan.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.ent_duan?.Duan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.Emails.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }

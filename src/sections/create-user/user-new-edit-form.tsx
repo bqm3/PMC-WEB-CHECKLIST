@@ -81,12 +81,13 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const NewUserSchema = Yup.object().shape({
     UserName: Yup.string().required('Tài khoản là bắt buộc'),
-    Emails: Yup.string().required('Email là bắt buộc').email('Chưa đúng định dang Email'),
+    Emails: Yup.string().required('Email là bắt buộc').email('Chưa đúng định dạng Email'),
 
     Password: Yup.string().required('Mật khẩu là bắt buộc'),
     // not required
     Permission: Yup.string(),
     ID_Duan: Yup.string(),
+    ID_KhoiCV: Yup.string()
   });
 
   const defaultValues = useMemo(
@@ -94,9 +95,9 @@ export default function UserNewEditForm({ currentUser }: Props) {
       UserName: currentUser?.UserName || '',
       Emails: currentUser?.Emails || '',
       Password: currentUser?.Password || '',
-      Permission: currentUser?.Permission,
-      ID_Duan: currentUser?.ID_Duan,
-      ID_KhoiCV: currentUser?.ID_KhoiCV || null || '' || undefined,
+      Permission: currentUser?.Permission || null || '',
+      ID_Duan: currentUser?.ID_Duan || null || '',
+      ID_KhoiCV: currentUser?.ID_KhoiCV || null || '' ,
     }),
     [currentUser]
   );
@@ -259,7 +260,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
               <RHFTextField name="Emails" label="Email" />
               
               {
-                currentUser == null && <RHFTextField name="Password" label="Mật khẩu" />
+                !currentUser?.Password &&  <RHFTextField name="Password" label="Mật khẩu" /> 
               }
             </Box>
 

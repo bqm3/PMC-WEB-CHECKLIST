@@ -74,7 +74,7 @@ export type IUser = {
   ID_Duan: string;
   UserName: string;
   Permission: string;
-  ID_KhoiCV: string | any;
+  ID_KhoiCV: string ;
   Emails: string;
   Password: string;
   isDelete: string;

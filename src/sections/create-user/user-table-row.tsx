@@ -37,7 +37,7 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Duan, UserName, Emails, ent_chucvu, ent_duan, ent_khoicv, Permission } = row;
+  const { ID_Duan, UserName, Emails, ent_chucvu, ent_duan, ent_khoicv, Permission, ID_User } = row;
 
   const confirm = useBoolean();
 
@@ -61,7 +61,7 @@ export default function CalvTableRow({
             },
           }}
         >
-          {ID_Duan}
+          {ID_User}
         </Box>
       </TableCell>
 

@@ -89,15 +89,22 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.get('https://checklist.pmcweb.vn/be/api/ent_user/check-auth');
+        const res = await axios.post('https://checklist.pmcweb.vn/be/api/ent_user/check-auth', [],
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
-        const { user } = res.data;
+        const { data } = res.data;
 
         dispatch({
           type: Types.INITIAL,
           payload: {
             user: {
-              ...user,
+              ...data,
               accessToken,
             },
           },
