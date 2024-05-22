@@ -78,7 +78,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { khoiCV } = useGetKhoiCV();
   const { tang, tangLoading, tangEmpty } = useGetTang();
   const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
 

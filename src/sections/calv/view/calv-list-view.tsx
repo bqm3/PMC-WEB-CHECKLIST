@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc, useGetCalv } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetHangMuc, useGetCalv, useGetKhoiCV } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -49,7 +49,6 @@ import CalvTableFiltersResult from '../calv-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'ID_Calv', label: 'Mã ca', width: 150 },
@@ -83,9 +82,23 @@ export default function CalvListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
+  const [tableData, setTableData] = useState<ICalv[]>([]);
+
   const { calv, calvLoading, calvEmpty } = useGetCalv();
 
-  const [tableData, setTableData] = useState<ICalv[]>([]);
+  const { khoiCV } = useGetKhoiCV();
+
+  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
+  useEffect(() => {
+    // Assuming khoiCV is set elsewhere in your component
+    khoiCV.forEach(khoi => {
+      set_STATUS_OPTIONS(prevOptions => [
+        ...prevOptions,
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+      ]);
+    });
+  }, [khoiCV]);
 
   useEffect(() => {
     if (calv?.length > 0) {

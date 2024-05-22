@@ -51,7 +51,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
   const [chucvu, setChucVu] = useState<IChucvu[]>([]);
 
-  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { khoiCV } = useGetKhoiCV();
   const { chucVu, chucVuLoading, chucVuEmpty } = useGetChucvu();
 
   useEffect(() => {

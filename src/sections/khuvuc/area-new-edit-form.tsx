@@ -71,7 +71,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
 
   const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
 
-  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { khoiCV } = useGetKhoiCV();
 
   useEffect(() => {
     if (toanha?.length > 0) {

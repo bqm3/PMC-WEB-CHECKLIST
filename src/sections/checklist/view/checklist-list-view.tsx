@@ -18,7 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetChecklistWeb, useGetCalv } from 'src/api/khuvuc';
+import { useGetChecklistWeb, useGetCalv, useGetKhoiCV } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -47,7 +47,6 @@ import ChecklistTableFiltersResult from '../checklist-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   // { id: 'ID_Checklist', label: '', width: 1 },
@@ -92,6 +91,20 @@ export default function ChecklistCalvListView() {
   const { checkList } = useGetChecklistWeb();
 
   const { calv } = useGetCalv();
+
+  const { khoiCV } = useGetKhoiCV();
+
+  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
+  useEffect(() => {
+    // Assuming khoiCV is set elsewhere in your component
+    khoiCV.forEach(khoi => {
+      set_STATUS_OPTIONS(prevOptions => [
+        ...prevOptions,
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+      ]);
+    });
+  }, [khoiCV]);
 
   // Use the checklist data in useEffect to set table data
   useEffect(() => {

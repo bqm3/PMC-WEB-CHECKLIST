@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc } from 'src/api/khuvuc';
+import { useGetKhoiCV, useGetKhuVuc } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -50,7 +50,7 @@ import OrderTableFiltersResult from '../area-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
+
 
 const TABLE_HEAD = [
   { id: 'ID_Khuvuc', label: 'Mã khu vực', width: 140 },
@@ -73,6 +73,8 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function AreaListView() {
+
+  
   const table = useTable({ defaultOrderBy: 'ID_Khuvuc' });
 
   const settings = useSettingsContext();
@@ -85,11 +87,11 @@ export default function AreaListView() {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
- 
 
   const [filters, setFilters] = useState(defaultFilters);
 
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
+  const { khoiCV } = useGetKhoiCV();
 
   const [tableData, setTableData] = useState<IKhuvuc[]>([]);
 
@@ -98,6 +100,19 @@ export default function AreaListView() {
       setTableData(khuvuc)
     }
   },[khuvuc])
+
+
+  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
+  useEffect(() => {
+    // Assuming khoiCV is set elsewhere in your component
+    khoiCV.forEach(khoi => {
+      set_STATUS_OPTIONS(prevOptions => [
+        ...prevOptions,
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+      ]);
+    });
+  }, [khoiCV]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -259,7 +274,7 @@ export default function AreaListView() {
                       khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '2').length}
                     {tab.value === '3' &&
                       khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '3').length}
-                    {tab.value === 'refunded' &&
+                    {tab.value === '4' &&
                       khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '4').length}
                   </Label>
                 }

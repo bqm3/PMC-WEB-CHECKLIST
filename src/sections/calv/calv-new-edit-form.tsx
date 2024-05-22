@@ -49,7 +49,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
 
   const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
 
-  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { khoiCV } = useGetKhoiCV();
 
   useEffect(() => {
     if (khoiCV?.length > 0) {

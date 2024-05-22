@@ -57,7 +57,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const [Duan, setDuan] = useState<IDuan[]>([]);
   const [Chucvu, setChucvu] = useState<IChucvu[]>([]);
 
-  const { khoiCV, khoiCVLoading, khoiCVEmpty } = useGetKhoiCV();
+  const { khoiCV } = useGetKhoiCV();
   const { chucVu, chucVuLoading, chucVuEmpty } = useGetChucvu();
   const { duan, duanLoading, duanEmpty } = useGetDuan();
 

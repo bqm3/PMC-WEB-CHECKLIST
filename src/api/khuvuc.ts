@@ -150,14 +150,12 @@ export function useGetTang() {
 }
 
 export function useGetKhoiCV() {
-  const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = `https://checklist.pmcweb.vn/be/api/ent_khoicv`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
       },
     }).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
@@ -557,7 +555,6 @@ export function useGetChecklistDetail(id: string) {
 
   return memoizedValue;
 }
-
 
 export function useGetUserDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
