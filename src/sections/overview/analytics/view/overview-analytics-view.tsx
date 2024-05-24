@@ -195,7 +195,7 @@ export default function OverviewAnalyticsView() {
   //         setIsLoading1(false)
   //       }
   //     } catch (err) {
-  //       console.log('error', err);
+        // console.log('error', err);
   //       setIsLoading1(false)
   //     }
   //   };
@@ -208,12 +208,12 @@ export default function OverviewAnalyticsView() {
   //     try {
   //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header');
   //       if (res.status === 200) {
-  //         console.log('success', res.data);
+          // console.log('success', res.data);
   //         setDataTotalHeader(res.data[0].order_stats);
   //         setIsLoading2(false)
   //       }
   //     } catch (err) {
-  //       console.log('error', err);
+        // console.log('error', err);
   //       setIsLoading2(false)
   //     }
   //   };
@@ -230,7 +230,7 @@ export default function OverviewAnalyticsView() {
   //         setIsLoading3(false)
   //       }
   //     } catch (err) {
-  //       console.log('error', err);
+        // console.log('error', err);
   //       setIsLoading3(false)
   //     }
   //   };
@@ -247,7 +247,7 @@ export default function OverviewAnalyticsView() {
   //         setIsLoading4(false);
   //       }
   //     } catch (err) {
-  //       console.log('error', err);
+        // console.log('error', err);
   //       setIsLoading4(false);
   //     }
   //   };
@@ -259,20 +259,20 @@ export default function OverviewAnalyticsView() {
       setIsLoading5(true);
       try {
         const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
-        console.log('res', res)
+        // console.log('res', res)
         if (res.status === 200) {
           setDataTotalYear(res.data[0]);
           setIsLoading5(false);
         }
       } catch (err) {
-        console.log('error', err);
+        // console.log('error', err);
         setIsLoading5(false);
       }
     };
     resTotal();
   }, []);
 
-  console.log('data', dataTotalYear)
+  // console.log('data', dataTotalYear)
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>

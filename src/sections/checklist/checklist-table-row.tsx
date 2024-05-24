@@ -109,7 +109,7 @@ export default function AreaTableRow({
       </TableCell>
       <TableCell align="center"> {Giatridinhdanh} </TableCell>
       <TableCell align="center"> {Giatrinhan} </TableCell>
-      <TableCell align="center"> {ent_tang.Tentang} </TableCell>
+      <TableCell align="center"> {ent_tang?.Tentang} </TableCell>
       <TableCell align="center"> {Sothutu} </TableCell>
       <TableCell align="center"> {Maso} </TableCell>
       <TableCell align="center">  <ListItemText

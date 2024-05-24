@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -494,6 +494,63 @@ export function useGetChecklist(pag: any) {
       checkListTotalPages: data?.totalPages,
       checklistPage: data?.page,
       checklistTotalCount: data?.totalCount
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetTb_Checklist(pag: any) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/tb_checklistc/?page=${Number(pag?.page)}&limit=${pag?.limit}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      tb_checkList: (data?.data as ITbChecklist[]) || [],
+      tb_checkListLoading: isLoading,
+      tb_checkListError: error,
+      tb_checkListValidating: isValidating,
+      tb_checkListEmpty: !isLoading && !data.length,
+      tb_checkListTotalPages: data?.totalPages,
+      tb_checklistPage: data?.page,
+      tb_checklistTotalCount: data?.totalCount
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetTb_ChecklistDetail(id:any) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/tb_checklistc/ca/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      checkList: (data?.data as TbChecklistCalv[]) || [],
+      checkListLoading: isLoading,
+      checkListError: error,
+      checkListValidating: isValidating,
+      checkListEmpty: !isLoading && !data.length,
     }),
     [data, error, isLoading, isValidating]
   );

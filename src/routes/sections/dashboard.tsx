@@ -136,6 +136,7 @@ const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list
 const TCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/tlist'));
 const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
 const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'));
+const CaChecklistDetailPage = lazy(() => import('src/pages/dashboard/checklist/detail'));
 
 const UserAdminProfilePage = lazy(() => import('src/pages/dashboard/userAdmin/profile'));
 // ----------------------------------------------------------------------
@@ -239,6 +240,7 @@ export const dashboardRoutes = [
           { element: <CheckListListsPage />, index: true },
           { path: 'list', element: <CheckListListsPage /> },
           { path: ':id/edit', element: <CheckListEditPage /> },
+          { path: 'lists/:id', element: <CaChecklistDetailPage /> },
           { path: 'new', element: <CheckListNewPage /> },
           { path: 'lists', element: <TCheckListListsPage /> },
         ],

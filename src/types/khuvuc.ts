@@ -12,6 +12,15 @@ export type IKhuvucTableFilters = {
   status: string;
 };
 
+export type ITbChecklistTableFilterValue = string | Date | null;
+
+export type ITbChecklistTableFilters = {
+  name: string;
+  status: number | string;
+  startDate: Date | null;
+  endDate: Date | null;
+};
+
 export type E_KhoiCV = {
   KhoiCV: string;
   ID_KhoiCV: string;
@@ -50,7 +59,7 @@ export type IDuan = {
   Diachi: string;
   Vido: string;
   Kinhdo: string;
-}
+};
 
 export type IGiamsat = {
   ID_Giamsat: string;
@@ -68,13 +77,12 @@ export type IGiamsat = {
   isDelete: string;
 };
 
-
 export type IUser = {
   ID_User: string;
   ID_Duan: string;
   UserName: string;
   Permission: string;
-  ID_KhoiCV: string ;
+  ID_KhoiCV: string;
   Emails: string;
   Password: string;
   isDelete: string;
@@ -86,7 +94,7 @@ export type IUser = {
 export type IChucvu = {
   ID_Chucvu: string;
   Chucvu: string;
-}
+};
 
 export type ITang = {
   ID_Tang: string;
@@ -96,8 +104,7 @@ export type ITang = {
   ID_User: string;
   ent_duan: IDuan;
   ent_user: IUser;
-}
-
+};
 
 export type IKhuvuc = {
   ID_Khuvuc: string;
@@ -149,6 +156,32 @@ export type IHangMuc = {
   ent_khuvuc: IKhuvuc;
 };
 
+export type ITbChecklist = {
+  ID_ChecklistC: string;
+  ID_Duan: string;
+  ID_KhoiCV: string;
+  Ngay: string;
+  ID_Calv: string;
+  ID_Giamsat: string;
+  TongC: string;
+  Tong: string;
+  Giobd: string;
+  Giokt: string;
+  Ghichu: string;
+  Tinhtrang: string;
+  Giochupanh1: string;
+  Anh1: string;
+  Giochupanh2: string;
+  Anh2: string;
+  Giochupanh3: string;
+  Anh3: string;
+  Giochupanh4: string;
+  Anh4: string;
+  ent_khoicv: IKhoiCV;
+  ent_giamsat: IGiamsat;
+  ent_calv: ICalv;
+};
+
 export type IChecklist = {
   ID_Checklist: string;
   ID_Khuvuc: string;
@@ -173,4 +206,18 @@ export type IChecklist = {
   ent_hangmuc: IHangMuc;
   ent_tang: E_Tang;
   ent_calv: ICalv;
+};
+
+export type TbChecklistCalv = {
+  ID_Checklistchitiet: string;
+  ID_ChecklistC: string;
+  ID_Checklist: string;
+  Ketqua: string;
+  Anh: string;
+  Gioht: string;
+  Ghichu: string;
+  isDelete: string;
+  status: string;
+  tb_checklistc: ITbChecklist;
+  ent_checklist: IChecklist;
 };

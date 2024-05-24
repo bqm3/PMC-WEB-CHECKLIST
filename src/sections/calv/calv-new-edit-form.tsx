@@ -62,17 +62,6 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
     ID_KhoiCV: Yup.string(),
     Giobatdau: Yup.mixed<any>().nullable().required('Phải có giờ bắt đầu'),
     Gioketthuc: Yup.mixed<any>().nullable().required('Phải có giờ kết thúc'),
-    // Gioketthuc: Yup.mixed<any>()
-    //   .required('Phải có giờ kết thúc')
-    //   .test(
-    //     'is-later',
-    //     'Giờ kết thúc phải lớn hơn giờ bắt đầu',
-    //     (value, { parent }) => {
-    //       const { Giobatdau } = parent; // Lấy giá trị của trường Giobatdau từ parent object
-
-    //       return value.localeCompare(Giobatdau);
-    //     }
-    //   ),
   });
 
   const defaultValues = useMemo(
@@ -108,95 +97,88 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
   }, [currentCalv, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-      try {
-        if (currentCalv !== undefined) {
-          await axios
-            .put(
-              `https://checklist.pmcweb.vn/be/api/ent_calv/update/${currentCalv.ID_Calv}`,
-              data,
-              {
-                headers: {
-                  Accept: 'application/json',
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              }
-            )
-            .then((res) => {
-              reset();
-              enqueueSnackbar('Cập nhật thành công!');
-              router.push(paths.dashboard.calv.root);
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
-            });
-        } else {
-          axios
-            .post(`https://checklist.pmcweb.vn/be/api/ent_calv/create`, data, {
-              headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
-            })
-            .then((res) => {
-              reset();
-              enqueueSnackbar('Tạo mới thành công!');
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
-            });
-        }
-      } catch (error) {
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 3000,
-          message: `Lỗi gửi yêu cầu`,
-        });
+    try {
+      if (currentCalv !== undefined) {
+        await axios
+          .put(`https://checklist.pmcweb.vn/be/api/ent_calv/update/${currentCalv.ID_Calv}`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => {
+            reset();
+            enqueueSnackbar('Cập nhật thành công!');
+            router.push(paths.dashboard.calv.root);
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+      } else {
+        axios
+          .post(`https://checklist.pmcweb.vn/be/api/ent_calv/create`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => {
+            reset();
+            enqueueSnackbar('Tạo mới thành công!');
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+      }
+    } catch (error) {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 3000,
+        message: `Lỗi gửi yêu cầu`,
+      });
       // }
     }
-  }
-);
-
-  console.log('defaultValues', values);
+  });
 
   const renderDetails = (
     <>
@@ -237,16 +219,8 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Giờ kiểm tra</Typography>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                <RHFTextField
-                  type="time"
-                  value={values?.Giobatdau || '23:59:00'}
-                  name="Giobatdau"
-                />
-                <RHFTextField
-                  type="time"
-                  value={values?.Gioketthuc || '23:59:00'}
-                  name="Gioketthuc"
-                />
+                <RHFTextField type="time" value={values?.Giobatdau || '23:59'} name="Giobatdau" />
+                <RHFTextField type="time" value={values?.Gioketthuc || '23:59'} name="Gioketthuc" />
               </Stack>
             </Stack>
           </Stack>

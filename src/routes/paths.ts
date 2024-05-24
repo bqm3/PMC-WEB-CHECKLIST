@@ -165,7 +165,7 @@ export const paths = {
     checklist: {
       root: `${ROOTS.DASHBOARD}/checklist`,
       new: `${ROOTS.DASHBOARD}/checklist/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}`,
+      detail: (id: string) => `${ROOTS.DASHBOARD}/checklist/lists/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
       lists :`${ROOTS.DASHBOARD}/checklist/lists`, 
     },
