@@ -18,7 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetChecklist, useGetCalv, useGetTb_Checklist } from 'src/api/khuvuc';
+import { useGetChecklist, useGetCalv, useGetTb_Checklist, useGetChecklistWeb } from 'src/api/khuvuc';
 
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -95,7 +95,7 @@ export default function ChecklistCalvListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  // const {checkList} = useGetChecklist( {page: table.page, limit: table.rowsPerPage});
+  const { checkList } = useGetChecklistWeb();
 
   const [tableData, setTableData] = useState<ITbChecklist[]>([]);
 
@@ -239,7 +239,7 @@ export default function ChecklistCalvListView() {
         />
 
         <Card>
-          <Tabs
+        <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -265,16 +265,24 @@ export default function ChecklistCalvListView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && tableData?.length}
+                    {tab.value === 'all' && checkList?.length}
                     {tab.value === '1' &&
-                      tableData?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '1'
+                      ).length}
 
                     {tab.value === '2' &&
-                      tableData?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '2'
+                      ).length}
                     {tab.value === '3' &&
-                      tableData?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '3'
+                      ).length}
                     {tab.value === '4' &&
-                      tableData?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
+                      checkList?.filter(
+                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '4'
+                      ).length}
                   </Label>
                 }
               />

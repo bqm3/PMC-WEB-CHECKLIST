@@ -215,7 +215,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
               )}
             </Stack>
 
-            <RHFTextField name="Tenca" label="Tên hạng mục" />
+            <RHFTextField name="Tenca" label="Tên ca làm việc" />
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Giờ kiểm tra</Typography>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

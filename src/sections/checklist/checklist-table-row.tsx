@@ -62,6 +62,7 @@ export default function AreaTableRow({
     calv_3,
     calv_4,
     ent_calv,
+    Tinhtrang
   } = row;
 
   const confirm = useBoolean();
@@ -93,7 +94,7 @@ export default function AreaTableRow({
   ));
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
+    <TableRow hover selected={selected} style={{backgroundColor: `${Tinhtrang}` === '1' ? '#FF563029' : '' }}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
