@@ -11,7 +11,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import {IKhuvucTableFilters, IKhuvucTableFilterValue} from 'src/types/khuvuc'
 // components
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +33,8 @@ export default function OrderTableToolbar({
   onResetFilters,
 }: Props) {
   const popover = usePopover();
+
+  const confirm = useBoolean();
 
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +108,7 @@ export default function OrderTableToolbar({
         <MenuItem
           onClick={() => {
             popover.onClose();
+            confirm.onTrue()
           }}
         >
           <Iconify icon="solar:import-bold" />
@@ -119,6 +124,18 @@ export default function OrderTableToolbar({
           Export
         </MenuItem>
       </CustomPopover>
+
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="PMC thông báo"
+        content="Uploads file"
+        action={
+          <Button variant="contained" color="error">
+            Xóa
+          </Button>
+        }
+      />
     </>
   );
 }

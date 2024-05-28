@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import Stack from '@mui/material/Stack';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -44,9 +45,9 @@ import { IChecklist, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/ty
 import ChecklistTableRow from '../checklist-table-row';
 import ChecklistTableToolbar from '../checklist-table-toolbar';
 import ChecklistTableFiltersResult from '../checklist-table-filters-result';
+import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 
 // ----------------------------------------------------------------------
-
 
 const TABLE_HEAD = [
   // { id: 'ID_Checklist', label: '', width: 1 },
@@ -78,6 +79,8 @@ export default function ChecklistCalvListView() {
 
   const confirm = useBoolean();
 
+  const upload = useBoolean();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
@@ -98,10 +101,10 @@ export default function ChecklistCalvListView() {
 
   useEffect(() => {
     // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach(khoi => {
-      set_STATUS_OPTIONS(prevOptions => [
+    khoiCV.forEach((khoi) => {
+      set_STATUS_OPTIONS((prevOptions) => [
         ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
       ]);
     });
   }, [khoiCV]);
@@ -216,23 +219,32 @@ export default function ChecklistCalvListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Checklists"
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'Checklist',
-              href: paths.dashboard.checklist.root,
-            },
-            { name: 'Danh sách' },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <CustomBreadcrumbs
+            heading="Checklists"
+            links={[
+              {
+                name: 'Dashboard',
+                href: paths.dashboard.root,
+              },
+              {
+                name: 'Checklist',
+                href: paths.dashboard.checklist.root,
+              },
+              { name: 'Danh sách' },
+            ]}
+            sx={{
+              mb: { xs: 3, md: 5 },
+            }}
+          />
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+            onClick={upload.onTrue}
+          >
+            Upload
+          </Button>
+        </Stack>
 
         <Card>
           <Tabs
@@ -372,6 +384,8 @@ export default function ChecklistCalvListView() {
           />
         </Card>
       </Container>
+
+      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} />
 
       <ConfirmDialog
         open={confirm.value}
