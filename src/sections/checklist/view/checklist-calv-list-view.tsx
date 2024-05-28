@@ -18,7 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetChecklist, useGetCalv, useGetTb_Checklist, useGetChecklistWeb } from 'src/api/khuvuc';
+import { useGetChecklist, useGetCalv, useGetTb_Checklist, useGetChecklistWeb, useGetKhoiCV } from 'src/api/khuvuc';
 
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -56,7 +56,7 @@ import ChecklistTableFiltersResult from '../tbchecklist-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
+// const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'Ngay', label: 'Ngày checklist', width: 100 },
@@ -95,7 +95,10 @@ export default function ChecklistCalvListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { checkList } = useGetChecklistWeb();
+  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
+
+  // const { checkList } = useGetChecklistWeb();
 
   const [tableData, setTableData] = useState<ITbChecklist[]>([]);
 
@@ -106,12 +109,24 @@ export default function ChecklistCalvListView() {
 
   const { calv } = useGetCalv();
 
+  const { khoiCV } = useGetKhoiCV();
+
   // Use the checklist data in useEffect to set table data
   useEffect(() => {
     if (tb_checkList) {
       setTableData(tb_checkList);
     }
   }, [tb_checkList, table.page, table.rowsPerPage]);
+
+  useEffect(() => {
+    // Assuming khoiCV is set elsewhere in your component
+    khoiCV.forEach(khoi => {
+      set_STATUS_OPTIONS(prevOptions => [
+        ...prevOptions,
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+      ]);
+    });
+  }, [khoiCV]);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -221,7 +236,7 @@ export default function ChecklistCalvListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Checklists"
+          heading="Ca Checklist"
           links={[
             {
               name: 'Dashboard',
@@ -265,23 +280,23 @@ export default function ChecklistCalvListView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && checkList?.length}
+                    {tab.value === 'all' && tb_checkList?.length}
                     {tab.value === '1' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '1'
+                      tb_checkList?.filter(
+                        (item) => `${item.ID_KhoiCV}` === '1'
                       ).length}
 
                     {tab.value === '2' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '2'
+                      tb_checkList?.filter(
+                        (item) => `${item.ID_KhoiCV}` === '2'
                       ).length}
                     {tab.value === '3' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '3'
+                      tb_checkList?.filter(
+                        (item) => `${item.ID_KhoiCV}` === '3'
                       ).length}
                     {tab.value === '4' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '4'
+                      tb_checkList?.filter(
+                        (item) => `${item.ID_KhoiCV}` === '4'
                       ).length}
                   </Label>
                 }
@@ -437,13 +452,9 @@ function applyFilter({
     );
   }
   if (status !== 'all') {
-    inputData = inputData.filter((tbchecklist) => tbchecklist.ID_KhoiCV === status);
+    inputData = inputData.filter((tbchecklist) => `${tbchecklist.ID_KhoiCV}` === `${status}`);
   }
 
-  // function parseDate(input: any) {
-  //   const [day, month, year] = input.split('/').map(Number);
-  //   return new Date(year, month - 1, day);
-  // }
 
   if (!dateError) {
     if (startDate && endDate) {

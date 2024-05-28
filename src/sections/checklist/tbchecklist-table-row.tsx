@@ -95,7 +95,7 @@ export default function AreaTableRow({
 
       <TableCell align="center">{Giobd}</TableCell>
       <TableCell align="center">
-        <Label variant="soft" color="info">
+        <Label variant="soft" color="secondary">
           {ent_calv?.Tenca}
         </Label>
       </TableCell>
@@ -119,8 +119,8 @@ export default function AreaTableRow({
         <Label
           variant="soft"
           color={
-            (`${Tinhtrang}` === '0' && 'secondary') ||
-            (`${Tinhtrang}` === '1' && 'primary') || 'default'
+            (`${Tinhtrang}` === '0' && 'info') ||
+            (`${Tinhtrang}` === '1' && 'default') || 'default'
           }
         >
           {`${Tinhtrang}` === '0' ? 'Đang mở' : 'Đã khóa'}

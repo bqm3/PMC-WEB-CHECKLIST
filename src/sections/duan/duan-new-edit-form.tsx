@@ -58,6 +58,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       Diachi: currentDuan?.Diachi || '',
       Vido: currentDuan?.Vido || '',
       Kinhdo: currentDuan?.Kinhdo || '',
+      Logo: currentDuan?.Logo || '',
     }),
     [currentDuan]
   );
@@ -194,6 +195,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             <RHFTextField name="Diachi" label="Địa chỉ" />
             <RHFTextField name="Vido" label="Vĩ độ" />
             <RHFTextField name="Kinhdo" label="Kinh độ" />
+            <RHFTextField name="Logo" label="Đường dẫn logo dự án" />
           </Stack>
         </Card>
       </Grid>

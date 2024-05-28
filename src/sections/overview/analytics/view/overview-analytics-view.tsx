@@ -16,6 +16,7 @@ import {
 import { useSettingsContext } from 'src/components/settings';
 // api
 import axios from 'axios';
+import { useGetKhoiCV } from 'src/api/khuvuc';
 //
 import AnalyticsNews from '../analytics-news';
 import AnalyticsTasks from '../analytics-tasks';
@@ -29,7 +30,8 @@ import AnalyticsConversionRates from '../analytics-conversion-rates';
 
 import BankingBalanceStatistics from '../../banking/banking-balance-statistics';
 
-import EcommerceYearlySales from '../../e-commerce/ecommerce-yearly-sales';
+import ChecklistsYear from '../checklist-yearly';
+
 
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
@@ -45,14 +47,42 @@ type widgetData = {
   result: any | number;
 };
 
+const STORAGE_KEY = 'accessToken';
+
+type SeriesData = {
+  label: string;
+  value: number;
+};
+
+type SeriesDataYear = {
+  name: string;
+  data: number[];
+};
+
+type ChartSeries = {
+  type: string;
+  data: SeriesDataYear[];
+};
+
+type ChartData = {
+  categories: string[];
+  series: ChartSeries[];
+};
+
 export default function OverviewAnalyticsView() {
   const theme = useTheme();
   const settings = useSettingsContext();
+  const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [dataTotalHeader, setDataTotalHeader] = useState<widgetData>();
-  const [dataTotalYear, setDataTotalYear] = useState<any>();
   const [dataTotalService, setDataTotalService] = useState<widgetData>();
   const [dataTotalReview, setDataTotalReview] = useState<widgetData>();
+
+  const [dataTotalKhoiCV, setDataTotalKhoiCV] = useState<SeriesData[]>([]);
+  const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedKhoiCV, setSelectedKhoiCV] = useState('All');
+
   const [dataTotal, setDataTotal] = useState<any>();
   const [isLoading1, setIsLoading1] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
@@ -60,94 +90,107 @@ export default function OverviewAnalyticsView() {
   const [isLoading4, setIsLoading4] = useState(false);
   const [isLoading5, setIsLoading5] = useState(false);
 
+  const { khoiCV } = useGetKhoiCV();
+  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading1(true);
-      setIsLoading2(true);
-      setIsLoading3(true);
-      setIsLoading4(true);
-      // setIsLoading5(true);
+    // Assuming khoiCV is set elsewhere in your component
+    khoiCV.forEach(khoi => {
+      set_STATUS_OPTIONS(prevOptions => [
+        ...prevOptions,
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+      ]);
+    });
+  }, [khoiCV]);
 
-      try {
-        const [totalRes, headerRes, serviceRes, reviewRes] = await Promise.all([
-          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-total'),
-          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header'),
-          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service'),
-          axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review'),
-          // axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year'),
-        ]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading1(true);
+  //     setIsLoading2(true);
+  //     setIsLoading3(true);
+  //     setIsLoading4(true);
+  //     // setIsLoading5(true);
 
-        if (totalRes.status === 200) {
-          const yearData: { [key: number]: Array<{ total: number; service_charge: number }> } = {};
+  //     try {
+  //       const [totalRes, headerRes, serviceRes, reviewRes] = await Promise.all([
+  //         axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-total'),
+  //         axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-header'),
+  //         axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-service'),
+  //         axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-review'),
+  //         // axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year'),
+  //       ]);
 
-          // Loop through rawData and populate yearData
-          totalRes.data.forEach((item: any) => {
-            const { year, month, total, service_charge } = item;
-            if (!yearData[year]) {
-              yearData[year] = Array(12).fill({ total: 0, service_charge: 0 });
-            }
+  //       if (totalRes.status === 200) {
+  //         const yearData: { [key: number]: Array<{ total: number; service_charge: number }> } = {};
 
-            const index = month - 1; // Month index starts from 0
+  //         // Loop through rawData and populate yearData
+  //         totalRes.data.forEach((item: any) => {
+  //           const { year, month, total, service_charge } = item;
+  //           if (!yearData[year]) {
+  //             yearData[year] = Array(12).fill({ total: 0, service_charge: 0 });
+  //           }
 
-            if (yearData[year][index]) {
-              yearData[year][index] = {
-                total: yearData[year][index].total + total,
-                service_charge: yearData[year][index].service_charge + service_charge,
-              };
-            }
-          });
+  //           const index = month - 1; // Month index starts from 0
 
-          // Convert yearData to the desired format
-          const serieswd = Object.entries(yearData).map(([year, data]) => ({
-            type: `${year}`,
-            data: [
-              {
-                name: 'Total Booking',
-                data: data.map((monthData) => monthData.total),
-              },
-              {
-                name: 'Total Service',
-                data: data.map((monthData) => monthData.service_charge),
-              },
-            ],
-          }));
-          setDataTotal(serieswd);
-          setIsLoading1(false);
-        }
+  //           if (yearData[year][index]) {
+  //             yearData[year][index] = {
+  //               total: yearData[year][index].total + total,
+  //               service_charge: yearData[year][index].service_charge + service_charge,
+  //             };
+  //           }
+  //         });
 
-        if (headerRes.status === 200) {
-          setDataTotalHeader(headerRes.data[0].order_stats);
-          setIsLoading2(false);
-        }
+  //         // Convert yearData to the desired format
+  //         const serieswd = Object.entries(yearData).map(([year, data]) => ({
+  //           type: `${year}`,
+  //           data: [
+  //             {
+  //               name: 'Total Booking',
+  //               data: data.map((monthData) => monthData.total),
+  //             },
+  //             {
+  //               name: 'Total Service',
+  //               data: data.map((monthData) => monthData.service_charge),
+  //             },
+  //           ],
+  //         }));
+  //         setDataTotal(serieswd);
+  //         setIsLoading1(false);
+  //       }
 
-        if (serviceRes.status === 200) {
-          setDataTotalService(serviceRes.data);
-          setIsLoading3(false);
-        }
+  //       if (headerRes.status === 200) {
+  //         setDataTotalHeader(headerRes.data[0].order_stats);
+  //         setIsLoading2(false);
+  //       }
 
-        if (reviewRes.status === 200) {
-          setDataTotalReview(reviewRes.data);
-          setIsLoading4(false);
-        }
+  //       if (serviceRes.status === 200) {
+  //         setDataTotalService(serviceRes.data);
+  //         setIsLoading3(false);
+  //       }
 
-        // console.log('yearRes', yearRes.status, yearRes.data);
+  //       if (reviewRes.status === 200) {
+  //         setDataTotalReview(reviewRes.data);
+  //         setIsLoading4(false);
+  //       }
 
-        // if (yearRes.status === 200) {
-        //   setDataTotalYear(yearRes.data[0]);
-        //   setIsLoading5(false);
-        // }
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        setIsLoading1(false);
-        setIsLoading2(false);
-        setIsLoading3(false);
-        setIsLoading4(false);
-        // setIsLoading5(false);
-      }
-    };
+  //       // console.log('yearRes', yearRes.status, yearRes.data);
 
-    fetchData();
-  }, []);
+  //       // if (yearRes.status === 200) {
+  //       //   setDataTotalYear(yearRes.data[0]);
+  //       //   setIsLoading5(false);
+  //       // }
+  //     } catch (err) {
+  //       console.error('Error fetching data:', err);
+  //       setIsLoading1(false);
+  //       setIsLoading2(false);
+  //       setIsLoading3(false);
+  //       setIsLoading4(false);
+  //       // setIsLoading5(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
 
   // useEffect(() => {
@@ -254,25 +297,62 @@ export default function OverviewAnalyticsView() {
   //   resTotal();
   // }, []);
 
-  useEffect(() => {
-    const resTotal = async () => {
-      setIsLoading5(true);
-      try {
-        const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
-        // console.log('res', res)
-        if (res.status === 200) {
-          setDataTotalYear(res.data[0]);
-          setIsLoading5(false);
-        }
-      } catch (err) {
-        // console.log('error', err);
-        setIsLoading5(false);
-      }
-    };
-    resTotal();
-  }, []);
+  // useEffect(() => {
+  //   const resTotal = async () => {
+  //     setIsLoading5(true);
+  //     try {
+  //       const res = await axios.post('https://be-nodejs-project.vercel.app/api/orders/widget-order-year');
+  //       // console.log('res', res)
+  //       if (res.status === 200) {
+  //         setDataTotalYear(res.data[0]);
+  //         setIsLoading5(false);
+  //       }
+  //     } catch (err) {
+  //       // console.log('error', err);
+  //       setIsLoading5(false);
+  //     }
+  //   };
+  //   resTotal();
+  // }, []);
 
   // console.log('data', dataTotalYear)
+
+  
+
+  useEffect(()=> {
+    const handleTotalKhoiCV = async () => {
+      await axios.get('https://checklist.pmcweb.vn/be/api/ent_checklist/total', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res)=> {
+        setDataTotalKhoiCV(res.data.data)
+      })
+      .catch((err)=> console.log('err', err))
+    }
+
+    handleTotalKhoiCV()
+  }, [accessToken])
+
+  useEffect(()=> {
+    const handleTotalKhoiCV = async () => {
+      await axios.get(`https://checklist.pmcweb.vn/be/api/tb_checklistc/year?year=${selectedYear}&khoi=${selectedKhoiCV}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res)=> {
+        setDataTotalYear(res.data.data)
+      })
+      .catch((err)=> console.log('err', err))
+    }
+
+    handleTotalKhoiCV()
+  }, [accessToken, selectedYear, selectedKhoiCV])
+
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -333,96 +413,28 @@ export default function OverviewAnalyticsView() {
         )}
 
         <Grid xs={12} md={6} lg={8}>
-          {dataTotalYear && isLoading5 === false && (
-            <EcommerceYearlySales
-              title="Yearly"
-              subheader="Number of booking invoices"
+            <ChecklistsYear
+              title="Số lượng checklist"
+              subheader="Hoàn thành checklist theo ca"
               chart={{
-                categories: [
-                  'Jan',
-                  'Feb',
-                  'Mar',
-                  'Apr',
-                  'May',
-                  'Jun',
-                  'Jul',
-                  'Aug',
-                  'Sep',
-                  'Oct',
-                  'Nov',
-                  'Dec',
-                ],
-                series: [
-                  {
-                    year: '2022',
-                    data: [
-                      {
-                        name: 'Total Orders',
-                        data: dataTotalYear
-                          ? dataTotalYear?.chart['2022']
-                          : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      },
-                    ],
-                  },
-                  {
-                    year: '2023',
-                    data: [
-                      {
-                        name: 'Total Orders',
-                        data: dataTotalYear
-                          ? dataTotalYear?.chart['2023']
-                          : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      },
-                    ],
-                  },
-                  {
-                    year: '2024',
-                    data: [
-                      {
-                        name: 'Total Orders',
-                        data: dataTotalYear
-                          ? dataTotalYear.chart['2024']
-                          : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      },
-                    ],
-                  },
-                ],
+                categories: dataTotalYear.categories,
+                series: dataTotalYear.series,
               }}
+              selectedYear={selectedYear} // Pass selected year as prop
+              onYearChange={setSelectedYear}
+              selectedKhoiCV={selectedKhoiCV}
+              onKhoiChange={setSelectedKhoiCV}
+              STATUS_OPTIONS={STATUS_OPTIONS}
             />
-          )}
         </Grid>
 
         <Grid xs={12} md={6} lg={4}>
-          {dataTotalService && isLoading3 === false && (
+          {dataTotalKhoiCV && isLoading3 === false && (
             <AnalyticsCurrentVisits
-              title="Current Services"
+              title="Checklists hiện tại"
               chart={{
-                series: [
-                  {
-                    label: 'Double Bed',
-                    value: Number(
-                      dataTotalService?.series && dataTotalService.series['Double Bed']
-                        ? dataTotalService.series['Double Bed']
-                        : 0
-                    ),
-                  },
-                  {
-                    label: 'Single Bed',
-                    value: Number(
-                      dataTotalService?.series && dataTotalService.series['Single Bed']
-                        ? dataTotalService.series['Single Bed']
-                        : 0
-                    ),
-                  },
-                  {
-                    label: "Children's Beds",
-                    value: Number(
-                      dataTotalService?.series && dataTotalService.series["Children's Beds"]
-                        ? dataTotalService.series["Children's Beds"]
-                        : 0
-                    ),
-                  },
-                ],
+                series: dataTotalKhoiCV,
+                colors: ['rgb(0, 167, 111)', 'rgb(255, 171, 0)',"rgb(255, 86, 48)",  'rgb(0, 184, 217)']
               }}
             />
           )}

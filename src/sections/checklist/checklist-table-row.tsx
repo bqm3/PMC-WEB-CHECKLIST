@@ -88,7 +88,14 @@ export default function AreaTableRow({
 
   // Tạo các nhãn từ mảng các tên ca làm việc
   const labels = shiftNamesArray.map((name, index) => (
-    <Label key={index} variant="soft" color="success" style={{marginTop: 4}}>
+    <Label key={index} variant="soft" 
+      color={
+        (`${ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '1' && 'success') ||
+        (`${ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '2' && 'warning') ||
+        (`${ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '3' && 'error') ||
+        'default'
+      }
+     style={{marginTop: 4}}>
       {name}
     </Label>
   ));

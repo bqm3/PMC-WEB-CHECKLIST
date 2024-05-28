@@ -8,7 +8,7 @@ export default function OverviewAnalyticsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Analytics</title>
+        <title> Dashboard: Phân tích dữ liệu</title>
       </Helmet>
 
       <OverviewAnalyticsView />

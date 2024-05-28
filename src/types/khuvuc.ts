@@ -59,6 +59,7 @@ export type IDuan = {
   Diachi: string;
   Vido: string;
   Kinhdo: string;
+  Logo: string;
 };
 
 export type IGiamsat = {

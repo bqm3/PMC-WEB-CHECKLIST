@@ -60,16 +60,10 @@ export default function AreaTableRow({
 
   const confirm = useBoolean();
 
-  const collapse = useBoolean();
-
   const popover = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{backgroundColor: `${status}` === '0' ? '#FFAB0029' : '' }}>
-      {/* <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell> */}
-
       <TableCell> {ent_checklist?.Checklist} </TableCell>
       <TableCell align="center">
         <ListItemText
@@ -97,8 +91,7 @@ export default function AreaTableRow({
       <TableCell align="center">
         {(Anh !== null && Anh !== undefined) && (
           <Avatar
-            alt={Anh}
-            src={`https://drive.google.com/thumbnail?id=${Anh}`}
+            src={`https://lh3.googleusercontent.com/d/${Anh}=s300?authuser=0`}
             variant="rounded"
             sx={{ width: 80, height: 80 }}
           />
