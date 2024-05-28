@@ -81,7 +81,7 @@ export default function OverviewAnalyticsView() {
   const [dataTotalKhoiCV, setDataTotalKhoiCV] = useState<SeriesData[]>([]);
   const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
   const [selectedYear, setSelectedYear] = useState('2024');
-  const [selectedKhoiCV, setSelectedKhoiCV] = useState('All');
+  const [selectedKhoiCV, setSelectedKhoiCV] = useState('all');
 
   const [dataTotal, setDataTotal] = useState<any>();
   const [isLoading1, setIsLoading1] = useState(false);

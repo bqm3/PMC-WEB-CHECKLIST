@@ -69,15 +69,17 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   const [khuVuc, setKhuVuc] = useState<any>([]);
   const [toaNha, setToaNha] = useState<IToanha[]>([]);
+  const [KhoiCV, setKhoiCV] = useState<IKhoiCV[]>([]);
 
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
   const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
+  const { khoiCV } = useGetKhoiCV();
 
-  // useEffect(() => {
-  //   if (khuvuc?.length > 0) {
-  //     setKhuVuc(khuvuc);
-  //   }
-  // }, [khuvuc]);
+  useEffect(() => {
+    if (khoiCV?.length > 0) {
+      setKhoiCV(khoiCV);
+    }
+  }, [khoiCV]);
 
   useEffect(() => {
     if (toanha?.length > 0) {
@@ -88,6 +90,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
   const NewProductSchema = Yup.object().shape({
     Hangmuc: Yup.string().required('Phải có tên hạng mục'),
     ID_Toanha: Yup.string(),
+    ID_KhoiCV: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -96,6 +99,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       Tieuchuankt: currentArticle?.Tieuchuankt || '',
       MaQrCode: currentArticle?.MaQrCode || '',
       ID_Khuvuc: currentArticle?.ID_Khuvuc || null,
+      ID_KhoiCV: currentArticle?.ent_khuvuc?.ID_KhoiCV || null || '',
       ID_Toanha: currentArticle?.ent_khuvuc?.ID_Toanha || null || '',
     }),
     [currentArticle]
@@ -116,32 +120,37 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   const values = watch();
 
-  useEffect(() => {
-    let filteredToanha;
-    // Filter the hangMuc array based on ID_KhoiCV from values
-    if (values.ID_Toanha) {
-      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha) || [];
 
-      // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
-     
-    } else {
-      filteredToanha = khuvuc;
+  useEffect(() => {
+    let filteredToanha = khuvuc;
+  
+    // If either ID_Toanha or ID_KhoiCV is present, filter the array
+    if (values.ID_Toanha || values.ID_KhoiCV) {
+      filteredToanha = khuvuc?.filter((item: any) => {
+        const matchToanha = values.ID_Toanha ? `${item.ID_Toanha}` === `${values.ID_Toanha}` : true;
+        const matchKhoiCV = values.ID_KhoiCV ? `${item.ID_KhoiCV}` === `${values.ID_KhoiCV}` : true;
+        return matchToanha && matchKhoiCV;
+      }) || [];
     }
+  
+    // Create a new array with the desired structure: { ID_Khuvuc: ID_Khuvuc, Khuvuc: item }
     const newArray = filteredToanha?.map((item: any) => ({
       ID_Khuvuc: item.ID_Khuvuc,
       Khuvuc: item,
     }));
-
+  
     // Update the state with the new array
     setKhuVuc(newArray);
-  }, [values.ID_Toanha, khuvuc]);
+  }, [values.ID_Toanha, values.ID_KhoiCV, khuvuc]);
+  
+  
+  
 
   useEffect(() => {
     if (currentArticle) {
       reset(defaultValues);
     }
   }, [currentArticle, defaultValues, reset]);
-
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -248,7 +257,8 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           {!mdUp && <CardHeader title="Chi tiết" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <Stack spacing={1.5}>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+              {/* <Stack> */}
               {toaNha?.length > 0 && (
                 <RHFSelect
                   name="ID_Toanha"
@@ -263,6 +273,24 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
                   ))}
                 </RHFSelect>
               )}
+              {/* </Stack> */}
+
+              {/* <Stack> */}
+              {KhoiCV?.length > 0 && (
+                <RHFSelect
+                  name="ID_KhoiCV"
+                  label="Khối công việc"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {KhoiCV?.map((item) => (
+                    <MenuItem key={item?.ID_Khoi} value={item?.ID_Khoi}>
+                      {item?.KhoiCV}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+              {/* </Stack> */}
             </Stack>
 
             <Stack spacing={1.5}>
@@ -275,7 +303,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
                 >
                   {khuVuc?.map((item: any) => (
                     <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
-                      {item?.Khuvuc?.ent_toanha?.Toanha} - {item?.Khuvuc?.Tenkhuvuc}
+                      {item?.Khuvuc?.Tenkhuvuc}
                     </MenuItem>
                   ))}
                 </RHFSelect>
