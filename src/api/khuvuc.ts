@@ -547,6 +547,7 @@ export function useGetTb_ChecklistDetail(id:any) {
   const memoizedValue = useMemo(
     () => ({
       checkList: (data?.data as TbChecklistCalv[]) || [],
+      dataChecklistC: (data?.dataChecklistC as any) || null,
       checkListLoading: isLoading,
       checkListError: error,
       checkListValidating: isValidating,
@@ -570,7 +571,6 @@ export function useGetChecklistWeb() {
       },
     }).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
-  console.log('data',data)
 
   const memoizedValue = useMemo(
     () => ({

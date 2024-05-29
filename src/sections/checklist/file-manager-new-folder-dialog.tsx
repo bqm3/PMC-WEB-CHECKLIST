@@ -8,6 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 // components
+import { useSnackbar } from 'src/components/snackbar';
 import Iconify from 'src/components/iconify';
 import { Upload } from 'src/components/upload';
 import axios from 'axios';
@@ -44,6 +45,8 @@ export default function FileManagerNewFolderDialog({
 }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [files, setFiles] = useState<(File | string)[]>([]);
 
@@ -85,10 +88,10 @@ export default function FileManagerNewFolderDialog({
         }
       });
       // setUploadedFileName(response.data.filename);
-      alert('File uploaded successfully');
+      enqueueSnackbar('Uploads dữ liệu thành công!');
     } catch (error) {
       console.error('Error uploading file:', error);
-      alert('File upload failed');
+      enqueueSnackbar('Uploads dữ liệu thất bại!');
     }
   };
 

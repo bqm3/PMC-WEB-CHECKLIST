@@ -12,6 +12,8 @@ import {
   _analyticTraffic,
   _analyticOrderTimeline,
 } from 'src/_mock';
+// hooks
+import { useAuthContext } from 'src/auth/hooks';
 // components
 import { useSettingsContext } from 'src/components/settings';
 // api
@@ -31,6 +33,7 @@ import AnalyticsConversionRates from '../analytics-conversion-rates';
 import BankingBalanceStatistics from '../../banking/banking-balance-statistics';
 
 import ChecklistsYear from '../checklist-yearly';
+
 
 
 // ----------------------------------------------------------------------
@@ -70,8 +73,13 @@ type ChartData = {
 };
 
 export default function OverviewAnalyticsView() {
+
   const theme = useTheme();
+  
   const settings = useSettingsContext();
+
+  const { user, logout } = useAuthContext();
+
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [dataTotalHeader, setDataTotalHeader] = useState<widgetData>();
@@ -79,6 +87,7 @@ export default function OverviewAnalyticsView() {
   const [dataTotalReview, setDataTotalReview] = useState<widgetData>();
 
   const [dataTotalKhoiCV, setDataTotalKhoiCV] = useState<SeriesData[]>([]);
+  const [totalKhoiCV, setTotalKhoiCV] = useState(0);
   const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
   const [selectedYear, setSelectedYear] = useState('2024');
   const [selectedKhoiCV, setSelectedKhoiCV] = useState('all');
@@ -317,7 +326,6 @@ export default function OverviewAnalyticsView() {
 
   // console.log('data', dataTotalYear)
 
-  
 
   useEffect(()=> {
     const handleTotalKhoiCV = async () => {
@@ -329,6 +337,7 @@ export default function OverviewAnalyticsView() {
       })
       .then((res)=> {
         setDataTotalKhoiCV(res.data.data)
+        
       })
       .catch((err)=> console.log('err', err))
     }
@@ -353,6 +362,11 @@ export default function OverviewAnalyticsView() {
     handleTotalKhoiCV()
   }, [accessToken, selectedYear, selectedKhoiCV])
 
+  useEffect(() => {
+    const totalValue = dataTotalKhoiCV.reduce((accumulator, currentObject) => accumulator + currentObject.value, 0);
+    setTotalKhoiCV(totalValue);
+  }, [dataTotalKhoiCV]);
+
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -362,7 +376,7 @@ export default function OverviewAnalyticsView() {
           mb: { xs: 3, md: 5 },
         }}
       >
-        Hi, Welcome back 👋
+        Hi, {user?.ent_duan?.Duan}
       </Typography>
       <Grid container spacing={3}>
         {isLoading2 === false && dataTotalHeader && (
@@ -431,7 +445,7 @@ export default function OverviewAnalyticsView() {
         <Grid xs={12} md={6} lg={4}>
           {dataTotalKhoiCV && isLoading3 === false && (
             <AnalyticsCurrentVisits
-              title="Checklists hiện tại"
+              title={`Số lượng Checklists khai báo hiện tại: ${totalKhoiCV}`}
               chart={{
                 series: dataTotalKhoiCV,
                 colors: ['rgb(0, 167, 111)', 'rgb(255, 171, 0)',"rgb(255, 86, 48)",  'rgb(0, 184, 217)']

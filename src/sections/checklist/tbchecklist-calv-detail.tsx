@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
+import { CSVLink, CSVDownload } from 'react-csv';
 // @mui
 import { alpha } from '@mui/material/styles';
 import Label from 'src/components/label';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -13,6 +15,8 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+
+
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -39,7 +43,12 @@ import {
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 // types
-import { IChecklist, IKhuvucTableFilters, IKhuvucTableFilterValue, TbChecklistCalv } from 'src/types/khuvuc';
+import {
+  IChecklist,
+  IKhuvucTableFilters,
+  IKhuvucTableFilterValue,
+  TbChecklistCalv,
+} from 'src/types/khuvuc';
 //
 import ChecklistTableRow from './detail/checklist-table-row';
 import ChecklistTableToolbar from './detail/checklist-table-toolbar';
@@ -47,19 +56,18 @@ import ChecklistTableFiltersResult from './detail/checklist-table-filters-result
 
 // ----------------------------------------------------------------------
 
-
 const TABLE_HEAD = [
-//   { id: 'ID_Checklist', label: '', width: 1 },
+  //   { id: 'ID_Checklist', label: '', width: 1 },
   { id: 'Checklist', label: 'Tên checklist', width: 150, align: 'left' },
   { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
   { id: 'Maso', label: 'Mã số', width: 100, align: 'center' },
- 
+
   { id: 'Ketqua', label: 'Kết quả', width: 100, align: 'center' },
   { id: 'Gioht', label: 'Giờ checklist', width: 100, align: 'center' },
   { id: 'Anh', label: 'Ảnh', width: 100, align: 'center' },
-  
+
   { id: 'Ghichu', label: 'Ghi chú', width: 100, align: 'center' },
-//   { id: '', width: 88 },
+  //   { id: '', width: 88 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -70,13 +78,25 @@ const defaultFilters: IKhuvucTableFilters = {
 const STORAGE_KEY = 'accessToken';
 
 type Props = {
-    currentChecklist?: TbChecklistCalv[];
-  };
+  currentChecklist?: TbChecklistCalv[];
+  dataChecklistC: any
+};
 
-  
+const headers = [
+  { label: 'STT', key: 'stt' },
+  { label: 'Hạng mục', key: 'hangMuc' },
+  { label: 'Nội dung kiểm tra', key: 'tenChecklist' },
+  { label: 'Giờ kiểm tra', key: 'gioKt' },
+  { label: 'Bình thường', key: 'kq1' },
+  { label: 'Không bình thường', key: 'kq2' },
+  { label: 'Lý do', key: 'lydo' },
+  { label: 'Ảnh', key: 'anh' },
+  { label: 'Ghi chú', key: 'ghichu' },
+];
+
 // ----------------------------------------------------------------------
 
-export default function TbChecklistCalvListView({ currentChecklist }: Props) {
+export default function TbChecklistCalvListView({ currentChecklist, dataChecklistC }: Props) {
   const table = useTable({ defaultOrderBy: 'ID_Checklist' });
 
   const settings = useSettingsContext();
@@ -91,25 +111,11 @@ export default function TbChecklistCalvListView({ currentChecklist }: Props) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  // const {checkList} = useGetChecklist( {page: table.page, limit: table.rowsPerPage});
-
   const [tableData, setTableData] = useState<TbChecklistCalv[]>([]);
 
+  const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
+
   const { calv } = useGetCalv();
-
-  const { khoiCV } = useGetKhoiCV();
-
-  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
-
-  useEffect(() => {
-    // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach(khoi => {
-      set_STATUS_OPTIONS(prevOptions => [
-        ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
-      ]);
-    });
-  }, [khoiCV]);
 
   // Use the checklist data in useEffect to set table data
   useEffect(() => {
@@ -124,7 +130,8 @@ export default function TbChecklistCalvListView({ currentChecklist }: Props) {
     filters,
   });
 
-  const dataInPage = dataFiltered.slice(
+
+  const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
@@ -195,7 +202,7 @@ export default function TbChecklistCalvListView({ currentChecklist }: Props) {
 
     table.onUpdatePageDeleteRows({
       totalRows: tableData?.length,
-      totalRowsInPage: dataInPage.length,
+      totalRowsInPage: dataInPage?.length,
       totalRowsFiltered: dataFiltered?.length,
     });
   }, [dataFiltered?.length, dataInPage.length, table, tableData]);
@@ -211,36 +218,53 @@ export default function TbChecklistCalvListView({ currentChecklist }: Props) {
     [router]
   );
 
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
+  
+  useEffect(()=> {
+    const formattedData = tableData?.map((item, index) => ({
+      stt: index + 1,
+      hangMuc: item.ent_checklist.ent_hangmuc.Hangmuc || '',
+      tenChecklist: item.ent_checklist.Checklist || '',
+      gioKt: item.Gioht || '',
+      kq1: `${item.status}` === '1' ? 'v' : '',
+      kq2: `${item.status}` === '0' ? 'v' : '',
+      lydo: item.Ketqua || '',
+      anh:  (item.Anh !== undefined && item.Anh !== null) ? `https://lh3.googleusercontent.com/d/${item.Anh}=s300?authuser=0$` : '',
+      ghichu: item.Ghichu || ''
+    }));
+    setDataFormatExcel(formattedData)
+  }, [tableData])
+
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Checklists"
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'Checklist',
-              href: paths.dashboard.checklist.root,
-            },
-            { name: 'Danh sách' },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <CustomBreadcrumbs
+            heading="Checklists"
+            links={[
+              {
+                name: 'Dashboard',
+                href: paths.dashboard.root,
+              },
+              {
+                name: 'Checklist',
+                href: paths.dashboard.checklist.root,
+              },
+              { name: 'Danh sách' },
+            ]}
+            sx={{
+              mb: { xs: 3, md: 5 },
+            }}
+          />
 
+          <CSVLink data={dataFormatExcel} headers={headers} 
+          filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_giamsat.Hoten}.csv`}>
+            <Button variant="contained" startIcon={<Iconify icon="solar:export-bold" />}>
+              Export
+            </Button>
+          </CSVLink>
+        </Stack>
         <Card>
-         
           <ChecklistTableToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -287,9 +311,9 @@ export default function TbChecklistCalvListView({ currentChecklist }: Props) {
                   rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                //   onSelectAllRows={(checked) =>
-                //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
-                //   }
+                  //   onSelectAllRows={(checked) =>
+                  //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
+                  //   }
                 />
 
                 <TableBody>
@@ -317,7 +341,7 @@ export default function TbChecklistCalvListView({ currentChecklist }: Props) {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={dataFiltered?.length}
             rowsPerPageOptions={[20, 30, 50]}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
@@ -385,14 +409,14 @@ function applyFilter({
       (checklist) =>
         `${checklist.ent_checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_checklist.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_checklist.ent_hangmuc.ent_khuvuc.Tenkhuvuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 
+        `${checklist.ent_checklist.ent_hangmuc.Hangmuc}`
+          .toLowerCase()
+          .indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.ent_checklist.ent_hangmuc.ent_khuvuc.Tenkhuvuc}`
+          .toLowerCase()
+          .indexOf(name.toLowerCase()) !== -1
     );
   }
-
-//   if (status !== 'all') {
-//     inputData = inputData?.filter((item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === status);
-//   }
 
   return inputData;
 }

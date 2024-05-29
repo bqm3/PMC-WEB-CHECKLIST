@@ -24,12 +24,12 @@ type Props = {
 export default function ChecklistCalvDetailView({ id }: Props) {
   const settings = useSettingsContext();
 
-  const { checkList: currentChecklist } = useGetTb_ChecklistDetail(id);
+  const { checkList: currentChecklist, dataChecklistC } = useGetTb_ChecklistDetail(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
     
-      <TbChecklistCalvView currentChecklist={currentChecklist} />
+      <TbChecklistCalvView currentChecklist={currentChecklist}  dataChecklistC={dataChecklistC}/>
     </Container>
   );
 }
