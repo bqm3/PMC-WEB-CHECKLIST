@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import {IDuan} from 'src/types/khuvuc';
+import {IDuan, IKhuvuc, IToanha} from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -37,7 +37,7 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Duan, Duan, Diachi } = row;
+  const { ID_Duan, Duan, Diachi, toanhas } = row;
 
   const confirm = useBoolean();
 
@@ -79,11 +79,68 @@ export default function CalvTableRow({
       <TableCell>
       {Diachi}
       </TableCell>
-      
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        <IconButton
+          color={collapse.value ? 'inherit' : 'default'}
+          onClick={collapse.onToggle}
+          sx={{
+            ...(collapse.value && {
+              bgcolor: 'action.hover',
+            }),
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-downward-fill" />
+        </IconButton>
+
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
+      </TableCell>
+      
+      
+    </TableRow>
+  );
+
+  const renderSecondary = (
+    <TableRow>
+      <TableCell sx={{ p: 0, border: 'none' }} colSpan={8}>
+        <Collapse
+          in={collapse.value}
+          timeout="auto"
+          unmountOnExit
+          sx={{ bgcolor: 'background.neutral' }}
+        >
+          <Stack component={Paper} sx={{ m: 1.5 }}>
+            {toanhas?.map((item:any) => (
+              <Stack
+                key={item.ID_Khuvuc}
+                direction="row"
+                alignItems="center"
+                sx={{
+                  p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
+                  '&:not(:last-of-type)': {
+                    borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
+                  },
+                }}
+              >
+                <ListItemText
+                  primary={item.Toanha}
+                  primaryTypographyProps={{
+                    typography: 'body2',
+                  }}
+                  secondaryTypographyProps={{
+                    component: 'span',
+                    color: 'text.disabled',
+                    mt: 0.5,
+                  }}
+                />
+
+                <Box>{item.Sotang} tầng</Box>
+
+              </Stack>
+            ))}
+          </Stack>
+        </Collapse>
       </TableCell>
     </TableRow>
   );
@@ -91,6 +148,8 @@ export default function CalvTableRow({
   return (
     <>
       {renderPrimary}
+
+      {renderSecondary}
 
       <CustomPopover
         open={popover.open}

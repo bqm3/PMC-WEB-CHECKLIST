@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import axios from 'axios';
 import { useMemo, useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
@@ -17,7 +18,7 @@ import { paths } from 'src/routes/paths';
 // hooks
 import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
-import { _tags, _roles, USER_GENDER_OPTIONS } from 'src/_mock';
+import { _tags, _roles, USER_GENDER_OPTIONS, _mapContact } from 'src/_mock';
 // api
 import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetChucvu } from 'src/api/khuvuc';
 // components
@@ -25,11 +26,9 @@ import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFSelect, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
 // types
-import { IKhoiCV, ICalv, IGiamsat, IDuan, IChucvu } from 'src/types/khuvuc';
-import axios from 'axios';
-import { DateTimePicker, TimePicker } from '@mui/x-date-pickers';
-// import moment from 'moment';
-import dayjs from 'dayjs';
+import { IDuan } from 'src/types/khuvuc';
+
+import ContactMap from './contact-map';
 
 // ----------------------------------------------------------------------
 
@@ -89,16 +88,12 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     try {
       if (currentDuan !== undefined) {
         await axios
-          .put(
-            `https://checklist.pmcweb.vn/be/api/ent_duan/update/${currentDuan.ID_Duan}`,
-            data,
-            {
-              headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          )
+          .put(`https://checklist.pmcweb.vn/be/api/ent_duan/update/${currentDuan.ID_Duan}`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
           .then((res) => {
             reset();
             enqueueSnackbar('Cập nhật thành công!');
@@ -218,12 +213,16 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Grid container spacing={3}>
-        {renderDetails}
+    <>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <Grid container spacing={3}>
+          {renderDetails}
 
-        {renderActions}
-      </Grid>
-    </FormProvider>
+          {renderActions}
+        </Grid>
+      </FormProvider>
+        {/* <ContactMap contacts={_mapContact} /> */}
+     
+    </>
   );
 }

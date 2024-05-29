@@ -230,7 +230,34 @@ export function useGetKhuVuc() {
 
 export function useGetDuan() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/ent_duan';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_duan/';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      duan: (data?.data as IDuan[]) || [],
+      duanLoading: isLoading,
+      duanError: error,
+      duanValidating: isValidating,
+      duanEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetDuanWeb() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_duan/web';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',

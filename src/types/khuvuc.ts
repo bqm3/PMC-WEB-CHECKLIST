@@ -60,6 +60,7 @@ export type IDuan = {
   Vido: string;
   Kinhdo: string;
   Logo: string;
+  toanhas: IToanha[]
 };
 
 export type IGiamsat = {

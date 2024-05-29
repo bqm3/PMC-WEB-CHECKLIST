@@ -29,12 +29,12 @@ export default function UserEditView({ id }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Cập nhật"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'User',
-            href: paths.dashboard.user.root,
+            name: 'Thông tin tài khoản',
+            href: paths.dashboard.createEmployee.list,
           },
           { name: currentUser?.UserName },
         ]}

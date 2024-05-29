@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetHangMuc, useGetKhoiCV } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -49,14 +49,12 @@ import OrderTableFiltersResult from '../article-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
   { id: 'ID_Hangmuc', label: 'Mã hạng mục', width: 150 },
   { id: 'Hangmuc', label: 'Tên hạng mục' },
-  { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
-  { id: 'ID_Khuvuc', label: 'Khu vực', width: 150, align: 'center' },
-  { id: 'ID_Toanha', label: 'Tòa nhà', width: 150, align: 'center' },
+  { id: 'MaQrCode', label: 'Mã Qr Code', width: 150, align: 'center' },
+  { id: 'ID_Khuvuc', label: 'Khu vực', width: 200, align: 'center' },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 150, align: 'center' },
   { id: '', width: 88 },
 ];
 
@@ -83,9 +81,22 @@ export default function AreaListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
+  const { hangMuc } = useGetHangMuc();
+  const { khoiCV } = useGetKhoiCV();
 
   const [tableData, setTableData] = useState<IHangMuc[]>([]);
+
+  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
+  useEffect(() => {
+    // Assuming khoiCV is set elsewhere in your component
+    khoiCV.forEach(khoi => {
+      set_STATUS_OPTIONS(prevOptions => [
+        ...prevOptions,
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+      ]);
+    });
+  }, [khoiCV]);
 
   useEffect(() => {
     if (hangMuc?.length > 0) {
@@ -216,7 +227,7 @@ export default function AreaListView() {
         />
 
         <Card>
-          {/* <Tabs
+        <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -224,7 +235,7 @@ export default function AreaListView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+        {STATUS_OPTIONS.map((tab) => (
               <Tab
                 key={tab.value}
                 iconPosition="end"
@@ -244,19 +255,19 @@ export default function AreaListView() {
                   >
                     {tab.value === 'all' && hangMuc?.length}
                     {tab.value === '1' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '1').length}
+                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '1').length}
 
                     {tab.value === '2' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '2').length}
+                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '2').length}
                     {tab.value === '3' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '3').length}
-                    {tab.value === 'refunded' &&
-                      hangMuc?.filter((order) => `${order.ID_KhoiCV}` === '4').length}
+                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '3').length}
+                    {tab.value === '4' &&
+                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '4').length}
                   </Label>
                 }
               />
             ))}
-          </Tabs> */}
+            </Tabs>
 
           <OrderTableToolbar
             filters={filters}
@@ -411,7 +422,7 @@ function applyFilter({
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.ID_Hangmuc}` === status);
+    inputData = inputData?.filter((order) => `${order?.ent_khuvuc?.ID_KhoiCV}` === status);
   }
 
   return inputData;

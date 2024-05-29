@@ -73,7 +73,6 @@ export default function AreaTableRow({
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <ListItemText
           primary={Hangmuc}
-          // secondary={ent_khoicv?.KhoiCV}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
             component: 'span',
@@ -82,8 +81,31 @@ export default function AreaTableRow({
         />
       </TableCell>
       <TableCell align="center"> {MaQrCode} </TableCell>
-      <TableCell> {ent_khuvuc?.Tenkhuvuc} </TableCell>
-      <TableCell> {ent_khuvuc?.ent_toanha?.Toanha} </TableCell>
+
+      <TableCell>
+        <ListItemText
+          primary={ent_khuvuc?.Tenkhuvuc}
+          secondary={ent_khuvuc?.ent_toanha?.Toanha}
+          primaryTypographyProps={{ typography: 'body2' }}
+          secondaryTypographyProps={{
+            component: 'span',
+            color: 'text.disabled',
+          }}
+        />{' '}
+      </TableCell>
+      <TableCell>
+        <Label
+          variant="soft"
+          color={
+            (`${ent_khuvuc?.ID_KhoiCV}` === '1' && 'success') ||
+            (`${ent_khuvuc?.ID_KhoiCV}` === '2' && 'warning') ||
+            (`${ent_khuvuc?.ID_KhoiCV}` === '3' && 'error') ||
+            'default'
+          }
+        >
+          {ent_khuvuc?.ent_khoicv?.KhoiCV}
+        </Label>
+      </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc, useGetCalv, useGetGiamsat, useGetDuan } from 'src/api/khuvuc';
+import {  useGetDuanWeb } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -57,13 +57,10 @@ import DuanTableFiltersResult from '../duan-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
   { id: 'ID_Duan', label: 'Mã dự án', width: 120 },
   { id: 'Duan', label: 'Tên dự án' },
   { id: 'Diachi', label: 'Địa chỉ' },
-
   { id: '', width: 88 },
 ];
 
@@ -90,7 +87,7 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { duan, duanLoading, duanEmpty } = useGetDuan();
+  const { duan, duanLoading, duanEmpty } = useGetDuanWeb();
 
   const [tableData, setTableData] = useState<IDuan[]>([]);
 

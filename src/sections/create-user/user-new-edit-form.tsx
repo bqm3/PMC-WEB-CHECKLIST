@@ -45,8 +45,6 @@ type Props = {
 const STORAGE_KEY = 'accessToken';
 
 export default function UserNewEditForm({ currentUser }: Props) {
-
-  console.log('currentUser',currentUser)
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -85,9 +83,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
     Password: Yup.string().required('Mật khẩu là bắt buộc'),
     // not required
-    Permission: Yup.string(),
-    ID_Duan: Yup.string(),
-    ID_KhoiCV: Yup.string()
   });
 
   const defaultValues = useMemo(
@@ -97,7 +92,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       Password: currentUser?.Password || '',
       Permission: currentUser?.Permission || null || '',
       ID_Duan: currentUser?.ID_Duan || null || '',
-      ID_KhoiCV: currentUser?.ID_KhoiCV || null || '' ,
+      ID_KhoiCV: currentUser?.ID_KhoiCV || null || '',
     }),
     [currentUser]
   );
@@ -120,78 +115,78 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if(currentUser !== undefined){
+      if (currentUser !== undefined) {
         await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_user/update/${currentUser?.ID_User}`, data, {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((res) => {
-          reset();
-          enqueueSnackbar('Cập nhật tài khoản!');
-          router.push(paths.dashboard.createEmployee.list);
-        })
-        .catch((error) => {
-          if (error.response) {
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 3000,
-              message: `${error.response.data.message}`,
-            });
-          } else if (error.request) {
-            // Lỗi không nhận được phản hồi từ server
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 3000,
-              message: `Không nhận được phản hồi từ máy chủ`,
-            });
-          } else {
-            // Lỗi khi cấu hình request
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 3000,
-              message: `Lỗi gửi yêu cầu`,
-            });
-          }
-        });
-      }else {
+          .put(`https://checklist.pmcweb.vn/be/api/ent_user/update/${currentUser?.ID_User}`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => {
+            reset();
+            enqueueSnackbar('Cập nhật tài khoản!');
+            router.push(paths.dashboard.createEmployee.list);
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+      } else {
         await axios
-        .post(`https://checklist.pmcweb.vn/be/api/ent_user/register`, data, {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((res) => {
-          reset();
-          enqueueSnackbar('Tạo tài khoản thành công!');
-          router.push(paths.dashboard.createEmployee.list);
-        })
-        .catch((error) => {
-          if (error.response) {
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 3000,
-              message: `${error.response.data.message}`,
-            });
-          } else if (error.request) {
-            // Lỗi không nhận được phản hồi từ server
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 3000,
-              message: `Không nhận được phản hồi từ máy chủ`,
-            });
-          } else {
-            // Lỗi khi cấu hình request
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 3000,
-              message: `Lỗi gửi yêu cầu`,
-            });
-          }
-        });
+          .post(`https://checklist.pmcweb.vn/be/api/ent_user/register`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => {
+            reset();
+            enqueueSnackbar('Tạo tài khoản thành công!');
+            router.push(paths.dashboard.createEmployee.list);
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
       }
     } catch (error) {
       enqueueSnackbar({
@@ -202,75 +197,85 @@ export default function UserNewEditForm({ currentUser }: Props) {
       // }
     }
   });
+
+  const renderPrimary = (
+    <Grid xs={12} md={12}>
+      <Card sx={{ p: 3 }}>
+        <Box
+          rowGap={3}
+          columnGap={2}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+          }}
+        >
+          {KhoiCV?.length > 0 && (
+            <RHFSelect
+              fullWidth
+              name="ID_KhoiCV"
+              label="Khối công việc"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {KhoiCV.map((option) => (
+                <MenuItem key={option.ID_Khoi} value={option.ID_Khoi}>
+                  {option.KhoiCV}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          )}
+          {Duan?.length > 0 && (
+            <RHFSelect
+              fullWidth
+              name="ID_Duan"
+              label="Dự án"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {Duan.map((option) => (
+                <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
+                  {option.Duan}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          )}
+
+          {Chucvu?.length > 0 && (
+            <RHFSelect
+              fullWidth
+              name="Permission"
+              label="Chức vụ"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {Chucvu.map((option) => (
+                <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
+                  {option.Chucvu}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          )}
+
+          <RHFTextField name="UserName" label="Tài khoản" />
+          <RHFTextField name="Emails" label="Email" />
+
+          {!currentUser && <RHFTextField name="Password" label="Mật khẩu" />}
+        </Box>
+
+        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            {!currentUser ? 'Tạo mới' : 'Lưu thay đổi'}
+          </LoadingButton>
+        </Stack>
+      </Card>
+    </Grid>
+  );
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={12}>
-          <Card sx={{ p: 3 }}>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              <RHFSelect
-                fullWidth
-                name="ID_KhoiCV"
-                label="Khối công việc"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {KhoiCV.map((option) => (
-                  <MenuItem key={option.ID_Khoi} value={option.ID_Khoi}>
-                    {option.KhoiCV}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFSelect
-                fullWidth
-                name="ID_Duan"
-                label="Dự án"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {Duan.map((option) => (
-                  <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
-                    {option.Duan}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-
-              <RHFSelect
-                fullWidth
-                name="Permission"
-                label="Chức vụ"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {Chucvu.map((option) => (
-                  <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
-                    {option.Chucvu}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFTextField name="UserName" label="Tài khoản" />
-              <RHFTextField name="Emails" label="Email" />
-              
-              {
-                !currentUser?.Password &&  <RHFTextField name="Password" label="Mật khẩu" /> 
-              }
-            </Box>
-
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-              {!currentUser ? 'Tạo mới' : 'Lưu thay đổi'}
-              </LoadingButton>
-            </Stack>
-          </Card>
-        </Grid>
+        {renderPrimary}
       </Grid>
     </FormProvider>
   );

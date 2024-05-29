@@ -87,9 +87,12 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const [toaNha, setToaNha] = useState<IToanha[]>([]);
   const [HangMuc, setHangMuc] = useState<any>([]);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
   const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { calv } = useGetCalv();
+  
 
   useEffect(() => {
     if (toanha?.length > 0) {
@@ -124,7 +127,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     [currentChecklist]
   );
 
-  const { calv } = useGetCalv();
+ 
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
