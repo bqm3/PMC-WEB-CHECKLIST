@@ -42,36 +42,15 @@ export const allLangs = [
     icon: 'flagpack:gb-nir',
   },
   {
-    label: 'French',
-    value: 'fr',
-    systemValue: merge(frFRDate, frFRDataGrid, frFRCore),
-    adapterLocale: frFRAdapter,
-    icon: 'flagpack:fr',
-  },
-  {
     label: 'Vietnamese',
     value: 'vi',
     systemValue: merge(viVNDate, viVNDataGrid, viVNCore),
     adapterLocale: viVNAdapter,
     icon: 'flagpack:vn',
-  },
-  {
-    label: 'Chinese',
-    value: 'cn',
-    systemValue: merge(zhCNDate, zhCNDataGrid, zhCNCore),
-    adapterLocale: zhCNAdapter,
-    icon: 'flagpack:cn',
-  },
-  {
-    label: 'Arabic',
-    value: 'ar',
-    systemValue: merge(arSDDataGrid, arSACore),
-    adapterLocale: arSAAdapter,
-    icon: 'flagpack:sa',
-  },
+  }
 ];
 
-export const defaultLang = allLangs[0]; // English
+export const defaultLang = allLangs[1]; // English
 
 // GET MORE COUNTRY FLAGS
 // https://icon-sets.iconify.design/flagpack/

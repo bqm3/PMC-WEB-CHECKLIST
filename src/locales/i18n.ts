@@ -22,10 +22,7 @@ i18n
   .init({
     resources: {
       en: { translations: translationEn },
-      fr: { translations: translationFr },
       vi: { translations: translationVi },
-      cn: { translations: translationCn },
-      ar: { translations: translationAr },
     },
     lng,
     fallbackLng: lng,
