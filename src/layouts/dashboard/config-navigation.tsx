@@ -58,13 +58,21 @@ export function useNavData() {
       // OVERVIEW
       {
         subheader: t('overview'),
-        items: [
-          {
-            title: t('analytics'),
-            path: paths.dashboard.general.analytics,
-            icon: ICONS.analytics,
-          },
-        ],
+        items: user
+          ? [
+              user?.Permission === 1
+                ? {
+                    title: t('analytics'),
+                    path: paths.dashboard.general.analytics,
+                    icon: ICONS.analytics,
+                  }
+                : {
+                    title: t('management'),
+                    path: paths.dashboard.general.management,
+                    icon: ICONS.analytics,
+                  },
+            ]
+          : [],
       },
       // MANAGEMENT
       {

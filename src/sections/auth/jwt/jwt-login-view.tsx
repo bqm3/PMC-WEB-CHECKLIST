@@ -86,7 +86,7 @@ export default function JwtLoginView() {
 
       <RHFTextField
         name="Password"
-        label="Password"
+        label="Mật khẩu"
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -107,7 +107,7 @@ export default function JwtLoginView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Login
+        Đăng nhập
       </LoadingButton>
     </Stack>
   );

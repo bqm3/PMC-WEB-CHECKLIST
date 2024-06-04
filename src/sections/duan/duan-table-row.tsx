@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import {IDuan, IKhuvuc, IToanha} from 'src/types/khuvuc';
+import { IDuan, IKhuvuc, IToanha } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -37,7 +37,7 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Duan, Duan, Diachi, toanhas } = row;
+  const { ID_Duan, Duan, Diachi, toanhas, totalKhuvucInDuan, totalHangmucInDuan } = row;
 
   const confirm = useBoolean();
 
@@ -76,9 +76,7 @@ export default function CalvTableRow({
           }}
         />
       </TableCell>
-      <TableCell>
-      {Diachi}
-      </TableCell>
+      <TableCell>{Diachi}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton
           color={collapse.value ? 'inherit' : 'default'}
@@ -96,8 +94,6 @@ export default function CalvTableRow({
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
       </TableCell>
-      
-      
     </TableRow>
   );
 
@@ -111,7 +107,7 @@ export default function CalvTableRow({
           sx={{ bgcolor: 'background.neutral' }}
         >
           <Stack component={Paper} sx={{ m: 1.5 }}>
-            {toanhas?.map((item:any) => (
+            {toanhas?.map((item: any) => (
               <Stack
                 key={item.ID_Khuvuc}
                 direction="row"
@@ -135,8 +131,9 @@ export default function CalvTableRow({
                   }}
                 />
 
-                <Box>{item.Sotang} tầng</Box>
-
+                <TableCell align="center"> {item.Sotang} tầng</TableCell>
+                <TableCell align="center"> {item.khuvucLength} Khu vực</TableCell>
+                <TableCell align="center"> {item.totalHangmucInToanha} Hạng mục</TableCell>
               </Stack>
             ))}
           </Stack>

@@ -92,7 +92,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
   const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
   const { calv } = useGetCalv();
-  
 
   useEffect(() => {
     if (toanha?.length > 0) {
@@ -197,8 +196,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   useEffect(() => {
     let filteredToanha;
     // Filter the hangMuc array based on ID_KhoiCV from values
-    if (values.ID_Toanha) {
-      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha) || [];
+    if (values.ID_Toanha && values.ID_KhoiCV) {
+      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha && item.ID_KhoiCV === values.ID_KhoiCV) || [];
 
       // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
      
@@ -212,7 +211,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
     // Update the state with the new array
     setKhuVuc(newArray);
-  }, [values.ID_Toanha, khuvuc]);
+  }, [values.ID_Toanha,values.ID_KhoiCV, khuvuc]);
 
   useEffect(() => {
     let filteredKhoiCV;

@@ -8,6 +8,8 @@ import DashboardLayout from 'src/layouts/dashboard';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { Outlet } from 'react-router-dom';
 import { ServiceNewView } from 'src/sections/service/view';
+// hooks
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +18,7 @@ export const DashboardPage = lazy(() => import('src/pages/dashboard/app'));
 export const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const OverviewEcommercePage = lazy(() => import('src/pages/dashboard/ecommerce'));
 const OverviewAnalyticsPage = lazy(() => import('src/pages/dashboard/analytics'));
+const OverviewManagementPage = lazy(() => import('src/pages/dashboard/management'));
 const OverviewBankingPage = lazy(() => import('src/pages/dashboard/banking'));
 const OverviewBookingPage = lazy(() => import('src/pages/dashboard/booking'));
 const OverviewFilePage = lazy(() => import('src/pages/dashboard/file'));
@@ -139,9 +142,10 @@ const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'
 const CaChecklistDetailPage = lazy(() => import('src/pages/dashboard/checklist/detail'));
 
 const UserAdminProfilePage = lazy(() => import('src/pages/dashboard/userAdmin/profile'));
-// ----------------------------------------------------------------------
+// -----------------------------------------
 
 export const dashboardRoutes = [
+  
   {
     path: 'dashboard',
     element: (
@@ -154,9 +158,10 @@ export const dashboardRoutes = [
       </AuthGuard>
     ),
     children: [
-      { element: <OverviewAnalyticsPage />, index: true },
+      { element:  <OverviewAnalyticsPage />, index: true },
       { path: 'ecommerce', element: <OverviewEcommercePage /> },
       { path: 'analytics', element: <OverviewAnalyticsPage /> },
+      { path: 'management', element: <OverviewManagementPage /> },
       { path: 'banking', element: <OverviewBankingPage /> },
       { path: 'booking', element: <OverviewBookingPage /> },
       { path: 'file', element: <OverviewFilePage /> },

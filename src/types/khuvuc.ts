@@ -60,6 +60,8 @@ export type IDuan = {
   Vido: string;
   Kinhdo: string;
   Logo: string;
+  totalKhuvucInDuan: string;
+  totalHangmucInDuan: string;
   toanhas: IToanha[]
 };
 
@@ -120,6 +122,8 @@ export type IKhuvuc = {
   isDelete: string;
   ent_khoicv: E_KhoiCV;
   ent_toanha: E_Toanha;
+  hangMucLength: string;
+  ent_hangmuc: IHangMuc;
 };
 
 export type IToanha = {
@@ -128,7 +132,9 @@ export type IToanha = {
   Toanha: string;
   Sotang: string;
   isDelete: string;
+  khuvucLength: string;
   ent_duan: E_Duan;
+  khuvuc: IKhuvuc;
 };
 
 export type IKhoiCV = {

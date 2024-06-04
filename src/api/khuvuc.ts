@@ -257,7 +257,7 @@ export function useGetDuan() {
 
 export function useGetDuanWeb() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/ent_duan/web';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_duan/thong-tin-du-an';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',

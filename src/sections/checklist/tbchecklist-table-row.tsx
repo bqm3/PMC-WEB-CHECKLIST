@@ -81,13 +81,9 @@ export default function AreaTableRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      {/* <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell> */}
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>{formattedDate}</TableCell>
 
       <TableCell align="center"> {ent_giamsat?.Hoten} </TableCell>
-      {/* <TableCell align="center"> {ent_giamsat.Hoten} </TableCell> */}
       <TableCell align="center">
         {' '}
         {TongC}/{Tong}
