@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc, useGetCalv, useGetGiamsat } from 'src/api/khuvuc';
+import { useGetKhoiCV, useGetGiamsat } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -56,10 +56,8 @@ import GiamsatTableFiltersResult from '../giamsat-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
-  { id: 'ID_Giamsat', label: 'Mã giám sát', width: 120 },
+  { id: 'ID_Giamsat', label: 'Mã', width: 100 },
   { id: 'Hoten', label: 'Họ tên', width: 200 },
   { id: 'ID_Chucvu', label: 'Chức vụ', width: 140, align: 'center' },
   { id: 'Ngaysinh', label: 'Ngày sinh', width: 100, align: 'center' },
@@ -92,17 +90,28 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { giamsat, giamsatLoading, giamsatEmpty } = useGetGiamsat();
+  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
+  const { giamsat } = useGetGiamsat();
+  const { khoiCV } = useGetKhoiCV();
 
   const [tableData, setTableData] = useState<IGiamsat[]>([]);
-
-  console.log('giamsat', giamsat);
 
   useEffect(() => {
     if (giamsat?.length > 0) {
       setTableData(giamsat);
     }
   }, [giamsat]);
+
+  useEffect(() => {
+    // Assuming khoiCV is set elsewhere in your component
+    khoiCV.forEach((khoi) => {
+      set_STATUS_OPTIONS((prevOptions) => [
+        ...prevOptions,
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
+      ]);
+    });
+  }, [khoiCV]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -235,7 +244,7 @@ export default function GiamsatListView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {/* {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab) => (
               <Tab
                 key={tab.value}
                 iconPosition="end"
@@ -263,12 +272,10 @@ export default function GiamsatListView() {
                       giamsat?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
                     {tab.value === '4' &&
                       giamsat?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
-                    {tab.value === '5' &&
-                      giamsat?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
                   </Label>
                 }
               />
-            ))} */}
+            ))}
           </Tabs>
 
           <GiamsatTableToolbar

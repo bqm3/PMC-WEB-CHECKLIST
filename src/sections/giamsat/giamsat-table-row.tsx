@@ -24,6 +24,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import moment from 'moment';
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +50,8 @@ export default function CalvTableRow({
   const collapse = useBoolean();
 
   const popover = usePopover();
+
+  const formattedDate = moment(Ngaysinh).format("DD/MM/YYYY");
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -82,7 +85,7 @@ export default function CalvTableRow({
         />
       </TableCell>
       <TableCell align="center"> {ent_chucvu?.Chucvu} </TableCell>
-      <TableCell align="center"> {Ngaysinh} </TableCell>
+      <TableCell align="center"> {formattedDate} </TableCell>
       <TableCell align="center"> {Sodienthoai} </TableCell>
       <TableCell align="center"> {
         Gioitinh === 'nam' && 'Nam' || Gioitinh === 'nu' && 'Nữ' || Gioitinh === 'khac' && 'Khác' 

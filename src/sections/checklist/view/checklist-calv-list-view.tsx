@@ -81,7 +81,7 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function ChecklistCalvListView() {
-  const table = useTable({ defaultOrderBy: 'ID_ChecklistC' });
+  const table = useTable({ });
 
   const settings = useSettingsContext();
 
