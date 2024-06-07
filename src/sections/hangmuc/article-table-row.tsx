@@ -42,7 +42,7 @@ export default function AreaTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Khuvuc, ID_Hangmuc, Hangmuc, Tieuchuankt, MaQrCode, ent_khuvuc } = row;
+  const { ID_Khuvuc, ID_Hangmuc, Hangmuc, Tieuchuankt, MaQrCode, ent_khuvuc, ent_khoicv, ID_KhoiCV } = row;
 
   const confirm = useBoolean();
 
@@ -66,7 +66,7 @@ export default function AreaTableRow({
             },
           }}
         >
-          {ID_Hangmuc}
+          HM{ID_Hangmuc}
         </Box>
       </TableCell>
 
@@ -97,13 +97,13 @@ export default function AreaTableRow({
         <Label
           variant="soft"
           color={
-            (`${ent_khuvuc?.ID_KhoiCV}` === '1' && 'success') ||
-            (`${ent_khuvuc?.ID_KhoiCV}` === '2' && 'warning') ||
-            (`${ent_khuvuc?.ID_KhoiCV}` === '3' && 'error') ||
+            (`${ID_KhoiCV}` === '1' && 'success') ||
+            (`${ID_KhoiCV}` === '2' && 'warning') ||
+            (`${ID_KhoiCV}` === '3' && 'error') ||
             'default'
           }
         >
-          {ent_khuvuc?.ent_khoicv?.KhoiCV}
+          {ent_khoicv?.KhoiCV}
         </Label>
       </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

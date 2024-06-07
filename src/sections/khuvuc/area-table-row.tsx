@@ -18,7 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 // types
 import { IOrderItem } from 'src/types/order';
-import { IKhuvuc } from 'src/types/khuvuc';
+import { IKhuvuc, IKhoiCV } from 'src/types/khuvuc';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -29,6 +29,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 type Props = {
   row: IKhuvuc;
+  khoiCV: IKhoiCV[];
   selected: boolean;
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -41,6 +42,7 @@ export default function AreaTableRow({
   onViewRow,
   onSelectRow,
   onDeleteRow,
+  khoiCV,
 }: Props) {
   const {
     ID_Khuvuc,
@@ -54,6 +56,7 @@ export default function AreaTableRow({
     ID_User,
     isDelete,
     ent_toanha,
+    ID_KhoiCVs,
   } = row;
 
   const confirm = useBoolean();
@@ -61,6 +64,48 @@ export default function AreaTableRow({
   const collapse = useBoolean();
 
   const popover = usePopover();
+
+  let ID_KhoiCVsArray: number[];
+
+  // Kiểm tra xem ID_KhoiCVs là một mảng hoặc không
+  if (Array.isArray(ID_KhoiCVs)) {
+    // Kiểm tra xem các phần tử trong mảng có phải là số không và chuyển đổi
+    ID_KhoiCVsArray = ID_KhoiCVs.filter((item) => typeof item === 'number').map(Number);
+  } else if (typeof ID_KhoiCVs === 'string') {
+    // Chuyển đổi từ chuỗi sang mảng số
+    ID_KhoiCVsArray = ID_KhoiCVs.replace(/\[|\]/g, '') // Loại bỏ dấu ngoặc vuông
+      .split(', ') // Phân tách các số
+      .map((item) => Number(item.trim())) // Chuyển đổi từ chuỗi sang số
+      .filter((item) => !Number.isNaN(item)); // Loại bỏ các giá trị không hợp lệ
+  } else {
+    // Trong trường hợp ID_KhoiCVs không phải là mảng hoặc chuỗi, ta gán một mảng rỗng
+    ID_KhoiCVsArray = [];
+  }
+
+  const shiftNames = ID_KhoiCVsArray.map((calvId) => {
+    const workShift = khoiCV?.find((shift) => `${shift.ID_Khoi}` === `${calvId}`);
+    return workShift ? workShift.KhoiCV : null;
+  })
+    .filter((name) => name !== null)
+    .join(', ');
+
+  const shiftNamesArray = shiftNames.split(', ');
+
+  const labels = shiftNamesArray.map((name, index) => (
+    <Label
+      key={index}
+      variant="soft"
+      color={
+        (`${name}` === 'Khối làm sạch' && 'success') ||
+        (`${name}` === 'Khối kỹ thuật' && 'warning') ||
+        (`${name}` === 'Khối bảo vệ' && 'error') ||
+        'default'
+      }
+      style={{ marginTop: 4 }}
+    >
+      {name}
+    </Label>
+  ));
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -78,7 +123,7 @@ export default function AreaTableRow({
             },
           }}
         >
-          {ID_Khuvuc}
+          KV{ID_Khuvuc}
         </Box>
       </TableCell>
 
@@ -99,35 +144,11 @@ export default function AreaTableRow({
 
       <TableCell align="center"> {MaQrCode} </TableCell>
       <TableCell> {`${Sothutu}`} </TableCell>
-      <TableCell>  {`${Makhuvuc}`}</TableCell>
+      <TableCell> {`${Makhuvuc}`}</TableCell>
 
-      <TableCell>
-        <Label
-          variant="soft"
-          color={
-            (`${ID_KhoiCV}` === '1' && 'success') ||
-            (`${ID_KhoiCV}` === '2' && 'warning') ||
-            (`${ID_KhoiCV}` === '3' && 'error') ||
-            'default'
-          }
-        >
-          {ent_khoicv.KhoiCV}
-        </Label>
-      </TableCell>
+      <TableCell>{labels}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        {/* <IconButton
-          color={collapse.value ? 'inherit' : 'default'}
-          onClick={collapse.onToggle}
-          sx={{
-            ...(collapse.value && {
-              bgcolor: 'action.hover',
-            }),
-          }}
-        >
-          <Iconify icon="eva:arrow-ios-downward-fill" />
-        </IconButton> */}
-
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -135,7 +156,6 @@ export default function AreaTableRow({
     </TableRow>
   );
 
- 
   return (
     <>
       {renderPrimary}
@@ -146,7 +166,7 @@ export default function AreaTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-         <MenuItem
+        <MenuItem
           onClick={() => {
             onViewRow();
             popover.onClose();
@@ -165,8 +185,6 @@ export default function AreaTableRow({
           <Iconify icon="solar:trash-bin-trash-bold" />
           Xóa
         </MenuItem>
-
-       
       </CustomPopover>
 
       <ConfirmDialog

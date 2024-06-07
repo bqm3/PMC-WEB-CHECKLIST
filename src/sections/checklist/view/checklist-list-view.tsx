@@ -276,20 +276,20 @@ export default function ChecklistCalvListView() {
                     {tab.value === 'all' && checkList?.length}
                     {tab.value === '1' &&
                       checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '1'
+                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '1'
                       ).length}
 
                     {tab.value === '2' &&
                       checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '2'
+                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '2'
                       ).length}
                     {tab.value === '3' &&
                       checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '3'
+                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '3'
                       ).length}
                     {tab.value === '4' &&
                       checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '4'
+                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '4'
                       ).length}
                   </Label>
                 }
@@ -451,7 +451,7 @@ function applyFilter({
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((item) => `${item.ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === status);
+    inputData = inputData?.filter((item) => `${item.ent_hangmuc.ID_KhoiCV}` === status);
   }
 
   return inputData;

@@ -255,14 +255,14 @@ export default function AreaListView() {
                   >
                     {tab.value === 'all' && hangMuc?.length}
                     {tab.value === '1' &&
-                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '1').length}
+                      hangMuc?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
 
                     {tab.value === '2' &&
-                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '2').length}
+                      hangMuc?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
                     {tab.value === '3' &&
-                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '3').length}
+                      hangMuc?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
                     {tab.value === '4' &&
-                      hangMuc?.filter((item) => `${item.ent_khuvuc.ID_KhoiCV}` === '4').length}
+                      hangMuc?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
                   </Label>
                 }
               />
@@ -422,7 +422,7 @@ function applyFilter({
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.ent_khuvuc?.ID_KhoiCV}` === status);
+    inputData = inputData?.filter((order) => `${order?.ID_KhoiCV}` === status);
   }
 
   return inputData;

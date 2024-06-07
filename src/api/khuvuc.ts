@@ -429,10 +429,12 @@ export function useGetHangMuc() {
       },
     }).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+  console.log('data?.data', data?.data)
 
   const memoizedValue = useMemo(
     () => ({
       hangMuc: (data?.data as IHangMuc[]) || [],
+
       hangMucLoading: isLoading,
       hangMucError: error,
       hangMucValidating: isValidating,

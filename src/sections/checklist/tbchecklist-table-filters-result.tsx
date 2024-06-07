@@ -56,18 +56,7 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {/* {!!filters.service.length && (
-          <Block label="Service:">
-            {filters.service.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveService(item)}
-              />
-            ))}
-          </Block>
-        )} */}
+       
 
         {filters.status !== 'all' && (
           <Block label="Khối làm việc:">
@@ -77,7 +66,7 @@ export default function InvoiceTableFiltersResult({
                 (`${filters.status}` === '1' && 'Khối làm sạch') ||
                 (`${filters.status}` === '2' && 'Khối kỹ thuật') ||
                 (`${filters.status}` === '3' && 'Khối bảo vệ')  ||
-                (`${filters.status}` === '4' && 'Khối lễ tân')  
+                (`${filters.status}` === '4' && 'Khối dự án')  
               }
               onDelete={handleRemoveStatus}
             />

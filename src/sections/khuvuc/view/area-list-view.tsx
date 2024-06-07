@@ -47,10 +47,7 @@ import OrderTableRow from '../area-table-row';
 import OrderTableToolbar from '../area-table-toolbar';
 import OrderTableFiltersResult from '../area-table-filters-result';
 
-
 // ----------------------------------------------------------------------
-
-
 
 const TABLE_HEAD = [
   { id: 'ID_Khuvuc', label: 'Mã khu vực', width: 140 },
@@ -73,8 +70,6 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function AreaListView() {
-
-  
   const table = useTable({ defaultOrderBy: 'ID_Khuvuc' });
 
   const settings = useSettingsContext();
@@ -87,7 +82,6 @@ export default function AreaListView() {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
@@ -95,21 +89,20 @@ export default function AreaListView() {
 
   const [tableData, setTableData] = useState<IKhuvuc[]>([]);
 
-  useEffect(()=> {
-    if(khuvuc.length > 0){
-      setTableData(khuvuc)
+  useEffect(() => {
+    if (khuvuc.length > 0) {
+      setTableData(khuvuc);
     }
-  },[khuvuc])
-
+  }, [khuvuc]);
 
   const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
 
   useEffect(() => {
     // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach(khoi => {
-      set_STATUS_OPTIONS(prevOptions => [
+    khoiCV.forEach((khoi) => {
+      set_STATUS_OPTIONS((prevOptions) => [
         ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV }
+        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
       ]);
     });
   }, [khoiCV]);
@@ -156,10 +149,9 @@ export default function AreaListView() {
           // reset();
           const deleteRow = tableData.filter((row) => row.ID_Khuvuc !== id);
           setTableData(deleteRow);
-  
+
           table.onUpdatePageDeleteRow(dataInPage.length);
           enqueueSnackbar('Xóa thành công!');
-         
         })
         .catch((error) => {
           if (error.response) {
@@ -187,7 +179,6 @@ export default function AreaListView() {
     },
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
-  
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.ID_Khuvuc));
@@ -268,14 +259,74 @@ export default function AreaListView() {
                   >
                     {tab.value === 'all' && khuvuc?.length}
                     {tab.value === '1' &&
-                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '1').length}
+                      khuvuc?.filter((order) => {
+                        let ids = order.ID_KhoiCVs;
+
+                        // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
+                        if (typeof ids !== 'string') {
+                          ids = String(ids);
+                        }
+
+                        // Kiểm tra các điều kiện để tìm '1'
+                        return (
+                          ids === '1' ||
+                          ids.startsWith('1,') ||
+                          ids.includes(',1,') ||
+                          ids.endsWith(',1')
+                        );
+                      }).length}
 
                     {tab.value === '2' &&
-                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '2').length}
+                      khuvuc?.filter((order) => {
+                        let ids = order.ID_KhoiCVs;
+
+                        // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
+                        if (typeof ids !== 'string') {
+                          ids = String(ids);
+                        }
+
+                        // Kiểm tra các điều kiện để tìm '1'
+                        return (
+                          ids === '2' ||
+                          ids.startsWith('2,') ||
+                          ids.includes(',2,') ||
+                          ids.endsWith(',2')
+                        );
+                      }).length}
                     {tab.value === '3' &&
-                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '3').length}
+                      khuvuc?.filter((order) => {
+                        let ids = order.ID_KhoiCVs;
+
+                        // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
+                        if (typeof ids !== 'string') {
+                          ids = String(ids);
+                        }
+
+                        // Kiểm tra các điều kiện để tìm '1'
+                        return (
+                          ids === '3' ||
+                          ids.startsWith('3,') ||
+                          ids.includes(',3,') ||
+                          ids.endsWith(',3')
+                        );
+                      }).length}
                     {tab.value === '4' &&
-                      khuvuc?.filter((order) => `${order.ID_KhoiCV}` === '4').length}
+                      khuvuc?.filter((order) => {
+                        let ids = order.ID_KhoiCVs;
+
+                        // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
+                        if (typeof ids !== 'string') {
+                          ids = String(ids);
+                        }
+
+                        // Kiểm tra các điều kiện để tìm '1'
+                        return (
+                          ids === '4' ||
+                          ids.startsWith('4,') ||
+                          ids.includes(',4,') ||
+                          ids.endsWith(',4')
+                        );
+                      }).length}
                   </Label>
                 }
               />
@@ -347,6 +398,7 @@ export default function AreaListView() {
                         onSelectRow={() => table.onSelectRow(row.ID_Khuvuc)}
                         onDeleteRow={() => handleDeleteRow(row.ID_Khuvuc)}
                         onViewRow={() => handleViewRow(row.ID_Khuvuc)}
+                        khoiCV={khoiCV}
                       />
                     ))}
 
@@ -433,9 +485,24 @@ function applyFilter({
     );
   }
 
+  
+
   if (status !== 'all') {
-    inputData = inputData.filter((order) => `${order?.ID_KhoiCV}` === status);
-  }
+    // Chuyển status thành số nguyên để so sánh với các phần tử trong mảng ID_KhoiCVs
+    const statusAsNumber = parseInt(status, 10);
+
+    inputData = inputData.filter(order => {
+        const ids = order?.ID_KhoiCVs;
+
+        // Kiểm tra nếu ids là mảng
+        if (Array.isArray(ids)) {
+            return ids.includes(statusAsNumber);
+        }
+
+        // Trường hợp ids không phải là mảng
+        return false;
+    });
+}
 
   return inputData;
 }

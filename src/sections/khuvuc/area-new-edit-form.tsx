@@ -67,7 +67,9 @@ export default function AreaNewEditForm({ currentArea }: Props) {
 
   const [includeTaxes, setIncludeTaxes] = useState(false);
   const [toaNha, setToanha] = useState<IToanha[]>([]);
-  const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
+  const [khoiCv, setKhoiCv] = useState<any>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
 
@@ -78,12 +80,6 @@ export default function AreaNewEditForm({ currentArea }: Props) {
       setToanha(toanha);
     }
   }, [toanha]);
-
-  useEffect(() => {
-    if (khoiCV?.length > 0) {
-      setKhoiCv(khoiCV);
-    }
-  }, [khoiCV]);
 
   const NewProductSchema = Yup.object().shape({
     Tenkhuvuc: Yup.string().required('Phải có tên khu vực'),
@@ -97,9 +93,59 @@ export default function AreaNewEditForm({ currentArea }: Props) {
       MaQrCode: currentArea?.MaQrCode || '',
       Sothutu: currentArea?.Sothutu || '',
       Makhuvuc: currentArea?.Makhuvuc || '',
+      ID_KhoiCVs: currentArea?.ID_KhoiCVs || [],
     }),
     [currentArea]
   );
+
+  useEffect(() => {
+    if (khoiCV?.length > 0) {
+      const transformedData = khoiCV.map((item) => ({
+        value: item.ID_Khoi,
+        label: item.KhoiCV,
+      }));
+      setKhoiCv(transformedData);
+    }
+  }, [khoiCV]);
+
+  // useEffect(() => {
+  //   if (
+  //     defaultValues.ID_KhoiCVs &&
+  //     defaultValues.ID_KhoiCVs !== '' &&
+  //     defaultValues.ID_KhoiCVs.length > 0
+  //   ) {
+  //     setLoading(true);
+  //     const parsedArray = Array.isArray(defaultValues.ID_KhoiCVs)
+  //       ? defaultValues.ID_KhoiCVs
+  //       : [defaultValues.ID_KhoiCVs];
+        
+  //     const newArray = parsedArray
+  //       ?.map((ID: string) => {
+  //         // Find the corresponding item in the khoiCV array
+  //         const item = khoiCV.find((iTem) => `${iTem.ID_Khoi}` === `${ID}`);
+
+  //         // If the item is found, return an object with the desired structure
+  //         if (item) {
+  //           return {
+  //             value: item.ID_Khoi,
+  //             label: `${item.KhoiCV}`,
+  //           };
+  //         }
+
+  //         // If the item is not found, return null or handle it as needed
+  //         return null;
+  //       })
+  //       ?.filter((item: any) => item !== null);
+  //     setKhoiCv(newArray);
+  //     setLoading(false);
+  //   } else {
+  //     const transformedData = khoiCV.map((item) => ({
+  //       value: item.ID_Khoi,
+  //       label: item.KhoiCV,
+  //     }));
+  //     setKhoiCv(transformedData);
+  //   }
+  // }, [khoiCV, defaultValues.ID_KhoiCVs]);
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -122,17 +168,8 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     }
   }, [currentArea, defaultValues, reset]);
 
-  // useEffect(() => {
-  //   if (includeTaxes) {
-  //     setValue('taxes', 0);
-  //   } else {
-  //     setValue('taxes', currentArea?.taxes || 0);
-  //   }
-  // }, [currentArea?.taxes, includeTaxes, setValue]);
-
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
       if (currentArea !== undefined) {
         await axios
           .put(`https://checklist.pmcweb.vn/be/api/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
@@ -214,36 +251,10 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     }
   });
 
-  // const handleDrop = useCallback(
-  //   (acceptedFiles: File[]) => {
-  //     const files = values.images || [];
-
-  //     const newFiles = acceptedFiles.map((file) =>
-  //       Object.assign(file, {
-  //         preview: URL.createObjectURL(file),
-  //       })
-  //     );
-
-  //     setValue('images', [...files, ...newFiles], { shouldValidate: true });
-  //   },
-  //   [setValue, values.images]
-  // );
-
-  // const handleRemoveFile = useCallback(
-  //   (inputFile: File | string) => {
-  //     const filtered = values.images && values.images?.filter((file) => file !== inputFile);
-  //     setValue('images', filtered);
-  //   },
-  //   [setValue, values.images]
-  // );
-
-  // const handleRemoveAllFiles = useCallback(() => {
-  //   setValue('images', []);
-  // }, [setValue]);
-
   const handleChangeIncludeTaxes = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setIncludeTaxes(event.target.checked);
   }, []);
+
 
   const renderDetails = (
     <>
@@ -281,21 +292,24 @@ export default function AreaNewEditForm({ currentArea }: Props) {
             </Stack>
 
             <Stack spacing={1.5}>
-              {khoiCv?.length > 0 && (
-                <RHFSelect
-                  name="ID_KhoiCV"
-                  label="Khối công việc"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {khoiCv?.map((item) => (
-                    <MenuItem key={item?.ID_Khoi} value={item?.ID_Khoi}>
-                      {item?.KhoiCV}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
+              {loading === false ? (
+                <>
+                  {khoiCv && khoiCv?.length > 0 ? (
+                    <RHFMultiSelect
+                      checkbox
+                      name="ID_KhoiCVs"
+                      label="Chọn các khối cho khu vực"
+                      options={khoiCv}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : (
+                <></>
               )}
             </Stack>
+
             <RHFTextField name="Tenkhuvuc" label="Tên khu vực" />
             <RHFTextField name="MaQrCode" label="Mã Qr Code" />
             <RHFTextField name="Sothutu" label="Số thứ tự" />

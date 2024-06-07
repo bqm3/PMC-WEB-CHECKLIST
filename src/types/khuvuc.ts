@@ -115,6 +115,7 @@ export type IKhuvuc = {
   ID_Toanha: string;
   ID_KhoiCV: string;
   Sothutu: string;
+  ID_KhoiCVs: string;
   Makhuvuc: string;
   MaQrCode: string;
   Tenkhuvuc: string;
@@ -157,11 +158,13 @@ export type ICalv = {
 export type IHangMuc = {
   ID_Hangmuc: string;
   ID_Khuvuc: string;
+  ID_KhoiCV: string;
   MaQrCode: string;
   Hangmuc: string;
   Tieuchuankt: string;
   isDelete: string;
   ent_khuvuc: IKhuvuc;
+  ent_khoicv: IKhoiCV;
 };
 
 export type ITbChecklist = {

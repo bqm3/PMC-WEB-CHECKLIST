@@ -37,11 +37,6 @@ export default function OrderTableFiltersResult({
     onFilters('status', 'all');
   };
 
-  const handleRemoveDate = () => {
-    onFilters('startDate', null);
-    onFilters('endDate', null);
-  };
-
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
@@ -59,7 +54,8 @@ export default function OrderTableFiltersResult({
               label={
                 (`${filters.status}` === '1' && 'Khối làm sạch') ||
                 (`${filters.status}` === '2' && 'Khối kỹ thuật') ||
-                (`${filters.status}` === '3' && 'Khối bảo vệ')
+                (`${filters.status}` === '3' && 'Khối bảo vệ') ||
+                (`${filters.status}` === '4' && 'Khối dự án') 
               }
               onDelete={handleRemoveStatus}
             />

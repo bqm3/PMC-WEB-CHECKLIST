@@ -197,7 +197,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     let filteredToanha;
     // Filter the hangMuc array based on ID_KhoiCV from values
     if (values.ID_Toanha && values.ID_KhoiCV) {
-      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha && item.ID_KhoiCV === values.ID_KhoiCV) || [];
+      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha 
+      &&  (values.ID_KhoiCV ? item.ID_KhoiCVs.includes(values.ID_KhoiCV) : true)) || [];
 
       // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
      
@@ -218,9 +219,9 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   
     if (values.ID_KhoiCV) {
       // Filter the hangMuc array based on ID_KhoiCV from values
-      filteredKhoiCV = hangMuc?.filter(item => item.ent_khuvuc.ID_KhoiCV === values.ID_KhoiCV) || [];
+      filteredKhoiCV = hangMuc?.filter(item => item.ID_KhoiCV === values.ID_KhoiCV) || [];
       if (values.ID_Khuvuc) {
-        filteredKhoiCV = filteredKhoiCV.filter(item => item.ent_khuvuc.ID_Khuvuc === values.ID_Khuvuc);
+        filteredKhoiCV = filteredKhoiCV.filter(item => item.ID_Khuvuc === values.ID_Khuvuc);
       }
     } else {
       // Use the full hangMuc array if ID_KhoiCV is not provided

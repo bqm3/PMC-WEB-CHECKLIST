@@ -86,13 +86,15 @@ export default function AreaTableRow({
 
   const shiftNamesArray = shiftNames.split(', ');
 
+  console.log('shiftNamesArray', shiftNamesArray)
+
   // Tạo các nhãn từ mảng các tên ca làm việc
   const labels = shiftNamesArray.map((name, index) => (
     <Label key={index} variant="soft" 
       color={
-        (`${ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '1' && 'success') ||
-        (`${ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '2' && 'warning') ||
-        (`${ent_hangmuc.ent_khuvuc.ID_KhoiCV}` === '3' && 'error') ||
+        (`${ent_hangmuc.ID_KhoiCV}` === '1' && 'success') ||
+        (`${ent_hangmuc.ID_KhoiCV}` === '2' && 'warning') ||
+        (`${ent_hangmuc.ID_KhoiCV}` === '3' && 'error') ||
         'default'
       }
      style={{marginTop: 4}}>

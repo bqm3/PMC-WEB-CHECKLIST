@@ -99,7 +99,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       Tieuchuankt: currentArticle?.Tieuchuankt || '',
       MaQrCode: currentArticle?.MaQrCode || '',
       ID_Khuvuc: currentArticle?.ID_Khuvuc || null,
-      ID_KhoiCV: currentArticle?.ent_khuvuc?.ID_KhoiCV || null || '',
+      ID_KhoiCV: currentArticle?.ID_KhoiCV || null || '',
       ID_Toanha: currentArticle?.ent_khuvuc?.ID_Toanha || null || '',
     }),
     [currentArticle]
@@ -128,7 +128,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
     if (values.ID_Toanha || values.ID_KhoiCV) {
       filteredToanha = khuvuc?.filter((item: any) => {
         const matchToanha = values.ID_Toanha ? `${item.ID_Toanha}` === `${values.ID_Toanha}` : true;
-        const matchKhoiCV = values.ID_KhoiCV ? `${item.ID_KhoiCV}` === `${values.ID_KhoiCV}` : true;
+        const matchKhoiCV = values.ID_KhoiCV ? item.ID_KhoiCVs.includes(values.ID_KhoiCV) : true;
         return matchToanha && matchKhoiCV;
       }) || [];
     }
