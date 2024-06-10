@@ -242,7 +242,7 @@ export default function ChecklistCalvListView() {
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
             onClick={upload.onTrue}
           >
-            Upload
+            Import
           </Button>
         </Stack>
 

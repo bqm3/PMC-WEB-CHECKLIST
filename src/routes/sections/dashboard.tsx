@@ -301,7 +301,7 @@ export const dashboardRoutes = [
         children: [{ element: <EmployeeAccountPage />, index: true }],
       },
       {
-        path: 'create-employee',
+        path: 'create-user',
         children: [
           { element: <CreateEmployeePage />, index: true },
           { path: 'list', element: <ListEmployeePage /> },

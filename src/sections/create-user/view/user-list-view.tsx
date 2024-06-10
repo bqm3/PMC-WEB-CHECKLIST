@@ -68,7 +68,7 @@ import DuanTableFiltersResult from '../user-table-filters-result';
 const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...PERMISSION_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'ID_User', label: 'Mã nhân viên', width: 80 },
+  { id: 'ID_User', label: 'Mã nhân viên', width: 120 },
   { id: 'UserName', label: 'Tài khoản', width: 140 },
   { id: 'Permission', label: 'Chức vụ', width: 140 },
 
@@ -201,7 +201,7 @@ export default function GiamsatListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.createEmployee.edit(id));
+      router.push(paths.dashboard.createUser.edit(id));
     },
     [router]
   );
@@ -225,7 +225,7 @@ export default function GiamsatListView() {
             },
             {
               name: 'Tài khoản',
-              href: paths.dashboard.createEmployee.root,
+              href: paths.dashboard.createUser.root,
             },
             { name: 'Danh sách' },
           ]}

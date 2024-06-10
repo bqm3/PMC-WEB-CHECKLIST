@@ -172,10 +172,10 @@ export const paths = {
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
       lists :`${ROOTS.DASHBOARD}/checklist/lists`, 
     },
-    createEmployee: {
-      root: `${ROOTS.DASHBOARD}/create-employee`,
-      list: `${ROOTS.DASHBOARD}/create-employee/list`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/create-employee/${id}/edit`,
+    createUser: {
+      root: `${ROOTS.DASHBOARD}/create-user`,
+      list: `${ROOTS.DASHBOARD}/create-user/list`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/create-user/${id}/edit`,
     },
     duan: {
       root: `${ROOTS.DASHBOARD}/duan`,

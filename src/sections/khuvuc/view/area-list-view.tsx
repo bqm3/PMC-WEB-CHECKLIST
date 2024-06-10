@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import Stack from '@mui/material/Stack';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -46,6 +47,7 @@ import { IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types
 import OrderTableRow from '../area-table-row';
 import OrderTableToolbar from '../area-table-toolbar';
 import OrderTableFiltersResult from '../area-table-filters-result';
+import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +79,8 @@ export default function AreaListView() {
   const router = useRouter();
 
   const confirm = useBoolean();
+
+  const upload = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -212,6 +216,7 @@ export default function AreaListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <CustomBreadcrumbs
           heading="Khu vực"
           links={[
@@ -229,6 +234,14 @@ export default function AreaListView() {
             mb: { xs: 3, md: 5 },
           }}
         />
+         <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+            onClick={upload.onTrue}
+          >
+            Upload
+          </Button>
+        </Stack>
 
         <Card>
           <Tabs
@@ -425,6 +438,8 @@ export default function AreaListView() {
           />
         </Card>
       </Container>
+
+      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} />
 
       <ConfirmDialog
         open={confirm.value}

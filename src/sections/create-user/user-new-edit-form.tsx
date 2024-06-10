@@ -97,6 +97,10 @@ export default function UserNewEditForm({ currentUser }: Props) {
     [currentUser]
   );
 
+  console.log('defaultValues', defaultValues)
+
+ 
+
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
     defaultValues,
@@ -110,6 +114,12 @@ export default function UserNewEditForm({ currentUser }: Props) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    if (currentUser) {
+      reset(defaultValues);
+    }
+  }, [currentUser, defaultValues, reset]);
 
   const values = watch();
 
@@ -126,7 +136,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar('Cập nhật tài khoản!');
-            router.push(paths.dashboard.createEmployee.list);
+            router.push(paths.dashboard.createUser.list);
           })
           .catch((error) => {
             if (error.response) {
@@ -162,7 +172,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar('Tạo tài khoản thành công!');
-            router.push(paths.dashboard.createEmployee.list);
+            router.push(paths.dashboard.createUser.list);
           })
           .catch((error) => {
             if (error.response) {
@@ -218,7 +228,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
             >
-              {KhoiCV.map((option) => (
+              {KhoiCV?.map((option) => (
                 <MenuItem key={option.ID_Khoi} value={option.ID_Khoi}>
                   {option.KhoiCV}
                 </MenuItem>
@@ -233,7 +243,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
             >
-              {Duan.map((option) => (
+              {Duan?.map((option) => (
                 <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
                   {option.Duan}
                 </MenuItem>
@@ -249,7 +259,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
             >
-              {Chucvu.map((option) => (
+              {Chucvu?.map((option) => (
                 <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
                   {option.Chucvu}
                 </MenuItem>

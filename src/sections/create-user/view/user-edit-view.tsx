@@ -34,7 +34,7 @@ export default function UserEditView({ id }: Props) {
           { name: 'Dashboard', href: paths.dashboard.root },
           {
             name: 'Thông tin tài khoản',
-            href: paths.dashboard.createEmployee.list,
+            href: paths.dashboard.createUser.list,
           },
           { name: currentUser?.UserName },
         ]}

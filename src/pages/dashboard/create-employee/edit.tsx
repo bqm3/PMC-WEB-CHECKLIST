@@ -14,7 +14,7 @@ export default function DuanEditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Cập nhật User</title>
+        <title> Dashboard: Cập nhật tài khoản</title>
       </Helmet>
 
       <UserEditView id={`${id}`} />

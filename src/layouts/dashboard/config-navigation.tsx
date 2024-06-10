@@ -177,11 +177,11 @@ export function useNavData() {
         },
         {
           title: t('createaccount'),
-          path: paths.dashboard.createEmployee.root,
+          path: paths.dashboard.createUser.root,
           icon: ICONS.user,
           children: [
-            { title: t('create'), path: paths.dashboard.createEmployee.root },
-            { title: t('list'), path: paths.dashboard.createEmployee.list },
+            { title: t('create'), path: paths.dashboard.createUser.root },
+            { title: t('list'), path: paths.dashboard.createUser.list },
           ],
         }
       );
