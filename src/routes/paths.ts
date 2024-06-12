@@ -1,6 +1,7 @@
 // utils
 import { paramCase } from 'src/utils/change-case';
 import { _id, _postTitles } from 'src/_mock/assets';
+import { IUser } from 'src/types/khuvuc';
 
 // ----------------------------------------------------------------------
 
@@ -163,6 +164,12 @@ export const paths = {
       new: `${ROOTS.DASHBOARD}/giamsat/new`,
       details: (id: string) => `${ROOTS.DASHBOARD}/giamsat/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/giamsat/${id}/edit`,
+    },
+
+    quanlygiamsat: {
+      root: `${ROOTS.DASHBOARD}/quan-ly-giam-sat`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/quan-ly-giam-sat/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/quan-ly-giam-sat/${id}/edit`,
     },
 
     checklist: {

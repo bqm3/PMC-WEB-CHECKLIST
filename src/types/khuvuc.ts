@@ -85,6 +85,7 @@ export type IUser = {
   ID_User: string;
   ID_Duan: string;
   UserName: string;
+  ID_Khuvucs: string;
   Permission: string;
   ID_KhoiCV: string;
   Emails: string;
@@ -136,6 +137,7 @@ export type IToanha = {
   khuvucLength: string;
   ent_duan: E_Duan;
   khuvuc: IKhuvuc;
+  ent_khuvuc: IKhuvuc[];
 };
 
 export type IKhoiCV = {

@@ -429,7 +429,6 @@ export function useGetHangMuc() {
       },
     }).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
-  console.log('data?.data', data?.data)
 
   const memoizedValue = useMemo(
     () => ({
@@ -643,6 +642,88 @@ export function useGetChecklistDetail(id: string) {
 }
 
 export function useGetUserDetail(id: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_user/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      user: (data?.data as IUser) || [],
+      userLoading: isLoading,
+      userError: error,
+      userValidating: isValidating,
+      userEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetKhuvucByToanha(id?: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_toanha/khuvuc/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      toanha: (data?.data as IToanha[]) || [],
+      user: (data?.user as IUser) || [],
+      toanhaLoading: isLoading,
+      toanhaError: error,
+      toanhaValidating: isValidating,
+      toanhaEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetGiamSatByDuan(){
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_user/gs';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      user: (data?.data as IUser[]) || [],
+      userLoading: isLoading,
+      userError: error,
+      userValidating: isValidating,
+      userEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetProfile(id: string){
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = `https://checklist.pmcweb.vn/be/api/ent_user/${id}`;
   const fetCher = (url: string) =>

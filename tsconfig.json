@@ -8,6 +8,7 @@
       "esnext"
     ],
     "strict": true,
+    
     "noEmit": true,
     "allowJs": true,
     "module": "esnext",
@@ -32,5 +33,9 @@
     "**/*.ts",
     "**/*.tsx",
     "src/**/*"
-  ]
+  ],
+  "rules": {
+      "no-shadow": "off",
+      "@typescript-eslint/no-shadow": ["error"]
+  },
 }
