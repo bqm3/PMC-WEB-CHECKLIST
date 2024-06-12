@@ -56,15 +56,13 @@ export default function GiamsatNewEditForm({ id }: Props) {
 
   const { toanha, user } = useGetKhuvucByToanha(id);
 
-  console.log('user', user)
-
   useEffect(() => {
     if (toanha && user) {
       setBuildingsData(toanha);
       // Initialize checked states for each building's areas
       setCheckedStates(
         toanha.map((building) =>
-          building.ent_khuvuc.map((area) => ({ ID_Khuvuc: area.ID_Khuvuc, checked: user.ID_Khuvucs.includes(area.ID_Khuvuc) }))
+          building.ent_khuvuc.map((area, index) => ({ ID_Khuvuc: area.ID_Khuvuc,Index: index, checked: user.ID_Khuvucs?.includes(area.ID_Khuvuc) }))
         )
       );
     }
@@ -72,11 +70,13 @@ export default function GiamsatNewEditForm({ id }: Props) {
 
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;
+   
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
-      index === buildingIndex
+      `${index}` === `${buildingIndex}`
         ? buildingCheckedStates?.map((data: any) => ({ ...data, checked: isChecked }))
         : buildingCheckedStates
     );
+
     setCheckedStates(updatedCheckedStates);
   };
 
@@ -166,7 +166,7 @@ export default function GiamsatNewEditForm({ id }: Props) {
                   {building.ent_khuvuc.map((area, areaIndex) => (
                     <FormControlLabel
                       key={area.ID_Khuvuc}
-                      label={area.Tenkhuvuc}
+                      label={`${area.Tenkhuvuc}`}
                       control={
                         <Checkbox
                           size="medium"

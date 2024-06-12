@@ -84,9 +84,7 @@ export default function AreaTableRow({
     // Kết hợp tên các ca làm việc thành một chuỗi với dấu phẩy
     .join(', ');
 
-  const shiftNamesArray = shiftNames.split(', ');
-
-  console.log('shiftNamesArray', shiftNamesArray)
+  const shiftNamesArray = shiftNames?.split(', ');
 
   // Tạo các nhãn từ mảng các tên ca làm việc
   const labels = shiftNamesArray.map((name, index) => (

@@ -125,10 +125,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     }),
     [currentChecklist]
   );
-
-  console.log('defaultValues', currentChecklist)
  
-
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
     defaultValues,
