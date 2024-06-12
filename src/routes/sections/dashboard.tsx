@@ -124,6 +124,10 @@ const GiamsatListsPage = lazy(() => import('src/pages/dashboard/giamsat/list'));
 const GiamsatNewPage = lazy(() => import('src/pages/dashboard/giamsat/new'));
 const GiamsatEditPage = lazy(() => import('src/pages/dashboard/giamsat/edit'));
 
+
+const QuanlyGiamsatListsPage = lazy(() => import('src/pages/dashboard/quanlygiamsat/list'));
+const QuanlyGiamsatEditPage = lazy(() => import('src/pages/dashboard/quanlygiamsat/edit'));
+
 // Dự án
 const DuanListsPage = lazy(() => import('src/pages/dashboard/duan/list'));
 const DuanNewPage = lazy(() => import('src/pages/dashboard/duan/new'));
@@ -306,6 +310,14 @@ export const dashboardRoutes = [
           { element: <CreateEmployeePage />, index: true },
           { path: 'list', element: <ListEmployeePage /> },
           { path: ':id/edit', element: <ListEditEmployeePage /> },
+        ],
+      },
+      {
+        path: 'quan-ly-giam-sat',
+        children: [
+          { element: <QuanlyGiamsatListsPage />, index: true },
+          { path: 'list', element: <QuanlyGiamsatListsPage /> },
+          { path: ':id/edit', element: <QuanlyGiamsatEditPage /> },
         ],
       },
       {

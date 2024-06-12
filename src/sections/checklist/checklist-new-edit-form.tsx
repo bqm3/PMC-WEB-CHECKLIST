@@ -116,7 +116,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       Maso: currentChecklist?.Maso || '',
       Ghichu: currentChecklist?.Ghichu || '',
       Tieuchuan: currentChecklist?.Tieuchuan || '',
-      ID_KhoiCV: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_KhoiCV || null || '',
+      ID_KhoiCV: currentChecklist?.ent_hangmuc?.ID_KhoiCV || null || '',
       ID_Khuvuc: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_Khuvuc || null || '',
       ID_Toanha: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_Toanha || null || '',
       ID_Hangmuc: currentChecklist?.ID_Hangmuc || null,
@@ -126,6 +126,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     [currentChecklist]
   );
 
+  console.log('defaultValues', currentChecklist)
  
 
   const methods = useForm({

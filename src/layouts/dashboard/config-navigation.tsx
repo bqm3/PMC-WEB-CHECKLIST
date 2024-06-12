@@ -97,7 +97,8 @@ export function useNavData() {
                   icon: ICONS.kanban,
                   children: [
                     { title: t('list'), path: paths.dashboard.hangmuc.root },
-                    { title: t('create'), path: paths.dashboard.hangmuc.new },
+                    { title: t('create'), path: paths.dashboard.hangmuc.new,  },
+                    
                   ],
                 },
                 {
@@ -107,6 +108,14 @@ export function useNavData() {
                   children: [
                     { title: t('list'), path: paths.dashboard.calv.root },
                     { title: t('create'), path: paths.dashboard.calv.new },
+                  ],
+                },
+                {
+                  title: t('taikhoangiamsat'),
+                  path: paths.dashboard.quanlygiamsat.root,
+                  icon: ICONS.external,
+                  children: [
+                    { title: t('list'), path: paths.dashboard.quanlygiamsat.root },
                   ],
                 },
                 {
