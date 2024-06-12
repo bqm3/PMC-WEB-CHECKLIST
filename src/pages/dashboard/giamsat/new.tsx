@@ -8,7 +8,7 @@ export default function GiamsatCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo mới</title>
+        <title> Dashboard: Tạo mới giám sát</title>
       </Helmet>
 
       <GiamsatCreateView />

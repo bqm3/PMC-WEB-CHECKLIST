@@ -256,30 +256,27 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
                 <Typography variant="subtitle2">Giới tính</Typography>
                 <RHFRadioGroup row name="Gioitinh" spacing={2} options={USER_GENDER_OPTIONS} />
               </Stack>
-              <RHFTextField name="Ngaysinh" type='date' label="Năm sinh" />
-              {/* <Stack spacing={1.5}>
-                <Controller
-                  name="Ngaysinh"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <DatePicker
-                      {...field}
-                      label="Ngày sinh"
-                      defaultValue={`${values.Ngaysinh}` || null}
-                      // format="yyyy-MM-dd"
-                      
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Stack>
-            */}
+              {/* <RHFTextField name="Ngaysinh" type='date' label="Năm sinh" /> */}
+              <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Năm sinh</Typography>
+              <Controller
+                name="Ngaysinh"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DatePicker
+                    {...field}
+                    format="dd/MM/yyyy"
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </Stack>
           </Stack>
         </Card>
       </Grid>
