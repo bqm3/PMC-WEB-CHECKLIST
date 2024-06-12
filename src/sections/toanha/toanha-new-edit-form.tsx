@@ -113,7 +113,11 @@ export default function GiamsatNewEditForm({ currentToanha }: Props) {
             )
             .then((res) => {
               reset();
-              enqueueSnackbar('Cập nhật thành công!');
+              enqueueSnackbar({
+                variant: 'success',
+                autoHideDuration: 2000,
+                message: 'Cập nhật thành công'
+              });
               router.push(paths.dashboard.toanha.root);
             })
             .catch((error) => {

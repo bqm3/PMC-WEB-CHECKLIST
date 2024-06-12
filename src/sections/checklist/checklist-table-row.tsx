@@ -83,7 +83,7 @@ export default function AreaTableRow({
     .filter((name) => name !== null)
     // Kết hợp tên các ca làm việc thành một chuỗi với dấu phẩy
     .join(', ');
-
+    
   const shiftNamesArray = shiftNames?.split(', ');
 
   // Tạo các nhãn từ mảng các tên ca làm việc
@@ -99,6 +99,7 @@ export default function AreaTableRow({
       {name}
     </Label>
   ));
+
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{backgroundColor: `${Tinhtrang}` === '1' ? '#FF563029' : '' }}>

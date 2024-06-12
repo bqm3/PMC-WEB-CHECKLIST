@@ -259,7 +259,11 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
           )
           .then((res) => {
             // reset();
-            enqueueSnackbar('Cập nhật thành công!');
+            enqueueSnackbar({
+                variant: 'success',
+                autoHideDuration: 2000,
+                message: 'Cập nhật thành công'
+              });
             router.push(paths.dashboard.checklist.root);
           })
           .catch((error) => {

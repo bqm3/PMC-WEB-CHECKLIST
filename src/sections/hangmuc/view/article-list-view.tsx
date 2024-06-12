@@ -29,6 +29,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import Stack from '@mui/material/Stack';
+// routes
 import {
   useTable,
   getComparator,
@@ -46,6 +48,7 @@ import { IHangMuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/type
 import OrderTableRow from '../article-table-row';
 import OrderTableToolbar from '../article-table-toolbar';
 import OrderTableFiltersResult from '../article-table-filters-result';
+import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -67,13 +70,15 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function AreaListView() {
-  const table = useTable({ defaultOrderBy: 'ID_Hangmuc' });
+  const table = useTable({ defaultOrderBy: 'Hangmuc' });
 
   const settings = useSettingsContext();
 
   const router = useRouter();
 
   const confirm = useBoolean();
+
+  const upload = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -83,6 +88,8 @@ export default function AreaListView() {
 
   const { hangMuc } = useGetHangMuc();
   const { khoiCV } = useGetKhoiCV();
+
+  
 
   const [tableData, setTableData] = useState<IHangMuc[]>([]);
 
@@ -208,6 +215,8 @@ export default function AreaListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
         <CustomBreadcrumbs
           heading="Hạng mục"
           links={[
@@ -225,6 +234,14 @@ export default function AreaListView() {
             mb: { xs: 3, md: 5 },
           }}
         />
+         <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+            onClick={upload.onTrue}
+          >
+            Upload
+          </Button>
+        </Stack>
 
         <Card>
         <Tabs
@@ -360,6 +377,8 @@ export default function AreaListView() {
           />
         </Card>
       </Container>
+
+      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} />
 
       <ConfirmDialog
         open={confirm.value}

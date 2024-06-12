@@ -103,7 +103,11 @@ export default function GiamsatNewEditForm({ id }: Props) {
       })
       .then((res) => {
         setLoading(false);
-        enqueueSnackbar('Cập nhật thành công!');
+        enqueueSnackbar({
+                variant: 'success',
+                autoHideDuration: 2000,
+                message: 'Cập nhật thành công'
+              });
       })
       .catch((error) => {
         setLoading(false);

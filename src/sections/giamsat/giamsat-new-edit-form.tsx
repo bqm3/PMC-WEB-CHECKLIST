@@ -124,7 +124,11 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
             )
             .then((res) => {
               reset();
-              enqueueSnackbar('Cập nhật thành công!');
+              enqueueSnackbar({
+                variant: 'success',
+                autoHideDuration: 2000,
+                message: 'Cập nhật thành công'
+              });
               router.push(paths.dashboard.giamsat.root);
             })
             .catch((error) => {

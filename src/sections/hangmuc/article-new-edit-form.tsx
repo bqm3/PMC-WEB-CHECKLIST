@@ -168,7 +168,11 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           )
           .then((res) => {
             // reset();
-            enqueueSnackbar('Cập nhật thành công!');
+            enqueueSnackbar({
+                variant: 'success',
+                autoHideDuration: 2000,
+                message: 'Cập nhật thành công'
+              });
             router.push(paths.dashboard.hangmuc.root);
           })
           .catch((error) => {
