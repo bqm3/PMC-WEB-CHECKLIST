@@ -29,11 +29,11 @@ export default function ChecklistEditView({ id }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Cập nhật"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'Khu vực',
+            name: 'Checklist',
             href: paths.dashboard.checklist.root,
           },
           { name: currentChecklist?.Checklist },

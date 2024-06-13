@@ -209,8 +209,8 @@ export default function GiamsatListView() {
               href: paths.dashboard.root,
             },
             {
-              name: 'Giám sát',
-              href: paths.dashboard.giamsat.root,
+              name: 'Tài khoản',
+              href: paths.dashboard.quanlygiamsat.root,
             },
             { name: 'Danh sách' },
           ]}
