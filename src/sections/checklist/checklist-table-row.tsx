@@ -45,6 +45,7 @@ export default function AreaTableRow({
   calv,
 }: Props) {
   const {
+    ID_Checklist,
     ID_Khuvuc,
     ID_Hangmuc,
     Checklist,
@@ -105,6 +106,19 @@ export default function AreaTableRow({
     <TableRow hover selected={selected} style={{backgroundColor: `${Tinhtrang}` === '1' ? '#FF563029' : '' }}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
+      </TableCell>
+      <TableCell>
+        <Box
+          onClick={onViewRow}
+          sx={{
+            cursor: 'pointer',
+            '&:hover': {
+              textDecoration: 'underline',
+            },
+          }}
+        >
+          C{ID_Checklist}
+        </Box>
       </TableCell>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <ListItemText

@@ -25,6 +25,7 @@ interface Props extends DialogProps {
   onChangeFolderName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   //
   open: boolean;
+  setLoading: any;
   onClose: VoidFunction;
 }
 
@@ -35,6 +36,7 @@ export default function FileManagerNewFolderDialog({
   title = 'Upload Files',
   open,
   onClose,
+  setLoading,
   //
   onCreate,
   onUpdate,
@@ -47,6 +49,8 @@ export default function FileManagerNewFolderDialog({
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  
 
   const [files, setFiles] = useState<(File | string)[]>([]);
 
@@ -70,6 +74,8 @@ export default function FileManagerNewFolderDialog({
   );
 
   const handleUpload = async () => {
+
+    
     onClose();
     const formData = new FormData();
     if (Array.isArray(files)) {
@@ -79,8 +85,9 @@ export default function FileManagerNewFolderDialog({
     } else {
       formData.append('files', files); // Fallback for a single file upload
     }
-
+    setLoading(true)
     try {
+      
       const response = await axios.post('https://checklist.pmcweb.vn/be/api/ent_khuvuc/uploads', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -89,8 +96,9 @@ export default function FileManagerNewFolderDialog({
       });
       // setUploadedFileName(response.data.filename);
       enqueueSnackbar('Uploads dữ liệu thành công!');
+      setLoading(false)
     } catch (error) {
-      console.error('Error uploading file:', error);
+      setLoading(false)
       enqueueSnackbar({
         variant: 'error',
         autoHideDuration: 2000,

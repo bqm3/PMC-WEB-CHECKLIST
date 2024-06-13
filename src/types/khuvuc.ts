@@ -218,6 +218,7 @@ export type IChecklist = {
   isDelete: string;
   ent_toanha: E_Toanha;
   ent_hangmuc: IHangMuc;
+  ent_khuvuc: IKhuvuc;
   ent_tang: E_Tang;
   ent_calv: ICalv;
 };

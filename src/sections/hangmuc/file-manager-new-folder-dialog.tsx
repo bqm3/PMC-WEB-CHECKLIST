@@ -20,6 +20,7 @@ interface Props extends DialogProps {
   //
   onCreate?: VoidFunction;
   onUpdate?: VoidFunction;
+  setLoading: any;
   //
   folderName?: string;
   onChangeFolderName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -35,6 +36,7 @@ export default function FileManagerNewFolderDialog({
   title = 'Upload Files',
   open,
   onClose,
+  setLoading,
   //
   onCreate,
   onUpdate,
@@ -70,6 +72,7 @@ export default function FileManagerNewFolderDialog({
   );
 
   const handleUpload = async () => {
+    setLoading(true)
     onClose();
     const formData = new FormData();
     if (Array.isArray(files)) {
@@ -89,8 +92,9 @@ export default function FileManagerNewFolderDialog({
       });
       // setUploadedFileName(response.data.filename);
       enqueueSnackbar('Uploads dữ liệu thành công!');
+      setLoading(false)
     } catch (error) {
-      console.error('Error uploading file:', error);
+      setLoading(false)
       enqueueSnackbar({
         variant: 'error',
         autoHideDuration: 2000,

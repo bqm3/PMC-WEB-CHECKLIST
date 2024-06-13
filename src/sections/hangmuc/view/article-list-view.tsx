@@ -29,6 +29,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { LoadingButton } from '@mui/lab';
 import Stack from '@mui/material/Stack';
 // routes
 import {
@@ -49,6 +50,7 @@ import OrderTableRow from '../article-table-row';
 import OrderTableToolbar from '../article-table-toolbar';
 import OrderTableFiltersResult from '../article-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
+
 
 // ----------------------------------------------------------------------
 
@@ -79,6 +81,8 @@ export default function AreaListView() {
   const confirm = useBoolean();
 
   const upload = useBoolean();
+
+  const [loading, setLoading] = useState<Boolean |any>(false)
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -234,13 +238,14 @@ export default function AreaListView() {
             mb: { xs: 3, md: 5 },
           }}
         />
-         <Button
+         <LoadingButton
+         loading={loading}
             variant="contained"
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
             onClick={upload.onTrue}
           >
             Upload
-          </Button>
+          </LoadingButton>
         </Stack>
 
         <Card>
@@ -378,7 +383,7 @@ export default function AreaListView() {
         </Card>
       </Container>
 
-      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} />
+      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
 
       <ConfirmDialog
         open={confirm.value}

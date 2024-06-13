@@ -26,6 +26,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import { LoadingButton } from '@mui/lab';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -47,17 +48,18 @@ import ChecklistTableToolbar from '../checklist-table-toolbar';
 import ChecklistTableFiltersResult from '../checklist-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  // { id: 'ID_Checklist', label: '', width: 1 },
+  { id: 'ID_Checklist', label: 'Mã', width: 50 },
   { id: 'Checklist', label: 'Tên checklist' },
   { id: 'Giatridinhdanh', label: 'Giá trị định danh', width: 100, align: 'center' },
   { id: 'Giatrinhan', label: 'Giá trị nhận', width: 120, align: 'center' },
   { id: 'ID_Tang', label: 'Tầng', width: 100, align: 'center' },
   { id: 'Sothutu', label: 'Số thứ tự', width: 100, align: 'center' },
   { id: 'Maso', label: 'Mã số', width: 100, align: 'center' },
-  { id: 'ID_Checklist', label: 'Hạng mục', width: 150, align: 'center' },
+  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
   { id: 'sCalv', label: 'Ca làm việc', width: 140, align: 'center' },
   { id: '', width: 88 },
 ];
@@ -84,6 +86,8 @@ export default function ChecklistCalvListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
+
+  const [loading, setLoading] = useState<Boolean | any>(false)
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -237,13 +241,14 @@ export default function ChecklistCalvListView() {
               mb: { xs: 3, md: 5 },
             }}
           />
-          <Button
+           <LoadingButton
+            loading={loading}
             variant="contained"
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
             onClick={upload.onTrue}
           >
-            Import
-          </Button>
+            Upload
+          </LoadingButton>
         </Stack>
 
         <Card>
@@ -385,7 +390,7 @@ export default function ChecklistCalvListView() {
         </Card>
       </Container>
 
-      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} />
+      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
 
       <ConfirmDialog
         open={confirm.value}
@@ -441,11 +446,12 @@ function applyFilter({
     inputData = inputData?.filter(
       (checklist) =>
         `${checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-      `${checklist.Giatridinhdanh}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-      `${checklist.Giatrinhan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.Giatridinhdanh}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.Giatrinhan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_hangmuc.MaQrCode}`.toLowerCase().indexOf(name?.toLowerCase()) !== -1
     );
   }

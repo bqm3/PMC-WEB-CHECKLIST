@@ -27,6 +27,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { LoadingButton } from '@mui/lab';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -48,6 +49,7 @@ import OrderTableRow from '../area-table-row';
 import OrderTableToolbar from '../area-table-toolbar';
 import OrderTableFiltersResult from '../area-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
+
 
 // ----------------------------------------------------------------------
 
@@ -85,6 +87,8 @@ export default function AreaListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
+
+  const [loading, setLoading] = useState<Boolean | any>(false)
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -234,13 +238,14 @@ export default function AreaListView() {
             mb: { xs: 3, md: 5 },
           }}
         />
-         <Button
+         <LoadingButton
+            loading={loading}
             variant="contained"
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
             onClick={upload.onTrue}
           >
             Upload
-          </Button>
+          </LoadingButton>
         </Stack>
 
         <Card>
@@ -439,7 +444,7 @@ export default function AreaListView() {
         </Card>
       </Container>
 
-      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} />
+      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
 
       <ConfirmDialog
         open={confirm.value}

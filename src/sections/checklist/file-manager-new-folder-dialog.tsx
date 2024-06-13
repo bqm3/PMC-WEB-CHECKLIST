@@ -19,6 +19,7 @@ interface Props extends DialogProps {
   title?: string;
   //
   onCreate?: VoidFunction;
+  setLoading: any;
   onUpdate?: VoidFunction;
   //
   folderName?: string;
@@ -37,6 +38,7 @@ export default function FileManagerNewFolderDialog({
   onClose,
   //
   onCreate,
+  setLoading,
   onUpdate,
   //
   folderName,
@@ -71,6 +73,7 @@ export default function FileManagerNewFolderDialog({
 
   const handleUpload = async () => {
     onClose();
+    setLoading(true)
     const formData = new FormData();
     if (Array.isArray(files)) {
       files.forEach(file => {
@@ -88,10 +91,15 @@ export default function FileManagerNewFolderDialog({
         }
       });
       // setUploadedFileName(response.data.filename);
+      setLoading(false)
       enqueueSnackbar('Uploads dữ liệu thành công!');
     } catch (error) {
-      console.error('Error uploading file:', error);
-      enqueueSnackbar('Uploads dữ liệu thất bại!');
+      setLoading(false)
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 2000,
+        message: 'Uploads dữ liệu thất bại',
+      });
     }
   };
 
