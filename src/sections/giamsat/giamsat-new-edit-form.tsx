@@ -80,7 +80,6 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
       Gioitinh: currentGiamsat?.Gioitinh || '',
       Ngaysinh: currentGiamsat?.Ngaysinh || '',
       ID_KhoiCV: `${currentGiamsat?.ID_KhoiCV}` || '' || null || undefined,
-      ID_Chucvu: `${currentGiamsat?.ID_Chucvu}` || '' || null || undefined,
     }),
     [currentGiamsat]
   );
@@ -108,100 +107,96 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   }, [currentGiamsat, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    
-      try {
-        if (currentGiamsat !== undefined) {
-          await axios
-            .put(
-              `https://checklist.pmcweb.vn/be/api/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
-              data,
-              {
-                headers: {
-                  Accept: 'application/json',
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              }
-            )
-            .then((res) => {
-              reset();
-              enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
-              router.push(paths.dashboard.giamsat.root);
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
-            });
-        } else {
-          axios
-            .post(`https://checklist.pmcweb.vn/be/api/ent_giamsat/create`, data, {
+    try {
+      if (currentGiamsat !== undefined) {
+        await axios
+          .put(
+            `https://checklist.pmcweb.vn/be/api/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
+            data,
+            {
               headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${accessToken}`,
               },
-            })
-            .then((res) => {
-              reset();
-              enqueueSnackbar('Tạo mới thành công!');
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 3000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
+            }
+          )
+          .then((res) => {
+            reset();
+            enqueueSnackbar({
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công',
             });
-        }
-      } catch (error) {
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 3000,
-          message: `Lỗi gửi yêu cầu`,
-        });
+            router.push(paths.dashboard.giamsat.root);
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+      } else {
+        axios
+          .post(`https://checklist.pmcweb.vn/be/api/ent_giamsat/create`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => {
+            reset();
+            enqueueSnackbar('Tạo mới thành công!');
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 3000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+      }
+    } catch (error) {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 3000,
+        message: `Lỗi gửi yêu cầu`,
+      });
       // }
     }
-  }
-);
-
-  console.log('defaultValues', values);
+  });
 
   const renderDetails = (
     <>
@@ -237,31 +232,14 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
                 </RHFSelect>
               )}
             </Stack>
-            <Stack spacing={1.5}>
-              {chucVu?.length > 0 && (
-                <RHFSelect
-                  name="ID_Chucvu"
-                  label="Chức vụ"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {chucVu?.map((item) => (
-                    <MenuItem key={`${item?.ID_Chucvu}`} value={`${item?.ID_Chucvu}`}>
-                      {item?.Chucvu}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-            </Stack>
 
             <RHFTextField name="Hoten" label="Tên giám sát" />
             <RHFTextField name="Sodienthoai" label="Số điện thoại" />
             <Stack spacing={1}>
-                <Typography variant="subtitle2">Giới tính</Typography>
-                <RHFRadioGroup row name="Gioitinh" spacing={2} options={USER_GENDER_OPTIONS} />
-              </Stack>
-              {/* <RHFTextField name="Ngaysinh" type='date' label="Năm sinh" /> */}
-              <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Giới tính</Typography>
+              <RHFRadioGroup row name="Gioitinh" spacing={2} options={USER_GENDER_OPTIONS} />
+            </Stack>
+            <Stack spacing={1.5}>
               <Typography variant="subtitle2">Năm sinh</Typography>
               <Controller
                 name="Ngaysinh"
