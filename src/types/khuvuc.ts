@@ -71,7 +71,7 @@ export type IGiamsat = {
   ID_Chucvu: string;
   ID_KhoiCV: string;
   Hoten: string;
-  Ngaysinh: string;
+  Ngaysinh: Date;
   Sodienthoai: string;
   Gioitinh: string;
   iQuyen: string;

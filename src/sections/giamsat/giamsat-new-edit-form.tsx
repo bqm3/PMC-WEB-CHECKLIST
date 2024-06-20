@@ -49,6 +49,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
+
   const [chucvu, setChucVu] = useState<IChucvu[]>([]);
 
   const { khoiCV } = useGetKhoiCV();
@@ -69,8 +70,8 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   const NewProductSchema = Yup.object().shape({
     Hoten: Yup.string().required('Phải có tên giám sát'),
     ID_KhoiCV: Yup.string(),
-    Ngaysinh: Yup.string(),
     Sodienthoai: Yup.string().required('Phone number is required'),
+    Ngaysinh: Yup.mixed<any>().nullable().required('Phải có ngày sinh'),
   });
 
   const defaultValues = useMemo(
@@ -78,7 +79,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
       Hoten: currentGiamsat?.Hoten || '',
       Sodienthoai: currentGiamsat?.Sodienthoai || '',
       Gioitinh: currentGiamsat?.Gioitinh || '',
-      Ngaysinh: currentGiamsat?.Ngaysinh || '',
+      Ngaysinh: currentGiamsat?.Ngaysinh || new Date() || null || undefined || '',
       ID_KhoiCV: `${currentGiamsat?.ID_KhoiCV}` || '' || null || undefined,
     }),
     [currentGiamsat]
@@ -198,6 +199,9 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
     }
   });
 
+  const defaultDate = defaultValues?.Ngaysinh ? new Date(defaultValues.Ngaysinh) : null;
+
+
   const renderDetails = (
     <>
       {mdUp && (
@@ -240,24 +244,11 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
               <RHFRadioGroup row name="Gioitinh" spacing={2} options={USER_GENDER_OPTIONS} />
             </Stack>
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Năm sinh</Typography>
-              <Controller
-                name="Ngaysinh"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <DatePicker
-                    {...field}
-                    format="dd/MM/yyyy"
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
+            <DatePicker
+              label="Ngày sinh"
+              value={new Date(values.Ngaysinh)}
+              onChange={(newValue) => setValue('Ngaysinh', newValue)}
+            />
             </Stack>
           </Stack>
         </Card>
