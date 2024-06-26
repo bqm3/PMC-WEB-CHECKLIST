@@ -13,7 +13,7 @@
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "clear-all": "rm -rf node_modules .next out dist build",
     "re-start": "rm -rf node_modules .next out dist build && yarn install && yarn start",
-    "re-build": "del -rf node_modules .next out dist build && yarn install && yarn build",
+    "re-build": "rm -rf node_modules .next out dist build && yarn install && yarn build",
     "re-build-test": "rm -rf node_modules .next out dist build && npm install && npm run build"
   },
   "eslintConfig": {

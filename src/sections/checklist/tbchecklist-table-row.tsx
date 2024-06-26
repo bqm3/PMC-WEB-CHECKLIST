@@ -34,6 +34,7 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  onOpenChecklist: VoidFunction;
 };
 
 export default function AreaTableRow({
@@ -42,6 +43,7 @@ export default function AreaTableRow({
   onViewRow,
   onSelectRow,
   onDeleteRow,
+  onOpenChecklist,
   calv,
 }: Props) {
   const {
@@ -75,6 +77,7 @@ export default function AreaTableRow({
   const collapse = useBoolean();
 
   const popover = usePopover();
+  const popover2 = usePopover();
 
   const [year, month, day] = Ngay.split('-');
   const formattedDate = `${day}/${month}/${year}`;
@@ -115,8 +118,7 @@ export default function AreaTableRow({
         <Label
           variant="soft"
           color={
-            (`${Tinhtrang}` === '0' && 'info') ||
-            (`${Tinhtrang}` === '1' && 'default') || 'default'
+            (`${Tinhtrang}` === '0' && 'info') || (`${Tinhtrang}` === '1' && 'default') || 'default'
           }
         >
           {`${Tinhtrang}` === '0' ? 'Đang mở' : 'Đã khóa'}
@@ -149,6 +151,28 @@ export default function AreaTableRow({
           <Iconify icon="solar:eye-bold" />
           Xem chi tiết
         </MenuItem>
+        {`${Tinhtrang}` === '1' && (
+          <MenuItem
+            onClick={() => {
+              confirm.onTrue();
+            }}
+          >
+            <Iconify icon="mdi:lock-open-outline" />
+            Mở ca
+          </MenuItem>
+        )}
+
+        <ConfirmDialog
+          open={confirm.value}
+          onClose={confirm.onFalse}
+          title="Mở ca"
+          content="Bạn có muốn mở ca hiện tại không?"
+          action={
+            <Button variant="contained" color="success" onClick={onOpenChecklist}>
+              Có
+            </Button>
+          }
+        />
       </CustomPopover>
     </>
   );

@@ -70,7 +70,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   const NewProductSchema = Yup.object().shape({
     Hoten: Yup.string().required('Phải có tên giám sát'),
     ID_KhoiCV: Yup.string(),
-    Sodienthoai: Yup.string().required('Phone number is required'),
+    Sodienthoai: Yup.string().required('Phải có số điện thoại'),
     Ngaysinh: Yup.mixed<any>().nullable().required('Phải có ngày sinh'),
   });
 

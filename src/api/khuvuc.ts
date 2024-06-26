@@ -540,7 +540,7 @@ export function useGetTb_Checklist(pag: any) {
         Authorization: `Bearer ${accessToken}`,
       },
     }).then((res) => res.json());
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetCher);
 
   const memoizedValue = useMemo(
     () => ({
@@ -551,9 +551,10 @@ export function useGetTb_Checklist(pag: any) {
       tb_checkListEmpty: !isLoading && !data.length,
       tb_checkListTotalPages: data?.totalPages,
       tb_checklistPage: data?.page,
-      tb_checklistTotalCount: data?.totalCount
+      tb_checklistTotalCount: data?.totalCount,
+      mutateTb_Checklist: mutate
     }),
-    [data, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating, mutate]
   );
 
   return memoizedValue;
