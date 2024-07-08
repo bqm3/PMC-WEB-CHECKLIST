@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react';
 
 // types
 import useSWR from 'swr';
+import { IChinhanh, IChucVu, INhompb } from 'src/types/scan';
 
 const STORAGE_KEY = 'accessToken';
 
@@ -744,6 +745,79 @@ export function useGetProfile(id: string){
       userError: error,
       userValidating: isValidating,
       userEmpty: !isLoading && !data.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+
+export function useGetNhompb(){
+  const URL = 'https://checklist.pmcweb.vn/pmc-assets/api/ent_nhompb/all';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      nhompb: (data?.data as INhompb[]) || [],
+      nhompbLoading: isLoading,
+      nhompbError: error,
+      nhompbValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetChinhanh(){
+  const URL = 'https://checklist.pmcweb.vn/pmc-assets/api/ent_chinhanh/all';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      chinhanh: (data?.data as IChinhanh[]) || [],
+      chinhanhLoading: isLoading,
+      chinhanhError: error,
+      chinhanhValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetChucVu(){
+  const URL = 'https://checklist.pmcweb.vn/pmc-assets/api/ent_chucvu/all';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      chucvu: (data?.data as IChucVu[]) || [],
+      chucvuLoading: isLoading,
+      chucvuError: error,
+      chucvuValidating: isValidating,
     }),
     [data, error, isLoading, isValidating]
   );

@@ -4,18 +4,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
-import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
-import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Switch from '@mui/material/Switch';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControlLabel from '@mui/material/FormControlLabel';
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
@@ -24,20 +18,14 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import {
   _tags,
   _roles,
-  PRODUCT_SIZE_OPTIONS,
-  PRODUCT_GENDER_OPTIONS,
-  PRODUCT_COLOR_NAME_OPTIONS,
-  PRODUCT_CATEGORY_GROUP_OPTIONS,
 } from 'src/_mock';
 // api
 import {
   useGetKhuVuc,
   useGetToanha,
   useGetKhoiCV,
-  useGetChecklistDetail,
   useGetTang,
   useGetHangMuc,
-  useGetCalvFilter,
   useGetCalv,
 } from 'src/api/khuvuc';
 // components
@@ -45,18 +33,12 @@ import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import FormProvider, {
   RHFSelect,
-  RHFEditor,
-  RHFUpload,
-  RHFSwitch,
   RHFTextField,
   RHFMultiSelect,
-  RHFAutocomplete,
-  RHFMultiCheckbox,
 } from 'src/components/hook-form';
 // types
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv } from 'src/types/khuvuc';
+import { IToanha,  IChecklist } from 'src/types/khuvuc';
 import axios from 'axios';
-import Iconify from 'src/components/iconify';
 // auth
 import { useAuthContext } from 'src/auth/hooks';
 

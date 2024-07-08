@@ -192,7 +192,8 @@ export function useNavData() {
             { title: t('create'), path: paths.dashboard.createUser.root },
             { title: t('list'), path: paths.dashboard.createUser.list },
           ],
-        }
+        },
+        
       );
     }
 

@@ -88,6 +88,9 @@ export type IUser = {
   ID_Khuvucs: string;
   Permission: string;
   ID_KhoiCV: string;
+  ID_Nhompb: string;
+  ID_Chinhanh: string;
+  ID_Chucvu: string;
   Emails: string;
   Password: string;
   isDelete: string;

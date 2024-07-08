@@ -16,7 +16,7 @@ export default function UserCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Tạo tài khoản checklist"
+        heading="Tạo tài khoản"
         links={[
           {
             name: 'Dashboard',

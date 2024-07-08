@@ -452,7 +452,7 @@ function applyFilter({
         `${checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_hangmuc.MaQrCode}`.toLowerCase().indexOf(name?.toLowerCase()) !== -1
+        `${checklist.ent_hangmuc.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
