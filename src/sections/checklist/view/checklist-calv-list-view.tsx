@@ -299,6 +299,50 @@ export default function ChecklistCalvListView() {
     [accessToken, enqueueSnackbar, reset, confirm, popover, mutateTb_Checklist]
   );
 
+  const handleRemoveChecklistC = useCallback(
+    async (id: string) => {
+      await axios
+        .put(`https://checklist.pmcweb.vn/be/api/tb_checklistc/delete/${id}`, [], {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(async (res) => {
+          await mutateTb_Checklist();
+          enqueueSnackbar({
+            variant: 'success',
+            autoHideDuration: 2000,
+            message: 'Xóa ca thành công',
+          });
+        })
+        .catch((error) => {
+          if (error.response) {
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `${error.response.data.message}`,
+            });
+          } else if (error.request) {
+            // Lỗi không nhận được phản hồi từ server
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Không nhận được phản hồi từ máy chủ`,
+            });
+          } else {
+            // Lỗi khi cấu hình request
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 3000,
+              message: `Lỗi gửi yêu cầu`,
+            });
+          }
+        });
+    },
+    [accessToken, enqueueSnackbar, mutateTb_Checklist]
+  );
+
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       handleFilters('status', newValue);
@@ -432,6 +476,7 @@ export default function ChecklistCalvListView() {
                       onDeleteRow={() => handleDeleteRow(row.ID_ChecklistC)}
                       onViewRow={() => handleViewRow(row.ID_ChecklistC)}
                       onOpenChecklist={() => handleOpenChecklistC(row.ID_ChecklistC)}
+                      onRemoveChecklist={()=>handleRemoveChecklistC(row.ID_ChecklistC)}
                     />
                   ))}
 

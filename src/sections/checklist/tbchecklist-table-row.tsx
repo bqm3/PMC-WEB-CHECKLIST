@@ -35,6 +35,7 @@ type Props = {
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onOpenChecklist: VoidFunction;
+  onRemoveChecklist: VoidFunction;
 };
 
 export default function AreaTableRow({
@@ -44,6 +45,7 @@ export default function AreaTableRow({
   onSelectRow,
   onDeleteRow,
   onOpenChecklist,
+  onRemoveChecklist,
   calv,
 }: Props) {
   const {
@@ -73,6 +75,7 @@ export default function AreaTableRow({
   } = row;
 
   const confirm = useBoolean();
+  const confirm2 = useBoolean();
 
   const collapse = useBoolean();
 
@@ -157,10 +160,21 @@ export default function AreaTableRow({
               confirm.onTrue();
             }}
           >
-            <Iconify icon="mdi:lock-open-outline" />
+            <Iconify color="error" icon="mdi:lock-open-outline" />
             Mở ca
           </MenuItem>
         )}
+
+        <MenuItem
+          onClick={() => {
+            confirm2.onTrue();
+            popover2.onClose();
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="solar:trash-bin-trash-bold" />
+          Xóa
+        </MenuItem>
 
         <ConfirmDialog
           open={confirm.value}
@@ -173,7 +187,21 @@ export default function AreaTableRow({
             </Button>
           }
         />
+
+<ConfirmDialog
+          open={confirm2.value}
+          onClose={confirm2.onFalse}
+          title="Xóa ca làm việc"
+          content="Bạn có muốn xóa ca làm việc không?"
+          action={
+            <Button variant="contained" color="success" onClick={onRemoveChecklist}>
+              Có
+            </Button>
+          }
+        />
       </CustomPopover>
+
+      
     </>
   );
 }
