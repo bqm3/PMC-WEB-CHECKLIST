@@ -87,11 +87,9 @@ const headers = [
   { label: 'Hạng mục', key: 'hangMuc' },
   { label: 'Nội dung kiểm tra', key: 'tenChecklist' },
   { label: 'Giờ kiểm tra', key: 'gioKt' },
-  { label: 'Bình thường', key: 'kq1' },
-  { label: 'Không bình thường', key: 'kq2' },
-  { label: 'Lý do', key: 'lydo' },
-  { label: 'Ảnh', key: 'anh' },
+  { label: 'Kết quả', key: 'kq' },
   { label: 'Ghi chú', key: 'ghichu' },
+  { label: 'Ảnh', key: 'anh' },
 ];
 
 // ----------------------------------------------------------------------
@@ -225,11 +223,9 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       hangMuc: item.ent_checklist.ent_hangmuc.Hangmuc || '',
       tenChecklist: item.ent_checklist.Checklist || '',
       gioKt: item.Gioht || '',
-      kq1: `${item.status}` === '1' ? 'v' : '',
-      kq2: `${item.status}` === '0' ? 'v' : '',
-      lydo: item.Ketqua || '',
-      anh:  (item.Anh !== undefined && item.Anh !== null) ? `https://lh3.googleusercontent.com/d/${item.Anh}=s300?authuser=0$` : '',
-      ghichu: item.Ghichu || ''
+      kq: item.Ketqua,
+      ghichu: item.Ghichu || '',
+      anh:  (item.Anh !== undefined && item.Anh !== null) ? `https://lh3.googleusercontent.com/d/${item.Anh}=s1000?authuser=0$` : '',
     }));
     setDataFormatExcel(formattedData)
   }, [tableData])
