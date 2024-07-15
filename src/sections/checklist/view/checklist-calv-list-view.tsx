@@ -201,7 +201,11 @@ export default function ChecklistCalvListView() {
           setTableData(deleteRow);
 
           table.onUpdatePageDeleteRow(dataInPage.length);
-          enqueueSnackbar('Xóa thành công!');
+          enqueueSnackbar({
+            variant: 'success',
+            autoHideDuration: 3000,
+            message: `Xóa thành công`,
+          });
         })
         .catch((error) => {
           if (error.response) {
@@ -240,6 +244,48 @@ export default function ChecklistCalvListView() {
       totalRowsFiltered: dataFiltered?.length,
     });
   }, [dataFiltered?.length, dataInPage.length, table, tableData]);
+
+  const handlePrint = useCallback(async () => {
+    try {
+      const idChecklistCArray = dataFiltered.map(item => item.ID_ChecklistC);
+      const data = {
+        list_IDChecklistC: idChecklistCArray,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      }
+      const response = await axios.post('https://checklist.pmcweb.vn/be/api/tb_checklistc/baocao', data, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: 'blob', // Ensure response is treated as a blob
+      });
+
+      // Create a new Blob object using the response data of the file
+      const blob = new Blob([response.data], {
+        type: response.headers['content-type'],
+      });
+
+      // Create a link element
+      const link = document.createElement('a');
+      
+      // Set the download attribute with a filename
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'Báo cáo Checklist.xlsx';
+
+      // Append the link to the body
+      document.body.appendChild(link);
+
+      // Programmatically trigger a click on the link to download the file
+      link.click();
+
+      // Remove the link from the document
+      document.body.removeChild(link);
+
+      console.log('Excel file downloaded successfully.');
+    } catch (error) {
+      console.error('Error downloading the Excel file', error);
+    }
+  }, [accessToken, dataFiltered, filters]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -350,6 +396,7 @@ export default function ChecklistCalvListView() {
     [handleFilters]
   );
 
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -416,6 +463,7 @@ export default function ChecklistCalvListView() {
           <ChecklistTableToolbar
             filters={filters}
             onFilters={handleFilters}
+            onPrint={handlePrint}
             dateError={dateError}
             //
             canReset={canReset}
@@ -426,6 +474,7 @@ export default function ChecklistCalvListView() {
             <ChecklistTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
+              
               //
               onResetFilters={handleResetFilters}
               //

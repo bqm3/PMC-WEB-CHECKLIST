@@ -88,6 +88,7 @@ export default function OverviewAnalyticsView() {
   const [dataTotalKhuvuc, setDataTotalKhuvuc] = useState<SeriesData[]>([]);
   const [dataTotalHangmuc, setDataTotalHangmuc] = useState<SeriesData[]>([]);
   const [dataPercent, setDataPercent] = useState<any>([]);
+  const [errorHangMuc, setErrorHangMuc] = useState<any>([]);
   const [totalKhoiCV, setTotalKhoiCV] = useState(0);
   const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
   const [selectedYear, setSelectedYear] = useState('2024');
@@ -235,6 +236,7 @@ export default function OverviewAnalyticsView() {
             />
           </Grid>
         )}
+
         {dataTotalHangmuc && (
           <Grid xs={12} md={6} lg={4}>
             <AppCurrentDownload
@@ -251,6 +253,7 @@ export default function OverviewAnalyticsView() {
             />
           </Grid>
         )}
+
         <Grid xs={12} md={6} lg={4}>
           {dataTotalKhoiCV && (
             <AnalyticsCurrentVisits
@@ -267,6 +270,7 @@ export default function OverviewAnalyticsView() {
             />
           )}
         </Grid>
+
         <Grid xs={12} md={12} lg={12}>
           <ChecklistsYear
             title="Số lượng checklist"
@@ -283,8 +287,12 @@ export default function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={12} lg={12}>
+        <Grid xs={12} md={6} lg={6}>
           <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
+        </Grid>
+
+        <Grid xs={12} md={6} lg={6}>
+          <EcommerceSalesOverview title="Hạng mục lỗi" data={_ecommerceSalesOverview} />
         </Grid>
         
       

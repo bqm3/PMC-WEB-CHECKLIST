@@ -22,14 +22,16 @@ type Props = {
   canReset: boolean;
   dateError: boolean;
   onResetFilters: VoidFunction;
+  onPrint: VoidFunction;
 };
 
-export default function OrderTableToolbar({
+export default function TbChecklistTableToolbar({
   filters,
   onFilters,
   //
   canReset,
   dateError,
+  onPrint,
   onResetFilters,
 }: Props) {
   const popover = usePopover();
@@ -69,32 +71,31 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
-        <DatePicker
-          label="Ngày bắt đầu"
-          value={filters.startDate}
-          onChange={handleFilterStartDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        />
+          <DatePicker
+            label="Ngày bắt đầu"
+            value={filters.startDate}
+            onChange={handleFilterStartDate}
+            slotProps={{ textField: { fullWidth: true } }}
+            sx={{
+              maxWidth: { md: 180 },
+            }}
+          />
 
-        <DatePicker
-          label="Ngày kết thúc"
-          value={filters.endDate}
-          onChange={handleFilterEndDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: dateError,
-            },
-          }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        />
+          <DatePicker
+            label="Ngày kết thúc"
+            value={filters.endDate}
+            onChange={handleFilterEndDate}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: dateError,
+              },
+            }}
+            sx={{
+              maxWidth: { md: 180 },
+            }}
+          />
 
           <TextField
             fullWidth
@@ -136,13 +137,14 @@ export default function OrderTableToolbar({
         <MenuItem
           onClick={() => {
             popover.onClose();
+            onPrint();
           }}
         >
           <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+          In báo cáo
         </MenuItem>
 
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             popover.onClose();
           }}
@@ -158,7 +160,7 @@ export default function OrderTableToolbar({
         >
           <Iconify icon="solar:export-bold" />
           Export
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
     </>
   );
