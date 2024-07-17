@@ -156,7 +156,7 @@ export default function ChecklistCalvListView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters.name || filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 

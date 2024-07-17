@@ -5,7 +5,6 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Stack, { StackProps } from '@mui/material/Stack';
 // types
-import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
 import { IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
@@ -31,7 +30,7 @@ export default function OrderTableFiltersResult({
   results,
   ...other
 }: Props) {
-  // const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
+  const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
@@ -66,11 +65,11 @@ export default function OrderTableFiltersResult({
           </Block>
         )}
 
-        {/* {filters.startDate && filters.endDate && (
+        {filters.startDate && filters.endDate && (
           <Block label="Date:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
-        )} */}
+        )}
 
         <Button
           color="error"

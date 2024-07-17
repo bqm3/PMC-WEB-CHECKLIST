@@ -16,7 +16,6 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
-
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -73,13 +72,15 @@ const TABLE_HEAD = [
 const defaultFilters: IKhuvucTableFilters = {
   name: '',
   status: 'all',
+  startDate: null,
+  endDate: null,
 };
 
 const STORAGE_KEY = 'accessToken';
 
 type Props = {
   currentChecklist?: TbChecklistCalv[];
-  dataChecklistC: any
+  dataChecklistC: any;
 };
 
 const headers = [
@@ -128,7 +129,6 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     filters,
   });
 
-
   const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
@@ -136,7 +136,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters.name || filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -216,8 +216,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     [router]
   );
 
-  
-  useEffect(()=> {
+  useEffect(() => {
     const formattedData = tableData?.map((item, index) => ({
       stt: index + 1,
       hangMuc: item.ent_checklist.ent_hangmuc.Hangmuc || '',
@@ -225,11 +224,13 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       gioKt: item.Gioht || '',
       kq: item.Ketqua,
       ghichu: item.Ghichu || '',
-      anh:  (item.Anh !== undefined && item.Anh !== null) ? `https://lh3.googleusercontent.com/d/${item.Anh}=s1000?authuser=0$` : '',
+      anh:
+        item.Anh !== undefined && item.Anh !== null
+          ? `https://lh3.googleusercontent.com/d/${item.Anh}=s1000?authuser=0$`
+          : '',
     }));
-    setDataFormatExcel(formattedData)
-  }, [tableData])
-
+    setDataFormatExcel(formattedData);
+  }, [tableData]);
 
   return (
     <>
@@ -253,8 +254,11 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             }}
           />
 
-          <CSVLink data={dataFormatExcel} headers={headers} 
-          filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_giamsat.Hoten}.csv`}>
+          <CSVLink
+            data={dataFormatExcel}
+            headers={headers}
+            filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_giamsat.Hoten}.csv`}
+          >
             <Button variant="contained" startIcon={<Iconify icon="solar:export-bold" />}>
               Export
             </Button>
@@ -327,7 +331,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(0, table.rowsPerPage, tableData?.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

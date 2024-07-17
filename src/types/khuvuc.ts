@@ -10,6 +10,8 @@ export type IKhuvucTableFilterValue = string | null;
 export type IKhuvucTableFilters = {
   name: string;
   status: string;
+  startDate: Date | null;
+  endDate: Date | null;
 };
 
 export type ITbChecklistTableFilterValue = string | Date | null;
