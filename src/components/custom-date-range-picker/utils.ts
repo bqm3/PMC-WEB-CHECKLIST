@@ -21,12 +21,12 @@ export function shortDateLabel(startDate: Date | null, endDate: Date | null) {
   if (currentYear) {
     if (sameMonth) {
       if (sameDay) {
-        return fDate(endDate, 'dd MMM yy');
+        return fDate(endDate, 'dd MM yy');
       }
-      return `${fDate(startDate, 'dd')} - ${fDate(endDate, 'dd MMM yy')}`;
+      return `${fDate(startDate, 'dd')} - ${fDate(endDate, 'dd/MM/yy')}`;
     }
-    return `${fDate(startDate, 'dd MMM')} - ${fDate(endDate, 'dd MMM yy')}`;
+    return `${fDate(startDate, 'dd/MM')} - ${fDate(endDate, 'dd/MM/yy')}`;
   }
 
-  return `${fDate(startDate, 'dd MMM yy')} - ${fDate(endDate, 'dd MMM yy')}`;
+  return `${fDate(startDate, 'dd/MM/yy')} - ${fDate(endDate, 'dd/MM/yy')}`;
 }

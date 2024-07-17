@@ -532,7 +532,7 @@ export function useGetChecklist(pag: any) {
 
 export function useGetTb_Checklist(pag: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/tb_checklistc/?page=${Number(pag?.page)}&limit=${pag?.limit}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/tb_checklistc/?page=0&limit=500`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',

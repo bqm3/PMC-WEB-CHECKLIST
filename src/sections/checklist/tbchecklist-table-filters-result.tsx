@@ -74,7 +74,7 @@ export default function InvoiceTableFiltersResult({
         )}
 
         {filters.startDate && filters.endDate && (
-          <Block label="Date:">
+          <Block label="Ngày: ">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
         )}

@@ -91,7 +91,7 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function ChecklistCalvListView() {
-  const table = useTable({});
+  const table = useTable();
 
   const settings = useSettingsContext();
 
@@ -128,7 +128,7 @@ export default function ChecklistCalvListView() {
     if (tb_checkList) {
       setTableData(tb_checkList);
     }
-  }, [tb_checkList, table.page, table.rowsPerPage, mutateTb_Checklist]);
+  }, [tb_checkList]);
 
   useEffect(() => {
     // Assuming khoiCV is set elsewhere in your component
@@ -152,9 +152,12 @@ export default function ChecklistCalvListView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(0, table.rowsPerPage);
+  const dataInPage = dataFiltered.slice(
+    table.page * table.rowsPerPage,
+    table.page * table.rowsPerPage + table.rowsPerPage
+  );
 
-  const denseHeight = table.dense ? 52 : 72;
+  const denseHeight = table.dense ? 56 : 76;
 
   const canReset = !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
 
@@ -396,7 +399,6 @@ export default function ChecklistCalvListView() {
     [handleFilters]
   );
 
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -531,7 +533,7 @@ export default function ChecklistCalvListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(0, table.rowsPerPage, tableData?.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -541,8 +543,7 @@ export default function ChecklistCalvListView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={tb_checklistTotalCount}
-            rowsPerPageOptions={[20, 30, 50]}
+            count={dataFiltered.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -631,6 +632,16 @@ function applyFilter({
       });
     }
   }
+
+  // if (!dateError) {
+  //   if (startDate && endDate) {
+  //     inputData = inputData.filter(
+  //       (invoice) =>
+  //         fTimestamp(invoice.Ngay) >= fTimestamp(startDate) &&
+  //         fTimestamp(invoice.Ngay) <= fTimestamp(endDate)
+  //     );
+  //   }
+  // }
 
   return inputData;
 }
