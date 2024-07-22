@@ -15,6 +15,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { CSVLink } from 'react-csv';
+
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -23,12 +25,16 @@ type Props = {
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
+  dataFormatExcel: any;
+  headers: any
 };
 
 export default function OrderTableToolbar({
   filters,
   onFilters,
   //
+  headers,
+  dataFormatExcel,
   canReset,
   onResetFilters,
 }: Props) {
@@ -96,33 +102,24 @@ export default function OrderTableToolbar({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
-        </MenuItem>
+        
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            confirm.onTrue()
-          }}
+        <CSVLink
+          data={dataFormatExcel}
+          headers={headers}
+          filename="Checklist.csv"
+          className="btn btn-primary"
+          style={{ textDecoration: 'none', color: 'black'}}
         >
-          <Iconify icon="solar:import-bold" />
-          Import
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:export-bold" />
-          Export
-        </MenuItem>
+          <MenuItem
+            onClick={() => {
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="solar:export-bold" />
+            Export
+          </MenuItem>
+        </CSVLink>
       </CustomPopover>
 
       <ConfirmDialog

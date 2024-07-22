@@ -214,6 +214,7 @@ export type IChecklist = {
   Ghichu: string;
   Tieuchuan: string;
   Tinhtrang: string;
+  isCheck: string;
   ID_User: string;
   sCalv: string;
   calv_1: string;

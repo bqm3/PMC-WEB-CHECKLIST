@@ -10,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
@@ -85,7 +87,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     Checklist: Yup.string().required('Phải có tên checklist'),
     ID_KhoiCV: Yup.string(),
     ID_Khuvuc: Yup.string(),
-    ID_Toanha: Yup.string()
+    ID_Toanha: Yup.string(),
+    isCheck: Yup.string()
   });
 
   const defaultValues = useMemo(
@@ -95,6 +98,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       Giatrinhan: currentChecklist?.Giatrinhan || '',
       MaQrCode: currentChecklist?.MaQrCode || '',
       Sothutu: currentChecklist?.Sothutu || '',
+      isCheck: currentChecklist?.isCheck || '0',
       Maso: currentChecklist?.Maso || '',
       Ghichu: currentChecklist?.Ghichu || '',
       Tieuchuan: currentChecklist?.Tieuchuan || '',
@@ -225,6 +229,18 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     }
   }, [currentChecklist, defaultValues, reset]);
 
+  // useEffect(() => {
+  //   if (includeTaxes) {
+  //     setValue('taxes', 0);
+  //   } else {
+  //     setValue('taxes', currentProduct?.taxes || 0);
+  //   }
+  // }, [currentProduct?.taxes, includeTaxes, setValue]);
+
+  const handleChangeIncludeCheck = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("isCheck", event.target.checked ? '1' : '0');
+  }, [setValue]);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentChecklist !== undefined) {
@@ -317,6 +333,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     }
   });
 
+
   const renderPrimary = (
     <>
       {mdUp && (
@@ -389,7 +406,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
                 >
                   {khuVuc?.map((item: any) => (
                     <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
-                      {item?.Khuvuc?.ent_toanha?.Toanha} - {item?.Khuvuc?.Tenkhuvuc}
+                      {item?.Khuvuc?.ent_toanha?.Toanha} ({item?.Khuvuc?.Tenkhuvuc})
                     </MenuItem>
                   ))}
                 </RHFSelect>
@@ -403,7 +420,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             >
               {HangMuc?.map((item: any) => (
                 <MenuItem key={item?.ID_Hangmuc} value={item?.ID_Hangmuc}>
-                  {item?.Hangmuc?.Hangmuc} - {item?.Hangmuc?.MaQrCode}
+                  {item?.Hangmuc?.Hangmuc} ({item?.Hangmuc?.MaQrCode})
                 </MenuItem>
               ))}
             </RHFSelect>
@@ -462,6 +479,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             </Stack>
             <RHFTextField name="Tieuchuan" label="Tiêu chuẩn kiểm tra" multiline rows={3} />
             <RHFTextField name="Ghichu" label="Ghi chú" multiline rows={3} />
+
+            <FormControlLabel control={<Switch checked={`${values.isCheck}` === '1'} onChange={handleChangeIncludeCheck}/>}  label="Nhập liệu" />
           </Stack>
         </Card>
       </Grid>
@@ -489,6 +508,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
         {renderPrimary}
 
         {renderDetails}
+
+        
 
         {renderActions}
       </Grid>

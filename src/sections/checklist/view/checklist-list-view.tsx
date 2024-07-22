@@ -222,6 +222,48 @@ export default function ChecklistCalvListView() {
     [handleFilters]
   );
 
+  const headers = [
+    { label: 'STT', key: 'stt' },
+    { label: 'Tên checklist', key: 'Checklist' },
+    { label: 'Giá trị định danh', key: 'Giatridinhdanh' },
+    { label: 'Giá trị nhận', key: 'Giatrinhan' },
+    { label: 'Tầng', key: 'Tentang' },
+    { label: 'Số thứ tự', key: 'Sothutu' },
+    { label: 'Mã số', key: 'Maso' },
+    { label: 'Hạng mục', key: 'Hangmuc' },
+    { label: 'Ca làm việc', key: 'caLvs' },
+  ];
+
+  const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
+
+  useEffect(() => {
+    const formattedData = dataFiltered?.map((item, index) => {
+      const shiftNames = [item.calv_1, item.calv_2, item.calv_3, item.calv_4]
+        .map((calvId : any) => {
+          const workShift = calv?.find((shift) => `${shift.ID_Calv}` === `${calvId}`);
+          return workShift ? workShift.Tenca : null;
+        })
+        .filter((name: any) => name !== null)
+        .join(', ');
+
+      const shiftNamesArray = shiftNames?.split(', ');
+
+      return {
+        stt: index + 1,
+        Checklist: item.Checklist || '',
+        Giatridinhdanh: item.Giatridinhdanh || '',
+        Giatrinhan: item.Giatrinhan || '',
+        Tentang: item.ent_tang.Tentang || '',
+        Sothutu: item.Sothutu || '',
+        Maso: item.Maso || '',
+        Hangmuc: item.ent_hangmuc.Hangmuc || '',
+        caLvs: shiftNamesArray || '',
+      };
+    });
+    setDataFormatExcel(formattedData);
+  }, [dataFiltered, calv]);
+
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -306,6 +348,8 @@ export default function ChecklistCalvListView() {
           <ChecklistTableToolbar
             filters={filters}
             onFilters={handleFilters}
+            headers={headers}
+            dataFormatExcel={dataFormatExcel}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}

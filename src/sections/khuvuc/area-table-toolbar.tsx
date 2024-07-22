@@ -8,10 +8,12 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 // types
-import {IKhuvucTableFilters, IKhuvucTableFilterValue} from 'src/types/khuvuc'
+import { IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import { CSVLink } from 'react-csv';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +23,8 @@ type Props = {
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
+  dataFormatExcel: any;
+  headers: any;
 };
 
 export default function OrderTableToolbar({
@@ -28,6 +32,8 @@ export default function OrderTableToolbar({
   onFilters,
   //
   canReset,
+  headers,
+  dataFormatExcel,
   onResetFilters,
 }: Props) {
   const popover = usePopover();
@@ -115,7 +121,7 @@ export default function OrderTableToolbar({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             popover.onClose();
           }}
@@ -131,16 +137,23 @@ export default function OrderTableToolbar({
         >
           <Iconify icon="solar:import-bold" />
           Import
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
+        </MenuItem> */}
+        <CSVLink
+          data={dataFormatExcel}
+          headers={headers}
+          filename="Khuvuc.csv"
+          className="btn btn-primary"
+          style={{ textDecoration: 'none', color: 'black'}}
         >
-          <Iconify icon="solar:export-bold" />
-          Export
-        </MenuItem>
+          <MenuItem
+            onClick={() => {
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="solar:export-bold" />
+            Export
+          </MenuItem>
+        </CSVLink>
       </CustomPopover>
     </>
   );

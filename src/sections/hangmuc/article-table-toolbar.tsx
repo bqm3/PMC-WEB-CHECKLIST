@@ -13,6 +13,8 @@ import {IKhuvucTableFilters, IKhuvucTableFilterValue} from 'src/types/khuvuc'
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
+import { CSVLink } from 'react-csv';
+
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -21,6 +23,8 @@ type Props = {
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
+  headers: any;
+  dataFormatExcel: any
 };
 
 export default function OrderTableToolbar({
@@ -28,6 +32,8 @@ export default function OrderTableToolbar({
   onFilters,
   //
   canReset,
+  headers,
+  dataFormatExcel,
   onResetFilters,
 }: Props) {
   const popover = usePopover();
@@ -115,32 +121,24 @@ export default function OrderTableToolbar({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
-        </MenuItem>
+        
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
+        <CSVLink
+          data={dataFormatExcel}
+          headers={headers}
+          filename="Hạng mục.csv"
+          className="btn btn-primary"
+          style={{ textDecoration: 'none', color: 'black'}}
         >
-          <Iconify icon="solar:import-bold" />
-          Import
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:export-bold" />
-          Export
-        </MenuItem>
+          <MenuItem
+            onClick={() => {
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="solar:export-bold" />
+            Export
+          </MenuItem>
+        </CSVLink>
       </CustomPopover>
     </>
   );

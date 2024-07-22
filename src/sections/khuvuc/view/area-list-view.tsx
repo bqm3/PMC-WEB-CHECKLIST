@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
+
 // @mui
 import { alpha } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
@@ -42,6 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
+
 // types
 import { IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
@@ -219,6 +221,32 @@ export default function AreaListView() {
     [handleFilters]
   );
 
+  const headers = [
+    { label: 'STT', key: 'stt' },
+    { label: 'Tên khu vực', key: 'Tenkhuvuc' },
+    { label: 'Tòa nhà', key: 'Toanha' },
+    { label: 'Mã Qr Code', key: 'MaQrCode' },
+    { label: 'Số thứ tự', key: 'Sothutu' },
+    { label: 'Mã khu vực', key: 'Makhuvuc' },
+    { label: 'Khối công việc', key: 'KhoiCV' },
+  ];
+
+  const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
+
+  useEffect(() => {
+    const formattedData = dataFiltered?.map((item, index) => ({
+      stt: index + 1,
+      Tenkhuvuc: item.Tenkhuvuc || '',
+      Toanha: item.ent_toanha.Toanha || '',
+      MaQrCode: item.MaQrCode || '',
+      Sothutu: item.Sothutu,
+      Makhuvuc: item.Makhuvuc || '',
+      KhoiCV:
+        item.ent_khoicv.KhoiCV || '',
+    }));
+    setDataFormatExcel(formattedData);
+  }, [dataFiltered]);
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -248,6 +276,7 @@ export default function AreaListView() {
           >
             Upload
           </LoadingButton>
+        
         </Stack>
 
         <Card>
@@ -356,6 +385,8 @@ export default function AreaListView() {
           <OrderTableToolbar
             filters={filters}
             onFilters={handleFilters}
+            headers={headers}
+            dataFormatExcel={dataFormatExcel}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}

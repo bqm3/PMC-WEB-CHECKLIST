@@ -218,6 +218,30 @@ export default function AreaListView() {
     [handleFilters]
   );
 
+  const headers = [
+    { label: 'STT', key: 'stt' },
+    { label: 'Tên hạng mục', key: 'Hangmuc' },
+    { label: 'Mã Qr Code', key: 'MaQrCode' },
+    { label: 'Khu vực', key: 'Tenkhuvuc' },
+    { label: 'Tiêu chuẩn kiểm tra', key: 'Tieuchuankt' },
+    { label: 'Khối công việc', key: 'KhoiCV' },
+  ];
+
+  const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
+
+  useEffect(() => {
+    const formattedData = dataFiltered?.map((item, index) => ({
+      stt:index + 1,
+      Hangmuc: item.Hangmuc || '',
+      MaQrCode: item.MaQrCode || '',
+      Tenkhuvuc: item.ent_khuvuc.Tenkhuvuc,
+      Tieuchuankt: item.Tieuchuankt || '',
+      KhoiCV:
+        item.ent_khoicv.KhoiCV || '',
+    }));
+    setDataFormatExcel(formattedData);
+  }, [dataFiltered]);
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -296,6 +320,9 @@ export default function AreaListView() {
           <OrderTableToolbar
             filters={filters}
             onFilters={handleFilters}
+            headers={headers}
+            dataFormatExcel={dataFormatExcel}
+            
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}

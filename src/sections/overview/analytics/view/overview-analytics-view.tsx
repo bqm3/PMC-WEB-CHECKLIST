@@ -88,7 +88,6 @@ export default function OverviewAnalyticsView() {
   const [dataTotalKhuvuc, setDataTotalKhuvuc] = useState<SeriesData[]>([]);
   const [dataTotalHangmuc, setDataTotalHangmuc] = useState<SeriesData[]>([]);
   const [dataPercent, setDataPercent] = useState<any>([]);
-  const [errorHangMuc, setErrorHangMuc] = useState<any>([]);
   const [totalKhoiCV, setTotalKhoiCV] = useState(0);
   const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
   const [selectedYear, setSelectedYear] = useState('2024');
@@ -291,9 +290,9 @@ export default function OverviewAnalyticsView() {
           <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
         </Grid>
 
-        <Grid xs={12} md={6} lg={6}>
+        {/* <Grid xs={12} md={6} lg={6}>
           <EcommerceSalesOverview title="Hạng mục lỗi" data={_ecommerceSalesOverview} />
-        </Grid>
+        </Grid> */}
         
       
       </Grid>
