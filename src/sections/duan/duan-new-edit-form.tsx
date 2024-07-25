@@ -107,21 +107,21 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             if (error.response) {
               enqueueSnackbar({
                 variant: 'error',
-                autoHideDuration: 3000,
+                autoHideDuration: 2000,
                 message: `${error.response.data.message}`,
               });
             } else if (error.request) {
               // Lỗi không nhận được phản hồi từ server
               enqueueSnackbar({
                 variant: 'error',
-                autoHideDuration: 3000,
+                autoHideDuration: 2000,
                 message: `Không nhận được phản hồi từ máy chủ`,
               });
             } else {
               // Lỗi khi cấu hình request
               enqueueSnackbar({
                 variant: 'error',
-                autoHideDuration: 3000,
+                autoHideDuration: 2000,
                 message: `Lỗi gửi yêu cầu`,
               });
             }
@@ -142,21 +142,21 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             if (error.response) {
               enqueueSnackbar({
                 variant: 'error',
-                autoHideDuration: 3000,
+                autoHideDuration: 2000,
                 message: `${error.response.data.message}`,
               });
             } else if (error.request) {
               // Lỗi không nhận được phản hồi từ server
               enqueueSnackbar({
                 variant: 'error',
-                autoHideDuration: 3000,
+                autoHideDuration: 2000,
                 message: `Không nhận được phản hồi từ máy chủ`,
               });
             } else {
               // Lỗi khi cấu hình request
               enqueueSnackbar({
                 variant: 'error',
-                autoHideDuration: 3000,
+                autoHideDuration: 2000,
                 message: `Lỗi gửi yêu cầu`,
               });
             }
@@ -165,7 +165,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     } catch (error) {
       enqueueSnackbar({
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 2000,
         message: `Lỗi gửi yêu cầu`,
       });
       // }

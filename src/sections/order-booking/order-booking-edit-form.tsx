@@ -125,14 +125,14 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
       router.push(paths.dashboard.orderBooking.root);
       enqueueSnackbar({
         variant: 'success',
-        autoHideDuration: 3000,
+        autoHideDuration: 2000,
         message: 'Update Success!',
       });
     } catch (error) {
       console.error(error);
       enqueueSnackbar({
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 2000,
         message: 'Update Faild',
       });
       loadingSend.onFalse();

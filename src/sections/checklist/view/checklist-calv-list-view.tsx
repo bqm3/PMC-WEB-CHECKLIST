@@ -206,7 +206,7 @@ export default function ChecklistCalvListView() {
           table.onUpdatePageDeleteRow(dataInPage.length);
           enqueueSnackbar({
             variant: 'success',
-            autoHideDuration: 3000,
+            autoHideDuration: 2000,
             message: `Xóa thành công`,
           });
         })
@@ -214,21 +214,21 @@ export default function ChecklistCalvListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -325,21 +325,21 @@ export default function ChecklistCalvListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -369,21 +369,21 @@ export default function ChecklistCalvListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 3000,
+              autoHideDuration: 2000,
               message: `Lỗi gửi yêu cầu`,
             });
           }

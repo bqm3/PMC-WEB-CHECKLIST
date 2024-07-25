@@ -73,14 +73,14 @@ export default function AccountChangePassword() {
       if (response.status === 200) {
         enqueueSnackbar({
           variant: 'success',
-          autoHideDuration: 3000,
+          autoHideDuration: 2000,
           message: 'Update success',
         });
         // reset();
       } else {
         enqueueSnackbar({
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 2000,
           message: 'Update error',
         });
       }

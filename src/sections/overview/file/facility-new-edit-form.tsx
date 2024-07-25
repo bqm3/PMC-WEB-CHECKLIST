@@ -118,14 +118,14 @@ export default function PacilityNewEditForm({ currentFacilities }: Props) {
       if (response.status === 200) {
         enqueueSnackbar({
           variant: 'success',
-          autoHideDuration: 3000,
+          autoHideDuration: 2000,
           message: 'Cập nhật thông tin khách sạn thành công!',
         })
       }
       else {
         enqueueSnackbar({
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 2000,
           message: 'Cập nhật thông tin khách sạn thất bại!',
         });
       }

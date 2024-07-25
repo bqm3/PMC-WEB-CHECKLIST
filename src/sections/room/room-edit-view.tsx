@@ -182,7 +182,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
         } else {
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 3000,
+            autoHideDuration: 2000,
             message: 'Update Faild!!!',
           });
         }
