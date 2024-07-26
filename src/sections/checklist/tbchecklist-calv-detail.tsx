@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { CSVLink, CSVDownload } from 'react-csv';
 // @mui
-import { alpha } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import Label from 'src/components/label';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -13,8 +13,15 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
+import Image from 'src/components/image';
+import IconButton from '@mui/material/IconButton';
+// import CloseIcon from '@mui/material/';
 
 // routes
 import { paths } from 'src/routes/paths';
@@ -56,17 +63,15 @@ import ChecklistTableFiltersResult from './detail/checklist-table-filters-result
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  //   { id: 'ID_Checklist', label: '', width: 1 },
   { id: 'Checklist', label: 'Tên checklist', width: 150, align: 'left' },
   { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
   { id: 'Maso', label: 'Mã số', width: 100, align: 'center' },
-
   { id: 'Ketqua', label: 'Kết quả', width: 100, align: 'center' },
   { id: 'Gioht', label: 'Giờ checklist', width: 100, align: 'center' },
   { id: 'Anh', label: 'Ảnh', width: 100, align: 'center' },
-
   { id: 'Ghichu', label: 'Ghi chú', width: 100, align: 'center' },
-  //   { id: '', width: 88 },
+
+  { id: '', width: 88 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -92,6 +97,15 @@ const headers = [
   { label: 'Ghi chú', key: 'ghichu' },
   { label: 'Ảnh', key: 'anh' },
 ];
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
 
 // ----------------------------------------------------------------------
 
@@ -136,7 +150,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+  const canReset =
+    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -208,6 +223,17 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  const [open, setOpen] = useState(false);
+  const [detailChecklist, setDetailChecklist] = useState<TbChecklistCalv>();
+
+  const handleClickOpen = (data: TbChecklistCalv) => {
+    setOpen(true);
+    setDetailChecklist(data);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleViewRow = useCallback(
     (id: string) => {
@@ -326,6 +352,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                       onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
                       onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
                       onViewRow={() => handleViewRow(row.ID_Checklist)}
+                      handleClickOpen={() => handleClickOpen(row)}
                     />
                   ))}
 
@@ -353,6 +380,38 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           />
         </Card>
       </Container>
+
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+        {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          
+        </DialogTitle> */}
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          {/* <CloseIcon /> */}
+        </IconButton>
+        <DialogContent dividers>
+          <Image
+            minWidth={500}
+            minHeight={500}
+            alt={detailChecklist?.ent_checklist?.Checklist}
+            src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            ratio="1/1"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Đóng
+          </Button>
+        </DialogActions>
+      </BootstrapDialog>
 
       <ConfirmDialog
         open={confirm.value}
@@ -405,7 +464,7 @@ function applyFilter({
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (name) {
-    inputData = inputData?.filter(
+    inputData = inputData.filter(
       (checklist) =>
         `${checklist.ent_checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||

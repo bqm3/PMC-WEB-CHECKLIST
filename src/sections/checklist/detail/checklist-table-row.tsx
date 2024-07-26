@@ -34,6 +34,7 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  handleClickOpen: VoidFunction;
 };
 
 export default function AreaTableRow({
@@ -43,6 +44,7 @@ export default function AreaTableRow({
   onSelectRow,
   onDeleteRow,
   calv,
+  handleClickOpen,
 }: Props) {
   const {
     ID_Checklistchitiet,
@@ -91,7 +93,7 @@ export default function AreaTableRow({
       <TableCell align="center">
         {(Anh !== null && Anh !== undefined) && (
           <Avatar
-            src={`https://lh3.googleusercontent.com/d/${Anh}=s300?authuser=0`}
+            src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
             variant="rounded"
             sx={{ width: 80, height: 80 }}
           />
@@ -100,11 +102,11 @@ export default function AreaTableRow({
       
       <TableCell align="center"> {Ghichu} </TableCell>
 
-      {/* <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
-      </TableCell> */}
+      </TableCell>
     </TableRow>
   );
 
@@ -120,14 +122,14 @@ export default function AreaTableRow({
       >
         <MenuItem
           onClick={() => {
-            onViewRow();
+            handleClickOpen();
             popover.onClose();
           }}
         >
           <Iconify icon="solar:eye-bold" />
           Xem
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
@@ -136,7 +138,7 @@ export default function AreaTableRow({
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Xóa
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
 
       <ConfirmDialog

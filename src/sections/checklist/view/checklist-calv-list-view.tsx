@@ -72,7 +72,7 @@ const TABLE_HEAD = [
   { id: 'Ngay', label: 'Ngày checklist', width: 100 },
 
   { id: 'ID_Giamsat', label: 'Người checklist', width: 100, align: 'center' },
-  { id: 'TongC', label: 'Đã check', width: 100, align: 'center' },
+  { id: 'Tong', label: 'Số Checklist', width: 100, align: 'center' },
   { id: 'Giobd', label: 'Giờ bắt đầu', width: 100, align: 'center' },
   { id: 'ID_Calv', label: 'Ca làm việc', width: 100, align: 'center' },
   { id: 'ID_KhoiCV', label: 'Khối công việc', width: 100, align: 'center' },

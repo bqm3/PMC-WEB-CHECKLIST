@@ -93,8 +93,6 @@ export default function ChecklistCalvListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  // const {checkList} = useGetChecklist( {page: table.page, limit: table.rowsPerPage});
-
   const [tableData, setTableData] = useState<IChecklist[]>([]);
 
   const { checkList } = useGetChecklistWeb();

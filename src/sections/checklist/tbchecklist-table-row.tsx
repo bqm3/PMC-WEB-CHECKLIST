@@ -92,7 +92,7 @@ export default function AreaTableRow({
       <TableCell align="center"> {ent_giamsat?.Hoten} </TableCell>
       <TableCell align="center">
         {' '}
-        {TongC}/{Tong}
+       {Tong}
       </TableCell>
 
       <TableCell align="center">{Giobd}</TableCell>
