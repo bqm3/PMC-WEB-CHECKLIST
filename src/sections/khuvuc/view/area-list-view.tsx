@@ -13,6 +13,11 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
+import Image from 'src/components/image';
 import Stack from '@mui/material/Stack';
 // routes
 import { paths } from 'src/routes/paths';
@@ -43,7 +48,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
-
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // types
 import { IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
@@ -51,6 +56,7 @@ import OrderTableRow from '../area-table-row';
 import OrderTableToolbar from '../area-table-toolbar';
 import OrderTableFiltersResult from '../area-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
+
 
 
 // ----------------------------------------------------------------------
@@ -84,7 +90,11 @@ export default function AreaListView() {
 
   const router = useRouter();
 
+  const popover = usePopover();
+
   const confirm = useBoolean();
+
+  const confirmQr = useBoolean();
 
   const upload = useBoolean();
 
@@ -97,9 +107,12 @@ export default function AreaListView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
+
   const { khoiCV } = useGetKhoiCV();
 
   const [tableData, setTableData] = useState<IKhuvuc[]>([]);
+
+  const [dataSelect, setDataSelect] = useState<IKhuvuc>();
 
   useEffect(() => {
     if (khuvuc.length > 0) {
@@ -192,6 +205,19 @@ export default function AreaListView() {
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
 
+  const handleDownloadImage = async () => {
+    const originalImage = `https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}`;
+    const image = await fetch(originalImage);
+    const imageBlog = await image.blob()
+    const imageURL = URL.createObjectURL(imageBlog)
+    const link = document.createElement('a')
+    link.href = imageURL;
+    link.download = `${dataSelect?.MaQrCode}`;
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  };
+
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.ID_Khuvuc));
     setTableData(deleteRows);
@@ -213,6 +239,16 @@ export default function AreaListView() {
     },
     [router]
   );
+
+  const handleQrRow = useCallback(
+    (data: IKhuvuc) => {
+      confirmQr.onTrue();
+      popover.onClose();
+      setDataSelect(data);
+    },
+    [confirmQr, popover]
+  );
+
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -449,6 +485,7 @@ export default function AreaListView() {
                         onSelectRow={() => table.onSelectRow(row.ID_Khuvuc)}
                         onDeleteRow={() => handleDeleteRow(row.ID_Khuvuc)}
                         onViewRow={() => handleViewRow(row.ID_Khuvuc)}
+                        onQrRow={()=> handleQrRow(row)}
                         khoiCV={khoiCV}
                       />
                     ))}
@@ -478,6 +515,27 @@ export default function AreaListView() {
       </Container>
 
       <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
+
+      <Dialog open={confirmQr.value} onClose={confirmQr.onFalse} maxWidth="sm">
+        <DialogTitle sx={{ pb: 2 }}>Ảnh Qr Code</DialogTitle>
+
+        <DialogContent>
+          <Card>
+            <Image
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}&amp;size=300x300`}
+              alt=""
+              title=""
+            />
+          </Card>
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="contained" color='success' onClick={handleDownloadImage}>Download</Button>
+          <Button variant="outlined" color="inherit" onClick={confirmQr.onFalse}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <ConfirmDialog
         open={confirm.value}
@@ -532,9 +590,9 @@ function applyFilter({
   if (name) {
     inputData = inputData.filter(
       (order) =>
-        order.Tenkhuvuc.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.MaQrCode.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.ent_toanha.Toanha.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order.Tenkhuvuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.ent_toanha.Toanha}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

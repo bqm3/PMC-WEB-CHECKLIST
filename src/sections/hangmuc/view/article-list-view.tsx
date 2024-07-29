@@ -12,6 +12,11 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
+import Image from 'src/components/image';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -43,6 +48,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
+import { usePopover } from 'src/components/custom-popover';
 // types
 import { IHangMuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
@@ -50,6 +56,7 @@ import OrderTableRow from '../article-table-row';
 import OrderTableToolbar from '../article-table-toolbar';
 import OrderTableFiltersResult from '../article-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
+
 
 
 // ----------------------------------------------------------------------
@@ -82,7 +89,11 @@ export default function AreaListView() {
 
   const confirm = useBoolean();
 
+  const popover = usePopover();
+
   const upload = useBoolean();
+
+  const confirmQr = useBoolean();
 
   const [loading, setLoading] = useState<Boolean |any>(false)
 
@@ -93,11 +104,12 @@ export default function AreaListView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const { hangMuc } = useGetHangMuc();
+
   const { khoiCV } = useGetKhoiCV();
 
-  
-
   const [tableData, setTableData] = useState<IHangMuc[]>([]);
+
+  const [dataSelect, setDataSelect] = useState<IHangMuc>();
 
   const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
 
@@ -189,6 +201,19 @@ export default function AreaListView() {
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
 
+  const handleDownloadImage = async () => {
+    const originalImage = `https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}`;
+    const image = await fetch(originalImage);
+    const imageBlog = await image.blob()
+    const imageURL = URL.createObjectURL(imageBlog)
+    const link = document.createElement('a')
+    link.href = imageURL;
+    link.download = `${dataSelect?.MaQrCode}`;
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  };
+
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Hangmuc));
     setTableData(deleteRows);
@@ -209,6 +234,15 @@ export default function AreaListView() {
       router.push(paths.dashboard.hangmuc.edit(id));
     },
     [router]
+  );
+
+  const handleQrRow = useCallback(
+    (data: IHangMuc) => {
+      confirmQr.onTrue();
+      popover.onClose();
+      setDataSelect(data);
+    },
+    [confirmQr, popover]
   );
 
   const handleFilterStatus = useCallback(
@@ -385,6 +419,7 @@ export default function AreaListView() {
                         onSelectRow={() => table.onSelectRow(row.ID_Hangmuc)}
                         onDeleteRow={() => handleDeleteRow(row.ID_Hangmuc)}
                         onViewRow={() => handleViewRow(row.ID_Hangmuc)}
+                        onQrRow={()=> handleQrRow(row)}
                       />
                     ))}
 
@@ -413,6 +448,27 @@ export default function AreaListView() {
       </Container>
 
       <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
+
+      <Dialog open={confirmQr.value} onClose={confirmQr.onFalse} maxWidth="sm">
+        <DialogTitle sx={{ pb: 2 }}>Ảnh Qr Code</DialogTitle>
+
+        <DialogContent>
+          <Card>
+            <Image
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}&amp;size=300x300`}
+              alt=""
+              title=""
+            />
+          </Card>
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="contained" color='success' onClick={handleDownloadImage}>Download</Button>
+          <Button variant="outlined" color="inherit" onClick={confirmQr.onFalse}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <ConfirmDialog
         open={confirm.value}

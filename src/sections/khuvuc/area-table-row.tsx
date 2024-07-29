@@ -34,6 +34,7 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  onQrRow: VoidFunction;
 };
 
 export default function AreaTableRow({
@@ -41,6 +42,7 @@ export default function AreaTableRow({
   selected,
   onViewRow,
   onSelectRow,
+  onQrRow,
   onDeleteRow,
   khoiCV,
 }: Props) {
@@ -175,6 +177,17 @@ export default function AreaTableRow({
           <Iconify icon="solar:eye-bold" />
           Xem
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            onQrRow();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="mdi:qrcode" />
+          Ảnh Qr
+        </MenuItem>
+
         <MenuItem
           onClick={() => {
             confirm.onTrue();
