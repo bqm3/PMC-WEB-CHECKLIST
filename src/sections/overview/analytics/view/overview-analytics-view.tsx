@@ -11,7 +11,7 @@ import {
   _analyticPosts,
   _analyticTraffic,
   _analyticOrderTimeline,
-  _ecommerceSalesOverview
+  _ecommerceSalesOverview,
 } from 'src/_mock';
 
 // hooks
@@ -37,7 +37,9 @@ import AppCurrentDownload from '../app-current-download';
 import BankingBalanceStatistics from '../../banking/banking-balance-statistics';
 
 import ChecklistsYear from '../checklist-yearly';
-import EcommerceSalesOverview from '../checklist-percent-overview'
+import EcommerceSalesOverview from '../checklist-percent-overview';
+
+import AppWidgetSummary from '../app-widget-summary';
 
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
@@ -218,7 +220,47 @@ export default function OverviewAnalyticsView() {
         Hi, {user?.ent_duan?.Duan}
       </Typography>
       <Grid container spacing={3}>
-       
+        {/* <Grid xs={6} md={3}>
+          <AppWidgetSummary
+            title="Khối kỹ thuật"
+            percent={Number(10)}
+            total={Number(6055)}
+            chart={{
+              series: [10, 5, 6, 6, 2, -5, 4, 0],
+            }}
+          />
+        </Grid>
+        <Grid xs={6} md={3}>
+          <AppWidgetSummary
+            title="Khối bảo vệ"
+            percent={Number(-10)}
+            total={Number(6055)}
+            chart={{
+              series: [10, 5, 6, 6, 2, -5, 4, 0],
+            }}
+          />
+        </Grid>
+        <Grid xs={6} md={3}>
+          <AppWidgetSummary
+            title="Khối dự án"
+            percent={Number(-45)}
+            total={Number(6055)}
+            chart={{
+              series: [10, 5, 6, 6, 2, -5, 4, 0],
+            }}
+          />
+        </Grid>
+        <Grid xs={6} md={3}>
+          <AppWidgetSummary
+            title="Khối làm sạch"
+            percent={Number(10)}
+            total={Number(6055)}
+            chart={{
+              series: [10, 5, 6, 6, 2, -5, 4, 0],
+            }}
+          />
+        </Grid> */}
+
         {dataTotalKhuvuc && (
           <Grid xs={12} md={6} lg={4}>
             <AppCurrentDownload
@@ -293,8 +335,6 @@ export default function OverviewAnalyticsView() {
         {/* <Grid xs={12} md={6} lg={6}>
           <EcommerceSalesOverview title="Hạng mục lỗi" data={_ecommerceSalesOverview} />
         </Grid> */}
-        
-      
       </Grid>
     </Container>
   );

@@ -74,52 +74,67 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
       sx={{
         width: 1,
         mx: 'auto',
-        maxWidth: 480,
-        px: { xs: 2, md: 8 },
-        pt: { xs: 15, md: 20 },
-        pb: { xs: 15, md: 0 },
+        maxWidth: 420,
+        justifyContent: 'center',
+        // backgroundColor: 'red',
+        
       }}
     >
-      {children}
-    </Stack>
-  );
-
-  const renderSection = (
-    <Stack
-      flexGrow={1}
-      spacing={10}
-      alignItems="center"
-      justifyContent="center"
-      sx={{
-        ...bgGradient({
-          color: alpha(
-            theme.palette.background.default,
-            theme.palette.mode === 'light' ? 0.88 : 0.94
-          ),
-          // imgUrl: '/assets/background/overlay_2.jpg',
-        }),
-      }}
-    >
-      <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
-        {title || 'Center PMC'}
-      </Typography>
-
-      <Box
-        component="img"
-        alt="auth"
-        src={image || '/assets/illustrations/overplay_main.jpg'}
+      <Stack
         sx={{
-          maxWidth: {
-            xs: 440,
-            lg: 520,
-            xl: 680,
-          },
+          width: 1,
+          mx: 'auto',
+          maxWidth: 420,
+          px: { xs: 2, md: 6 },
+          pt: { xs: 10, md: 12 },
+          pb: { xs: 10, md: 12 },
+          alignContent: 'center',
+          borderRadius: '12px',
+          backgroundColor: 'rgba(255, 255, 255, 0.95)', // Màu trắng với độ mờ
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)',
         }}
-      />
-
-      
+      >
+        {children}
+      </Stack>
     </Stack>
   );
+
+  // const renderSection = (
+  //   <Stack
+  //     flexGrow={1}
+  //     spacing={10}
+  //     alignItems="center"
+  //     justifyContent="center"
+
+  //     sx={{
+  //       backgroundColor: 'red',
+  //       ...bgGradient({
+  //         // color: alpha(
+  //         //   theme.palette.background.default,
+  //         //   theme.palette.mode === 'light' ? 0.88 : 0.94
+  //         // ),
+  //         // imgUrl: '/assets/illustrations/overplay_main.jpg',
+  //       }),
+  //     }}
+  //   >
+  //     {/* <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
+  //       {title || 'Center PMC'}
+  //     </Typography> */}
+
+  //     {/* <Box
+  //       component="img"
+  //       alt="auth"
+  //       src={image || '/assets/illustrations/overplay_main.jpg'}
+  //       sx={{
+  //         maxWidth: {
+  //           xs: 440,
+  //           lg: 520,
+  //           xl: 680,
+  //         },
+  //       }}
+  //     /> */}
+  //   </Stack>
+  // );
 
   return (
     <Stack
@@ -127,11 +142,14 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
       direction="row"
       sx={{
         minHeight: '100vh',
+        backgroundImage: 'url(/assets/illustrations/bg.jpg)',
+        backgroundSize: 'cover', // Đảm bảo hình nền bao phủ toàn bộ khu vực
+        backgroundPosition: 'center', // Đảm bảo hình nền được đặt ở giữa
       }}
     >
       {renderLogo}
 
-      {mdUp && renderSection}
+      {/* {mdUp && renderSection} */}
 
       {renderContent}
     </Stack>
