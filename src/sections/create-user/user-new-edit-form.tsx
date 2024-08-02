@@ -56,7 +56,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [toggleChecklist, setToggleChecklist] = useState(true);
-  const [toggleQlts, setToggleQlts] = useState(true);
+  const [toggleQlts, setToggleQlts] = useState(false);
 
   const [KhoiCV, setKhoiCV] = useState<IKhoiCV[]>([]);
   const [Duan, setDuan] = useState<IDuan[]>([]);
@@ -78,6 +78,12 @@ export default function UserNewEditForm({ currentUser }: Props) {
       setKhoiCV(khoiCV);
     }
   }, [khoiCV]);
+
+  useEffect(() => {
+    if (`${currentUser?.Permission}` === '3') {
+      setToggleQlts(true);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if (nhompb?.length > 0) {
@@ -187,76 +193,76 @@ export default function UserNewEditForm({ currentUser }: Props) {
             }
           });
       } else {
-        if(toggleQlts === true) {
+        if (toggleQlts === true) {
           await axios
-          .post(`https://checklist.pmcweb.vn/pmc-assets/api/ent_user/register`, data, {
-            headers: {
-              Accept: 'application/json',
-            },
-          })
-          .then((res) => {
-            reset();
-            enqueueSnackbar('Tạo tài khoản thành công!');
-          })
-          .catch((error) => {
-            if (error.response) {
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `${error.response.data.message}`,
-              });
-            } else if (error.request) {
-              // Lỗi không nhận được phản hồi từ server
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `Không nhận được phản hồi từ máy chủ`,
-              });
-            } else {
-              // Lỗi khi cấu hình request
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `Lỗi gửi yêu cầu`,
-              });
-            }
-          });
+            .post(`https://checklist.pmcweb.vn/pmc-assets/api/ent_user/register`, data, {
+              headers: {
+                Accept: 'application/json',
+              },
+            })
+            .then((res) => {
+              reset();
+              enqueueSnackbar('Tạo tài khoản thành công!');
+            })
+            .catch((error) => {
+              if (error.response) {
+                enqueueSnackbar({
+                  variant: 'error',
+                  autoHideDuration: 2000,
+                  message: `${error.response.data.message}`,
+                });
+              } else if (error.request) {
+                // Lỗi không nhận được phản hồi từ server
+                enqueueSnackbar({
+                  variant: 'error',
+                  autoHideDuration: 2000,
+                  message: `Không nhận được phản hồi từ máy chủ`,
+                });
+              } else {
+                // Lỗi khi cấu hình request
+                enqueueSnackbar({
+                  variant: 'error',
+                  autoHideDuration: 2000,
+                  message: `Lỗi gửi yêu cầu`,
+                });
+              }
+            });
         }
-        if(toggleChecklist === true) {
+        if (toggleChecklist === true) {
           await axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_user/register`, data, {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-          .then((res) => {
-            reset();
-            enqueueSnackbar('Tạo tài khoản thành công!');
-          })
-          .catch((error) => {
-            if (error.response) {
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `${error.response.data.message}`,
-              });
-            } else if (error.request) {
-              // Lỗi không nhận được phản hồi từ server
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `Không nhận được phản hồi từ máy chủ`,
-              });
-            } else {
-              // Lỗi khi cấu hình request
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `Lỗi gửi yêu cầu`,
-              });
-            }
-          });
+            .post(`https://checklist.pmcweb.vn/be/api/ent_user/register`, data, {
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => {
+              reset();
+              enqueueSnackbar('Tạo tài khoản thành công!');
+            })
+            .catch((error) => {
+              if (error.response) {
+                enqueueSnackbar({
+                  variant: 'error',
+                  autoHideDuration: 2000,
+                  message: `${error.response.data.message}`,
+                });
+              } else if (error.request) {
+                // Lỗi không nhận được phản hồi từ server
+                enqueueSnackbar({
+                  variant: 'error',
+                  autoHideDuration: 2000,
+                  message: `Không nhận được phản hồi từ máy chủ`,
+                });
+              } else {
+                // Lỗi khi cấu hình request
+                enqueueSnackbar({
+                  variant: 'error',
+                  autoHideDuration: 2000,
+                  message: `Lỗi gửi yêu cầu`,
+                });
+              }
+            });
         }
       }
     } catch (error) {
@@ -351,84 +357,88 @@ export default function UserNewEditForm({ currentUser }: Props) {
           </Box>
         )}
 
-        <Stack direction="row" alignItems="center" spacing={0.5} marginTop={2}>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  defaultChecked={toggleQlts}
-                  value={toggleQlts}
-                  onChange={() => setToggleQlts(!toggleQlts)}
+        {`${currentUser?.Permission}` === '3' && (
+          <>
+            <Stack direction="row" alignItems="center" spacing={0.5} marginTop={2}>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      defaultChecked={toggleQlts}
+                      value={toggleQlts}
+                      onChange={() => setToggleQlts(!toggleQlts)}
+                    />
+                  }
+                  label="Quản lý tài sản"
                 />
-              }
-              label="Quản lý tài sản"
-            />
-          </FormGroup>
-        </Stack>
+              </FormGroup>
+            </Stack>
 
-        {/* Quan ly tai san  */}
-        {toggleQlts === true && (
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
-            }}
-            marginTop={3}
-          >
-            {NhomPB?.length > 0 && (
-              <RHFSelect
-                fullWidth
-                name="ID_Nhompb"
-                label="Nhóm phòng ban"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-                disabled={!toggleQlts}
+            {/* Quan ly tai san  */}
+            {toggleQlts === true && (
+              <Box
+                rowGap={3}
+                columnGap={2}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  sm: 'repeat(3, 1fr)',
+                }}
+                marginTop={3}
               >
-                {NhomPB?.map((option) => (
-                  <MenuItem key={option.ID_Nhompb} value={option.ID_Nhompb}>
-                    {option.Nhompb}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )}
+                {NhomPB?.length > 0 && (
+                  <RHFSelect
+                    fullWidth
+                    name="ID_Nhompb"
+                    label="Nhóm phòng ban"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                    disabled={!toggleQlts}
+                  >
+                    {NhomPB?.map((option) => (
+                      <MenuItem key={option.ID_Nhompb} value={option.ID_Nhompb}>
+                        {option.Nhompb}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
 
-            {ChiNhanh?.length > 0 && (
-              <RHFSelect
-                fullWidth
-                name="ID_Chinhanh"
-                label="Chi nhánh"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-                disabled={!toggleQlts}
-              >
-                {ChiNhanh?.map((option) => (
-                  <MenuItem key={option.ID_Chinhanh} value={option.ID_Chinhanh}>
-                    {option.Tenchinhanh}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )}
+                {ChiNhanh?.length > 0 && (
+                  <RHFSelect
+                    fullWidth
+                    name="ID_Chinhanh"
+                    label="Chi nhánh"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                    disabled={!toggleQlts}
+                  >
+                    {ChiNhanh?.map((option) => (
+                      <MenuItem key={option.ID_Chinhanh} value={option.ID_Chinhanh}>
+                        {option.Tenchinhanh}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
 
-            {ChucVu?.length > 0 && (
-              <RHFSelect
-                fullWidth
-                name="ID_Chucvu"
-                label="Chức vụ"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-                disabled={!toggleQlts}
-              >
-                {ChucVu?.map((option) => (
-                  <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
-                    {option.Chucvu}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+                {ChucVu?.length > 0 && (
+                  <RHFSelect
+                    fullWidth
+                    name="ID_Chucvu"
+                    label="Chức vụ"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                    disabled={!toggleQlts}
+                  >
+                    {ChucVu?.map((option) => (
+                      <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
+                        {option.Chucvu}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
+              </Box>
             )}
-          </Box>
+          </>
         )}
 
         <Box

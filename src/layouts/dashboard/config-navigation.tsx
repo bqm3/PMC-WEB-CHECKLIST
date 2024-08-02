@@ -155,8 +155,40 @@ export function useNavData() {
     ];
 
     // Conditionally add "Tạo tài khoản" tab if user's role_id is 1
+    if (user?.Permission === 1) {
+      navigationData[1].items.unshift(
+        {
+          title: t('building'),
+          path: paths.dashboard.toanha.root,
+          icon: ICONS.banking,
+          children: [
+            { title: t('create'), path: paths.dashboard.toanha.new },
+            { title: t('list'), path: paths.dashboard.toanha.root },
+          ],
+        },
+        {
+          title: t('tang'),
+          path: paths.dashboard.tang.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('create'), path: paths.dashboard.tang.new },
+            { title: t('list'), path: paths.dashboard.tang.root },
+          ],
+        },
+        {
+          title: t('createaccount'),
+          path: paths.dashboard.createUser.root,
+          icon: ICONS.user,
+          children: [
+            { title: t('create'), path: paths.dashboard.createUser.root },
+            { title: t('list'), path: paths.dashboard.createUser.list },
+          ],
+        }
+      );
+    }
+    
     if (user?.Permission === 3) {
-      navigationData[1].items.push(
+      navigationData[1].items.unshift(
         {
           title: t('project'),
           path: paths.dashboard.duan.root,
@@ -192,10 +224,10 @@ export function useNavData() {
             { title: t('create'), path: paths.dashboard.createUser.root },
             { title: t('list'), path: paths.dashboard.createUser.list },
           ],
-        },
-        
+        }
       );
     }
+    
 
     return navigationData;
   }, [t, user]);
