@@ -27,7 +27,7 @@ export default function GiamsatEditView({ id }: Props) {
   const { giamsat: currentGiamsat } = useGetGiamsatDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

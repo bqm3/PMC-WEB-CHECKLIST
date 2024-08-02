@@ -19,7 +19,7 @@ export default function OverviewFacilitiesView() {
   const { facilities: currentPost } = useGetFacilities();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

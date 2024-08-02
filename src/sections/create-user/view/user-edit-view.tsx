@@ -27,7 +27,7 @@ export default function UserEditView({ id }: Props) {
   const { user: currentUser } = useGetUserDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Cập nhật"
         links={[

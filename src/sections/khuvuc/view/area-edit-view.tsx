@@ -27,7 +27,7 @@ export default function AreaEditView({ id }: Props) {
   const { khuvuc: currentArea } = useGetKhuVucDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

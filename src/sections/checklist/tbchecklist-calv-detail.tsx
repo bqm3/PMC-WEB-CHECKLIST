@@ -260,10 +260,10 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <CustomBreadcrumbs
-            heading="Checklists"
+            heading="Checklist trong ca"
             links={[
               {
                 name: 'Dashboard',

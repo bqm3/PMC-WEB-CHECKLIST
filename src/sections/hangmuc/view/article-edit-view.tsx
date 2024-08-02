@@ -27,7 +27,7 @@ export default function ArticleEditView({ id }: Props) {
   const { hangMuc: currentArticle } = useGetHangMucDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

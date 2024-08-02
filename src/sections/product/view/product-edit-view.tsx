@@ -22,7 +22,7 @@ export default function ProductEditView({ id }: Props) {
   const { product: currentProduct } = useGetProduct(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

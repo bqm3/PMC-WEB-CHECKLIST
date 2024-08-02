@@ -22,7 +22,7 @@ export default function PostEditView({ title }: Props) {
   const { post: currentPost } = useGetPost(title);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

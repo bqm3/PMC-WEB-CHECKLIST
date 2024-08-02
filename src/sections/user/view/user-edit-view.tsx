@@ -22,7 +22,7 @@ export default function UserEditView({ id }: Props) {
   const currentUser = _userList.find((user) => user.id === id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

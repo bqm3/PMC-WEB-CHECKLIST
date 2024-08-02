@@ -27,7 +27,7 @@ export default function ChecklistCalvDetailView({ id }: Props) {
   const { checkList: currentChecklist, dataChecklistC } = useGetTb_ChecklistDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
     
       <TbChecklistCalvView currentChecklist={currentChecklist}  dataChecklistC={dataChecklistC}/>
     </Container>

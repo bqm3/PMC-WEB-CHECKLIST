@@ -28,7 +28,7 @@ export default function GiamsatEditView({ id }: Props) {
   const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Thiết lập khu vực checklist cho tài khoản"
         links={[

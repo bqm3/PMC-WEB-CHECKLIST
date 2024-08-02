@@ -33,7 +33,7 @@ export default function OrderDetailsView({ id }: Props) {
   }, []);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <OrderDetailsToolbar
         backLink={paths.dashboard.order.root}
         orderNumber={currentOrder.orderNumber}

@@ -19,7 +19,7 @@ export default function ServiceNewView() {
 
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading='New'
         links={[

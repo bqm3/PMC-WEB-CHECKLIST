@@ -182,7 +182,7 @@ export default function ProductDetailsView({ id }: Props) {
   );
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       {productLoading && renderSkeleton}
 
       {productError && renderError}

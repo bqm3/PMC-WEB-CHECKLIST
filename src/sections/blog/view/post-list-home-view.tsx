@@ -50,7 +50,7 @@ export default function PostListHomeView() {
   }, []);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Typography
         variant="h4"
         sx={{

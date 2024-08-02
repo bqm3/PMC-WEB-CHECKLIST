@@ -27,7 +27,7 @@ export default function ChecklistEditView({ id }: Props) {
   const { checkList: currentChecklist } = useGetChecklistDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Cập nhật"
         links={[

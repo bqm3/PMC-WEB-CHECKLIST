@@ -27,7 +27,7 @@ export default function GiamsatEditView({ id }: Props) {
   const { toanha: currentToanha } = useGetToanhaDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[

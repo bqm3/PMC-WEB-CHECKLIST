@@ -24,7 +24,7 @@ export default function ServiceEditView({ id }: Props) {
   const { service: currentProduct } = useGetService(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading='Update'
         links={[

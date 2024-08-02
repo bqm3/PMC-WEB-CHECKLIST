@@ -22,7 +22,7 @@ export default function TypeRoomEditView({ id }: Props) {
   const { data: currentProduct } = useGetTypeService(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Create"
         links={[

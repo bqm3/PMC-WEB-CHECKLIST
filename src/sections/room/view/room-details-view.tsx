@@ -69,7 +69,7 @@ export default function RoomDetailsView({ id }: Props) {
   );
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <RoomDetailsToolbar
         backLink={paths.dashboard.room.root}
         editLink={paths.dashboard.room.edit(`${room?.data?.id}`)}

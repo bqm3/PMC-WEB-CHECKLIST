@@ -33,7 +33,7 @@ export default function OrderBookingDetailView({ id }: Props) {
     }
   }, [order])
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading={`Detail Order Booking HD-${order?.data?.id}`}
         links={[

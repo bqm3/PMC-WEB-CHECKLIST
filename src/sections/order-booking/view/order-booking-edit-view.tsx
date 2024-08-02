@@ -32,7 +32,7 @@ export default function OrderBookingEditView({ id }: Props) {
     }
   }, [order])
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading={`Update Order Booking HD-${order?.data?.id}`}
         links={[

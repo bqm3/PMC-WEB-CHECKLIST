@@ -136,7 +136,7 @@ export default function GiamsatNewEditForm({ id }: Props) {
   };
 
   const renderDetails = (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Card>
         <Stack spacing={2} flexWrap="wrap" p={2}>
           {buildingsData.map((building, buildingIndex) => {

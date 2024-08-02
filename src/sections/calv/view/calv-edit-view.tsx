@@ -27,7 +27,7 @@ export default function CalvEditView({ id }: Props) {
   const { calv: currentCalv } = useGetCalvDetail(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Edit"
         links={[
