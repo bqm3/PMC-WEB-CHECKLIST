@@ -8,7 +8,7 @@ export default function UserCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo tài khoản</title>
+        <title> Dashboard: Tài khoản</title>
       </Helmet>
 
       <UserCreateView />

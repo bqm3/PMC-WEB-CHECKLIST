@@ -296,9 +296,10 @@ export default function ChecklistCalvListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.checklist.detail(id));
+      const url = paths.dashboard.checklist.detail(id);
+      window.open(url, '_blank');
     },
-    [router]
+    []
   );
 
   const handleOpenChecklistC = useCallback(
