@@ -104,9 +104,9 @@ export default function AreaTableRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{backgroundColor: `${Tinhtrang}` === '1' ? '#FF563029' : '' }}>
-      <TableCell padding="checkbox">
+      {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+      </TableCell> */}
       <TableCell>
         <Box
           onClick={onViewRow}

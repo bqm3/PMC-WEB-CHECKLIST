@@ -47,15 +47,15 @@ export default function TableSelectedAction({
       }}
       {...other}
     >
-      <Checkbox
+      {/* <Checkbox
         indeterminate={!!numSelected && numSelected < rowCount}
         checked={!!rowCount && numSelected === rowCount}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
           onSelectAllRows(event.target.checked)
         }
-      />
+      /> */}
 
-      <Typography
+      {/* <Typography
         variant="subtitle2"
         sx={{
           ml: 2,
@@ -67,7 +67,7 @@ export default function TableSelectedAction({
         }}
       >
         {numSelected} selected
-      </Typography>
+      </Typography> */}
 
       {action && action}
     </Stack>

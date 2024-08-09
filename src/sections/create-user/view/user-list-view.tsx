@@ -68,14 +68,14 @@ import DuanTableFiltersResult from '../user-table-filters-result';
 const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...PERMISSION_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'ID_User', label: 'Mã nhân viên', width: 120 },
+  { id: 'ID_User', label: 'Mã nhân viên', width: 140 },
   { id: 'UserName', label: 'Tài khoản', width: 140 },
   { id: 'Permission', label: 'Chức vụ', width: 140 },
 
   { id: 'ID_Duan', label: 'Tên dự án', width: 140 },
   { id: 'Emails', label: 'Email', width: 140 },
   { id: 'ID_KhoiCV', label: 'Khối công việc', width: 140 },
-  { id: '', width: 88 },
+  { id: '', width: 40 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {

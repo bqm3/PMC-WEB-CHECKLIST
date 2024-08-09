@@ -454,9 +454,9 @@ export default function UserNewEditForm({ currentUser }: Props) {
           <RHFTextField name="UserName" label="Tài khoản" />
           <RHFTextField name="Emails" label="Email" />
 
-          { `${currentUser?.Permission}` === '2' &&
+          {/* { `${currentUser?.Permission}` === '2' && */}
             <RHFTextField name="Password" label="Mật khẩu" />
-          }
+          {/* } */}
         </Box>
 
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>

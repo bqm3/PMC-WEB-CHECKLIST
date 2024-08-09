@@ -30,8 +30,9 @@ export default function InvoiceTableFiltersResult({
   results,
   ...other
 }: Props) {
-  const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
+  const shortLabel = shortDateLabel(filters?.startDate, filters?.endDate);
 
+  console.log('shortLabel',shortLabel)
   //   const handleRemoveService = (inputValue: string) => {
   //     const newValue = filters.service.filter((item) => item !== inputValue);
   //     onFilters('service', newValue);
@@ -73,9 +74,9 @@ export default function InvoiceTableFiltersResult({
           </Block>
         )}
 
-        {filters.startDate && filters.endDate && (
+        {filters?.startDate && filters?.endDate && (
           <Block label="Ngày: ">
-            <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
+            <Chip size="small" label={shortLabel || ""} onDelete={handleRemoveDate} />
           </Block>
         )}
 

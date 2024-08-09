@@ -64,6 +64,7 @@ import ChecklistTableRow from '../tbchecklist-table-row';
 import ChecklistTableToolbar from '../tbchecklist-table-toolbar';
 import ChecklistTableFiltersResult from '../tbchecklist-table-filters-result';
 
+
 // ----------------------------------------------------------------------
 
 // const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
@@ -248,13 +249,32 @@ export default function ChecklistCalvListView() {
     });
   }, [dataFiltered?.length, dataInPage.length, table, tableData]);
 
+  const getStatusText = (status : any) => {
+    switch (status) {
+      case '1':
+        return 'Khối làm sạch';
+      case '2':
+        return 'Khối kỹ thuật';
+      case '3':
+        return 'Khối Bảo vệ';
+      case '4':
+        return 'Dự án';
+      case 'all':
+        return 'Khối bảo vệ, Làm sạch, Kỹ thuật, Dự án';
+      default:
+        return '';
+    }
+  };
+
   const handlePrint = useCallback(async () => {
     try {
       const idChecklistCArray = dataFiltered.map(item => item.ID_ChecklistC);
+      const khoiText = getStatusText(filters.status);
       const data = {
         list_IDChecklistC: idChecklistCArray,
         startDate: filters.startDate,
         endDate: filters.endDate,
+        tenBoPhan: khoiText
       }
       const response = await axios.post('https://checklist.pmcweb.vn/be/api/tb_checklistc/baocao', data, {
         headers: {
@@ -289,6 +309,7 @@ export default function ChecklistCalvListView() {
       console.error('Error downloading the Excel file', error);
     }
   }, [accessToken, dataFiltered, filters]);
+// }, [ dataFiltered, filters]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -401,8 +422,7 @@ export default function ChecklistCalvListView() {
   );
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
           heading="Ca Checklist"
           links={[
@@ -555,30 +575,6 @@ export default function ChecklistCalvListView() {
           />
         </Card>
       </Container>
-
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
-    </>
   );
 }
 
@@ -620,26 +616,42 @@ function applyFilter({
 
   if (!dateError) {
     if (startDate && endDate) {
-      // Đặt endDate vào cuối ngày
-      endDate.setHours(23);
-      endDate.setMinutes(59);
-      endDate.setSeconds(59);
 
-      const startTimestamp = fTimestamp(startDate);
-      const endTimestamp = fTimestamp(endDate);
-      inputData = inputData.filter((tbchecklist) => {
-        const checklistTimestamp = fTimestamp(tbchecklist.Ngay);
-        return checklistTimestamp >= startTimestamp && checklistTimestamp < endTimestamp;
-      });
+      console.log(
+        'startDate', startDate, typeof startDate
+      )
+
+      console.log(
+        'endDate', endDate, typeof endDate
+      )
+
+      // const startTimestamp = fTimestamp(startDate);
+      // const endTimestamp = fTimestamp(endDate);
+
+      // if (typeof startTimestamp === 'number' && !Number.isNaN(startTimestamp) &&
+      // typeof endTimestamp === 'number' && !Number.isNaN(endTimestamp)) {
+      //   console.log('endDate',startTimestamp , endTimestamp)
+      //   inputData = inputData?.filter((tbchecklist) => {
+      //     const checklistTimestamp = fTimestamp(tbchecklist?.Ngay);
+      //     // Kiểm tra checklistTimestamp là số trước khi so sánh
+      //     if (typeof checklistTimestamp === 'number') {
+      //       return checklistTimestamp >= startTimestamp && checklistTimestamp < endTimestamp;
+      //     }
+      //     return false; // Loại bỏ nếu checklistTimestamp không phải là số
+      //   });
+      // }else {
+      //   return inputData;
+      // }
+
     }
   }
 
   // if (!dateError) {
   //   if (startDate && endDate) {
-  //     inputData = inputData.filter(
+  //     inputData = inputData?.filter(
   //       (invoice) =>
-  //         fTimestamp(invoice.Ngay) >= fTimestamp(startDate) &&
-  //         fTimestamp(invoice.Ngay) <= fTimestamp(endDate)
+  //         fTimestamp(invoice?.Ngay) >= fTimestamp(startDate) &&
+  //         fTimestamp(invoice?.Ngay) <= fTimestamp(endDate)
   //     );
   //   }
   // }
