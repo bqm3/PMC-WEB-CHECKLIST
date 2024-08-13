@@ -425,9 +425,9 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.Hoten.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Sodienthoai.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.ent_chucvu.Chucvu.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order.Hoten}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.Sodienthoai}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.ent_chucvu.Chucvu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

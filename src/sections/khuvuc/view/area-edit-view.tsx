@@ -21,6 +21,8 @@ type Props = {
   id: string;
 };
 
+
+
 export default function AreaEditView({ id }: Props) {
   const settings = useSettingsContext();
 

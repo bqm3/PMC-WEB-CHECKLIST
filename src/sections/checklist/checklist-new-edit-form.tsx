@@ -17,10 +17,7 @@ import { paths } from 'src/routes/paths';
 // hooks
 import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
-import {
-  _tags,
-  _roles,
-} from 'src/_mock';
+import { _tags, _roles } from 'src/_mock';
 // api
 import {
   useGetKhuVuc,
@@ -33,13 +30,9 @@ import {
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
-import FormProvider, {
-  RHFSelect,
-  RHFTextField,
-  RHFMultiSelect,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
 // types
-import { IToanha,  IChecklist } from 'src/types/khuvuc';
+import { IToanha, IChecklist } from 'src/types/khuvuc';
 import axios from 'axios';
 // auth
 import { useAuthContext } from 'src/auth/hooks';
@@ -88,7 +81,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     ID_KhoiCV: Yup.string(),
     ID_Khuvuc: Yup.string(),
     ID_Toanha: Yup.string(),
-    isCheck: Yup.string()
+    isCheck: Yup.string(),
+    isImportant: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -99,6 +93,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       MaQrCode: currentChecklist?.MaQrCode || '',
       Sothutu: currentChecklist?.Sothutu || '',
       isCheck: currentChecklist?.isCheck || '0',
+      isImportant: currentChecklist?.isImportant || '0',
       Maso: currentChecklist?.Maso || '',
       Ghichu: currentChecklist?.Ghichu || '',
       Tieuchuan: currentChecklist?.Tieuchuan || '',
@@ -111,7 +106,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     }),
     [currentChecklist]
   );
- 
+
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
     defaultValues,
@@ -181,11 +176,14 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     let filteredToanha;
     // Filter the hangMuc array based on ID_KhoiCV from values
     if (values.ID_Toanha && values.ID_KhoiCV) {
-      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha 
-      &&  (values.ID_KhoiCV ? item.ID_KhoiCVs.includes(values.ID_KhoiCV) : true)) || [];
+      filteredToanha =
+        khuvuc?.filter(
+          (item: any) =>
+            item.ID_Toanha === values.ID_Toanha &&
+            (values.ID_KhoiCV ? item.ID_KhoiCVs.includes(values.ID_KhoiCV) : true)
+        ) || [];
 
       // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
-     
     } else {
       filteredToanha = khuvuc;
     }
@@ -196,32 +194,31 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
     // Update the state with the new array
     setKhuVuc(newArray);
-  }, [values.ID_Toanha,values.ID_KhoiCV, khuvuc]);
+  }, [values.ID_Toanha, values.ID_KhoiCV, khuvuc]);
 
   useEffect(() => {
     let filteredKhoiCV;
-  
+
     if (values.ID_KhoiCV) {
       // Filter the hangMuc array based on ID_KhoiCV from values
-      filteredKhoiCV = hangMuc?.filter(item => item.ID_KhoiCV === values.ID_KhoiCV) || [];
+      filteredKhoiCV = hangMuc?.filter((item) => item.ID_KhoiCV === values.ID_KhoiCV) || [];
       if (values.ID_Khuvuc) {
-        filteredKhoiCV = filteredKhoiCV.filter(item => item.ID_Khuvuc === values.ID_Khuvuc);
+        filteredKhoiCV = filteredKhoiCV.filter((item) => item.ID_Khuvuc === values.ID_Khuvuc);
       }
     } else {
       // Use the full hangMuc array if ID_KhoiCV is not provided
       filteredKhoiCV = hangMuc;
     }
-  
+
     // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
-    const newArray = filteredKhoiCV?.map(item => ({
+    const newArray = filteredKhoiCV?.map((item) => ({
       ID_Hangmuc: item.ID_Hangmuc,
       Hangmuc: item,
     }));
-  
+
     // Update the state with the new array
     setHangMuc(newArray);
   }, [values.ID_KhoiCV, values.ID_Khuvuc, hangMuc]);
-  
 
   useEffect(() => {
     if (currentChecklist) {
@@ -237,9 +234,19 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   //   }
   // }, [currentProduct?.taxes, includeTaxes, setValue]);
 
-  const handleChangeIncludeCheck = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue("isCheck", event.target.checked ? '1' : '0');
-  }, [setValue]);
+  const handleChangeIncludeCheck = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue('isCheck', event.target.checked ? '1' : '0');
+    },
+    [setValue]
+  );
+
+  const handleChangeIncludeImportant = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue('isImportant', event.target.checked ? '1' : '0');
+    },
+    [setValue]
+  );
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -258,10 +265,10 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
           .then((res) => {
             // reset();
             enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công',
+            });
             router.push(paths.dashboard.checklist.root);
           })
           .catch((error) => {
@@ -333,7 +340,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     }
   });
 
-
   const renderPrimary = (
     <>
       {mdUp && (
@@ -398,19 +404,19 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             </RHFSelect>
 
             {khuVuc?.length > 0 && (
-                <RHFSelect
-                  name="ID_Khuvuc"
-                  label="Khu vực"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {khuVuc?.map((item: any) => (
-                    <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
-                      {item?.Khuvuc?.ent_toanha?.Toanha} ({item?.Khuvuc?.Tenkhuvuc})
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
+              <RHFSelect
+                name="ID_Khuvuc"
+                label="Khu vực"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {khuVuc?.map((item: any) => (
+                  <MenuItem key={item?.ID_Khuvuc} value={item?.ID_Khuvuc}>
+                    {item?.Khuvuc?.ent_toanha?.Toanha} ({item?.Khuvuc?.Tenkhuvuc})
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            )}
 
             <RHFSelect
               name="ID_Hangmuc"
@@ -480,27 +486,37 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             <RHFTextField name="Tieuchuan" label="Tiêu chuẩn kiểm tra" multiline rows={3} />
             <RHFTextField name="Ghichu" label="Ghi chú" multiline rows={3} />
 
-            <FormControlLabel control={<Switch checked={`${values.isCheck}` === '1'} onChange={handleChangeIncludeCheck}/>}  label="Nhập liệu" />
+            <FormControlLabel
+              control={
+                <Switch checked={`${values.isCheck}` === '1'} onChange={handleChangeIncludeCheck} />
+              }
+              label="Nhập liệu"
+            />
           </Stack>
         </Card>
       </Grid>
     </>
   );
-
+  
   const renderActions = (
     <>
-      {mdUp && <Grid md={4} />}
-      <Grid
-        xs={12}
-        md={8}
-        sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
-      >
-        <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+      {mdUp && <Grid md={3} />}
+      <Grid xs={12} md={9} sx={{ display: 'flex', alignItems: 'center' }}>
+        <FormControlLabel
+           control={
+            <Switch checked={`${values.isImportant}` === '1'} onChange={handleChangeIncludeImportant} />
+          }
+          label="Quan trọng"
+          sx={{ flexGrow: 1}}
+        />
+        
+        <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}   sx={{ ml: 2 }}>
           {!currentChecklist ? 'Tạo mới' : 'Lưu thay đổi'}
         </LoadingButton>
       </Grid>
     </>
   );
+
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -508,8 +524,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
         {renderPrimary}
 
         {renderDetails}
-
-        
 
         {renderActions}
       </Grid>

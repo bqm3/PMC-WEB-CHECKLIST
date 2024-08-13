@@ -312,6 +312,14 @@ export default function OverviewAnalyticsView() {
           )}
         </Grid>
 
+        <Grid xs={12} md={6} lg={6}>
+          <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
+        </Grid>
+
+        <Grid xs={12} md={6} lg={6}>
+          <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
+        </Grid>
+
         <Grid xs={12} md={12} lg={12}>
           <ChecklistsYear
             title="Số lượng checklist"
@@ -328,9 +336,7 @@ export default function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={6}>
-          <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
-        </Grid>
+       
 
         {/* <Grid xs={12} md={6} lg={6}>
           <EcommerceSalesOverview title="Hạng mục lỗi" data={_ecommerceSalesOverview} />

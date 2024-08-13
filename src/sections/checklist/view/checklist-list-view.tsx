@@ -35,10 +35,10 @@ import {
   emptyRows,
   TableNoData,
   TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
+  
   TablePaginationCustom,
 } from 'src/components/table';
+
 import { useSnackbar } from 'src/components/snackbar';
 // types
 import { IChecklist, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
@@ -47,6 +47,8 @@ import ChecklistTableRow from '../checklist-table-row';
 import ChecklistTableToolbar from '../checklist-table-toolbar';
 import ChecklistTableFiltersResult from '../checklist-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
+import TableHeadCustom from '../table-head-custom';
+import TableSelectedAction from '../table-selected-action';
 
 
 // ----------------------------------------------------------------------
@@ -267,7 +269,7 @@ export default function ChecklistCalvListView() {
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <CustomBreadcrumbs
-            heading="Checklists"
+            heading="Danh sách Checklist"
             links={[
               {
                 name: 'Dashboard',
@@ -374,7 +376,7 @@ export default function ChecklistCalvListView() {
                 table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_Checklist))
               }
               action={
-                <Tooltip title="Delete">
+                <Tooltip title="Xóa">
                   <IconButton color="primary" onClick={confirm.onTrue}>
                     <Iconify icon="solar:trash-bin-trash-bold" />
                   </IconButton>
@@ -391,13 +393,17 @@ export default function ChecklistCalvListView() {
                   rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
+                  onSelectAllRows={(checked: any) =>
                     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
                   }
                 />
 
                 <TableBody>
-                  {dataInPage.map((row) => (
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    ).map((row) => (
                     <ChecklistTableRow
                       key={row.ID_Checklist}
                       calv={calv}
@@ -493,7 +499,6 @@ function applyFilter({
         `${checklist.Giatridinhdanh}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.Giatrinhan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_hangmuc.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1

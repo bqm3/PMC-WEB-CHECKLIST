@@ -275,6 +275,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
     }
   });
 
+  console.log('currentUser',currentUser)
+
   const renderPrimary = (
     <Grid xs={12} md={12}>
       <Card sx={{ p: 3 }}>
@@ -454,9 +456,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
           <RHFTextField name="UserName" label="Tài khoản" />
           <RHFTextField name="Emails" label="Email" />
 
-          {/* { `${currentUser?.Permission}` === '2' && */}
+          {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />}
+
+          {`${currentUser?.Permission}` === '2' && (
             <RHFTextField name="Password" label="Mật khẩu" />
-          {/* } */}
+          )}
         </Box>
 
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>

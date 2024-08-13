@@ -55,6 +55,11 @@ export type E_Tang = {
   Sotang: string;
 };
 
+export type INhom ={
+  ID_Nhom: string;
+  Nhom: string;
+}
+
 export type IDuan = {
   ID_Duan: string;
   Duan: string;
@@ -62,9 +67,11 @@ export type IDuan = {
   Vido: string;
   Kinhdo: string;
   Logo: string;
+  ID_Nhom: string;
   totalKhuvucInDuan: string;
   totalHangmucInDuan: string;
-  toanhas: IToanha[]
+  toanhas: IToanha[];
+  ent_nhom: INhom;
 };
 
 export type IGiamsat = {
@@ -215,6 +222,7 @@ export type IChecklist = {
   Tieuchuan: string;
   Tinhtrang: string;
   isCheck: string;
+  isImportant: string;
   ID_User: string;
   sCalv: string;
   calv_1: string;

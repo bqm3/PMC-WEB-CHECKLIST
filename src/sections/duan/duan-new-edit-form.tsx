@@ -36,6 +36,25 @@ type Props = {
   currentDuan?: IDuan;
 };
 
+const dataProject = [
+  {
+    ID_Nhom: 1,
+    Nhom: "Nhóm A"
+  },
+  {
+    ID_Nhom: 2,
+    Nhom: "Nhóm B"
+  },
+  {
+    ID_Nhom: 3,
+    Nhom: "Nhóm C"
+  },
+  {
+    ID_Nhom: 4,
+    Nhom: "Nhóm D"
+  }
+]
+
 const STORAGE_KEY = 'accessToken';
 
 export default function GiamsatNewEditForm({ currentDuan }: Props) {
@@ -54,6 +73,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
   const defaultValues = useMemo(
     () => ({
       Duan: currentDuan?.Duan || '',
+      ID_Nhom: currentDuan?.ID_Nhom || '',
       Diachi: currentDuan?.Diachi || '',
       Vido: currentDuan?.Vido || '',
       Kinhdo: currentDuan?.Kinhdo || '',
@@ -190,6 +210,23 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
           {!mdUp && <CardHeader title="Chi tiết" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+             <Stack spacing={1.5}>
+              {dataProject?.length > 0 && (
+                <RHFSelect
+                  name="ID_Nhom"
+                  label="Nhóm dự án"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {dataProject?.map((item) => (
+                    <MenuItem key={item?.ID_Nhom} value={item?.ID_Nhom}>
+                      {item?.Nhom}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+
             <RHFTextField name="Duan" label="Tên dự án" />
             <RHFTextField name="Diachi" label="Địa chỉ" />
             <RHFTextField name="Vido" label="Vĩ độ" />
