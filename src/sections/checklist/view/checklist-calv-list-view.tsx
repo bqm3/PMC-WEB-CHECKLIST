@@ -195,7 +195,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be//api/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -278,7 +278,7 @@ export default function ChecklistCalvListView() {
         endDate: filters.endDate,
         tenBoPhan: khoiText
       }
-      const response = await axios.post('https://checklist.pmcweb.vn/be//api/tb_checklistc/baocao', data, {
+      const response = await axios.post('https://checklist.pmcweb.vn/be/api/tb_checklistc/baocao', data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -328,7 +328,7 @@ export default function ChecklistCalvListView() {
   const handleOpenChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be//api/tb_checklistc/open/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/tb_checklistc/open/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -373,7 +373,7 @@ export default function ChecklistCalvListView() {
   const handleRemoveChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be//api/tb_checklistc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/tb_checklistc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

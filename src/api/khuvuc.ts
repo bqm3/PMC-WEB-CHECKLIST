@@ -12,7 +12,7 @@ const STORAGE_KEY = 'accessToken';
 
 export function useGetCalv() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_calv/';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_calv/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -39,7 +39,7 @@ export function useGetCalv() {
 
 export function useGetCalvDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_calv/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_calv/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -69,7 +69,7 @@ export function useGetCalvFilter(inp : any) {
   const dataInput = {
     ID_KhoiCV: inp?.ID_KhoiCV
   }
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_calv/`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_calv/`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'post',
@@ -97,7 +97,7 @@ export function useGetCalvFilter(inp : any) {
 
 export function useGetToanha() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_toanha/';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_toanha/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -124,7 +124,7 @@ export function useGetToanha() {
 
 export function useGetTang() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_tang/';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_tang/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -150,7 +150,7 @@ export function useGetTang() {
 }
 
 export function useGetKhoiCV() {
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_khoicv`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_khoicv`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -176,7 +176,7 @@ export function useGetKhoiCV() {
 
 export function useGetChucvu() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_chucvu`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_chucvu`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -203,7 +203,7 @@ export function useGetChucvu() {
 
 export function useGetKhuVuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_khuvuc/filter';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_khuvuc/filter';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'post',
@@ -230,7 +230,7 @@ export function useGetKhuVuc() {
 
 export function useGetDuan() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_duan/';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_duan/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -257,7 +257,7 @@ export function useGetDuan() {
 
 export function useGetDuanWeb() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_duan/thong-tin-du-an';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_duan/thong-tin-du-an';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -284,7 +284,7 @@ export function useGetDuanWeb() {
 
 export function useGetGiamsat() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_giamsat/';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_giamsat/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -311,7 +311,7 @@ export function useGetGiamsat() {
 
 export function useGetGiamsatDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_giamsat/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_giamsat/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -338,7 +338,7 @@ export function useGetGiamsatDetail(id: string) {
 
 export function useGetDuanDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_duan/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_duan/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -365,7 +365,7 @@ export function useGetDuanDetail(id: string) {
 
 export function useGetToanhaDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_toanha/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_toanha/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -392,7 +392,7 @@ export function useGetToanhaDetail(id: string) {
 
 export function useGetKhuVucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_khuvuc/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_khuvuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -419,7 +419,7 @@ export function useGetKhuVucDetail(id: string) {
 
 export function useGetHangMuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_hangmuc/';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_hangmuc/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -447,7 +447,7 @@ export function useGetHangMuc() {
 
 export function useGetUsers() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_user/get-online';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_user/get-online';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -474,7 +474,7 @@ export function useGetUsers() {
 
 export function useGetHangMucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_hangmuc/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_hangmuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -501,7 +501,7 @@ export function useGetHangMucDetail(id: string) {
 
 export function useGetChecklist(pag: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_checklist/?page=${Number(pag?.page) + 1}&limit=${pag?.limit}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_checklist/?page=${Number(pag?.page) + 1}&limit=${pag?.limit}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -531,7 +531,7 @@ export function useGetChecklist(pag: any) {
 
 export function useGetTb_Checklist(pag: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/tb_checklistc/?page=0&limit=500`;
+  const URL = `https://checklist.pmcweb.vn/be/api/tb_checklistc/?page=0&limit=500`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -562,7 +562,7 @@ export function useGetTb_Checklist(pag: any) {
 
 export function useGetTb_ChecklistDetail(id:any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/tb_checklistc/ca/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/tb_checklistc/ca/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -590,7 +590,7 @@ export function useGetTb_ChecklistDetail(id:any) {
 
 export function useGetChecklistWeb() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_checklist/web`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_checklist/web`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -617,7 +617,7 @@ export function useGetChecklistWeb() {
 
 export function useGetChecklistDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_checklist/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_checklist/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -644,7 +644,7 @@ export function useGetChecklistDetail(id: string) {
 
 export function useGetUserDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_user/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_user/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -671,7 +671,7 @@ export function useGetUserDetail(id: string) {
 
 export function useGetKhuvucByToanha(id?: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_toanha/khuvuc/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_toanha/khuvuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -699,7 +699,7 @@ export function useGetKhuvucByToanha(id?: string) {
 
 export function useGetGiamSatByDuan(){
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be//api/ent_user/gs';
+  const URL = 'https://checklist.pmcweb.vn/be/api/ent_user/gs';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -726,7 +726,7 @@ export function useGetGiamSatByDuan(){
 
 export function useGetProfile(id: string){
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be//api/ent_user/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/ent_user/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',

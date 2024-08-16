@@ -112,7 +112,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
       if (currentGiamsat !== undefined) {
         await axios
           .put(
-            `https://checklist.pmcweb.vn/be//api/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
+            `https://checklist.pmcweb.vn/be/api/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
             data,
             {
               headers: {
@@ -155,7 +155,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be//api/ent_giamsat/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/ent_giamsat/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

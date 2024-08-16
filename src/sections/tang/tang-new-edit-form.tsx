@@ -118,7 +118,7 @@ export default function AreaNewEditForm({ currentTang }: Props) {
       console.log('data', data);
      
         axios
-          .post(`https://checklist.pmcweb.vn/be//api/ent_tang/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/ent_tang/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

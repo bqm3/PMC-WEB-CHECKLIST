@@ -88,7 +88,7 @@ export default function FileManagerNewFolderDialog({
     setLoading(true)
     try {
       
-      const response = await axios.post('https://checklist.pmcweb.vn/be//api/ent_khuvuc/uploads', formData, {
+      const response = await axios.post('https://checklist.pmcweb.vn/be/api/ent_khuvuc/uploads', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${accessToken}`,

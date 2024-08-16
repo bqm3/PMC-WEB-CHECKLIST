@@ -146,7 +146,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be//api/ent_giamsat/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/ent_giamsat/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

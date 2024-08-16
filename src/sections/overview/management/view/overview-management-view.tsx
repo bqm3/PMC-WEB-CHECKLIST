@@ -101,7 +101,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataDuan = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be//api/ent_duan/thong-tin-du-an', {
+        .get('https://checklist.pmcweb.vn/be/api/ent_duan/thong-tin-du-an', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
