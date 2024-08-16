@@ -137,7 +137,7 @@ export type IKhuvuc = {
   ent_khoicv: E_KhoiCV;
   ent_toanha: E_Toanha;
   hangMucLength: string;
-  ent_hangmuc: IHangMuc;
+  ent_hangmuc: IHangMuc[];
 };
 
 export type IToanha = {

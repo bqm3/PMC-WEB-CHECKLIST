@@ -129,7 +129,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_khuvuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be//api/ent_khuvuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

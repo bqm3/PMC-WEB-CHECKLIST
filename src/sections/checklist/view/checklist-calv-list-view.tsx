@@ -99,8 +99,10 @@ export default function ChecklistCalvListView() {
   const router = useRouter();
 
   const popover = usePopover();
+  const popover2 = usePopover()
 
   const confirm = useBoolean();
+  const confirm2 = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -193,7 +195,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be//api/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -276,7 +278,7 @@ export default function ChecklistCalvListView() {
         endDate: filters.endDate,
         tenBoPhan: khoiText
       }
-      const response = await axios.post('https://checklist.pmcweb.vn/be/api/tb_checklistc/baocao', data, {
+      const response = await axios.post('https://checklist.pmcweb.vn/be//api/tb_checklistc/baocao', data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -326,16 +328,14 @@ export default function ChecklistCalvListView() {
   const handleOpenChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/tb_checklistc/open/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be//api/tb_checklistc/open/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
         })
         .then(async (res) => {
-          reset();
-          confirm.onFalse();
-          popover.onClose();
+          // reset();
           await mutateTb_Checklist();
           enqueueSnackbar({
             variant: 'success',
@@ -367,13 +367,13 @@ export default function ChecklistCalvListView() {
           }
         });
     },
-    [accessToken, enqueueSnackbar, reset, confirm, popover, mutateTb_Checklist]
+    [accessToken, enqueueSnackbar, mutateTb_Checklist]
   );
 
   const handleRemoveChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/tb_checklistc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be//api/tb_checklistc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

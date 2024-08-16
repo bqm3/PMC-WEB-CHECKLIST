@@ -158,6 +158,7 @@ export default function AreaTableRow({
           <MenuItem
             onClick={() => {
               confirm.onTrue();
+              
             }}
           >
             <Iconify color="error" icon="mdi:lock-open-outline" />

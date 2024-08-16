@@ -50,7 +50,7 @@ import {
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // types
-import { IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
+import { IHangMuc, IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
 import OrderTableRow from '../area-table-row';
 import OrderTableToolbar from '../area-table-toolbar';
@@ -64,12 +64,10 @@ import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 const TABLE_HEAD = [
   { id: 'ID_Khuvuc', label: 'Mã khu vực', width: 140 },
   { id: 'Tenkhuvuc', label: 'Tên khu vực' },
-
-  { id: 'ID_Toanha', label: 'Tòa nhà', width: 140, align: 'center' },
+  { id: 'ID_Toanha', label: 'Tòa nhà', width: 140, },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
-  { id: 'Sothutu', label: 'Số thứ tự', width: 100 },
-  { id: 'Makhuvuc', label: 'Mã khu vực', width: 100 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 100 },
+  { id: 'Makhuvuc', label: 'Mã khu vực', width: 140 },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 140 },
   { id: '', width: 88 },
 ];
 
@@ -91,10 +89,13 @@ export default function AreaListView() {
   const router = useRouter();
 
   const popover = usePopover();
+  const popover1 = usePopover();
 
   const confirm = useBoolean();
+  const confirm1 = useBoolean();
 
   const confirmQr = useBoolean();
+  const confirmQrHm = useBoolean();
 
   const upload = useBoolean();
 
@@ -164,7 +165,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_khuvuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be//api/ent_khuvuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -240,6 +241,11 @@ export default function AreaListView() {
     [router]
   );
 
+  const handleViewRow1 = useCallback((data: any)=> {
+    const url = paths.dashboard.hangmuc.edit(data);
+      window.open(url, '_blank');
+  }, [])
+
   const handleQrRow = useCallback(
     (data: IKhuvuc) => {
       confirmQr.onTrue();
@@ -249,6 +255,15 @@ export default function AreaListView() {
     [confirmQr, popover]
   );
 
+  const handleQrRowHM = useCallback(
+    (data: any) => {
+      console.log('data',data)
+      confirmQrHm.onTrue();
+      popover1.onClose();
+      setDataSelect(data);
+    },
+    [confirmQrHm, popover1]
+  );
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -269,19 +284,22 @@ export default function AreaListView() {
 
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
 
-  useEffect(() => {
-    const formattedData = dataFiltered?.map((item, index) => ({
-      stt: index + 1,
-      Tenkhuvuc: item.Tenkhuvuc || '',
-      Toanha: item.ent_toanha.Toanha || '',
-      MaQrCode: item.MaQrCode || '',
-      Sothutu: item.Sothutu,
-      Makhuvuc: item.Makhuvuc || '',
-      KhoiCV:
-        item.ent_khoicv.KhoiCV || '',
-    }));
-    setDataFormatExcel(formattedData);
-  }, [dataFiltered]);
+  // useEffect(() => {
+  //   console.log('run')
+  //   const formattedData = dataFiltered?.map((item, index) => ({
+  //     stt: index + 1,
+  //     Tenkhuvuc: item.Tenkhuvuc || '',
+  //     Toanha: item.ent_toanha.Toanha || '',
+  //     MaQrCode: item.MaQrCode || '',
+  //     Sothutu: item.Sothutu,
+  //     Makhuvuc: item.Makhuvuc || '',
+  //     KhoiCV:
+  //       item.ent_khoicv.KhoiCV || '',
+  //   }));
+  //   setDataFormatExcel(formattedData);
+  // }, [dataFiltered]);
+
+  
 
   return (
     <>
@@ -485,7 +503,9 @@ export default function AreaListView() {
                         onSelectRow={() => table.onSelectRow(row.ID_Khuvuc)}
                         onDeleteRow={() => handleDeleteRow(row.ID_Khuvuc)}
                         onViewRow={() => handleViewRow(row.ID_Khuvuc)}
+                        onViewRow1={(data: any) => handleViewRow1(data)}
                         onQrRow={()=> handleQrRow(row)}
+                        onQrRowHM={(data:any)=> handleQrRowHM(data)}
                         khoiCV={khoiCV}
                       />
                     ))}
@@ -517,7 +537,7 @@ export default function AreaListView() {
       <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
 
       <Dialog open={confirmQr.value} onClose={confirmQr.onFalse} maxWidth="sm">
-        <DialogTitle sx={{ pb: 2 }}>Ảnh Qr Code</DialogTitle>
+        <DialogTitle sx={{ pb: 2 }}>Ảnh Qr Code Khu vực</DialogTitle>
 
         <DialogContent>
           <Card>
@@ -532,6 +552,27 @@ export default function AreaListView() {
         <DialogActions>
           <Button variant="contained" color='success' onClick={handleDownloadImage}>Download</Button>
           <Button variant="outlined" color="inherit" onClick={confirmQr.onFalse}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={confirmQrHm.value} onClose={confirmQrHm.onFalse} maxWidth="sm">
+        <DialogTitle sx={{ pb: 2 }}>Ảnh Qr Code Hạng mục</DialogTitle>
+
+        <DialogContent>
+          <Card>
+            <Image
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}&amp;size=300x300`}
+              alt=""
+              title=""
+            />
+          </Card>
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="contained" color='success' onClick={handleDownloadImage}>Download</Button>
+          <Button variant="outlined" color="inherit" onClick={confirmQrHm.onFalse}>
             Cancel
           </Button>
         </DialogActions>

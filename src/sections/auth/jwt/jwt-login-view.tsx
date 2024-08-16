@@ -23,6 +23,7 @@ import { useAuthContext } from 'src/auth/hooks';
 // components
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import Logo from 'src/components/logo';
 
 // ----------------------------------------------------------------------
 
@@ -72,14 +73,22 @@ export default function JwtLoginView() {
     }
   });
 
-  const renderHead = (
-    <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">Đăng nhập PMC</Typography>
-    </Stack>
+  // const renderHead = (
+  //   <Stack spacing={2} sx={{ mb: 5 }}>
+  //     {/* <Typography variant="h4">Đăng nhập PMC</Typography> */}
+  //   </Stack>
+  // );
+
+  const renderLogo = (
+   <Stack sx={{
+    display: 'flex', alignItems: 'center'
+   }}>
+     <Logo/>
+   </Stack>
   );
 
   const renderForm = (
-    <Stack spacing={2.5}>
+    <Stack spacing={2}>
       {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
       <RHFTextField name="UserName" label="Tài khoản" />
@@ -114,7 +123,7 @@ export default function JwtLoginView() {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      {renderHead}
+      {renderLogo}
       {renderForm}
     </FormProvider>
   );

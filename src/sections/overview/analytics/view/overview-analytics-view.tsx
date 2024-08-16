@@ -111,7 +111,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/ent_checklist/total', {
+        .get('https://checklist.pmcweb.vn/be//api/ent_checklist/total', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -129,13 +129,14 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/ent_khuvuc/total', {
+        .get('https://checklist.pmcweb.vn/be//api/ent_khuvuc/total', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
         })
         .then((res) => {
+          console.log('res.data.data',res.data.data)
           setDataTotalKhuvuc(res.data.data);
         })
         .catch((err) => console.log('err', err));
@@ -147,7 +148,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalHangmuc = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/ent_hangmuc/total', {
+        .get('https://checklist.pmcweb.vn/be//api/ent_hangmuc/total', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -165,7 +166,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handlePercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/tb_checklistc/percent', {
+        .get('https://checklist.pmcweb.vn/be//api/tb_checklistc/percent', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -184,7 +185,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `https://checklist.pmcweb.vn/be/api/tb_checklistc/year?year=${selectedYear}&khoi=${selectedKhoiCV}`,
+          `https://checklist.pmcweb.vn/be//api/tb_checklistc/year?year=${selectedYear}&khoi=${selectedKhoiCV}`,
           {
             headers: {
               'Content-Type': 'application/json',

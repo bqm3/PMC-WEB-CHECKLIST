@@ -59,22 +59,22 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
 
   const mdUp = useResponsive('up', 'md');
 
-  const renderLogo = (
-    <Logo
-      sx={{
-        zIndex: 9,
-        position: 'absolute',
-        m: { xs: 2, md: 5 },
-      }}
-    />
-  );
+  // const renderLogo = (
+  //   <Logo
+  //     sx={{
+  //       zIndex: 9,
+  //       position: 'absolute',
+  //       m: { xs: 2, md: 5 },
+  //     }}
+  //   />
+  // );
 
   const renderContent = (
     <Stack
       sx={{
         width: 1,
         mx: 'auto',
-        maxWidth: 420,
+        maxWidth: 400,
         justifyContent: 'center',
         // backgroundColor: 'red',
         
@@ -84,10 +84,10 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
         sx={{
           width: 1,
           mx: 'auto',
-          maxWidth: 420,
-          px: { xs: 2, md: 6 },
-          pt: { xs: 10, md: 12 },
-          pb: { xs: 10, md: 12 },
+          maxWidth: 400,
+          px: { xs: 2, md: 3 },
+          pt: { xs: 3, md: 4 },
+          pb: { xs: 4, md: 6 },
           alignContent: 'center',
           borderRadius: '12px',
           backgroundColor: 'rgba(255, 255, 255, 0.95)', // Màu trắng với độ mờ
@@ -147,7 +147,7 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
         backgroundPosition: 'center', // Đảm bảo hình nền được đặt ở giữa
       }}
     >
-      {renderLogo}
+      {/* {renderLogo} */}
 
       {/* {mdUp && renderSection} */}
 

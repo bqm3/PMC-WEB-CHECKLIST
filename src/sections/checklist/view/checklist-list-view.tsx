@@ -153,7 +153,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be//api/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -371,9 +371,9 @@ export default function ChecklistCalvListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData?.length}
+              rowCount={tableData.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_Checklist))
+                table.onSelectAllRows(checked, tableData.map((row) => row?.ID_Checklist))
               }
               action={
                 <Tooltip title="Xóa">
@@ -394,7 +394,7 @@ export default function ChecklistCalvListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked: any) =>
-                    table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
+                    table.onSelectAllRows(checked, tableData.map((row) => row.ID_Checklist))
                   }
                 />
 
@@ -445,10 +445,10 @@ export default function ChecklistCalvListView() {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
+        title="PMC Thông báo"
         content={
           <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
+            Bạn có muốn xóa <strong> {table.selected.length} </strong> dữ liệu?
           </>
         }
         action={
