@@ -160,7 +160,7 @@ export default function ChecklistCalvListView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 56 : 76;
+  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
 
@@ -616,38 +616,36 @@ function applyFilter({
 
   if (!dateError) {
     if (startDate && endDate) {
-
-      console.log(
-        'startDate', startDate, typeof startDate
-      )
-
-      console.log(
-        'endDate', endDate, typeof endDate
-      )
-
-      // const startTimestamp = fTimestamp(startDate);
-      // const endTimestamp = fTimestamp(endDate);
-
-      // if (typeof startTimestamp === 'number' && !Number.isNaN(startTimestamp) &&
-      // typeof endTimestamp === 'number' && !Number.isNaN(endTimestamp)) {
-      //   console.log('endDate',startTimestamp , endTimestamp)
-      //   inputData = inputData?.filter((tbchecklist) => {
-      //     const checklistTimestamp = fTimestamp(tbchecklist?.Ngay);
-      //     // Kiểm tra checklistTimestamp là số trước khi so sánh
-      //     if (typeof checklistTimestamp === 'number') {
-      //       return checklistTimestamp >= startTimestamp && checklistTimestamp < endTimestamp;
-      //     }
-      //     return false; // Loại bỏ nếu checklistTimestamp không phải là số
-      //   });
-      // }else {
-      //   return inputData;
-      // }
-
+      // Validate if startDate and endDate are proper Date objects
+      const isValidDate = (date: any) => date instanceof Date && !Number.isNaN(date.getTime());
+  
+      if (isValidDate(startDate) && isValidDate(endDate)) {
+        console.log('inputData', endDate, typeof endDate);
+        console.log('startDate', startDate, typeof startDate);
+  
+        // Filter inputData only if the dates are valid
+        inputData = inputData?.filter((invoice) => {
+          const invoiceTimestamp = fTimestamp(invoice?.Ngay);
+          const startTimestamp = fTimestamp(startDate);
+          const endTimestamp = fTimestamp(endDate);
+  
+          // Perform filtering if timestamps are valid
+          return invoiceTimestamp >= startTimestamp && invoiceTimestamp <= endTimestamp;
+        });
+      } else {
+        console.error('Invalid startDate or endDate:', startDate, endDate);
+        // Return unfiltered inputData if dates are invalid
+        return inputData;
+      }
     }
   }
+  
+  
 
   // if (!dateError) {
   //   if (startDate && endDate) {
+  //     console.log('inputData',endDate, typeof endDate)
+  //     console.log('startDate',startDate, typeof startDate)
   //     inputData = inputData?.filter(
   //       (invoice) =>
   //         fTimestamp(invoice?.Ngay) >= fTimestamp(startDate) &&

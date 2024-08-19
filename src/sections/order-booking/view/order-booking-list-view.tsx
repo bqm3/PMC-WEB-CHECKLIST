@@ -119,7 +119,7 @@ export default function OrderBookingListView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 56 : 76;
+  const denseHeight = table.dense ? 52 : 72;
 
   const canReset =
     !!filters.customer ||

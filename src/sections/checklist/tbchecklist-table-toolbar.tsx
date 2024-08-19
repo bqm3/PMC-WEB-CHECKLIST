@@ -78,7 +78,7 @@ export default function TbChecklistTableToolbar({
             onChange={handleFilterStartDate}
             slotProps={{ textField: { fullWidth: true } }}
             sx={{
-              maxWidth: { md: 180 },
+              maxWidth: { md: 200 },
             }}
           />
 
@@ -89,11 +89,10 @@ export default function TbChecklistTableToolbar({
             slotProps={{
               textField: {
                 fullWidth: true,
-                error: dateError,
               },
             }}
             sx={{
-              maxWidth: { md: 180 },
+              maxWidth: { md: 200 },
             }}
           />
 

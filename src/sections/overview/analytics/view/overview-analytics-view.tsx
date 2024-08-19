@@ -5,15 +5,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-// _mock
-import {
-  _analyticTasks,
-  _analyticPosts,
-  _analyticTraffic,
-  _analyticOrderTimeline,
-  _ecommerceSalesOverview,
-} from 'src/_mock';
-
 // hooks
 import { useAuthContext } from 'src/auth/hooks';
 // components
@@ -21,25 +12,15 @@ import { useSettingsContext } from 'src/components/settings';
 // api
 import axios from 'axios';
 import { useGetKhoiCV } from 'src/api/khuvuc';
-//
-import AnalyticsNews from '../analytics-news';
-import AnalyticsTasks from '../analytics-tasks';
 import AnalyticsCurrentVisits from '../analytics-current-visits';
-import AnalyticsOrderTimeline from '../analytics-order-timeline';
-import AnalyticsWebsiteVisits from '../analytics-website-visits';
-import AnalyticsWidgetSummary from '../analytics-widget-summary';
-import AnalyticsTrafficBySite from '../analytics-traffic-by-site';
-import AnalyticsCurrentSubject from '../analytics-current-subject';
-import AnalyticsConversionRates from '../analytics-conversion-rates';
 
 import AppCurrentDownload from '../app-current-download';
-
-import BankingBalanceStatistics from '../../banking/banking-balance-statistics';
+import BankingRecentTransitions from '../banking-recent-transitions';
+import ChecklistRecentTransitions from '../checklist-recent-transitions';
 
 import ChecklistsYear from '../checklist-yearly';
 import EcommerceSalesOverview from '../checklist-percent-overview';
 
-import AppWidgetSummary from '../app-widget-summary';
 
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
@@ -89,6 +70,8 @@ export default function OverviewAnalyticsView() {
   const [dataTotalKhoiCV, setDataTotalKhoiCV] = useState<SeriesData[]>([]);
   const [dataTotalKhuvuc, setDataTotalKhuvuc] = useState<SeriesData[]>([]);
   const [dataTotalHangmuc, setDataTotalHangmuc] = useState<SeriesData[]>([]);
+  const [dataTotalErrorWeek, setDataTotalErrorWeek] = useState<any>([]);
+  const [dataChecklistsError, setDataChecklistsError] = useState<any>([]);
   const [dataPercent, setDataPercent] = useState<any>([]);
   const [totalKhoiCV, setTotalKhoiCV] = useState(0);
   const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
@@ -136,8 +119,43 @@ export default function OverviewAnalyticsView() {
           },
         })
         .then((res) => {
-          console.log('res.data.data',res.data.data)
           setDataTotalKhuvuc(res.data.data);
+        })
+        .catch((err) => console.log('err', err));
+    };
+
+    handleTotalKhuvuc();
+  }, [accessToken]);
+
+  useEffect(() => {
+    const handleTotalKhuvuc = async () => {
+      await axios
+        .get('https://checklist.pmcweb.vn/be/api/tb_checklistc/list-checklist-error-project', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          setDataTotalErrorWeek(res.data.data[0].errorDetails);
+        })
+        .catch((err) => console.log('err', err));
+    };
+
+    handleTotalKhuvuc();
+  }, [accessToken]);
+
+  useEffect(() => {
+    const handleTotalKhuvuc = async () => {
+      await axios
+        .get('https://checklist.pmcweb.vn/be/api/tb_checklistc/list-checklist', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          setDataChecklistsError(res.data.data);
         })
         .catch((err) => console.log('err', err));
     };
@@ -221,46 +239,42 @@ export default function OverviewAnalyticsView() {
         Hi, {user?.ent_duan?.Duan}
       </Typography>
       <Grid container spacing={3}>
-        {/* <Grid xs={6} md={3}>
-          <AppWidgetSummary
-            title="Khối kỹ thuật"
-            percent={Number(10)}
-            total={Number(6055)}
-            chart={{
-              series: [10, 5, 6, 6, 2, -5, 4, 0],
-            }}
-          />
+
+      <Grid xs={12} md={12} lg={12}>
+        { dataTotalErrorWeek && 
+          <BankingRecentTransitions
+          title="Sự cố ngày hôm trước"
+          tableData={dataTotalErrorWeek}
+          tableLabels={[
+            { id: 'checklistName', label: 'Tên checklist' },
+            { id: 'Ngay', label: 'Ngày' },
+            { id: 'calv', label: 'Ca làm việc' },
+            { id: 'note', label: 'Ghi chú' },
+            { id: 'Giamsat', label: 'Giám sát' },
+            { id: 'image', label: 'Ảnh' },
+            { id: '' },
+          ]}
+        />
+        }
         </Grid>
-        <Grid xs={6} md={3}>
-          <AppWidgetSummary
-            title="Khối bảo vệ"
-            percent={Number(-10)}
-            total={Number(6055)}
-            chart={{
-              series: [10, 5, 6, 6, 2, -5, 4, 0],
-            }}
-          />
+
+        <Grid xs={12} md={12} lg={12}>
+        { dataTotalErrorWeek && 
+          <ChecklistRecentTransitions
+          title="Các checklist lỗi"
+          tableData={dataChecklistsError}
+          tableLabels={[
+            { id: 'checklistName', label: 'Tên checklist' },
+            { label: 'Giá trị định danh', id: 'Giatridinhdanh' },
+            { label: 'Giá trị nhận', id: 'Giatrinhan' },
+            { label: 'Tầng', id: 'Tentang' },
+            { label: 'Số thứ tự', id: 'Sothutu' },
+            { label: 'Mã số', id: 'Maso' },
+            { label: 'Hạng mục', id: 'Hangmuc' },
+          ]}
+        />
+        }
         </Grid>
-        <Grid xs={6} md={3}>
-          <AppWidgetSummary
-            title="Khối dự án"
-            percent={Number(-45)}
-            total={Number(6055)}
-            chart={{
-              series: [10, 5, 6, 6, 2, -5, 4, 0],
-            }}
-          />
-        </Grid>
-        <Grid xs={6} md={3}>
-          <AppWidgetSummary
-            title="Khối làm sạch"
-            percent={Number(10)}
-            total={Number(6055)}
-            chart={{
-              series: [10, 5, 6, 6, 2, -5, 4, 0],
-            }}
-          />
-        </Grid> */}
 
         {dataTotalKhuvuc && (
           <Grid xs={12} md={6} lg={4}>
@@ -313,15 +327,7 @@ export default function OverviewAnalyticsView() {
           )}
         </Grid>
 
-        <Grid xs={12} md={6} lg={6}>
-          <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={6}>
-          <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
-        </Grid>
-
-        <Grid xs={12} md={12} lg={12}>
+        <Grid xs={12} md={8} lg={8}>
           <ChecklistsYear
             title="Số lượng checklist"
             subheader="Hoàn thành checklist theo ca"
@@ -337,7 +343,9 @@ export default function OverviewAnalyticsView() {
           />
         </Grid>
 
-       
+        <Grid xs={12} md={4} lg={4}>
+          <EcommerceSalesOverview title="Tỉ lệ checklist" data={dataPercent} />
+        </Grid>
 
         {/* <Grid xs={12} md={6} lg={6}>
           <EcommerceSalesOverview title="Hạng mục lỗi" data={_ecommerceSalesOverview} />
