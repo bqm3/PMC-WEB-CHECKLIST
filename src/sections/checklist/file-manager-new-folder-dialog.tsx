@@ -29,7 +29,6 @@ interface Props extends DialogProps {
   onClose: VoidFunction;
 }
 
-
 const STORAGE_KEY = 'accessToken';
 
 export default function FileManagerNewFolderDialog({
@@ -45,7 +44,6 @@ export default function FileManagerNewFolderDialog({
   onChangeFolderName,
   ...other
 }: Props) {
-
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -73,34 +71,40 @@ export default function FileManagerNewFolderDialog({
 
   const handleUpload = async () => {
     onClose();
-    setLoading(true)
+    setLoading(true);
+
     const formData = new FormData();
     if (Array.isArray(files)) {
-      files.forEach(file => {
+      files.forEach((file) => {
         formData.append('files', file);
       });
     } else {
       formData.append('files', files); // Fallback for a single file upload
     }
 
-    try {
-      const response = await axios.post('https://checklist.pmcweb.vn/be/api/ent_checklist/uploads', formData, {
+    await axios
+      .post('https://checklist.pmcweb.vn/be/api/ent_checklist/uploads', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${accessToken}`,
-        }
+        },
+      })
+      .then(() => {
+        setLoading(false);
+        enqueueSnackbar('Uploads dữ liệu thành công!');
+      })
+      .catch((err) => {
+        setLoading(false);
+
+        // Lấy thông báo lỗi từ response nếu có
+        const errorMessage = err.response?.data?.message || 'Uploads dữ liệu thất bại';
+
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 2000,
+          message: errorMessage,
+        });
       });
-      // setUploadedFileName(response.data.filename);
-      setLoading(false)
-      enqueueSnackbar('Uploads dữ liệu thành công!');
-    } catch (error) {
-      setLoading(false)
-      enqueueSnackbar({
-        variant: 'error',
-        autoHideDuration: 2000,
-        message: 'Uploads dữ liệu thất bại',
-      });
-    }
   };
 
   const handleRemoveFile = (inputFile: File | string) => {

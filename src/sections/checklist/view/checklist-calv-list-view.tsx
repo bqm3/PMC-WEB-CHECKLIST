@@ -616,43 +616,19 @@ function applyFilter({
 
   if (!dateError) {
     if (startDate && endDate) {
-      // Validate if startDate and endDate are proper Date objects
-      const isValidDate = (date: any) => date instanceof Date && !Number.isNaN(date.getTime());
-  
-      if (isValidDate(startDate) && isValidDate(endDate)) {
-        console.log('inputData', endDate, typeof endDate);
-        console.log('startDate', startDate, typeof startDate);
-  
-        // Filter inputData only if the dates are valid
-        inputData = inputData?.filter((invoice) => {
-          const invoiceTimestamp = fTimestamp(invoice?.Ngay);
-          const startTimestamp = fTimestamp(startDate);
-          const endTimestamp = fTimestamp(endDate);
-  
-          // Perform filtering if timestamps are valid
-          return invoiceTimestamp >= startTimestamp && invoiceTimestamp <= endTimestamp;
-        });
-      } else {
-        console.error('Invalid startDate or endDate:', startDate, endDate);
-        // Return unfiltered inputData if dates are invalid
-        return inputData;
-      }
+      // Đặt endDate vào cuối ngày
+      endDate.setHours(23);
+      endDate.setMinutes(59);
+      endDate.setSeconds(59);
+
+      const startTimestamp = fTimestamp(startDate);
+      const endTimestamp = fTimestamp(endDate);
+      inputData = inputData.filter((item) => {
+        const nxTimestamp = fTimestamp(item.Ngay);
+        return nxTimestamp >= startTimestamp && nxTimestamp < endTimestamp;
+      });
     }
   }
-  
-  
-
-  // if (!dateError) {
-  //   if (startDate && endDate) {
-  //     console.log('inputData',endDate, typeof endDate)
-  //     console.log('startDate',startDate, typeof startDate)
-  //     inputData = inputData?.filter(
-  //       (invoice) =>
-  //         fTimestamp(invoice?.Ngay) >= fTimestamp(startDate) &&
-  //         fTimestamp(invoice?.Ngay) <= fTimestamp(endDate)
-  //     );
-  //   }
-  // }
 
   return inputData;
 }

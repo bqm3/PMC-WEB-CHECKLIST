@@ -79,7 +79,7 @@ export function useNavData() {
         subheader: t('management'),
 
         items:
-          user?.Permission === 1
+          user?.Permission !== 2
             ? [
                 // KHU VUC
                 {
