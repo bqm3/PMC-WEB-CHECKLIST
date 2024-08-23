@@ -96,6 +96,7 @@ export const paths = {
   dashboard: {
     root: `${ROOTS.DASHBOARD}/analytics`,
     mail: `${ROOTS.DASHBOARD}/mail`,
+    statistical_report: `${ROOTS.DASHBOARD}/statistical-report`,
     chat: `${ROOTS.DASHBOARD}/chat`,
     blank: `${ROOTS.DASHBOARD}/blank`,
     kanban: `${ROOTS.DASHBOARD}/kanban`,
@@ -105,6 +106,7 @@ export const paths = {
     general: {
       app: `${ROOTS.DASHBOARD}/app`,
       ecommerce: `${ROOTS.DASHBOARD}/ecommerce`,
+      statistical_report: `${ROOTS.DASHBOARD}/statistical-report`,
       analytics: `${ROOTS.DASHBOARD}/analytics`,
       management: `${ROOTS.DASHBOARD}/management`,
       banking: `${ROOTS.DASHBOARD}/banking`,

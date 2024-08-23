@@ -58,22 +58,35 @@ export function useNavData() {
       // OVERVIEW
       {
         subheader: t('overview'),
-        items: user
-          ? [
-              user?.Permission === 1
-                ? {
-                    title: t('analytics'),
-                    path: paths.dashboard.general.analytics,
-                    icon: ICONS.analytics,
-                  }
-                : {
-                    title: t('management'),
-                    path: paths.dashboard.general.management,
-                    icon: ICONS.analytics,
-                  },
-            ]
-          : [],
+        items: (() => {
+          if (!user) return [];
+      
+          if (user.Permission === 1) {
+            return [
+              {
+                title: t('analytics'),
+                path: paths.dashboard.general.analytics,
+                icon: ICONS.analytics,
+              },
+              {
+                title: t('statistical report'),
+                path: paths.dashboard.general.statistical_report,
+                icon: ICONS.file,
+              },
+            ];
+          }
+      
+          return [
+            {
+              title: t('management'),
+              path: paths.dashboard.general.management,
+              icon: ICONS.analytics,
+            },
+          ];
+        })(),
       },
+      
+      
       // MANAGEMENT
       {
         subheader: t('management'),

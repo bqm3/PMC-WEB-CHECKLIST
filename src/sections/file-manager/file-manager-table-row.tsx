@@ -120,13 +120,13 @@ export default function FileManagerTableRow({ row, selected, onSelectRow, onDele
           }),
         }}
       >
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox
             checked={selected}
             onDoubleClick={() => console.info('ON DOUBLE CLICK')}
             onClick={onSelectRow}
           />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell onClick={handleClick}>
           <Stack direction="row" alignItems="center" spacing={2}>

@@ -35,8 +35,6 @@ import {
   emptyRows,
   TableNoData,
   TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
@@ -46,7 +44,8 @@ import { IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue, ITang } from 'sr
 import OrderTableRow from '../tang-table-row';
 import OrderTableToolbar from '../tang-table-toolbar';
 import OrderTableFiltersResult from '../tang-table-filters-result';
-
+import TableSelectedAction from '../table-selected-action'
+import TableHeadCustom from '../table-head-custom'
 
 // ----------------------------------------------------------------------
 
@@ -82,8 +81,6 @@ export default function AreaListView() {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
- 
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
@@ -91,11 +88,11 @@ export default function AreaListView() {
 
   const [tableData, setTableData] = useState<ITang[]>([]);
 
-  useEffect(()=> {
-    if(tang.length > 0){
-      setTableData(tang)
+  useEffect(() => {
+    if (tang.length > 0) {
+      setTableData(tang);
     }
-  },[tang])
+  }, [tang]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -139,10 +136,9 @@ export default function AreaListView() {
           // reset();
           const deleteRow = tableData.filter((row) => row.ID_Tang !== id);
           setTableData(deleteRow);
-  
+
           table.onUpdatePageDeleteRow(dataInPage.length);
           enqueueSnackbar('Xóa thành công!');
-         
         })
         .catch((error) => {
           if (error.response) {
@@ -170,23 +166,56 @@ export default function AreaListView() {
     },
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
-  
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.ID_Tang));
-    setTableData(deleteRows);
+  const handleDeleteRows = useCallback(async () => {
+    const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Tang));
+    await axios
+      .put(`https://checklist.pmcweb.vn/be/api/ent_tang/delete-mul`, deleteRows, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        table.onUpdatePageDeleteRow(dataInPage.length);
+        enqueueSnackbar('Xóa thành công!');
+        const notDeleteRows = tableData.filter((row) => !table.selected.includes(row.ID_Tang));
+        setTableData(notDeleteRows);
 
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+        table.onUpdatePageDeleteRows({
+          totalRows: tableData.length,
+          totalRowsInPage: dataInPage.length,
+          totalRowsFiltered: dataFiltered.length,
+        });
+      })
+      .catch((error) => {
+        if (error.response) {
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `${error.response.data.message}`,
+          });
+        } else if (error.request) {
+          // Lỗi không nhận được phản hồi từ server
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `Không nhận được phản hồi từ máy chủ`,
+          });
+        } else {
+          // Lỗi khi cấu hình request
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `Lỗi gửi yêu cầu`,
+          });
+        }
+      });
+  }, [accessToken, enqueueSnackbar, dataFiltered.length, dataInPage.length, table, tableData]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -238,6 +267,24 @@ export default function AreaListView() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={tableData.length}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(
+                  checked,
+                  tableData.map((row) => row?.ID_Tang)
+                )
+              }
+              action={
+                <Tooltip title="Xóa">
+                  <IconButton color="primary" onClick={confirm.onTrue}>
+                    <Iconify icon="solar:trash-bin-trash-bold" />
+                  </IconButton>
+                </Tooltip>
+              }
+            />
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
@@ -315,7 +362,7 @@ export default function AreaListView() {
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
+            Bạn có muốn xóa <strong> {table.selected.length} </strong> tầng?
           </>
         }
         action={
@@ -327,7 +374,7 @@ export default function AreaListView() {
               confirm.onFalse();
             }}
           >
-            Delete
+            Xóa
           </Button>
         }
       />
@@ -363,7 +410,7 @@ function applyFilter({
     inputData = inputData.filter(
       (order) =>
         order.Tentang.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${order.ent_duan.Duan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 
+        `${order.ent_duan.Duan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

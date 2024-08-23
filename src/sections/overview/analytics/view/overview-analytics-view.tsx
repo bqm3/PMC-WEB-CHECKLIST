@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 // @mui
 import Grid from '@mui/material/Unstable_Grid2';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { LoadingButton } from '@mui/lab';
 // hooks
 import { useAuthContext } from 'src/auth/hooks';
+import { useBoolean } from 'src/hooks/use-boolean';
+// components
+import Iconify from 'src/components/iconify';
 // components
 import { useSettingsContext } from 'src/components/settings';
 // api
@@ -20,7 +24,6 @@ import ChecklistRecentTransitions from '../checklist-recent-transitions';
 
 import ChecklistsYear from '../checklist-yearly';
 import EcommerceSalesOverview from '../checklist-percent-overview';
-
 
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
@@ -66,6 +69,10 @@ export default function OverviewAnalyticsView() {
   const { user, logout } = useAuthContext();
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
+
+  const upload = useBoolean();
+
+  const [loading, setLoading] = useState<Boolean | any>(false);
 
   const [dataTotalKhoiCV, setDataTotalKhoiCV] = useState<SeriesData[]>([]);
   const [dataTotalKhuvuc, setDataTotalKhuvuc] = useState<SeriesData[]>([]);
@@ -228,52 +235,67 @@ export default function OverviewAnalyticsView() {
     setTotalKhoiCV(totalValue);
   }, [dataTotalKhoiCV]);
 
+  const handleLinkHSSE = useCallback(()=> {
+    const url = "https://pmcwebvn.sharepoint.com/sites/PMCteam/SitePages/B%C3%A1o-c%C3%A1o-HSSE.aspx?csf=1&web=1&share=EUBekLeeP6hLszUcIm2kXQEBm6ZHozG95Gn14yIxExnPFw&e=HsaK0H";
+    window.open(url, '_blank');
+  },[])
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Typography
-        variant="h4"
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       >
-        Hi, {user?.ent_duan?.Duan}
-      </Typography>
+        <Typography variant="h4">Hi, {user?.ent_duan?.Duan}</Typography>
+        <LoadingButton
+          loading={loading}
+          variant="contained"
+          startIcon={<Iconify icon="eva:link-2-fill" />}
+          onClick={handleLinkHSSE}
+        >
+          Báo cáo HSSE
+        </LoadingButton>
+      </Grid>
       <Grid container spacing={3}>
-
-      <Grid xs={12} md={12} lg={12}>
-        { dataTotalErrorWeek && 
-          <BankingRecentTransitions
-          title="Sự cố ngày hôm trước"
-          tableData={dataTotalErrorWeek}
-          tableLabels={[
-            { id: 'checklistName', label: 'Tên checklist' },
-            { id: 'Ngay', label: 'Ngày' },
-            { id: 'calv', label: 'Ca làm việc' },
-            { id: 'note', label: 'Ghi chú' },
-            { id: 'Giamsat', label: 'Giám sát' },
-            { id: 'image', label: 'Ảnh' },
-            { id: '' },
-          ]}
-        />
-        }
+        <Grid xs={12} md={12} lg={12}>
+          {dataTotalErrorWeek && (
+            <BankingRecentTransitions
+              title="Sự cố ngày hôm trước"
+              tableData={dataTotalErrorWeek}
+              tableLabels={[
+                { id: 'checklistName', label: 'Tên checklist' },
+                { id: 'Ngay', label: 'Ngày' },
+                { id: 'calv', label: 'Ca làm việc' },
+                { id: 'note', label: 'Ghi chú' },
+                { id: 'Giamsat', label: 'Giám sát' },
+                { id: 'image', label: 'Ảnh' },
+                { id: '' },
+              ]}
+            />
+          )}
         </Grid>
 
         <Grid xs={12} md={12} lg={12}>
-        { dataTotalErrorWeek && 
-          <ChecklistRecentTransitions
-          title="Các checklist lỗi"
-          tableData={dataChecklistsError}
-          tableLabels={[
-            { id: 'checklistName', label: 'Tên checklist' },
-            { label: 'Giá trị định danh', id: 'Giatridinhdanh' },
-            { label: 'Giá trị nhận', id: 'Giatrinhan' },
-            { label: 'Tầng', id: 'Tentang' },
-            { label: 'Số thứ tự', id: 'Sothutu' },
-            { label: 'Mã số', id: 'Maso' },
-            { label: 'Hạng mục', id: 'Hangmuc' },
-          ]}
-        />
-        }
+          {dataTotalErrorWeek && (
+            <ChecklistRecentTransitions
+              title="Các checklist lỗi"
+              tableData={dataChecklistsError}
+              tableLabels={[
+                { id: 'checklistName', label: 'Tên checklist' },
+                { label: 'Giá trị định danh', id: 'Giatridinhdanh' },
+                { label: 'Giá trị nhận', id: 'Giatrinhan' },
+                { label: 'Tầng', id: 'Tentang' },
+                { label: 'Số thứ tự', id: 'Sothutu' },
+                { label: 'Mã số', id: 'Maso' },
+                { label: 'Hạng mục', id: 'Hangmuc' },
+              ]}
+            />
+          )}
         </Grid>
 
         {dataTotalKhuvuc && (

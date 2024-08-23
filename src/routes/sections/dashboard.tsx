@@ -18,6 +18,7 @@ export const DashboardPage = lazy(() => import('src/pages/dashboard/app'));
 export const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const OverviewEcommercePage = lazy(() => import('src/pages/dashboard/ecommerce'));
 const OverviewAnalyticsPage = lazy(() => import('src/pages/dashboard/analytics'));
+const StattisticalReportPage = lazy(() => import('src/pages/dashboard/statistical-report'));
 const OverviewManagementPage = lazy(() => import('src/pages/dashboard/management'));
 const OverviewBankingPage = lazy(() => import('src/pages/dashboard/banking'));
 const OverviewBookingPage = lazy(() => import('src/pages/dashboard/booking'));
@@ -165,6 +166,7 @@ export const dashboardRoutes = [
       { element:  <OverviewAnalyticsPage />, index: true },
       { path: 'ecommerce', element: <OverviewEcommercePage /> },
       { path: 'analytics', element: <OverviewAnalyticsPage /> },
+      { path: 'statistical-report', element: <StattisticalReportPage /> },
       { path: 'management', element: <OverviewManagementPage /> },
       { path: 'banking', element: <OverviewBankingPage /> },
       { path: 'booking', element: <OverviewBookingPage /> },

@@ -91,6 +91,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
     Hangmuc: Yup.string().required('Phải có tên hạng mục'),
     ID_Toanha: Yup.string(),
     ID_KhoiCV: Yup.string(),
+    FileTieuChuan: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -98,6 +99,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       Hangmuc: currentArticle?.Hangmuc || '',
       Tieuchuankt: currentArticle?.Tieuchuankt || '',
       MaQrCode: currentArticle?.MaQrCode || '',
+      FileTieuChuan: currentArticle?.FileTieuChuan || '',
       ID_Khuvuc: currentArticle?.ID_Khuvuc || null,
       ID_KhoiCV: currentArticle?.ID_KhoiCV || null || '',
       ID_Toanha: currentArticle?.ent_khuvuc?.ID_Toanha || null || '',
@@ -316,6 +318,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
             <RHFTextField name="Hangmuc" label="Tên hạng mục" />
             <RHFTextField name="MaQrCode" label="Mã Qr Code" />
+            <RHFTextField name="FileTieuChuan" label="Đường dẫn file tiêu chuẩn" />
 
             <RHFTextField name="Tieuchuankt" label="Tiêu chuẩn kiểm tra" multiline rows={4} />
           </Stack>

@@ -47,7 +47,7 @@ export default function TableSelectedAction({
       }}
       {...other}
     >
-      {/* <Checkbox
+      <Checkbox
         indeterminate={!!numSelected && numSelected < rowCount}
         checked={!!rowCount && numSelected === rowCount}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -69,7 +69,7 @@ export default function TableSelectedAction({
         {numSelected} chọn
       </Typography>
 
-      {action && action} */}
+      {action && action}
     </Stack>
   );
 }
