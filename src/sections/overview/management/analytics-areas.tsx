@@ -81,20 +81,22 @@ function CountryItem({ country }: CountryItemProps) {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Stack direction="row" alignItems="center" flexGrow={1} sx={{ minWidth: 120 }}>
-        <Image
-          alt="Ảnh dự án"
-          src={`${
-            country?.Logo ? country?.Logo : 'https://pmcweb.vn/wp-content/uploads/logo.png'
-          } `}
-          ratio="1/1"
-          sx={{
-            borderRadius: 0.65,
-            width: 80,
-            height: 80,
-            mr: 1,
+        <Stack
+          style={{
+            width: 120,
+            height: 100,
+            marginRight: 40,
             objectFit: 'contain',
+            justifyContent: 'center'
           }}
-        />
+        >
+          <Image
+            alt="Ảnh dự án"
+            src={`${
+              country?.Logo ? country?.Logo : 'https://pmcweb.vn/wp-content/uploads/logo.png'
+            } `}
+          />
+        </Stack>
         <ListItemText
           primary={country?.Duan}
           secondary={country?.Diachi}
