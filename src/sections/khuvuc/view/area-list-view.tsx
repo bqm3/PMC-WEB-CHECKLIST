@@ -114,7 +114,7 @@ export default function AreaListView() {
 
   const [tableData, setTableData] = useState<IKhuvuc[]>([]);
 
-  const [dataSelect, setDataSelect] = useState<IKhuvuc>();
+  const [dataSelect, setDataSelect] = useState<any>();
 
   useEffect(() => {
     if (khuvuc.length > 0) {
@@ -207,8 +207,22 @@ export default function AreaListView() {
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
 
-  const handleDownloadImage = async () => {
-    const originalImage = `https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}`;
+  const handleDownloadImageKhuVuc = async () => {
+    const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Tenkhuvuc}`;
+    const image = await fetch(originalImage);
+    const imageBlog = await image.blob()
+    const imageURL = URL.createObjectURL(imageBlog)
+    const link = document.createElement('a')
+    link.href = imageURL;
+    link.download = `${dataSelect?.MaQrCode}`;
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  };
+  const handleDownloadImageHangMuc = async () => {
+    const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Hangmuc}`;
     const image = await fetch(originalImage);
     const imageBlog = await image.blob()
     const imageURL = URL.createObjectURL(imageBlog)
@@ -576,8 +590,8 @@ export default function AreaListView() {
 
         <DialogContent>
           <Card>
-            <Image
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}&amp;size=300x300`}
+          <Image
+              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&size=300`}
               alt=""
               title=""
             />
@@ -585,7 +599,7 @@ export default function AreaListView() {
         </DialogContent>
 
         <DialogActions>
-          <Button variant="contained" color='success' onClick={handleDownloadImage}>Download</Button>
+          <Button variant="contained" color='success' onClick={handleDownloadImageKhuVuc}>Download</Button>
           <Button variant="outlined" color="inherit" onClick={confirmQr.onFalse}>
             Cancel
           </Button>
@@ -597,8 +611,8 @@ export default function AreaListView() {
 
         <DialogContent>
           <Card>
-            <Image
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}&amp;size=300x300`}
+          <Image
+              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&size=300`}
               alt=""
               title=""
             />
@@ -606,7 +620,7 @@ export default function AreaListView() {
         </DialogContent>
 
         <DialogActions>
-          <Button variant="contained" color='success' onClick={handleDownloadImage}>Download</Button>
+          <Button variant="contained" color='success' onClick={handleDownloadImageHangMuc}>Download</Button>
           <Button variant="outlined" color="inherit" onClick={confirmQrHm.onFalse}>
             Cancel
           </Button>

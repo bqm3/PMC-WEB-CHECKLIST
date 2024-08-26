@@ -201,7 +201,8 @@ export default function AreaListView() {
   );
 
   const handleDownloadImage = async () => {
-    const originalImage = `https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}`;
+    const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Hangmuc}`;
     const image = await fetch(originalImage);
     const imageBlog = await image.blob()
     const imageURL = URL.createObjectURL(imageBlog)
@@ -488,8 +489,8 @@ export default function AreaListView() {
 
         <DialogContent>
           <Card>
-            <Image
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${dataSelect?.MaQrCode}&amp;size=300x300`}
+          <Image
+              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&size=300`}
               alt=""
               title=""
             />
