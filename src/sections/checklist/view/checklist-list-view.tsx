@@ -193,16 +193,51 @@ export default function ChecklistCalvListView() {
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Checklist));
-    setTableData(deleteRows);
+  const handleDeleteRows = useCallback(async () => {
+    const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Checklist));
+    await axios
+      .put(`https://checklist.pmcweb.vn/be/api/ent_checklist/delete-mul`, deleteRows, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        table.onUpdatePageDeleteRow(dataInPage.length);
+        enqueueSnackbar('Xóa thành công!');
+        const notDeleteRows = tableData.filter((row) => !table.selected.includes(row.ID_Checklist));
+        setTableData(notDeleteRows);
 
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData?.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered?.length,
-    });
-  }, [dataFiltered?.length, dataInPage.length, table, tableData]);
+        table.onUpdatePageDeleteRows({
+          totalRows: tableData.length,
+          totalRowsInPage: dataInPage.length,
+          totalRowsFiltered: dataFiltered.length,
+        });
+      })
+      .catch((error) => {
+        if (error.response) {
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `${error.response.data.message}`,
+          });
+        } else if (error.request) {
+          // Lỗi không nhận được phản hồi từ server
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `Không nhận được phản hồi từ máy chủ`,
+          });
+        } else {
+          // Lỗi khi cấu hình request
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `Lỗi gửi yêu cầu`,
+          });
+        }
+      });
+  }, [accessToken, enqueueSnackbar, dataFiltered.length, dataInPage.length, table, tableData]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);

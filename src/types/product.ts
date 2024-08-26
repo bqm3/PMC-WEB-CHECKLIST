@@ -81,5 +81,6 @@ export type IProductTableFilters = {
   name: string;
   stock: string[];
   publish: string[];
+  
 };
 // ====================================

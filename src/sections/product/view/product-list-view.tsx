@@ -62,7 +62,7 @@ const PUBLISH_OPTIONS = [
 const defaultFilters: IProductTableFilters = {
   name: '',
   publish: [],
-  stock: [],
+  stock: []
 };
 
 // ----------------------------------------------------------------------

@@ -44,10 +44,9 @@ export const JOB_EMPLOYMENT_TYPE_OPTIONS = [
 ];
 
 export const JOB_EXPERIENCE_OPTIONS = [
-  { value: 'No experience', label: 'No experience' },
-  { value: '1 year exp', label: '1 year exp' },
-  { value: '2 year exp', label: '2 year exp' },
-  { value: '> 3 year exp', label: '> 3 year exp' },
+  { value: '1', label: 'Báo cáo tổng hợp Ca Checklist' },
+  { value: '2', label: 'Báo cáo tổng hợp Checklist ngăn ngừa rủi ro' },
+  { value: '3', label: 'Báo cáo các Checklist có vấn đề' },
 ];
 
 export const JOB_BENEFIT_OPTIONS = [

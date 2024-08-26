@@ -14,6 +14,18 @@ export type IKhuvucTableFilters = {
   endDate: Date | null;
 };
 
+export type IBaoCaoTableFilterValue = string | null | string[] | Date;
+
+export type IBaoCaoTableFilters = {
+  name: string;
+  stock: string[];
+  publish: string[];
+  startDate: Date | null;
+  endDate: Date | null;
+};
+
+
+
 export type ITbChecklistTableFilterValue = string | Date | null;
 
 export type ITbChecklistTableFilters = {
@@ -175,6 +187,7 @@ export type IHangMuc = {
   ID_KhoiCV: string;
   MaQrCode: string;
   Hangmuc: string;
+  ID_KhoiCVs: string;
   FileTieuChuan: string;
   Tieuchuankt: string;
   isDelete: string;

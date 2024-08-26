@@ -43,8 +43,6 @@ import {
   emptyRows,
   TableNoData,
   TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
@@ -57,7 +55,8 @@ import OrderTableToolbar from '../article-table-toolbar';
 import OrderTableFiltersResult from '../article-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 
-
+import TableSelectedAction from '../table-selected-action'
+import TableHeadCustom from '../table-head-custom'
 
 // ----------------------------------------------------------------------
 
@@ -214,16 +213,51 @@ export default function AreaListView() {
     document.body.removeChild(link)
   };
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Hangmuc));
-    setTableData(deleteRows);
+  const handleDeleteRows = useCallback(async () => {
+    const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Hangmuc));
+    await axios
+      .put(`https://checklist.pmcweb.vn/be/api/ent_hangmuc/delete-mul`, deleteRows, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        table.onUpdatePageDeleteRow(dataInPage.length);
+        enqueueSnackbar('Xóa thành công!');
+        const notDeleteRows = tableData.filter((row) => !table.selected.includes(row.ID_Hangmuc));
+        setTableData(notDeleteRows);
 
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData?.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered?.length,
-    });
-  }, [dataFiltered?.length, dataInPage.length, table, tableData]);
+        table.onUpdatePageDeleteRows({
+          totalRows: tableData.length,
+          totalRowsInPage: dataInPage.length,
+          totalRowsFiltered: dataFiltered.length,
+        });
+      })
+      .catch((error) => {
+        if (error.response) {
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `${error.response.data.message}`,
+          });
+        } else if (error.request) {
+          // Lỗi không nhận được phản hồi từ server
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `Không nhận được phản hồi từ máy chủ`,
+          });
+        } else {
+          // Lỗi khi cấu hình request
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 2000,
+            message: `Lỗi gửi yêu cầu`,
+          });
+        }
+      });
+  }, [accessToken, enqueueSnackbar, dataFiltered.length, dataInPage.length, table, tableData]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -476,7 +510,7 @@ export default function AreaListView() {
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
+            Bạn có muốn xóa <strong> {table.selected.length} </strong> hạng mục?
           </>
         }
         action={
@@ -488,7 +522,7 @@ export default function AreaListView() {
               confirm.onFalse();
             }}
           >
-            Delete
+            Xóa
           </Button>
         }
       />
