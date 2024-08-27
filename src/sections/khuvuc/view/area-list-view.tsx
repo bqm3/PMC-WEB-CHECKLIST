@@ -209,7 +209,7 @@ export default function AreaListView() {
 
   const handleDownloadImageKhuVuc = async () => {
     const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
-    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Tenkhuvuc}`;
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.MaQrCode}`;
     const image = await fetch(originalImage);
     const imageBlog = await image.blob()
     const imageURL = URL.createObjectURL(imageBlog)
@@ -222,7 +222,7 @@ export default function AreaListView() {
   };
   const handleDownloadImageHangMuc = async () => {
     const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
-    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Hangmuc}`;
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.MaQrCode}`;
     const image = await fetch(originalImage);
     const imageBlog = await image.blob()
     const imageURL = URL.createObjectURL(imageBlog)

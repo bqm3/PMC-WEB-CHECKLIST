@@ -202,7 +202,7 @@ export default function AreaListView() {
 
   const handleDownloadImage = async () => {
     const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
-    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Hangmuc}`;
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.MaQrCode}`;
     const image = await fetch(originalImage);
     const imageBlog = await image.blob()
     const imageURL = URL.createObjectURL(imageBlog)
