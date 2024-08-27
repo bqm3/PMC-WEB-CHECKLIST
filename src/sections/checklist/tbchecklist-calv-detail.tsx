@@ -64,10 +64,9 @@ import ChecklistTableFiltersResult from './detail/checklist-table-filters-result
 
 const TABLE_HEAD = [
   { id: 'Checklist', label: 'Tên checklist', width: 150, align: 'left' },
-  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 150, align: 'center' },
-  { id: 'Maso', label: 'Mã số', width: 100, align: 'center' },
+  { id: 'ID_Hangmuc', label: 'Hạng mục (Khu vực - Tòa)', width: 150, align: 'center' },
   { id: 'Ketqua', label: 'Kết quả', width: 100, align: 'center' },
-  { id: 'Gioht', label: 'Giờ checklist', width: 100, align: 'center' },
+  { id: 'Gioht', label: 'Giờ Checklist', width: 100, align: 'center' },
   { id: 'Anh', label: 'Ảnh', width: 100, align: 'center' },
   { id: 'Ghichu', label: 'Ghi chú', width: 100, align: 'center' },
 
@@ -110,7 +109,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function TbChecklistCalvListView({ currentChecklist, dataChecklistC }: Props) {
-  const table = useTable({ defaultOrderBy: 'ID_Checklist' });
+  const table = useTable({ defaultOrderBy: 'Gioht' });
 
   const settings = useSettingsContext();
 
@@ -465,13 +464,16 @@ function applyFilter({
 
   if (name) {
     inputData = inputData.filter(
-      (checklist) =>
-        `${checklist.ent_checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_checklist.ent_hangmuc.Hangmuc}`
+      (item) =>
+        `${item.ent_checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${item.ent_checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${item.ent_checklist.ent_hangmuc.Hangmuc}`
           .toLowerCase()
           .indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_checklist.ent_hangmuc.ent_khuvuc.Tenkhuvuc}`
+        `${item.ent_checklist.ent_hangmuc.ent_khuvuc.Tenkhuvuc}`
+          .toLowerCase()
+          .indexOf(name.toLowerCase()) !== -1 ||
+          `${item.ent_checklist.ent_hangmuc.ent_khuvuc.ent_toanha.Toanha}`
           .toLowerCase()
           .indexOf(name.toLowerCase()) !== -1
     );

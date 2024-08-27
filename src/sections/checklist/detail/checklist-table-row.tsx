@@ -64,15 +64,13 @@ export default function AreaTableRow({
 
   const popover = usePopover();
 
-  console.log('ent_checklist?.Giatridinhdanh',ent_checklist?.Giatridinhdanh)
-
   const renderPrimary = (
     <TableRow hover selected={selected} style={{backgroundColor: `${status}` === '0' ? '#FFAB0029' : '' }}>
       <TableCell> {ent_checklist?.Checklist} </TableCell>
       <TableCell align="center">
         <ListItemText
-          primary={ent_checklist?.ent_hangmuc?.Hangmuc}
-          secondary={ent_checklist?.ent_hangmuc?.ent_khuvuc?.Tenkhuvuc}
+          primary={`${ent_checklist?.ent_hangmuc?.Hangmuc}`}
+          secondary={`${ent_checklist?.ent_hangmuc?.ent_khuvuc?.Tenkhuvuc} - ${ent_checklist?.ent_hangmuc?.ent_khuvuc?.ent_toanha.Toanha}`}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
             component: 'span',
@@ -80,7 +78,6 @@ export default function AreaTableRow({
           }}
         />
       </TableCell>
-      <TableCell align="center"> {ent_checklist?.Maso} </TableCell>
       <TableCell align="center"> 
       <ListItemText
           primary={Ketqua}
