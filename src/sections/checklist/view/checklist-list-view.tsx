@@ -35,7 +35,6 @@ import {
   emptyRows,
   TableNoData,
   TableEmptyRows,
-  
   TablePaginationCustom,
 } from 'src/components/table';
 
@@ -49,7 +48,6 @@ import ChecklistTableFiltersResult from '../checklist-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 import TableHeadCustom from '../table-head-custom';
 import TableSelectedAction from '../table-selected-action';
-
 
 // ----------------------------------------------------------------------
 
@@ -91,7 +89,7 @@ export default function ChecklistCalvListView() {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [loading, setLoading] = useState<Boolean | any>(false)
+  const [loading, setLoading] = useState<Boolean | any>(false);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -258,46 +256,43 @@ export default function ChecklistCalvListView() {
   );
 
   const headers = [
-    { label: 'STT', key: 'stt' },
-    { label: 'Tên checklist', key: 'Checklist' },
+    { label: 'Tên tòa nhà', key: 'tentoanha' },
+    { label: 'Mã khu vực', key: 'makhuvuc' },
+    { label: 'Mã QrCode khu vực', key: 'maqrcodekhuvuc' },
+    { label: 'Tên khu vực', key: 'tenkhuvuc' },
+    { label: 'Mã QrCode hạng mục', key: 'maqrcodehangmuc' },
+    { label: 'Tên hạng mục', key: 'tenhangmuc' },
+    { label: 'Tên tầng', key: 'Tentang' },
+    { label: 'Tên khối công việc', key: 'tenkhoicongviec' },
+    { label: 'Thứ tự check', key: 'thutucheck' },
+    { label: 'Mã checklist', key: 'macl' },
+    { label: 'Tên checklist', key: 'tencl' },
+    { label: 'Tiêu chuẩn checklist', key: 'tieuchuan' },
     { label: 'Giá trị định danh', key: 'Giatridinhdanh' },
     { label: 'Giá trị nhận', key: 'Giatrinhan' },
-    { label: 'Tầng', key: 'Tentang' },
-    { label: 'Số thứ tự', key: 'Sothutu' },
-    { label: 'Mã số', key: 'Maso' },
-    { label: 'Hạng mục', key: 'Hangmuc' },
-    { label: 'Ca làm việc', key: 'caLvs' },
   ];
 
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
 
   useEffect(() => {
-    const formattedData = dataFiltered?.map((item, index) => {
-      const shiftNames = [item.calv_1, item.calv_2, item.calv_3, item.calv_4]
-        .map((calvId : any) => {
-          const workShift = calv?.find((shift) => `${shift.ID_Calv}` === `${calvId}`);
-          return workShift ? workShift.Tenca : null;
-        })
-        .filter((name: any) => name !== null)
-        .join(', ');
-
-      const shiftNamesArray = shiftNames?.split(', ');
-
-      return {
-        stt: index + 1,
-        Checklist: item.Checklist || '',
-        Giatridinhdanh: item.Giatridinhdanh || '',
-        Giatrinhan: item.Giatrinhan || '',
-        Tentang: item.ent_tang.Tentang || '',
-        Sothutu: item.Sothutu || '',
-        Maso: item.Maso || '',
-        Hangmuc: item.ent_hangmuc.Hangmuc || '',
-        caLvs: shiftNamesArray || '',
-      };
-    });
+    const formattedData = tableData?.map((item, index) => ({
+      tentoanha: item?.ent_hangmuc?.ent_khuvuc?.ent_toanha?.Toanha || '',
+      makhuvuc: item?.ent_hangmuc?.ent_khuvuc?.Makhuvuc || '',
+      maqrcodekhuvuc: item?.ent_hangmuc?.ent_khuvuc?.MaQrCode || '',
+      tenkhuvuc: item?.ent_hangmuc?.ent_khuvuc?.Tenkhuvuc || '',
+      maqrcodehangmuc: item?.ent_hangmuc?.MaQrCode || '',
+      tenhangmuc: item?.ent_hangmuc?.Hangmuc || '',
+      Tentang: item?.ent_tang.Tentang || '',
+      tenkhoicongviec: item?.ent_hangmuc?.ent_khoicv?.KhoiCV || '',
+      thutucheck: item?.Sothutu || '',
+      macl: item?.Maso || '',
+      tencl: item?.Checklist || '',
+      tieuchuan: item?.Tieuchuan || '',
+      Giatridinhdanh: item?.Giatridinhdanh || '',
+      Giatrinhan: item?.Giatrinhan || '',
+    }));
     setDataFormatExcel(formattedData);
-  }, [dataFiltered, calv]);
-
+  }, [tableData]);
 
   return (
     <>
@@ -320,7 +315,7 @@ export default function ChecklistCalvListView() {
               mb: { xs: 3, md: 5 },
             }}
           />
-           <LoadingButton
+          <LoadingButton
             loading={loading}
             variant="contained"
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
@@ -359,22 +354,14 @@ export default function ChecklistCalvListView() {
                   >
                     {tab.value === 'all' && checkList?.length}
                     {tab.value === '1' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '1'
-                      ).length}
+                      checkList?.filter((item) => `${item.ent_hangmuc.ID_KhoiCV}` === '1').length}
 
                     {tab.value === '2' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '2'
-                      ).length}
+                      checkList?.filter((item) => `${item.ent_hangmuc.ID_KhoiCV}` === '2').length}
                     {tab.value === '3' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '3'
-                      ).length}
+                      checkList?.filter((item) => `${item.ent_hangmuc.ID_KhoiCV}` === '3').length}
                     {tab.value === '4' &&
-                      checkList?.filter(
-                        (item) => `${item.ent_hangmuc.ID_KhoiCV}` === '4'
-                      ).length}
+                      checkList?.filter((item) => `${item.ent_hangmuc.ID_KhoiCV}` === '4').length}
                   </Label>
                 }
               />
@@ -408,7 +395,10 @@ export default function ChecklistCalvListView() {
               numSelected={table.selected.length}
               rowCount={tableData.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData.map((row) => row?.ID_Checklist))
+                table.onSelectAllRows(
+                  checked,
+                  tableData.map((row) => row?.ID_Checklist)
+                )
               }
               action={
                 <Tooltip title="Xóa">
@@ -429,7 +419,10 @@ export default function ChecklistCalvListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked: any) =>
-                    table.onSelectAllRows(checked, tableData.map((row) => row.ID_Checklist))
+                    table.onSelectAllRows(
+                      checked,
+                      tableData.map((row) => row.ID_Checklist)
+                    )
                   }
                 />
 
@@ -438,17 +431,18 @@ export default function ChecklistCalvListView() {
                     .slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
-                    ).map((row) => (
-                    <ChecklistTableRow
-                      key={row.ID_Checklist}
-                      calv={calv}
-                      row={row}
-                      selected={table.selected.includes(row.ID_Checklist)}
-                      onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
-                      onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
-                      onViewRow={() => handleViewRow(row.ID_Checklist)}
-                    />
-                  ))}
+                    )
+                    .map((row) => (
+                      <ChecklistTableRow
+                        key={row.ID_Checklist}
+                        calv={calv}
+                        row={row}
+                        selected={table.selected.includes(row.ID_Checklist)}
+                        onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
+                        onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
+                        onViewRow={() => handleViewRow(row.ID_Checklist)}
+                      />
+                    ))}
 
                   <TableEmptyRows
                     height={denseHeight}
@@ -475,7 +469,11 @@ export default function ChecklistCalvListView() {
         </Card>
       </Container>
 
-      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
+      <FileManagerNewFolderDialog
+        open={upload.value}
+        onClose={upload.onFalse}
+        setLoading={setLoading}
+      />
 
       <ConfirmDialog
         open={confirm.value}
