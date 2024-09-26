@@ -5,7 +5,7 @@ export type IRoomFilters = {
   services: string[];
 };
 
-export type IKhuvucTableFilterValue = string | null;
+export type IKhuvucTableFilterValue = string | null | [] | string[];
 
 export type IKhuvucTableFilters = {
   name: string;
@@ -13,6 +13,14 @@ export type IKhuvucTableFilters = {
   startDate: Date | null;
   endDate: Date | null;
 };
+
+export type IChecklistTableFilters ={
+  name: string;
+  status: string;
+  startDate: Date | null;
+  endDate: Date | null;
+  building: string[]
+}
 
 export type IBaoCaoTableFilterValue = string | null | string[] | Date;
 
@@ -52,6 +60,8 @@ export type E_Toanha = {
 
 export type E_Duan = {
   Duan: string;
+  ID_Duan: string;
+  ent_duan_khoicv: IDuanKhoiCV
 };
 
 export type E_Calv = {
@@ -69,7 +79,7 @@ export type E_Tang = {
 
 export type INhom ={
   ID_Nhom: string;
-  Nhom: string;
+  Tennhom: string;
 }
 
 export type IDuan = {
@@ -84,6 +94,8 @@ export type IDuan = {
   totalHangmucInDuan: string;
   toanhas: IToanha[];
   ent_nhom: INhom;
+  ent_duan_khoicv: IDuanKhoiCV[]
+  
 };
 
 export type IGiamsat = {
@@ -102,23 +114,53 @@ export type IGiamsat = {
   isDelete: string;
 };
 
+export type IThietLapCa = {
+  ID_ThietLapCa: string;
+  Ngaythu: string;
+  ID_Calv: string;
+  Sochecklist: string;
+  ID_Hangmucs: string;
+  ID_Duan: string;
+  isDelte: string;
+  ent_calv: ICalv;
+  ent_duan: IDuan;
+}
+
 export type IUser = {
   ID_User: string;
   ID_Duan: string;
   UserName: string;
   ID_Khuvucs: string;
-  Permission: string;
-  ID_KhoiCV: string;
-  ID_Nhompb: string;
-  ID_Chinhanh: string;
   ID_Chucvu: string;
-  Emails: string;
+  ID_KhoiCV: string;
+  ID_Chinhanh: string;
+  Hoten: string;
+  Ngaysinh: Date | null;
+  Sodienthoai: string;
+  Gioitinh: string;
+  Email: string;
   Password: string;
   isDelete: string;
   ent_khoicv: E_KhoiCV;
   ent_duan: IDuan;
   ent_chucvu: IChucvu;
 };
+
+export type ISucongoai = {
+  ID_Suco: string;
+  ID_KV_CV: string;
+  ID_Hangmuc: string;
+  Ngaysuco: string;
+  Giosuco: string;
+  Noidungsuco: string;
+  Duongdancacanh: string;
+  ID_User: string;
+  Tinhtrangxuly: string;
+  Ngayxuly: string;
+  isDelete: string;
+  ent_hangmuc: IHangMuc;
+  ent_user: IUser;
+}
 
 export type IChucvu = {
   ID_Chucvu: string;
@@ -128,17 +170,29 @@ export type IChucvu = {
 export type ITang = {
   ID_Tang: string;
   Tentang: string;
-  Sotang: string;
   ID_Duan: string;
   ID_User: string;
   ent_duan: IDuan;
   ent_user: IUser;
 };
 
+export type E_Khuvuc_KhoiCV = {
+  ID_KV_CV: string;
+  ID_Khuvuc: string;
+  ID_KhoiCV: string;
+  ent_khoicv: E_KhoiCV;
+}
+
+export type E_Calv_KhoiCV = {
+  ID_Calv_KhoiCV: string;
+  ID_Calv: string;
+  ID_KhoiCV: string;
+  ent_khoicv: E_KhoiCV;
+}
+
 export type IKhuvuc = {
   ID_Khuvuc: string;
   ID_Toanha: string;
-  ID_KhoiCV: string;
   Sothutu: string;
   ID_KhoiCVs: string;
   Makhuvuc: string;
@@ -146,10 +200,11 @@ export type IKhuvuc = {
   Tenkhuvuc: string;
   ID_User: string;
   isDelete: string;
-  ent_khoicv: E_KhoiCV;
+  ent_khuvuc_khoicvs: E_Khuvuc_KhoiCV[];
   ent_toanha: E_Toanha;
   hangMucLength: string;
   ent_hangmuc: IHangMuc[];
+  KhoiCVs: IKhoiCV[]
 };
 
 export type IToanha = {
@@ -162,11 +217,25 @@ export type IToanha = {
   ent_duan: E_Duan;
   khuvuc: IKhuvuc;
   ent_khuvuc: IKhuvuc[];
+  tenKhois: string[];
 };
 
 export type IKhoiCV = {
-  ID_Khoi: string;
+  ID_KhoiCV: string;
   KhoiCV: string;
+  Chuky: string;
+  Ngaybatdau: Date;
+  
+};
+
+export type IDuanKhoiCV = {
+  ID_Duan_KhoiCV: string;
+  ID_KhoiCV: string;
+  ID_Duan: string;
+  Ngaybatdau: string;
+  Chuky: string;
+  ent_duan: IDuan;
+  ent_khoicv: IKhoiCV;
 };
 
 export type ICalv = {
@@ -184,15 +253,13 @@ export type ICalv = {
 export type IHangMuc = {
   ID_Hangmuc: string;
   ID_Khuvuc: string;
-  ID_KhoiCV: string;
   MaQrCode: string;
   Hangmuc: string;
-  ID_KhoiCVs: string;
   FileTieuChuan: string;
+  Important: string;
   Tieuchuankt: string;
   isDelete: string;
   ent_khuvuc: IKhuvuc;
-  ent_khoicv: IKhoiCV;
 };
 
 export type ITbChecklist = {
@@ -201,7 +268,8 @@ export type ITbChecklist = {
   ID_KhoiCV: string;
   Ngay: string;
   ID_Calv: string;
-  ID_Giamsat: string;
+  ID_User: string;
+  ID_ThietLapCa: string;
   TongC: string;
   Tong: string;
   Giobd: string;
@@ -219,6 +287,8 @@ export type ITbChecklist = {
   ent_khoicv: IKhoiCV;
   ent_giamsat: IGiamsat;
   ent_calv: ICalv;
+  ent_user: IUser;
+  ent_thietlapca: IThietLapCa
 };
 
 export type IChecklist = {

@@ -21,13 +21,14 @@ export const KHUVUC_STATUS_OPTIONS = [
   { value: '1', label: 'Khối làm sạch' },
   { value: '2', label: 'Khối kỹ thuật' },
   { value: '3', label: 'Khối bảo vệ' },
-  { value: '4', label: 'Khối lễ tân' },
+  { value: '4', label: 'Khối dịch vụ' },
   // { value: 'refunded', label: 'Refunded' },
 ];
 
 export const PERMISSION_STATUS_OPTIONS = [
-  { value: '1', label: 'Giám đốc dự án' },
-  { value: '2', label: 'Giám sát' },
+  { value: '2', label: 'Giám đốc dự án' },
+  { value: '3', label: 'Kỹ sư trưởng' },
+  { value: '4', label: 'Giám sát' },
 ];
 
 const ITEMS = [...Array(3)].map((_, index) => ({

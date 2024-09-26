@@ -49,6 +49,14 @@ export const JOB_EXPERIENCE_OPTIONS = [
   { value: '3', label: 'Báo cáo các Checklist có vấn đề' },
 ];
 
+export const REPORT_CHECKLIST = [
+  { value: '1', label: 'Báo cáo tổng hợp Ca Checklist' },
+  { value: '2', label: 'Bảng kê các sự cố khẩn cấp nằm ngoài Checklist' },
+  { value: '3', label: 'Báo cáo các Checklist có vấn đề' },
+  { value: '4', label: 'Thống kê tra cứu Checklist' },
+  { value: '5', label: 'Báo cáo tổng hợp Checklist ngăn ngừa rủi ro' },
+];
+
 export const JOB_BENEFIT_OPTIONS = [
   { value: 'Free parking', label: 'Free parking' },
   { value: 'Bonus commission', label: 'Bonus commission' },

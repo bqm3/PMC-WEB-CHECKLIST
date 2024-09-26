@@ -18,7 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 // types
 import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IHangMuc, IChecklist, ICalv } from 'src/types/khuvuc';
+import { IKhuvuc, IHangMuc, IChecklist, ICalv, IKhoiCV } from 'src/types/khuvuc';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -34,6 +34,8 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  khoiCV: IKhoiCV[];
+  index: number;
 };
 
 export default function AreaTableRow({
@@ -43,6 +45,8 @@ export default function AreaTableRow({
   onSelectRow,
   onDeleteRow,
   calv,
+  khoiCV,
+  index
 }: Props) {
   const {
     ID_Checklist,
@@ -63,7 +67,8 @@ export default function AreaTableRow({
     calv_3,
     calv_4,
     ent_calv,
-    Tinhtrang
+    Tinhtrang,
+    ent_khuvuc,
   } = row;
 
   const confirm = useBoolean();
@@ -72,38 +77,41 @@ export default function AreaTableRow({
 
   const popover = usePopover();
 
-  const calvIds = [calv_1, calv_2, calv_3, calv_4];
-  const shiftNames = calvIds
+  const shiftNamesKhoiCV = ent_khuvuc.ent_khuvuc_khoicvs
     .map((calvId) => {
-      // Tìm ca làm việc trong sCalv bằng ID_Calv
-      const workShift = calv?.find((shift) => `${shift.ID_Calv}` === `${calvId}`);
-      // Nếu tìm thấy, trả về tên của ca làm việc
-      return workShift ? workShift.Tenca : null;
+      const workShift = khoiCV?.find((shift) => `${shift.ID_KhoiCV}` === `${calvId.ID_KhoiCV}`);
+      return workShift ? calvId.ent_khoicv.KhoiCV : null;
     })
-    // Lọc ra các phần tử null trong trường hợp ID_Calv không tồn tại trong sCalv
-    .filter((name) => name !== null)
-    // Kết hợp tên các ca làm việc thành một chuỗi với dấu phẩy
-    .join(', ');
-    
-  const shiftNamesArray = shiftNames?.split(', ');
+    .filter((name) => name !== null);
 
-  // Tạo các nhãn từ mảng các tên ca làm việc
-  const labels = shiftNamesArray.map((name, index) => (
-    <Label key={index} variant="soft" 
+  const labelsKhoiCV = shiftNamesKhoiCV.map((name) => (
+    <Label
+      key={name}
+      variant="soft"
       color={
-        (`${ent_hangmuc.ID_KhoiCV}` === '1' && 'success') ||
-        (`${ent_hangmuc.ID_KhoiCV}` === '2' && 'warning') ||
-        (`${ent_hangmuc.ID_KhoiCV}` === '3' && 'error') ||
+        (`${name}` === 'Khối làm sạch' && 'success') ||
+        (`${name}` === 'Khối kỹ thuật' && 'warning') ||
+        (`${name}` === 'Khối bảo vệ' && 'error') ||
         'default'
       }
-     style={{marginTop: 4}}>
+      style={{margin: 2}}
+    >
       {name}
     </Label>
   ));
+  let backgroundColorStyle;
 
-
+if (Tinhtrang === '1') {
+  backgroundColorStyle = '#FF563029';
+} else {
+  backgroundColorStyle = (index % 2 !== 0) ? '#f3f6f4' : '';
+}
   const renderPrimary = (
-    <TableRow hover selected={selected} style={{backgroundColor: `${Tinhtrang}` === '1' ? '#FF563029' : '' }}>
+    <TableRow
+      hover
+      selected={selected}
+      style={{ backgroundColor: backgroundColorStyle }}
+    >
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
@@ -117,25 +125,16 @@ export default function AreaTableRow({
             },
           }}
         >
-          C{ID_Checklist}
+          C-{ID_Checklist}
         </Box>
       </TableCell>
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <ListItemText
-          primary={Checklist}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        />
+      <TableCell>
+        <ListItemText primary={Checklist} primaryTypographyProps={{ typography: 'body2' }} />
       </TableCell>
-      <TableCell align="center"> {Giatridinhdanh} </TableCell>
-      <TableCell align="center"> {Giatrinhan} </TableCell>
-      <TableCell align="center"> {ent_tang?.Tentang} </TableCell>
-      <TableCell align="center"> {Sothutu} </TableCell>
-      <TableCell align="center"> {Maso} </TableCell>
-      <TableCell align="center">  <ListItemText
+      {/* <TableCell align="center"> {Giatrinhan} </TableCell> */}
+      <TableCell align="center">
+        {' '}
+        <ListItemText
           primary={ent_hangmuc?.Hangmuc}
           secondary={ent_hangmuc?.MaQrCode}
           primaryTypographyProps={{ typography: 'body2' }}
@@ -143,9 +142,21 @@ export default function AreaTableRow({
             component: 'span',
             color: 'text.disabled',
           }}
-        /></TableCell>
-      <TableCell width={140}>{labels}</TableCell>
-
+        />
+      </TableCell>
+      <TableCell align="center">
+        {' '}
+        <ListItemText
+          primary={ent_khuvuc?.Tenkhuvuc}
+          secondary={ent_khuvuc?.ent_toanha?.Toanha}
+          primaryTypographyProps={{ typography: 'body2' }}
+          secondaryTypographyProps={{
+            component: 'span',
+            color: 'text.disabled',
+          }}
+        />
+      </TableCell>
+      <TableCell align="center"> {labelsKhoiCV} </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

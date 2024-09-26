@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import {IDuan, IUser} from 'src/types/khuvuc';
+import { IDuan, IUser } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -37,7 +37,18 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_Duan, UserName, Emails, ent_chucvu, ent_duan, ent_khoicv, Permission, ID_User } = row;
+  const {
+    ID_Duan,
+    UserName,
+    Email,
+    ent_chucvu,
+    ent_duan,
+    ent_khoicv,
+    ID_Chucvu,
+    ID_User,
+    Hoten,
+    Sodienthoai,
+  } = row;
 
   const confirm = useBoolean();
 
@@ -65,23 +76,14 @@ export default function CalvTableRow({
         </Box>
       </TableCell>
 
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <ListItemText
-          primary={UserName}
-          // secondary={ent_khoicv?.KhoiCV}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        />
-      </TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{ent_chucvu?.Chucvu}</TableCell>
-      
-      <TableCell sx={{alignItems: 'center' }}>{ent_duan?.Duan}</TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{Emails}</TableCell>
-      <TableCell sx={{alignItems: 'center' }}>{ent_khoicv?.KhoiCV}</TableCell>
-      
+      <TableCell>{UserName}</TableCell>
+      <TableCell sx={{ alignItems: 'center' }}>{ent_chucvu?.Chucvu}</TableCell>
+
+      <TableCell sx={{ alignItems: 'center' }}>{Hoten}</TableCell>
+      <TableCell sx={{ alignItems: 'center' }}>{Email}</TableCell>
+      <TableCell sx={{ alignItems: 'center' }}>{Sodienthoai}</TableCell>
+      <TableCell sx={{ alignItems: 'center' }}>{ent_khoicv?.KhoiCV}</TableCell>
+
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

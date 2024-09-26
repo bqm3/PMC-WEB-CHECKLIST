@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { GiamsatCreateView } from 'src/sections/giamsat/view';
+import { ChukyDuanCreateView } from 'src/sections/chukyduan/view';
 
 // ----------------------------------------------------------------------
 
-export default function GiamsatCreatePage() {
+export default function ArticleCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo mới giám sát</title>
+        <title> Dashboard: Tạo mới</title>
       </Helmet>
 
-      <GiamsatCreateView />
+      <ChukyDuanCreateView />
     </>
   );
 }

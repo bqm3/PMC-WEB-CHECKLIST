@@ -49,7 +49,7 @@ function ProgressItem({ progress }: ProgressItemProps) {
           {progress.label}
         </Typography>
 
-        <Typography variant="subtitle2">Đã check: </Typography>
+        <Typography variant="subtitle2">Đã check: {progress.totalAmount} </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           &nbsp;({fPercent(progress.value)})

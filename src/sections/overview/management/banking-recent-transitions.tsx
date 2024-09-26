@@ -36,6 +36,7 @@ type RowProps = {
   gioht: string;
   khoilv: string;
   Giamsat: string;
+  duan: string;
   calv: string | null;
   avatarUrl: string | null;
   Ngay: Date | number | string;
@@ -46,6 +47,8 @@ interface Props extends CardProps {
   subheader?: string;
   tableData: RowProps[];
   tableLabels: any;
+  
+  handleViewRow: any
 }
 
 export default function BankingRecentTransitions({
@@ -53,28 +56,29 @@ export default function BankingRecentTransitions({
   subheader,
   tableLabels,
   tableData,
+  handleViewRow,
   ...other
 }: Props) {
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
 
-      <TableContainer sx={{ overflow: 'unset' }}>
-        <Scrollbar sx={{ minWidth: 720 }}>
-          <Table>
+      <TableContainer sx={{ maxHeight: 500 }}>
+        {/* <Scrollbar sx={{ minWidth: 720 }}> */}
+          <Table stickyHeader aria-label="sticky table">
             <TableHeadCustom headLabel={tableLabels} />
 
-            <TableBody>
+            <TableBody style={{scrollBehavior:'smooth'}}>
               {tableData.map((row) => (
-                <BankingRecentTransitionsRow key={row.Anh} row={row} />
+                <BankingRecentTransitionsRow key={row.Anh} row={row} handleViewRow={()=>handleViewRow(row)}/>
               ))}
             </TableBody>
           </Table>
-        </Scrollbar>
+        {/* </Scrollbar> */}
       </TableContainer>
-
-      {/* <Divider sx={{ borderStyle: 'dashed' }} />
-
+      
+      <Divider sx={{ borderStyle: 'dashed' }} />
+      {/* 
       <Box sx={{ p: 2, textAlign: 'right' }}>
         <Button
           size="small"
@@ -92,50 +96,21 @@ export default function BankingRecentTransitions({
 
 type BankingRecentTransitionsRowProps = {
   row: RowProps;
+  handleViewRow: any
 };
 
-function BankingRecentTransitionsRow({ row }: BankingRecentTransitionsRowProps) {
+function BankingRecentTransitionsRow({ row, handleViewRow }: BankingRecentTransitionsRowProps) {
   const theme = useTheme();
-
-  const isLight = theme.palette.mode === 'light';
-
   const popover = usePopover();
-
-  const handleDownload = () => {
-    popover.onClose();
-    console.info('DOWNLOAD', row.id);
-  };
-
-  const handlePrint = () => {
-    popover.onClose();
-    console.info('PRINT', row.id);
-  };
-
-  const handleShare = () => {
-    popover.onClose();
-    console.info('SHARE', row.id);
-  };
-
-  const handleDelete = () => {
-    popover.onClose();
-    console.info('DELETE', row.id);
-  };
-
-  // const renderAvatar = (
-  //   <Box sx={{ position: 'relative', mr: 2 }}>
-  //   </Box>
-  // );
 
   return (
     <>
       <TableRow>
-        <TableCell>
-          {row.checklistName}
-        </TableCell>
+        <TableCell width={350}>{row.checklistName}</TableCell>
 
         <TableCell>
           <ListItemText
-            primary={format(new Date(row.Ngay), 'dd MMM yyyy')}
+            primary={format(new Date(row.Ngay), 'dd-MM-yyyy')}
             secondary={row.gioht}
             primaryTypographyProps={{ typography: 'body2' }}
             secondaryTypographyProps={{
@@ -145,75 +120,41 @@ function BankingRecentTransitionsRow({ row }: BankingRecentTransitionsRowProps) 
             }}
           />
         </TableCell>
-
-        <TableCell>{(row.calv)}</TableCell>
-        <TableCell>{(row.note)}</TableCell>
-        <TableCell>
-          <ListItemText
-            primary={row.Giamsat}
-            secondary={row.khoilv}
-            primaryTypographyProps={{ typography: 'body2' }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </TableCell>
-
+        <TableCell>{row.note}</TableCell>
         <TableCell align="center">
-        {(row.Anh !== null && row.Anh !== undefined) ? (
-          <Avatar
-            src={`https://lh3.googleusercontent.com/d/${row.Anh}=s1000?authuser=0`}
-            variant="rounded"
-            sx={{ width: 80, height: 80 }}
-          />
-        ) : (
-          <Avatar
-          src={row.image}
-          variant="rounded"
-          sx={{ width: 80, height: 80 }}
-        />
-          
-        )}
-      </TableCell>
-      
+          {row.Anh !== null && row.Anh !== undefined ? (
+            <Avatar
+              src={`https://lh3.googleusercontent.com/d/${row.Anh}=s1000?authuser=0`}
+              variant="rounded"
+              sx={{ width: 80, height: 80 }}
+            />
+          ) : (
+            <Avatar src={row.image} variant="rounded" sx={{ width: 80, height: 80 }} />
+          )}
+        </TableCell>
+        <TableCell>{row.duan}</TableCell>
 
-        {/* <TableCell align="right" sx={{ pr: 1 }}>
+        <TableCell align="right" sx={{ pr: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell> */}
-      </TableRow >
+        </TableCell>
+      </TableRow>
 
-      {/* <CustomPopover
+      <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem onClick={handleDownload}>
-          <Iconify icon="eva:cloud-download-fill" />
-          Download
+        <MenuItem onClick={()=> {
+          popover.onClose();
+          handleViewRow()
+        }}>
+          <Iconify icon="solar:eye-bold" />
+          Xem ảnh
         </MenuItem>
-
-        <MenuItem onClick={handlePrint}>
-          <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
-        </MenuItem>
-
-        <MenuItem onClick={handleShare}>
-          <Iconify icon="solar:share-bold" />
-          Share
-        </MenuItem>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
-      </CustomPopover> */}
+      </CustomPopover>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import axios from 'axios';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -92,9 +92,8 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
-
   const { giamsat } = useGetGiamsat();
+
   const { khoiCV } = useGetKhoiCV();
 
   const [tableData, setTableData] = useState<IGiamsat[]>([]);
@@ -105,15 +104,13 @@ export default function GiamsatListView() {
     }
   }, [giamsat]);
 
-  useEffect(() => {
-    // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach((khoi) => {
-      set_STATUS_OPTIONS((prevOptions) => [
-        ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
-      ]);
-    });
-  }, [khoiCV]);
+  const STATUS_OPTIONS = useMemo(() => [
+    { value: 'all', label: 'Tất cả' },
+    ...khoiCV.map(khoi => ({
+      value: khoi.ID_KhoiCV.toString(),
+      label: khoi.KhoiCV
+    }))
+  ], [khoiCV]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -146,7 +143,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_giamsat/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

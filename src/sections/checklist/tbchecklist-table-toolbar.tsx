@@ -100,7 +100,7 @@ export default function TbChecklistTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Tìm kiếm tên người tạo, người check,..."
+            placeholder="Tìm kiếm tên người tạo, người checklist,..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

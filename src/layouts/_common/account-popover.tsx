@@ -95,7 +95,7 @@ export default function AccountPopover() {
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.Emails}
+            {user?.Email}
           </Typography>
         </Box>
 
@@ -115,7 +115,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
         >
-          Logout
+          Đăng xuất
         </MenuItem>
       </CustomPopover>
     </>

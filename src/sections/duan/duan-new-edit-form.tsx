@@ -108,7 +108,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     try {
       if (currentDuan !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/ent_duan/update/${currentDuan.ID_Duan}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -148,7 +148,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_duan/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

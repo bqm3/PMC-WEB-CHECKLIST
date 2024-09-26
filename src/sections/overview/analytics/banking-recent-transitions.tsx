@@ -46,6 +46,7 @@ interface Props extends CardProps {
   subheader?: string;
   tableData: RowProps[];
   tableLabels: any;
+  handleViewRow: any;
 }
 
 export default function BankingRecentTransitions({
@@ -53,6 +54,7 @@ export default function BankingRecentTransitions({
   subheader,
   tableLabels,
   tableData,
+  handleViewRow,
   ...other
 }: Props) {
   return (
@@ -66,7 +68,7 @@ export default function BankingRecentTransitions({
 
             <TableBody>
               {tableData.map((row) => (
-                <BankingRecentTransitionsRow key={row.Anh} row={row} />
+                <BankingRecentTransitionsRow key={row.Anh} row={row} handleViewRow={()=>handleViewRow(row)}/>
               ))}
             </TableBody>
           </Table>
@@ -92,39 +94,15 @@ export default function BankingRecentTransitions({
 
 type BankingRecentTransitionsRowProps = {
   row: RowProps;
+  handleViewRow: VoidFunction
 };
 
-function BankingRecentTransitionsRow({ row }: BankingRecentTransitionsRowProps) {
+function BankingRecentTransitionsRow({ row, handleViewRow }: BankingRecentTransitionsRowProps) {
   const theme = useTheme();
 
   const isLight = theme.palette.mode === 'light';
 
   const popover = usePopover();
-
-  const handleDownload = () => {
-    popover.onClose();
-    console.info('DOWNLOAD', row.id);
-  };
-
-  const handlePrint = () => {
-    popover.onClose();
-    console.info('PRINT', row.id);
-  };
-
-  const handleShare = () => {
-    popover.onClose();
-    console.info('SHARE', row.id);
-  };
-
-  const handleDelete = () => {
-    popover.onClose();
-    console.info('DELETE', row.id);
-  };
-
-  // const renderAvatar = (
-  //   <Box sx={{ position: 'relative', mr: 2 }}>
-  //   </Box>
-  // );
 
   return (
     <>
@@ -179,41 +157,27 @@ function BankingRecentTransitionsRow({ row }: BankingRecentTransitionsRowProps) 
       </TableCell>
       
 
-        {/* <TableCell align="right" sx={{ pr: 1 }}>
+        <TableCell align="right" sx={{ pr: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell> */}
+        </TableCell>
       </TableRow >
 
-      {/* <CustomPopover
+      <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem onClick={handleDownload}>
-          <Iconify icon="eva:cloud-download-fill" />
-          Download
+        <MenuItem onClick={()=> {
+          popover.onClose();
+          handleViewRow()
+        }}>
+          <Iconify icon="solar:eye-bold" />
+          Xem ảnh
         </MenuItem>
-
-        <MenuItem onClick={handlePrint}>
-          <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
-        </MenuItem>
-
-        <MenuItem onClick={handleShare}>
-          <Iconify icon="solar:share-bold" />
-          Share
-        </MenuItem>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
-      </CustomPopover> */}
+      </CustomPopover>
     </>
   );
 }

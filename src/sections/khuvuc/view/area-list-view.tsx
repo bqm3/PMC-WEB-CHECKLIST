@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
 // @mui
@@ -50,25 +50,22 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // types
 import { IHangMuc, IKhuvuc, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
-import OrderTableRow from '../area-table-row';
-import OrderTableToolbar from '../area-table-toolbar';
+import AreaTableRow from '../area-table-row';
+import AreaTableToolbar from '../area-table-toolbar';
 import OrderTableFiltersResult from '../area-table-filters-result';
 import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 
-import TableSelectedAction from '../table-selected-action'
-import TableHeadCustom from '../table-head-custom'
-
-
+import TableSelectedAction from '../table-selected-action';
+import TableHeadCustom from '../table-head-custom';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'ID_Khuvuc', label: 'Mã khu vực', width: 140 },
+  { id: 'ID_Khuvuc', label: 'Mã', width: 50 },
   { id: 'Tenkhuvuc', label: 'Tên khu vực' },
-  { id: 'ID_Toanha', label: 'Tòa nhà', width: 140, },
-  { id: 'MaQrCode', label: 'Mã Qr Code', width: 140, align: 'center' },
-  { id: 'Makhuvuc', label: 'Mã khu vực', width: 140 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 140 },
+  { id: 'ID_Toanha', label: 'Tòa nhà', width: 150 },
+  { id: 'MaQrCode', label: 'Mã Qr Code', width: 150 },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 250 },
   { id: '', width: 88 },
 ];
 
@@ -104,7 +101,7 @@ export default function AreaListView() {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [loading, setLoading] = useState<Boolean | any>(false)
+  const [loading, setLoading] = useState<Boolean | any>(false);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -114,7 +111,7 @@ export default function AreaListView() {
 
   const [tableData, setTableData] = useState<IKhuvuc[]>([]);
 
-  const [dataSelect, setDataSelect] = useState<any>();
+  const [dataSelect, setDataSelect] = useState<IKhuvuc>();
 
   useEffect(() => {
     if (khuvuc.length > 0) {
@@ -122,17 +119,13 @@ export default function AreaListView() {
     }
   }, [khuvuc]);
 
-  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
-
-  useEffect(() => {
-    // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach((khoi) => {
-      set_STATUS_OPTIONS((prevOptions) => [
-        ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
-      ]);
-    });
-  }, [khoiCV]);
+  const STATUS_OPTIONS = useMemo(() => [
+    { value: 'all', label: 'Tất cả' },
+    ...khoiCV.map(khoi => ({
+      value: khoi.ID_KhoiCV.toString(),
+      label: khoi.KhoiCV
+    }))
+  ], [khoiCV]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -166,7 +159,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_khuvuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -207,37 +200,25 @@ export default function AreaListView() {
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
 
-  const handleDownloadImageKhuVuc = async () => {
+  const handleDownloadImage = async () => {
+    // const originalImage = `https://api.qrserver.com/v1/create-qr-code/?data="${dataSelect?.MaQrCode}"`;
     const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
-    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.MaQrCode}`;
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Tenkhuvuc}`;
     const image = await fetch(originalImage);
-    const imageBlog = await image.blob()
-    const imageURL = URL.createObjectURL(imageBlog)
-    const link = document.createElement('a')
+    const imageBlog = await image.blob();
+    const imageURL = URL.createObjectURL(imageBlog);
+    const link = document.createElement('a');
     link.href = imageURL;
     link.download = `${dataSelect?.MaQrCode}`;
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  };
-  const handleDownloadImageHangMuc = async () => {
-    const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
-    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.MaQrCode}`;
-    const image = await fetch(originalImage);
-    const imageBlog = await image.blob()
-    const imageURL = URL.createObjectURL(imageBlog)
-    const link = document.createElement('a')
-    link.href = imageURL;
-    link.download = `${dataSelect?.MaQrCode}`;
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Khuvuc));
     await axios
-      .put(`https://checklist.pmcweb.vn/be/api/ent_khuvuc/delete-mul`, deleteRows, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -291,10 +272,10 @@ export default function AreaListView() {
     [router]
   );
 
-  const handleViewRow1 = useCallback((data: any)=> {
+  const handleViewRow1 = useCallback((data: any) => {
     const url = paths.dashboard.hangmuc.edit(data);
-      window.open(url, '_blank');
-  }, [])
+    window.open(url, '_blank');
+  }, []);
 
   const handleQrRow = useCallback(
     (data: IKhuvuc) => {
@@ -348,30 +329,30 @@ export default function AreaListView() {
   //   setDataFormatExcel(formattedData);
   // }, [dataFiltered]);
 
-  
+  // console.log('khuvuc',khuvuc)
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <CustomBreadcrumbs
-          heading="Khu vực"
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'Khu vực',
-              href: paths.dashboard.khuvuc.root,
-            },
-            { name: 'Danh sách' },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
-         <LoadingButton
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <CustomBreadcrumbs
+            heading="Khu vực"
+            links={[
+              {
+                name: 'Dashboard',
+                href: paths.dashboard.root,
+              },
+              {
+                name: 'Khu vực',
+                href: paths.dashboard.khuvuc.root,
+              },
+              { name: 'Danh sách' },
+            ]}
+            sx={{
+              mb: { xs: 3, md: 5 },
+            }}
+          />
+          <LoadingButton
             loading={loading}
             variant="contained"
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
@@ -379,7 +360,6 @@ export default function AreaListView() {
           >
             Upload
           </LoadingButton>
-        
         </Stack>
 
         <Card>
@@ -411,8 +391,8 @@ export default function AreaListView() {
                   >
                     {tab.value === 'all' && khuvuc?.length}
                     {tab.value === '1' &&
-                      khuvuc?.filter((order) => {
-                        let ids = order.ID_KhoiCVs;
+                      khuvuc?.filter((item) => {
+                        let ids = item.ID_KhoiCVs;
 
                         // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
                         if (typeof ids !== 'string') {
@@ -429,8 +409,8 @@ export default function AreaListView() {
                       }).length}
 
                     {tab.value === '2' &&
-                      khuvuc?.filter((order) => {
-                        let ids = order.ID_KhoiCVs;
+                      khuvuc?.filter((item) => {
+                        let ids = item.ID_KhoiCVs;
 
                         // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
                         if (typeof ids !== 'string') {
@@ -446,8 +426,8 @@ export default function AreaListView() {
                         );
                       }).length}
                     {tab.value === '3' &&
-                      khuvuc?.filter((order) => {
-                        let ids = order.ID_KhoiCVs;
+                      khuvuc?.filter((item) => {
+                        let ids = item.ID_KhoiCVs;
 
                         // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
                         if (typeof ids !== 'string') {
@@ -463,8 +443,8 @@ export default function AreaListView() {
                         );
                       }).length}
                     {tab.value === '4' &&
-                      khuvuc?.filter((order) => {
-                        let ids = order.ID_KhoiCVs;
+                      khuvuc?.filter((item) => {
+                        let ids = item.ID_KhoiCVs;
 
                         // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
                         if (typeof ids !== 'string') {
@@ -485,7 +465,7 @@ export default function AreaListView() {
             ))}
           </Tabs>
 
-          <OrderTableToolbar
+          <AreaTableToolbar
             filters={filters}
             onFilters={handleFilters}
             headers={headers}
@@ -511,9 +491,9 @@ export default function AreaListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={khuvuc?.length}
+              rowCount={dataInPage?.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, khuvuc?.map((row) => row?.ID_Khuvuc))
+                table.onSelectAllRows(checked, dataInPage?.map((row) => row?.ID_Khuvuc))
               }
               action={
                 <Tooltip title="Delete">
@@ -534,7 +514,7 @@ export default function AreaListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, khuvuc?.map((row) => row.ID_Khuvuc))
+                    table.onSelectAllRows(checked, dataInPage?.map((row) => row.ID_Khuvuc))
                   }
                 />
 
@@ -544,8 +524,8 @@ export default function AreaListView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
-                      <OrderTableRow
+                    .map((row, index) => (
+                      <AreaTableRow
                         key={row.ID_Khuvuc}
                         row={row}
                         selected={table.selected.includes(row.ID_Khuvuc)}
@@ -553,9 +533,10 @@ export default function AreaListView() {
                         onDeleteRow={() => handleDeleteRow(row.ID_Khuvuc)}
                         onViewRow={() => handleViewRow(row.ID_Khuvuc)}
                         onViewRow1={(data: any) => handleViewRow1(data)}
-                        onQrRow={()=> handleQrRow(row)}
-                        onQrRowHM={(data:any)=> handleQrRowHM(data)}
+                        onQrRow={() => handleQrRow(row)}
+                        onQrRowHM={(data: any) => handleQrRowHM(data)}
                         khoiCV={khoiCV}
+                        index={index}
                       />
                     ))}
 
@@ -583,14 +564,18 @@ export default function AreaListView() {
         </Card>
       </Container>
 
-      <FileManagerNewFolderDialog open={upload.value} onClose={upload.onFalse} setLoading={setLoading}/>
+      <FileManagerNewFolderDialog
+        open={upload.value}
+        onClose={upload.onFalse}
+        setLoading={setLoading}
+      />
 
       <Dialog open={confirmQr.value} onClose={confirmQr.onFalse} maxWidth="sm">
         <DialogTitle sx={{ pb: 2 }}>Ảnh Qr Code Khu vực</DialogTitle>
 
         <DialogContent>
           <Card>
-          <Image
+            <Image
               src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&size=300`}
               alt=""
               title=""
@@ -599,7 +584,9 @@ export default function AreaListView() {
         </DialogContent>
 
         <DialogActions>
-          <Button variant="contained" color='success' onClick={handleDownloadImageKhuVuc}>Download</Button>
+          <Button variant="contained" color="success" onClick={handleDownloadImage}>
+            Download
+          </Button>
           <Button variant="outlined" color="inherit" onClick={confirmQr.onFalse}>
             Cancel
           </Button>
@@ -611,7 +598,7 @@ export default function AreaListView() {
 
         <DialogContent>
           <Card>
-          <Image
+            <Image
               src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&size=300`}
               alt=""
               title=""
@@ -620,7 +607,9 @@ export default function AreaListView() {
         </DialogContent>
 
         <DialogActions>
-          <Button variant="contained" color='success' onClick={handleDownloadImageHangMuc}>Download</Button>
+          <Button variant="contained" color="success" onClick={handleDownloadImage}>
+            Download
+          </Button>
           <Button variant="outlined" color="inherit" onClick={confirmQrHm.onFalse}>
             Cancel
           </Button>
@@ -686,28 +675,21 @@ function applyFilter({
     );
   }
 
-  
-
   if (status !== 'all') {
-    // Chuyển status thành số nguyên để so sánh với các phần tử trong mảng ID_KhoiCVs
+    // Convert status to a number for comparison
     const statusAsNumber = parseInt(status, 10);
-
-    inputData = inputData.filter(order => {
-        const ids = order?.ID_KhoiCVs;
-
-        // Kiểm tra nếu ids là mảng
-        if (Array.isArray(ids)) {
-            return ids.includes(statusAsNumber);
-        }
-
-        // Trường hợp ids không phải là mảng
-        return false;
+  
+    // Filter inputData based on ID_KhoiCV
+    inputData = inputData.filter((order) => {
+      const ids = order?.ent_khuvuc_khoicvs;
+  
+      // Check if ids is an array and contains the statusAsNumber
+      return Array.isArray(ids) && ids.some((item) => Number(item.ID_KhoiCV) === Number(statusAsNumber));
     });
-}
+  }
 
   return inputData;
 }
 
-
-// 13000 + 1000 + 1000 
+// 13000 + 1000 + 1000
 // </dfn></dfn>

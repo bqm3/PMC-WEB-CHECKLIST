@@ -93,6 +93,7 @@
         "args": "after-used",
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
   }
 }

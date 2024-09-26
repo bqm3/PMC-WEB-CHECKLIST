@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import { IDuan, IKhuvuc, IToanha } from 'src/types/khuvuc';
+import { IDuan, IKhoiCV, IKhuvuc, IToanha } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -134,6 +134,7 @@ export default function CalvTableRow({
                 <TableCell align="center"> {item.Sotang} tầng</TableCell>
                 <TableCell align="center"> {item.khuvucLength} Khu vực</TableCell>
                 <TableCell align="center"> {item.totalHangmucInToanha} Hạng mục</TableCell>
+                <TableCell align="center" width={200}> {item?.tenKhois?.join(", \n")}</TableCell>
               </Stack>
             ))}
           </Stack>

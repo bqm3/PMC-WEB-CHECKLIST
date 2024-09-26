@@ -37,6 +37,10 @@ export default function OrderTableFiltersResult({
     onFilters('status', 'all');
   };
 
+  const handleRemoveBuilding = () => {
+    onFilters('building', []);
+  };
+
   const handleRemoveDate = () => {
     onFilters('startDate', null);
     onFilters('endDate', null);

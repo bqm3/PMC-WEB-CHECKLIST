@@ -9,15 +9,12 @@ import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 // auth
 import { useAuthContext } from 'src/auth/hooks';
+import { IUser } from 'src/types/khuvuc';
 
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
   <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
-  // OR
-  // <Iconify icon="fluent:mail-24-filled" />
-  // https://icon-sets.iconify.design/solar/
-  // https://www.streamlinehq.com/icons
 );
 
 const ICONS = {
@@ -48,10 +45,25 @@ const ICONS = {
 };
 
 // ----------------------------------------------------------------------
+export function getRootPathByRole(u: IUser){
+  console.log('u', u.ID_Chucvu)
+  if (!u) return null;
+  switch (u.ID_Chucvu) {
+    case '1': // Admin
+      return paths.dashboard.general.analytics;
+    case '2': // Manager
+      return paths.dashboard.general.analytics;
+    case '5': // Analytics role
+      return paths.dashboard.general.management;
+    default:
+      return paths.dashboard.general.analytics; 
+  }
+};
 
 export function useNavData() {
   const { t } = useLocales();
   const { user, logout } = useAuthContext();
+  console.log('u', user)
 
   const data = useMemo(() => {
     const navigationData = [
@@ -60,8 +72,8 @@ export function useNavData() {
         subheader: t('overview'),
         items: (() => {
           if (!user) return [];
-      
-          if (user.Permission === 1) {
+
+          if (user.ID_Chucvu === 2 || user?.ID_Chucvu === 3) {
             return [
               {
                 title: t('analytics'),
@@ -75,24 +87,27 @@ export function useNavData() {
               },
             ];
           }
-      
-          return [
-            {
-              title: t('management'),
-              path: paths.dashboard.general.management,
-              icon: ICONS.analytics,
-            },
-          ];
+
+          if(user.ID_Chucvu === 4 || user.ID_Chucvu === 1 ){
+            return [
+              {
+                title: t('management'),
+                path: paths.dashboard.general.management,
+                icon: ICONS.analytics,
+              },
+            ];
+          }
+
+          return [];
         })(),
       },
-      
-      
+
       // MANAGEMENT
       {
         subheader: t('management'),
 
         items:
-          user?.Permission !== 2
+          user?.ID_Chucvu === 2 || user?.ID_Chucvu === 3
             ? [
                 // KHU VUC
                 {
@@ -110,8 +125,7 @@ export function useNavData() {
                   icon: ICONS.kanban,
                   children: [
                     { title: t('list'), path: paths.dashboard.hangmuc.root },
-                    { title: t('create'), path: paths.dashboard.hangmuc.new,  },
-                    
+                    { title: t('create'), path: paths.dashboard.hangmuc.new },
                   ],
                 },
                 {
@@ -124,20 +138,21 @@ export function useNavData() {
                   ],
                 },
                 {
-                  title: t('taikhoangiamsat'),
-                  path: paths.dashboard.quanlygiamsat.root,
-                  icon: ICONS.external,
+                  title: t('chukyduan'),
+                  path: paths.dashboard.chukyduan.root,
+                  icon: ICONS.analytics,
                   children: [
-                    { title: t('list'), path: paths.dashboard.quanlygiamsat.root },
+                    { title: t('create'), path: paths.dashboard.chukyduan.new },
+                    { title: t('list'), path: paths.dashboard.chukyduan.root },
                   ],
                 },
                 {
-                  title: t('giamsat'),
-                  path: paths.dashboard.giamsat.root,
-                  icon: ICONS.user,
+                  title: t('phanquyenchecklist'),
+                  path: paths.dashboard.phanquyenchecklist.root,
+                  icon: ICONS.external,
                   children: [
-                    { title: t('list'), path: paths.dashboard.giamsat.root },
-                    { title: t('create'), path: paths.dashboard.giamsat.new },
+                    { title: t('list'), path: paths.dashboard.phanquyenchecklist.root },
+                    { title: t('create'), path: paths.dashboard.phanquyenchecklist.new },
                   ],
                 },
                 {
@@ -148,6 +163,14 @@ export function useNavData() {
                     { title: t('list'), path: paths.dashboard.checklist.root },
                     { title: t('create'), path: paths.dashboard.checklist.new },
                     { title: t('calamviec'), path: paths.dashboard.checklist.lists },
+                  ],
+                },
+                {
+                  title: t('suco'),
+                  path: paths.dashboard.sucongoai.root,
+                  icon: ICONS.disabled,
+                  children: [
+                    { title: t('list'), path: paths.dashboard.sucongoai.root },
                   ],
                 },
               ]
@@ -167,8 +190,7 @@ export function useNavData() {
       },
     ];
 
-    // Conditionally add "Tạo tài khoản" tab if user's role_id is 1
-    if (user?.Permission === 1) {
+    if (user?.ID_Chucvu === 2 || user?.ID_Chucvu === 3) {
       navigationData[1].items.unshift(
         {
           title: t('building'),
@@ -199,8 +221,8 @@ export function useNavData() {
         }
       );
     }
-    
-    if (user?.Permission === 3) {
+
+    if (user?.ID_Chucvu === 1) {
       navigationData[1].items.unshift(
         {
           title: t('project'),
@@ -212,22 +234,12 @@ export function useNavData() {
           ],
         },
         {
-          title: t('building'),
-          path: paths.dashboard.toanha.root,
-          icon: ICONS.banking,
+          title: t('baocaovitri'),
+          path: paths.dashboard.general.location,
+          icon: ICONS.analytics,
           children: [
-            { title: t('create'), path: paths.dashboard.toanha.new },
-            { title: t('list'), path: paths.dashboard.toanha.root },
-          ],
-        },
-        {
-          title: t('tang'),
-          path: paths.dashboard.tang.root,
-          icon: ICONS.tour,
-          children: [
-            { title: t('create'), path: paths.dashboard.tang.new },
-            { title: t('list'), path: paths.dashboard.tang.root },
-          ],
+            { title: t('list'), path: paths.dashboard.general.location },
+          ]
         },
         {
           title: t('createaccount'),
@@ -240,6 +252,7 @@ export function useNavData() {
         }
       );
     }
+
     
 
     return navigationData;

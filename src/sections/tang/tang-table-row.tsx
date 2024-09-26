@@ -47,7 +47,6 @@ export default function AreaTableRow({
     ID_Duan,
     ID_User,
     Tentang,
-    Sotang,
     ent_duan,
     ent_user
   } = row;

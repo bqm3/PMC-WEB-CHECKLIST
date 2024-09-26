@@ -107,7 +107,7 @@ export default function InvoiceTableToolbar({
         </FormControl>
 
         <DatePicker
-          label="Start date"
+          label="Ngày bắt đầu"
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -117,7 +117,7 @@ export default function InvoiceTableToolbar({
         />
 
         <DatePicker
-          label="End date"
+          label="Ngày kết thúc"
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{

@@ -60,12 +60,12 @@ export default function TourNewEditForm({ currentTour }: Props) {
     services: Yup.array().min(2, 'Must have at least 2 services'),
     destination: Yup.string().required('Destination is required'),
     available: Yup.object().shape({
-      startDate: Yup.mixed<any>().nullable().required('Start date is required'),
+      startDate: Yup.mixed<any>().nullable().required('Ngày bắt đầu is required'),
       endDate: Yup.mixed<any>()
-        .required('End date is required')
+        .required('Ngày kết thúc is required')
         .test(
           'date-min',
-          'End date must be later than start date',
+          'Ngày kết thúc must be later than Ngày bắt đầu',
           (value, { parent }) => value.getTime() > parent.startDate.getTime()
         ),
     }),

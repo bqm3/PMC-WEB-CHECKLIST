@@ -100,7 +100,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
     try {
       if (currentCalv !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/ent_calv/update/${currentCalv.ID_Calv}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_calv/update/${currentCalv.ID_Calv}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -140,7 +140,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_calv/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_calv/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -211,7 +211,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
                   {khoiCv?.map((item) => (
-                    <MenuItem key={`${item?.ID_Khoi}`} value={`${item?.ID_Khoi}`}>
+                    <MenuItem key={`${item?.ID_KhoiCV}`} value={`${item?.ID_KhoiCV}`}>
                       {item?.KhoiCV}
                     </MenuItem>
                   ))}

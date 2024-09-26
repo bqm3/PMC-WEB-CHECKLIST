@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import axios from 'axios';
 // @mui
 import * as Yup from 'yup';
@@ -64,21 +64,17 @@ import ChecklistTableRow from '../tbchecklist-table-row';
 import ChecklistTableToolbar from '../tbchecklist-table-toolbar';
 import ChecklistTableFiltersResult from '../tbchecklist-table-filters-result';
 
-
 // ----------------------------------------------------------------------
 
-// const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...KHUVUC_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
-  { id: 'Ngay', label: 'Ngày checklist', width: 100 },
-
-  { id: 'ID_Giamsat', label: 'Người checklist', width: 100, align: 'center' },
-  { id: 'Tong', label: 'Số Checklist', width: 100, align: 'center' },
-  { id: 'Giobd', label: 'Giờ bắt đầu', width: 100, align: 'center' },
-  { id: 'Giokt', label: 'Giờ kết thúc', width: 100, align: 'center' },
-  { id: 'ID_Calv', label: 'Ca làm việc', width: 100, align: 'center' },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 100, align: 'center' },
-  { id: 'Tinhtrang', label: 'Trạng thái', width: 100, align: 'center' },
+  { id: 'Ngay', label: 'Ngày checklist' },
+  { id: 'ID_Giamsat', label: 'Người checklist' },
+  { id: 'Tong', label: 'Số Checklist' },
+  { id: 'Giobd', label: 'Giờ ' },
+  { id: 'ID_Calv', label: 'Ca làm việc' },
+  { id: 'ID_ThietLapCa', label: 'Thiết lập ca' },
+  { id: 'ID_KhoiCV', label: 'Khối công việc' },
+  { id: 'Tinhtrang', label: 'Trạng thái' },
   { id: '', width: 50 },
 ];
 
@@ -100,7 +96,7 @@ export default function ChecklistCalvListView() {
   const router = useRouter();
 
   const popover = usePopover();
-  const popover2 = usePopover()
+  const popover2 = usePopover();
 
   const confirm = useBoolean();
   const confirm2 = useBoolean();
@@ -111,9 +107,6 @@ export default function ChecklistCalvListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
-
-  // const { checkList } = useGetChecklistWeb();
 
   const [tableData, setTableData] = useState<ITbChecklist[]>([]);
 
@@ -134,15 +127,13 @@ export default function ChecklistCalvListView() {
     }
   }, [tb_checkList]);
 
-  useEffect(() => {
-    // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach((khoi) => {
-      set_STATUS_OPTIONS((prevOptions) => [
-        ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
-      ]);
-    });
-  }, [khoiCV]);
+  const STATUS_OPTIONS = useMemo(() => [
+    { value: 'all', label: 'Tất cả' },
+    ...khoiCV.map(khoi => ({
+      value: khoi.ID_KhoiCV.toString(),
+      label: khoi.KhoiCV
+    }))
+  ], [khoiCV]);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -161,9 +152,10 @@ export default function ChecklistCalvListView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 52 : 72;
+  const denseHeight = 52;
 
-  const canReset = !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+  const canReset =
+    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -196,7 +188,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -252,7 +244,7 @@ export default function ChecklistCalvListView() {
     });
   }, [dataFiltered?.length, dataInPage.length, table, tableData]);
 
-  const getStatusText = (status : any) => {
+  const getStatusText = (status: any) => {
     switch (status) {
       case '1':
         return 'Khối làm sạch';
@@ -271,15 +263,15 @@ export default function ChecklistCalvListView() {
 
   const handlePrint = useCallback(async () => {
     try {
-      const idChecklistCArray = dataFiltered.map(item => item.ID_ChecklistC);
+      const idChecklistCArray = dataFiltered.map((item) => item.ID_ChecklistC);
       const khoiText = getStatusText(filters.status);
       const data = {
         list_IDChecklistC: idChecklistCArray,
         startDate: filters.startDate,
         endDate: filters.endDate,
-        tenBoPhan: khoiText
-      }
-      const response = await axios.post('https://checklist.pmcweb.vn/be/api/tb_checklistc/baocao', data, {
+        tenBoPhan: khoiText,
+      };
+      const response = await axios.post('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/baocao', data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -293,7 +285,7 @@ export default function ChecklistCalvListView() {
 
       // Create a link element
       const link = document.createElement('a');
-      
+
       // Set the download attribute with a filename
       link.href = window.URL.createObjectURL(blob);
       link.download = 'Báo cáo Checklist.xlsx';
@@ -312,24 +304,20 @@ export default function ChecklistCalvListView() {
       console.error('Error downloading the Excel file', error);
     }
   }, [accessToken, dataFiltered, filters]);
-// }, [ dataFiltered, filters]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
 
-  const handleViewRow = useCallback(
-    (id: string) => {
-      const url = paths.dashboard.checklist.detail(id);
-      window.open(url, '_blank');
-    },
-    []
-  );
+  const handleViewRow = useCallback((id: string) => {
+    const url = paths.dashboard.checklist.detail(id);
+    window.open(url, '_blank');
+  }, []);
 
   const handleOpenChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/tb_checklistc/open/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/open/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -374,7 +362,7 @@ export default function ChecklistCalvListView() {
   const handleRemoveChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/tb_checklistc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -424,158 +412,157 @@ export default function ChecklistCalvListView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <CustomBreadcrumbs
-          heading="Ca Checklist"
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'Checklist',
-              href: paths.dashboard.checklist.root,
-            },
-            { name: 'Danh sách' },
-          ]}
+      <CustomBreadcrumbs
+        heading="Ca Checklist"
+        links={[
+          {
+            name: 'Dashboard',
+            href: paths.dashboard.root,
+          },
+          {
+            name: 'Checklist',
+            href: paths.dashboard.checklist.root,
+          },
+          { name: 'Danh sách' },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+
+      <Card>
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
           sx={{
-            mb: { xs: 3, md: 5 },
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
+        >
+          {STATUS_OPTIONS.map((tab) => (
+            <Tab
+              key={tab.value}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === '1' && 'success') ||
+                    (tab.value === '2' && 'warning') ||
+                    (tab.value === '3' && 'error') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && tb_checkList?.length}
+                  {tab.value === '1' &&
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
+
+                  {tab.value === '2' &&
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
+                  {tab.value === '3' &&
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
+                  {tab.value === '4' &&
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
+        <ChecklistTableToolbar
+          filters={filters}
+          onFilters={handleFilters}
+          onPrint={handlePrint}
+          dateError={dateError}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
         />
 
-        <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === '1' && 'success') ||
-                      (tab.value === '2' && 'warning') ||
-                      (tab.value === '3' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && tb_checkList?.length}
-                    {tab.value === '1' &&
-                      tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
-
-                    {tab.value === '2' &&
-                      tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
-                    {tab.value === '3' &&
-                      tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
-                    {tab.value === '4' &&
-                      tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-          <ChecklistTableToolbar
+        {canReset && (
+          <ChecklistTableFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            onPrint={handlePrint}
-            dateError={dateError}
             //
-            canReset={canReset}
             onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered?.length}
+            sx={{ p: 2.5, pt: 0 }}
+          />
+        )}
+
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <TableSelectedAction
+            dense={table.dense}
+            numSelected={table.selected.length}
+            rowCount={tableData?.length}
+            onSelectAllRows={(checked) =>
+              table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_ChecklistC))
+            }
+            action={
+              <Tooltip title="Delete">
+                <IconButton color="primary" onClick={confirm.onTrue}>
+                  <Iconify icon="solar:trash-bin-trash-bold" />
+                </IconButton>
+              </Tooltip>
+            }
           />
 
-          {canReset && (
-            <ChecklistTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered?.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+          <Scrollbar>
+            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={tableData?.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(checked, tableData?.map((row) => row.ID_ChecklistC))
+                // }
+              />
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={tableData?.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_ChecklistC))
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
+              <TableBody>
+                {dataInPage.map((row) => (
+                  <ChecklistTableRow
+                    key={row.ID_ChecklistC}
+                    calv={calv}
+                    row={row}
+                    selected={table.selected.includes(row.ID_ChecklistC)}
+                    onSelectRow={() => table.onSelectRow(row.ID_ChecklistC)}
+                    onDeleteRow={() => handleDeleteRow(row.ID_ChecklistC)}
+                    onViewRow={() => handleViewRow(row.ID_ChecklistC)}
+                    onOpenChecklist={() => handleOpenChecklistC(row.ID_ChecklistC)}
+                    onRemoveChecklist={() => handleRemoveChecklistC(row.ID_ChecklistC)}
+                  />
+                ))}
 
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData?.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(checked, tableData?.map((row) => row.ID_ChecklistC))
-                  // }
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                 />
 
-                <TableBody>
-                  {dataInPage.map((row) => (
-                    <ChecklistTableRow
-                      key={row.ID_ChecklistC}
-                      calv={calv}
-                      row={row}
-                      selected={table.selected.includes(row.ID_ChecklistC)}
-                      onSelectRow={() => table.onSelectRow(row.ID_ChecklistC)}
-                      onDeleteRow={() => handleDeleteRow(row.ID_ChecklistC)}
-                      onViewRow={() => handleViewRow(row.ID_ChecklistC)}
-                      onOpenChecklist={() => handleOpenChecklistC(row.ID_ChecklistC)}
-                      onRemoveChecklist={()=>handleRemoveChecklistC(row.ID_ChecklistC)}
-                    />
-                  ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

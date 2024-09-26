@@ -65,8 +65,6 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [includeTaxes, setIncludeTaxes] = useState(false);
-
   const [khuVuc, setKhuVuc] = useState<any>([]);
   const [toaNha, setToaNha] = useState<IToanha[]>([]);
   const [KhoiCV, setKhoiCV] = useState<IKhoiCV[]>([]);
@@ -90,8 +88,8 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
   const NewProductSchema = Yup.object().shape({
     Hangmuc: Yup.string().required('Phải có tên hạng mục'),
     ID_Toanha: Yup.string(),
-    ID_KhoiCV: Yup.string(),
     FileTieuChuan: Yup.string(),
+    Important: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -99,9 +97,9 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       Hangmuc: currentArticle?.Hangmuc || '',
       Tieuchuankt: currentArticle?.Tieuchuankt || '',
       MaQrCode: currentArticle?.MaQrCode || '',
+      Important: currentArticle?.Important || '0',
       FileTieuChuan: currentArticle?.FileTieuChuan || '',
       ID_Khuvuc: currentArticle?.ID_Khuvuc || null,
-      ID_KhoiCV: currentArticle?.ID_KhoiCV || null || '',
       ID_Toanha: currentArticle?.ent_khuvuc?.ID_Toanha || null || '',
     }),
     [currentArticle]
@@ -127,11 +125,10 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
     let filteredToanha = khuvuc;
   
     // If either ID_Toanha or ID_KhoiCV is present, filter the array
-    if (values.ID_Toanha || values.ID_KhoiCV) {
+    if (values.ID_Toanha ) {
       filteredToanha = khuvuc?.filter((item: any) => {
         const matchToanha = values.ID_Toanha ? `${item.ID_Toanha}` === `${values.ID_Toanha}` : true;
-        const matchKhoiCV = values.ID_KhoiCV ? item.ID_KhoiCVs.includes(values.ID_KhoiCV) : true;
-        return matchToanha && matchKhoiCV;
+        return matchToanha ;
       }) || [];
     }
   
@@ -143,7 +140,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
   
     // Update the state with the new array
     setKhuVuc(newArray);
-  }, [values.ID_Toanha, values.ID_KhoiCV, khuvuc]);
+  }, [values.ID_Toanha, khuvuc]);
   
   
   
@@ -159,7 +156,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       if (currentArticle !== undefined) {
         await axios
           .put(
-            `https://checklist.pmcweb.vn/be/api/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`,
+            `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`,
             data,
             {
               headers: {
@@ -202,7 +199,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_hangmuc/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -245,6 +242,13 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
     }
   });
 
+  const handleChangeIncludeImportant = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue('Important', event.target.checked ? '1' : '0');
+    },
+    [setValue]
+  );
+
   const renderDetails = (
     <>
       {mdUp && (
@@ -264,7 +268,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-              {/* <Stack> */}
+          
               {toaNha?.length > 0 && (
                 <RHFSelect
                   name="ID_Toanha"
@@ -279,24 +283,6 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
                   ))}
                 </RHFSelect>
               )}
-              {/* </Stack> */}
-
-              {/* <Stack> */}
-              {KhoiCV?.length > 0 && (
-                <RHFSelect
-                  name="ID_KhoiCV"
-                  label="Khối công việc"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {KhoiCV?.map((item) => (
-                    <MenuItem key={item?.ID_Khoi} value={item?.ID_Khoi}>
-                      {item?.KhoiCV}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-              {/* </Stack> */}
             </Stack>
 
             <Stack spacing={1.5}>
@@ -329,13 +315,26 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   const renderActions = (
     <>
-      {mdUp && <Grid md={4} />}
-      <Grid
-        xs={12}
-        md={8}
-        sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
-      >
-        <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+      {mdUp && <Grid md={3} />}
+      <Grid xs={12} md={9} sx={{ display: 'flex', alignItems: 'center' }}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={`${values.Important}` === '1'}
+              onChange={handleChangeIncludeImportant}
+            />
+          }
+          label="Quan trọng"
+          sx={{ flexGrow: 1 }}
+        />
+
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          size="large"
+          loading={isSubmitting}
+          sx={{ ml: 2 }}
+        >
           {!currentArticle ? 'Tạo mới' : 'Lưu thay đổi'}
         </LoadingButton>
       </Grid>

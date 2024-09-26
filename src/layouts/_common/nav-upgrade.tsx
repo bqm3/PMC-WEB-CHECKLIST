@@ -52,9 +52,7 @@ export default function NavUpgrade() {
               borderBottomLeftRadius: 2,
             }}
           >
-            {user?.Permission === 1 && 'Giám đốc dự án' }
-            {user?.Permission === 2 && 'Giám sát' }
-            {user?.Permission === 3 && 'Phòng Số Hóa' }
+            {user?.ent_chucvu?.Chucvu }
           </Label>
         </Box>
 
@@ -64,7 +62,7 @@ export default function NavUpgrade() {
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            {user?.Emails}
+            {user?.Email}
           </Typography>
         </Stack>
 

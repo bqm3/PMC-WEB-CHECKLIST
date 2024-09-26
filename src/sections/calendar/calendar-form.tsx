@@ -121,7 +121,7 @@ export default function CalendarForm({ currentEvent, colorOptions, onClose }: Pr
                   field.onChange(fTimestamp(newValue));
                 }
               }}
-              label="Start date"
+              label="Ngày bắt đầu"
               format="dd/MM/yyyy hh:mm a"
               slotProps={{
                 textField: {
@@ -144,13 +144,13 @@ export default function CalendarForm({ currentEvent, colorOptions, onClose }: Pr
                   field.onChange(fTimestamp(newValue));
                 }
               }}
-              label="End date"
+              label="Ngày kết thúc"
               format="dd/MM/yyyy hh:mm a"
               slotProps={{
                 textField: {
                   fullWidth: true,
                   error: dateError,
-                  helperText: dateError && 'End date must be later than start date',
+                  helperText: dateError && 'Ngày kết thúc must be later than Ngày bắt đầu',
                 },
               }}
             />

@@ -78,9 +78,11 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
   const NewProductSchema = Yup.object().shape({
     Checklist: Yup.string().required('Phải có tên checklist'),
-    ID_KhoiCV: Yup.string(),
-    ID_Khuvuc: Yup.string(),
-    ID_Toanha: Yup.string(),
+    // ID_KhoiCV: Yup.string(),
+    ID_Khuvuc: Yup.mixed<any>().required('Phải có khu vực'),
+    ID_Hangmuc: Yup.mixed<any>().required('Phải có hạng mục'),
+    ID_Toanha: Yup.mixed<any>().required('Phải có tòa nhà'),
+    sCalv: Yup.mixed<any>().required('Phải có ca làm việc'),
     isCheck: Yup.string(),
     isImportant: Yup.string(),
   });
@@ -97,9 +99,8 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       Maso: currentChecklist?.Maso || '',
       Ghichu: currentChecklist?.Ghichu || '',
       Tieuchuan: currentChecklist?.Tieuchuan || '',
-      ID_KhoiCV: currentChecklist?.ent_hangmuc?.ID_KhoiCV || null || '',
-      ID_Khuvuc: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_Khuvuc || null || '',
-      ID_Toanha: currentChecklist?.ent_hangmuc?.ent_khuvuc?.ID_Toanha || null || '',
+      ID_Khuvuc: currentChecklist?.ID_Khuvuc || null || '',
+      ID_Toanha: currentChecklist?.ent_khuvuc?.ID_Toanha || null || '',
       ID_Hangmuc: currentChecklist?.ID_Hangmuc || null,
       ID_Tang: currentChecklist?.ID_Tang || null,
       sCalv: currentChecklist?.sCalv || [],
@@ -123,65 +124,10 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const values = watch();
 
   useEffect(() => {
-    // Set loading state to true at the beginning
-    setLoading(true);
-
-    // Declare an array to hold the filtered or full list of calv items
-    let filteredCalv;
-
-    if (values.ID_KhoiCV) {
-      // Filter the calv array based on ID_KhoiCV from values
-      filteredCalv = calv?.filter((item) => item.ID_KhoiCV === values.ID_KhoiCV) || [];
-    } else {
-      // Use the full calv array if ID_KhoiCV is not provided
-      filteredCalv = calv;
-    }
-    const sCalvArray = Array.isArray(defaultValues.sCalv)
-      ? defaultValues.sCalv
-      : [defaultValues.sCalv];
-
-    // Merge sCalv with the list of ID_Calv from filteredCalv
-    const mergedIDCalv = sCalvArray.concat(filteredCalv?.map((item) => item.ID_Calv));
-
-    // Remove duplicates by creating a Set and converting it back to an array
-    const uniqueIDCalv = Array.from(new Set(mergedIDCalv));
-
-    // Create a new array with the desired structure: { value: ID_Calv, label: Tenca }
-    const newArray = uniqueIDCalv
-      .map((idCalv) => {
-        // Find the corresponding item in the filteredCalv array
-        const item = calv.find((iTem) => iTem.ID_Calv === idCalv);
-
-        // If the item is found, return an object with the desired structure
-        if (item) {
-          return {
-            value: item.ID_Calv,
-            label: `${item.Tenca} - ${item.ent_khoicv.KhoiCV}`,
-          };
-        }
-
-        // If the item is not found, return null or handle it as needed
-        return null;
-      })
-      .filter((item) => item !== null);
-
-    // Update the state with the new array
-    setCalv(newArray);
-
-    // Set loading state to false at the end
-    setLoading(false);
-  }, [values.ID_KhoiCV, calv, defaultValues.sCalv]);
-
-  useEffect(() => {
     let filteredToanha;
     // Filter the hangMuc array based on ID_KhoiCV from values
-    if (values.ID_Toanha && values.ID_KhoiCV) {
-      filteredToanha =
-        khuvuc?.filter(
-          (item: any) =>
-            item.ID_Toanha === values.ID_Toanha &&
-            (values.ID_KhoiCV ? item.ID_KhoiCVs.includes(values.ID_KhoiCV) : true)
-        ) || [];
+    if (values.ID_Toanha) {
+      filteredToanha = khuvuc?.filter((item: any) => item.ID_Toanha === values.ID_Toanha) || [];
 
       // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
     } else {
@@ -194,45 +140,32 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
     // Update the state with the new array
     setKhuVuc(newArray);
-  }, [values.ID_Toanha, values.ID_KhoiCV, khuvuc]);
+  }, [values.ID_Toanha, khuvuc]);
 
   useEffect(() => {
-    let filteredKhoiCV;
+    let filteredHM;
 
-    if (values.ID_KhoiCV) {
-      // Filter the hangMuc array based on ID_KhoiCV from values
-      filteredKhoiCV = hangMuc?.filter((item) => item.ID_KhoiCV === values.ID_KhoiCV) || [];
-      if (values.ID_Khuvuc) {
-        filteredKhoiCV = filteredKhoiCV.filter((item) => item.ID_Khuvuc === values.ID_Khuvuc);
-      }
+    if (values.ID_Khuvuc) {
+      filteredHM = hangMuc.filter((item) => item.ID_Khuvuc === values.ID_Khuvuc);
     } else {
       // Use the full hangMuc array if ID_KhoiCV is not provided
-      filteredKhoiCV = hangMuc;
+      filteredHM = hangMuc;
     }
 
     // Create a new array with the desired structure: { ID_Hangmuc: ID_Hangmuc, Hangmuc: item }
-    const newArray = filteredKhoiCV?.map((item) => ({
+    const newArray = filteredHM?.map((item) => ({
       ID_Hangmuc: item.ID_Hangmuc,
       Hangmuc: item,
     }));
 
-    // Update the state with the new array
     setHangMuc(newArray);
-  }, [values.ID_KhoiCV, values.ID_Khuvuc, hangMuc]);
+  }, [values.ID_Khuvuc, hangMuc, calv]);
 
   useEffect(() => {
     if (currentChecklist) {
       reset(defaultValues);
     }
   }, [currentChecklist, defaultValues, reset]);
-
-  // useEffect(() => {
-  //   if (includeTaxes) {
-  //     setValue('taxes', 0);
-  //   } else {
-  //     setValue('taxes', currentProduct?.taxes || 0);
-  //   }
-  // }, [currentProduct?.taxes, includeTaxes, setValue]);
 
   const handleChangeIncludeCheck = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -253,7 +186,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       if (currentChecklist !== undefined) {
         await axios
           .put(
-            `https://checklist.pmcweb.vn/be/api/ent_checklist/update/${currentChecklist.ID_Checklist}`,
+            `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/update/${currentChecklist.ID_Checklist}`,
             data,
             {
               headers: {
@@ -296,7 +229,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_checklist/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -359,20 +292,18 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-              {khoiCV?.length > 0 && (
-                <RHFSelect
-                  name="ID_KhoiCV"
-                  label="Khối công việc"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {khoiCV?.map((item) => (
-                    <MenuItem key={item?.ID_Khoi} value={item?.ID_Khoi}>
-                      {item?.KhoiCV}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
+              <RHFSelect
+                name="ID_Toanha"
+                label="Tòa nhà *"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {toaNha?.map((item: any) => (
+                  <MenuItem key={item?.ID_Toanha} value={item?.ID_Toanha}>
+                    {item?.Toanha}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
 
               {tang?.length > 0 && (
                 <RHFSelect
@@ -390,23 +321,10 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
               )}
             </Stack>
 
-            <RHFSelect
-              name="ID_Toanha"
-              label="Tòa nhà"
-              InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-            >
-              {toaNha?.map((item: any) => (
-                <MenuItem key={item?.ID_Toanha} value={item?.ID_Toanha}>
-                  {item?.Toanha}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-
             {khuVuc?.length > 0 && (
               <RHFSelect
                 name="ID_Khuvuc"
-                label="Khu vực"
+                label="Khu vực *"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
@@ -420,7 +338,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
             <RHFSelect
               name="ID_Hangmuc"
-              label="Hạng mục"
+              label="Hạng mục *"
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
             >
@@ -430,16 +348,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
                 </MenuItem>
               ))}
             </RHFSelect>
-
-            {loading === false && (
-              <>
-                {Calv.length > 0 && Calv?.length > 0 ? (
-                  <RHFMultiSelect checkbox name="sCalv" label="Ca làm việc" options={Calv} />
-                ) : (
-                  <></>
-                )}
-              </>
-            )}
           </Stack>
         </Card>
       </Grid>
@@ -497,26 +405,34 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       </Grid>
     </>
   );
-  
+
   const renderActions = (
     <>
       {mdUp && <Grid md={3} />}
       <Grid xs={12} md={9} sx={{ display: 'flex', alignItems: 'center' }}>
         <FormControlLabel
-           control={
-            <Switch checked={`${values.isImportant}` === '1'} onChange={handleChangeIncludeImportant} />
+          control={
+            <Switch
+              checked={`${values.isImportant}` === '1'}
+              onChange={handleChangeIncludeImportant}
+            />
           }
           label="Quan trọng"
-          sx={{ flexGrow: 1}}
+          sx={{ flexGrow: 1 }}
         />
-        
-        <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}   sx={{ ml: 2 }}>
+
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          size="large"
+          loading={isSubmitting}
+          sx={{ ml: 2 }}
+        >
           {!currentChecklist ? 'Tạo mới' : 'Lưu thay đổi'}
         </LoadingButton>
       </Grid>
     </>
   );
-
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

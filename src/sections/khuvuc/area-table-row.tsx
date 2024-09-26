@@ -38,7 +38,8 @@ type Props = {
   onDeleteRow: VoidFunction;
   onQrRow: VoidFunction;
   onViewRow1: any;
-  onQrRowHM: any
+  onQrRowHM: any;
+  index: number;
 };
 
 export default function AreaTableRow({
@@ -51,14 +52,13 @@ export default function AreaTableRow({
   onViewRow1,
   onQrRowHM,
   khoiCV,
+  index,
 }: Props) {
   const {
     ID_Khuvuc,
     ID_Toanha,
-    ID_KhoiCV,
     Sothutu,
     MaQrCode,
-    ent_khoicv,
     Makhuvuc,
     Tenkhuvuc,
     ID_User,
@@ -66,6 +66,7 @@ export default function AreaTableRow({
     ent_toanha,
     ID_KhoiCVs,
     ent_hangmuc,
+    ent_khuvuc_khoicvs,
   } = row;
 
   const confirm = useBoolean();
@@ -77,10 +78,10 @@ export default function AreaTableRow({
   const popover = usePopover();
   const popover1 = usePopover();
 
-  let ID_KhoiCVsArray: number[];
-
   const [ID_Hangmuc, setIDHangMuc] = useState(null);
   const [qrHM, setQrHM] = useState(null);
+
+  let ID_KhoiCVsArray: number[];
 
   // Kiểm tra xem ID_KhoiCVs là một mảng hoặc không
   if (Array.isArray(ID_KhoiCVs)) {
@@ -97,18 +98,16 @@ export default function AreaTableRow({
     ID_KhoiCVsArray = [];
   }
 
-  const shiftNames = ID_KhoiCVsArray.map((calvId) => {
-    const workShift = khoiCV?.find((shift) => `${shift.ID_Khoi}` === `${calvId}`);
-    return workShift ? workShift.KhoiCV : null;
-  })
-    .filter((name) => name !== null)
-    .join(', ');
+  const shiftNames = ent_khuvuc_khoicvs
+    .map((calvId) => {
+      const workShift = khoiCV?.find((shift) => `${shift.ID_KhoiCV}` === `${calvId.ID_KhoiCV}`);
+      return workShift ? calvId.ent_khoicv.KhoiCV : null;
+    })
+    .filter((name) => name !== null);
 
-  const shiftNamesArray = shiftNames.split(', ');
-
-  const labels = shiftNamesArray.map((name, index) => (
+  const labels = shiftNames.map((name, i) => (
     <Label
-      key={index}
+      key={i}
       variant="soft"
       color={
         (`${name}` === 'Khối làm sạch' && 'success') ||
@@ -116,24 +115,25 @@ export default function AreaTableRow({
         (`${name}` === 'Khối bảo vệ' && 'error') ||
         'default'
       }
-      style={{ marginTop: 4 }}
+      style={{ marginTop: 4, marginLeft: 4 }}
     >
       {name}
     </Label>
   ));
 
-  const handleClickHangMuc = (item: any, pop: any, event:any) => {
+  const handleClickHangMuc = (item: any, pop: any, event: any) => {
     pop.onOpen(event);
     setIDHangMuc(item?.ID_Hangmuc);
-    setQrHM(item)
+    setQrHM(item);
   };
 
+  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
   const renderPrimary = (
-    <TableRow hover selected={selected}>
-       <TableCell padding="checkbox">
+    <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
+      <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      
+
       <TableCell>
         <Box
           onClick={onViewRow}
@@ -148,23 +148,10 @@ export default function AreaTableRow({
         </Box>
       </TableCell>
 
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        {/* <Avatar alt={customer.name} src={customer.avatarUrl} sx={{ mr: 2 }} /> */}
-
-        <ListItemText
-          primary={Tenkhuvuc}
-          secondary={ent_khoicv?.KhoiCV}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        />
-      </TableCell>
+      <TableCell>{Tenkhuvuc}</TableCell>
       <TableCell> {ent_toanha?.Toanha} </TableCell>
 
-      <TableCell align="center"> {MaQrCode} </TableCell>
-      <TableCell> {`${Makhuvuc}`}</TableCell>
+      <TableCell> {MaQrCode} </TableCell>
 
       <TableCell>{labels}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
@@ -212,20 +199,21 @@ export default function AreaTableRow({
                 <TableCell>
                   <Box>HM{item.ID_Hangmuc}</Box>
                 </TableCell>
+
                 <ListItemText
                   primary={item?.Hangmuc}
-                  secondary={item?.MaQrCode}
+                  // secondary={item?.}
                   primaryTypographyProps={{
                     typography: 'body2',
                   }}
-                  secondaryTypographyProps={{
-                    component: 'span',
-                    color: 'text.disabled',
-                    mt: 0.5,
-                  }}
+                  // secondaryTypographyProps={{
+                  //   component: 'span',
+                  //   color: 'text.disabled',
+                  //   mt: 0.5,
+                  // }}
                 />
-
-                <TableCell>
+                <TableCell>{item?.MaQrCode}</TableCell>
+                {/* <TableCell>
                   <Label
                     variant="soft"
                     color={
@@ -237,7 +225,7 @@ export default function AreaTableRow({
                   >
                     {ent_khoicv?.KhoiCV}
                   </Label>
-                </TableCell>
+                </TableCell> */}
                 <IconButton
                   color={popover1.open ? 'inherit' : 'default'}
                   onClick={(event) => handleClickHangMuc(item, popover1, event)}
@@ -284,7 +272,7 @@ export default function AreaTableRow({
         <MenuItem
           onClick={() => {
             confirm.onTrue();
-            popover.onClose();
+            // popover.onClose();
           }}
           sx={{ color: 'error.main' }}
         >
@@ -318,12 +306,11 @@ export default function AreaTableRow({
           <Iconify icon="mdi:qrcode" />
           Ảnh Qr
         </MenuItem>
-
       </CustomPopover>
 
       <ConfirmDialog
-        open={confirm1.value}
-        onClose={confirm1.onFalse}
+        open={confirm.value}
+        onClose={confirm.onFalse}
         title="PMC thông báo"
         content="Bạn có thực sự muốn xóa không?"
         action={

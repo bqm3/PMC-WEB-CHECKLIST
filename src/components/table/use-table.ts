@@ -16,7 +16,7 @@ export type UseTableProps = {
 };
 
 export default function useTable(props?: UseTableProps): ReturnType {
-  const [dense, setDense] = useState(!!props?.defaultDense);
+  const [dense, setDense] = useState(true);
 
   const [page, setPage] = useState(props?.defaultCurrentPage || 0);
 
@@ -56,7 +56,7 @@ export default function useTable(props?: UseTableProps): ReturnType {
   }, []);
 
   const onChangeDense = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
+    setDense(true);
   }, []);
 
   const onSelectAllRows = useCallback((checked: boolean, inputValue: string[]) => {

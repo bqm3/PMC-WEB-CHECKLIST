@@ -43,7 +43,7 @@ export default function CalvTableRow({
 //   onSelectRow,
 //   onDeleteRow,
 }: Props) {
-  const { ID_Duan, ID_User, ID_KhoiCV, isDelete, ent_chucvu, ent_khoicv, UserName, Emails } = row;
+  const { ID_Duan, ID_User, ID_KhoiCV, isDelete, ent_chucvu, ent_khoicv, UserName, Email } = row;
 
   const confirm = useBoolean();
 
@@ -79,7 +79,7 @@ export default function CalvTableRow({
           }}
         />
       </TableCell>
-      <TableCell align="center"> {Emails} </TableCell>
+      <TableCell align="center"> {Email} </TableCell>
       <TableCell align="center"> {ent_chucvu?.Chucvu}</TableCell>
 
       <TableCell align="center">

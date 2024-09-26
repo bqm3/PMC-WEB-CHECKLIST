@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import axios from 'axios';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -56,7 +56,7 @@ import GiamsatTableFiltersResult from '../giamsat-table-filters-result';
 const TABLE_HEAD = [
   { id: 'ID_User', label: 'Mã giám sát', width: 140 },
   { id: 'UserName', label: 'Tài khoản', width: 200 },
-  { id: 'Emails', label: 'Email', width: 200, align: 'center' },
+  { id: 'Email', label: 'Email', width: 200, align: 'center' },
   { id: 'ID_Chucvu', label: 'Chức vụ', width: 140, align: 'center' },
   { id: 'ID_KhoiCV', label: 'Khối làm việc', width: 140, align: 'center' },
   { id: '', width: 88 },
@@ -87,8 +87,6 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
-
   const { user } = useGetGiamSatByDuan();
   const { khoiCV } = useGetKhoiCV();
 
@@ -100,15 +98,13 @@ export default function GiamsatListView() {
     }
   }, [user]);
 
-  useEffect(() => {
-    // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach((khoi) => {
-      set_STATUS_OPTIONS((prevOptions) => [
-        ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
-      ]);
-    });
-  }, [khoiCV]);
+  const STATUS_OPTIONS = useMemo(() => [
+    { value: 'all', label: 'Tất cả' },
+    ...khoiCV.map(khoi => ({
+      value: khoi.ID_KhoiCV.toString(),
+      label: khoi.KhoiCV
+    }))
+  ], [khoiCV]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -141,7 +137,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_giamsat/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -410,7 +406,7 @@ function applyFilter({
     inputData = inputData?.filter(
       (order) =>
         order.UserName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Emails.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order.Email.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.ent_chucvu.Chucvu.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }

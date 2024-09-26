@@ -11,10 +11,12 @@ import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
-import TableContainer from '@mui/material/TableContainer';
+import TableContainer from '@mui/material/TableContainer'
+import { Stack } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { LoadingButton } from '@mui/lab';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, PERMISSION_STATUS_OPTIONS } from 'src/_mock';
 import {
@@ -62,19 +64,21 @@ import {
 import DuanTableRow from '../user-table-row';
 import DuanTableToolbar from '../user-table-toolbar';
 import DuanTableFiltersResult from '../user-table-filters-result';
+import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog'
+
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...PERMISSION_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'ID_User', label: 'Mã nhân viên', width: 140 },
-  { id: 'UserName', label: 'Tài khoản', width: 140 },
-  { id: 'Permission', label: 'Chức vụ', width: 140 },
-
-  { id: 'ID_Duan', label: 'Tên dự án', width: 140 },
-  { id: 'Emails', label: 'Email', width: 140 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 140 },
+  { id: 'ID_User', label: 'Mã ', width: 50 },
+  { id: 'UserName', label: 'Tài khoản', width: 150 },
+  { id: 'ID_Chucvu', label: 'Chức vụ', width: 150 },
+  { id: 'Hoten', label: 'Họ tên', width: 150 },
+  { id: 'Email', label: 'Email', width: 150 },
+  { id: 'Sodienthoai', label: 'Số điện thoại', width: 150 },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 150 },
   { id: '', width: 40 },
 ];
 
@@ -97,13 +101,16 @@ export default function GiamsatListView() {
 
   const confirm = useBoolean();
 
+  const upload = useBoolean();
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const [loading, setLoading] = useState<Boolean | any>(false);
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { duan, duanLoading, duanEmpty } = useGetDuan();
   const { user, userLoading, userEmpty } = useGetUsers();
 
   const [tableData, setTableData] = useState<IUser[]>([]);
@@ -145,7 +152,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_duan/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -218,7 +225,8 @@ export default function GiamsatListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <CustomBreadcrumbs
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <CustomBreadcrumbs
           heading="Danh sách tài khoản"
           links={[
             {
@@ -235,44 +243,56 @@ export default function GiamsatListView() {
             mb: { xs: 3, md: 5 },
           }}
         />
-        <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
+          <LoadingButton
+            loading={loading}
+            variant="contained"
+            startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+            onClick={upload.onTrue}
           >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === '1' && 'success') ||
-                      (tab.value === '2' && 'warning') ||
-                      (tab.value === '3' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && user?.length}
-                    {tab.value === '1' &&
-                      user?.filter((order) => `${order.Permission}` === '1').length}
+            Upload
+          </LoadingButton>
+        </Stack>
+        
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {STATUS_OPTIONS.map((tab) => (
+            <Tab
+              key={tab.value}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === '2' && 'success') ||
+                    (tab.value === '3' && 'warning') ||
+                    (tab.value === '4' && 'error') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && user?.length}
+                  {tab.value === '2' &&
+                    user?.filter((order) => `${order.ID_Chucvu}` === '2').length}
 
-                    {tab.value === '2' &&
-                      user?.filter((order) => `${order.Permission}` === '2').length}
-                   
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
+                  {tab.value === '3' &&
+                    user?.filter((order) => `${order.ID_Chucvu}` === '3').length}
+
+                  {tab.value === '4' &&
+                    user?.filter((order) => `${order.ID_Chucvu}` === '4').length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
 
         <Card>
           <DuanTableToolbar
@@ -367,6 +387,12 @@ export default function GiamsatListView() {
         </Card>
       </Container>
 
+      <FileManagerNewFolderDialog
+        open={upload.value}
+        onClose={upload.onFalse}
+        setLoading={setLoading}
+      />
+
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
@@ -420,14 +446,16 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.UserName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.UserName}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.Hoten}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.ent_chucvu.Chucvu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${order?.ent_duan?.Duan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Emails.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order.Email}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.Permission}` === status);
+    inputData = inputData?.filter((order) => `${order?.ID_Chucvu}` === status);
   }
 
   return inputData;

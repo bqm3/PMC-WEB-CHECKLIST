@@ -137,7 +137,7 @@ export default function ToanhaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_toanha/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_toanha/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

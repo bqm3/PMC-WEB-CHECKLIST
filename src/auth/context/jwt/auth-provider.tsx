@@ -1,10 +1,14 @@
 import { useEffect, useReducer, useCallback, useMemo } from 'react';
 // utils
 import axios, { endpoints } from 'src/utils/axios';
+import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'src/routes/hooks';
 //
+import { getRootPathByRole } from 'src/layouts/dashboard/config-navigation';
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession } from './utils';
 import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
+
 
 // ----------------------------------------------------------------------
 
@@ -81,6 +85,7 @@ type Props = {
 
 export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const router = useRouter();
 
   const initialize = useCallback(async () => {
     try {
@@ -89,14 +94,12 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.post('https://checklist.pmcweb.vn/be/api/ent_user/check-auth', [],
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const res = await axios.post('https://checklist.pmcweb.vn/be/api/v2/ent_user/check-auth', [], {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
         const { data } = res.data;
 
@@ -133,28 +136,31 @@ export function AuthProvider({ children }: Props) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (UserName: string, Password: string) => {
-    const data = {
-      UserName,
-      Password,
-    };
+  const login = useCallback(
+    async (UserName: string, Password: string) => {
+      const data = {
+        UserName,
+        Password,
+      };
 
-    const urlHttp = 'https://checklist.pmcweb.vn/be/api/ent_user/login';
-    const res = await axios.post(urlHttp, data);
-    const { token, user } = res.data;
+      const urlHttp = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/login';
+      const res = await axios.post(urlHttp, data);
+      const { token, user } = res.data;
 
-    setSession(token);
+      setSession(token);
 
-    dispatch({
-      type: Types.LOGIN,
-      payload: {
-        user: {
-          ...user,
-          token,
+      dispatch({
+        type: Types.LOGIN,
+        payload: {
+          user: {
+            ...user,
+            token,
+          },
         },
-      },
-    });
-  }, []);
+      });
+    },
+    []
+  );
 
   // REGISTER
   const register = useCallback(

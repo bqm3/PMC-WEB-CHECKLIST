@@ -60,7 +60,7 @@ export default function OrderTableFiltersResult({
                 (`${filters.status}` === '1' && 'Khối làm sạch') ||
                 (`${filters.status}` === '2' && 'Khối kỹ thuật') ||
                 (`${filters.status}` === '3' && 'Khối bảo vệ') ||
-                (`${filters.status}` === '4' && 'Khối lễ tân') 
+                (`${filters.status}` === '4' && 'Khối dịch vụ') 
               }
               onDelete={handleRemoveStatus}
             />

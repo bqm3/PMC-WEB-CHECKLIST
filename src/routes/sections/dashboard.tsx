@@ -20,6 +20,7 @@ const OverviewEcommercePage = lazy(() => import('src/pages/dashboard/ecommerce')
 const OverviewAnalyticsPage = lazy(() => import('src/pages/dashboard/analytics'));
 const StattisticalReportPage = lazy(() => import('src/pages/dashboard/statistical-report'));
 const OverviewManagementPage = lazy(() => import('src/pages/dashboard/management'));
+const LocationManagementPage = lazy(() => import('src/pages/dashboard/location'));
 const OverviewBankingPage = lazy(() => import('src/pages/dashboard/banking'));
 const OverviewBookingPage = lazy(() => import('src/pages/dashboard/booking'));
 const OverviewFilePage = lazy(() => import('src/pages/dashboard/file'));
@@ -108,7 +109,6 @@ const KhuvucEditPage = lazy(() => import('src/pages/dashboard/khuvuc/edit'));
 // Tang
 const TangListsPage = lazy(() => import('src/pages/dashboard/tang/list'));
 const TangNewPage = lazy(() => import('src/pages/dashboard/tang/new'));
-// const TangEditPage = lazy(() => import('src/pages/dashboard/tang/edit'));
 
 // Hạng mục
 const HangMucListsPage = lazy(() => import('src/pages/dashboard/hangmuc/list'));
@@ -121,13 +121,17 @@ const CalvNewPage = lazy(() => import('src/pages/dashboard/calv/new'));
 const CalvEditPage = lazy(() => import('src/pages/dashboard/calv/edit'));
 
 // Giam sat
-const GiamsatListsPage = lazy(() => import('src/pages/dashboard/giamsat/list'));
-const GiamsatNewPage = lazy(() => import('src/pages/dashboard/giamsat/new'));
-const GiamsatEditPage = lazy(() => import('src/pages/dashboard/giamsat/edit'));
+const ChukyDuanListsPage = lazy(() => import('src/pages/dashboard/chukyduan/list'));
+const ChukyDuanNewPage = lazy(() => import('src/pages/dashboard/chukyduan/new'));
+const ChukyDuanEditPage = lazy(() => import('src/pages/dashboard/chukyduan/edit'));
 
+// Sự cố
+const SuCoListsPage = lazy(() => import('src/pages/dashboard/sucongoai/list'));
 
-const QuanlyGiamsatListsPage = lazy(() => import('src/pages/dashboard/quanlygiamsat/list'));
-const QuanlyGiamsatEditPage = lazy(() => import('src/pages/dashboard/quanlygiamsat/edit'));
+// Phân quyền checklist
+const QuanlyCaHangMucListsPage = lazy(() => import('src/pages/dashboard/phanquyenchecklist/list'));
+const QuanlyCaHangMucNewPage  = lazy(() => import('src/pages/dashboard/phanquyenchecklist/new'));
+const QuanlyCaHangMucEditPage = lazy(() => import('src/pages/dashboard/phanquyenchecklist/edit'));
 
 // Dự án
 const DuanListsPage = lazy(() => import('src/pages/dashboard/duan/list'));
@@ -219,6 +223,16 @@ export const dashboardRoutes = [
         ],
       },
       {
+        path: 'chu-ky-du-an',
+        children: [
+          { element: <ChukyDuanListsPage />, index: true },
+          { path: 'list', element: <ChukyDuanListsPage /> },
+          { path: ':id/edit', element: <ChukyDuanEditPage /> },
+          { path: 'new', element: <ChukyDuanNewPage /> },
+        ],
+      },
+      { path: 'quan-ly-vi-tri', element: <LocationManagementPage /> },
+      {
         path: 'hangmuc',
         children: [
           { element: <HangMucListsPage />, index: true },
@@ -237,12 +251,12 @@ export const dashboardRoutes = [
         ],
       },
       {
-        path: 'giamsat',
+        path: 'phan-ca-hang-muc',
         children: [
-          { element: <GiamsatListsPage />, index: true },
-          { path: 'list', element: <GiamsatListsPage /> },
-          { path: ':id/edit', element: <GiamsatEditPage /> },
-          { path: 'new', element: <GiamsatNewPage /> },
+          { element: <QuanlyCaHangMucListsPage />, index: true },
+          { path: 'new', element: <QuanlyCaHangMucNewPage /> },
+          { path: 'list', element: <QuanlyCaHangMucListsPage /> },
+          { path: ':id/edit', element: <QuanlyCaHangMucEditPage /> },
         ],
       },
       {
@@ -270,7 +284,6 @@ export const dashboardRoutes = [
         children: [
           { element: <TangListsPage />, index: true },
           { path: 'list', element: <TangListsPage /> },
-          // { path: ':id/edit', element: <TangEditPage /> },
           { path: 'new', element: <TangNewPage /> },
         ],
       },
@@ -288,6 +301,13 @@ export const dashboardRoutes = [
         children: [
           { element: <UserAdminProfilePage />, index: true },
           { path: 'profile', element: <UserAdminProfilePage /> },
+        ],
+      },
+      {
+        path: 'su-co-ngoai',
+        children: [
+          { element: <SuCoListsPage />, index: true },
+          { path: 'list', element: <SuCoListsPage /> },
         ],
       },
       {
@@ -314,14 +334,7 @@ export const dashboardRoutes = [
           { path: ':id/edit', element: <ListEditEmployeePage /> },
         ],
       },
-      {
-        path: 'quan-ly-giam-sat',
-        children: [
-          { element: <QuanlyGiamsatListsPage />, index: true },
-          { path: 'list', element: <QuanlyGiamsatListsPage /> },
-          { path: ':id/edit', element: <QuanlyGiamsatEditPage /> },
-        ],
-      },
+      
       {
         path: 'userMinimal',
         children: [

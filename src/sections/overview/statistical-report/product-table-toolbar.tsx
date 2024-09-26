@@ -22,49 +22,24 @@ import { IBaoCaoTableFilters, IBaoCaoTableFilterValue } from 'src/types/khuvuc';
 type Props = {
   filters: IBaoCaoTableFilters;
   onFilters: (name: string, value: IBaoCaoTableFilterValue) => void;
-  //
-  stockOptions: {
-    value: string;
-    label: string;
-  }[];
-  publishOptions: {
-    value: string;
-    label: string;
-  }[];
 };
 
 export default function ProductTableToolbar({
   filters,
   onFilters,
-  //
-  stockOptions,
-  publishOptions,
 }: Props) {
   const popover = usePopover();
 
-  const handleFilterName = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onFilters('name', event.target.value);
+  const handleFilterStartDate = useCallback(
+    (newValue: Date | null) => {
+      onFilters('startDate', newValue);
     },
     [onFilters]
   );
 
-  const handleFilterStock = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      onFilters(
-        'stock',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
-    },
-    [onFilters]
-  );
-
-  const handleFilterPublish = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      onFilters(
-        'publish',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
+  const handleFilterEndDate = useCallback(
+    (newValue: Date | null) => {
+      onFilters('endDate', newValue);
     },
     [onFilters]
   );
@@ -74,7 +49,7 @@ export default function ProductTableToolbar({
       <Stack
         spacing={2}
         alignItems={{ xs: 'flex-end', md: 'center' }}
-        justifyContent="space-between"
+        // justifyContent="space-between"
         direction={{
           xs: 'column',
           md: 'row',
@@ -84,20 +59,32 @@ export default function ProductTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-         <DatePicker
+        <FormControl
+          sx={{
+            flexShrink: 0,
+            width: { xs: 1, md: 200 },
+          }}
+        >
+          <DatePicker
             label="Ngày bắt đầu"
             value={filters.startDate}
-            // onChange={handleFilterStartDate}
+            onChange={handleFilterStartDate}
             slotProps={{ textField: { fullWidth: true } }}
             sx={{
               maxWidth: { md: 200 },
             }}
           />
-
+        </FormControl>
+        <FormControl
+          sx={{
+            flexShrink: 0,
+            width: { xs: 1, md: 200 },
+          }}
+        >
           <DatePicker
             label="Ngày kết thúc"
             value={filters.endDate}
-            // onChange={handleFilterEndDate}
+            onChange={handleFilterEndDate}
             slotProps={{
               textField: {
                 fullWidth: true,
@@ -107,7 +94,8 @@ export default function ProductTableToolbar({
               maxWidth: { md: 200 },
             }}
           />
-        <FormControl
+        </FormControl>
+        {/* <FormControl
           sx={{
             flexShrink: 0,
             width: { xs: 1, md: 200 },
@@ -221,7 +209,7 @@ export default function ProductTableToolbar({
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
 
         {/* <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField

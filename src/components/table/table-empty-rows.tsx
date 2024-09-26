@@ -18,7 +18,7 @@ export default function TableEmptyRows({ emptyRows, height }: Props) {
     <TableRow
       sx={{
         ...(height && {
-          height: height * emptyRows,
+          height: 54 * emptyRows,
         }),
       }}
     >

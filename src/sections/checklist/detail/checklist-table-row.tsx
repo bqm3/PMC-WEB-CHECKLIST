@@ -65,12 +65,16 @@ export default function AreaTableRow({
   const popover = usePopover();
 
   const renderPrimary = (
-    <TableRow hover selected={selected} style={{backgroundColor: `${status}` === '0' ? '#FFAB0029' : '' }}>
+    <TableRow
+      hover
+      selected={selected}
+      style={{ backgroundColor: `${status}` === '0' ? '#FFAB0029' : '' }}
+    >
       <TableCell> {ent_checklist?.Checklist} </TableCell>
-      <TableCell align="center">
+      <TableCell>
         <ListItemText
-          primary={`${ent_checklist?.ent_hangmuc?.Hangmuc}`}
-          secondary={`${ent_checklist?.ent_hangmuc?.ent_khuvuc?.Tenkhuvuc} - ${ent_checklist?.ent_hangmuc?.ent_khuvuc?.ent_toanha.Toanha}`}
+          primary={ent_checklist?.ent_hangmuc?.Hangmuc}
+          secondary={`${ent_checklist?.ent_khuvuc?.Tenkhuvuc} - ${ent_checklist?.ent_khuvuc?.ent_toanha.Toanha}`}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
             component: 'span',
@@ -78,19 +82,15 @@ export default function AreaTableRow({
           }}
         />
       </TableCell>
-      <TableCell align="center"> 
-      <ListItemText
-          primary={Ketqua}
-          secondary={ent_checklist?.Giatridinhdanh ? ent_checklist?.Giatridinhdanh : ent_checklist?.Giatrinhan}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        /> </TableCell>
-        <TableCell align="center"> {Gioht} </TableCell>
-      <TableCell align="center">
-        {(Anh !== null && Anh !== undefined) && (
+      <TableCell> {ent_checklist?.ent_tang?.Tentang} </TableCell>
+      <TableCell>
+        {' '}
+        {Ketqua} {`${ent_checklist?.isCheck}` === '1' ? `(${ent_checklist?.Giatrinhan})` : ''}
+      </TableCell>
+     
+      <TableCell> {Gioht} </TableCell>
+      <TableCell>
+        {Anh !== null && Anh !== undefined && (
           <Avatar
             src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
             variant="rounded"
@@ -98,8 +98,8 @@ export default function AreaTableRow({
           />
         )}
       </TableCell>
-      
-      <TableCell align="center"> {Ghichu} </TableCell>
+
+      <TableCell> {Ghichu} </TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

@@ -15,9 +15,11 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import Dialog from '@mui/material/Dialog';
+import { Box } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import Typography from '@mui/material/Typography';
 import Image from 'src/components/image';
 import IconButton from '@mui/material/IconButton';
@@ -34,7 +36,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 // components
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -63,13 +64,13 @@ import ChecklistTableFiltersResult from './detail/checklist-table-filters-result
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'Checklist', label: 'Tên checklist', width: 150, align: 'left' },
-  { id: 'ID_Hangmuc', label: 'Hạng mục (Khu vực - Tòa)', width: 150, align: 'center' },
-  { id: 'Ketqua', label: 'Kết quả', width: 100, align: 'center' },
-  { id: 'Gioht', label: 'Giờ Checklist', width: 100, align: 'center' },
-  { id: 'Anh', label: 'Ảnh', width: 100, align: 'center' },
-  { id: 'Ghichu', label: 'Ghi chú', width: 100, align: 'center' },
-
+  { id: 'Checklist', label: 'Tên checklist', width: 150 },
+  { id: 'ID_Hangmuc', label: 'Hạng mục (Khu vực- Tòa)', width: 250 },
+  { id: 'ID_Tang', label: 'Tầng', width: 100 },
+  { id: 'Ketqua', label: 'Kết quả', width: 100 },
+  { id: 'Gioht', label: 'Giờ Checklist', width: 100 },
+  { id: 'Anh', label: 'Hình ảnh', width: 100 },
+  { id: 'Ghichu', label: 'Ghi chú', width: 100 },
   { id: '', width: 88 },
 ];
 
@@ -109,7 +110,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function TbChecklistCalvListView({ currentChecklist, dataChecklistC }: Props) {
-  const table = useTable({ defaultOrderBy: 'Gioht' });
+  const table = useTable({ defaultOrderBy: 'ID_Checklist' });
 
   const settings = useSettingsContext();
 
@@ -168,7 +169,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -257,6 +258,15 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     setDataFormatExcel(formattedData);
   }, [tableData]);
 
+  const formatDateString = (dateString: any) => {
+    if (dateString) {
+      const [year, month, day] = dateString.split('-');
+      return `${day}-${month}-${year}`;
+    }
+
+    return dateString;
+  };
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -282,13 +292,48 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           <CSVLink
             data={dataFormatExcel}
             headers={headers}
-            filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_giamsat.Hoten}.csv`}
+            filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_user.Hoten}.csv`}
           >
             <Button variant="contained" startIcon={<Iconify icon="solar:export-bold" />}>
               Export
             </Button>
           </CSVLink>
         </Stack>
+
+        <Box
+          rowGap={5}
+          display="grid"
+          alignItems="center"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+          }}
+          sx={{ pb: 2 }}
+        >
+          <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+              Thông tin trong ca
+            </Typography>
+            Ca: {dataChecklistC?.ent_calv?.Tenca}
+            <br />
+            Người Checklist: {dataChecklistC?.ent_user?.Hoten}
+            <br />
+            Khối công việc: {dataChecklistC?.ent_khoicv?.KhoiCV}
+            <br />
+          </Stack>
+
+          <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
+             1
+            </Typography>
+            Ngày: {formatDateString(dataChecklistC?.Ngay)}
+            <br />
+            Giờ bắt đầu - kết thúc: {dataChecklistC?.Giobd} - {dataChecklistC?.Giokt}
+            <br />
+            Tình trạng: {dataChecklistC?.Tinhtrang === 0 ? 'Mở ra' : 'Đóng ca'}
+            <br />
+          </Stack>
+        </Box>
         <Card>
           <ChecklistTableToolbar
             filters={filters}
@@ -464,18 +509,18 @@ function applyFilter({
 
   if (name) {
     inputData = inputData.filter(
-      (item) =>
-        `${item.ent_checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${item.ent_checklist.Maso}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${item.ent_checklist.ent_hangmuc.Hangmuc}`
+      (checklist) =>
+        `${checklist.ent_checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.ent_checklist.ent_khuvuc.Tenkhuvuc}`
           .toLowerCase()
           .indexOf(name.toLowerCase()) !== -1 ||
-        `${item.ent_checklist.ent_hangmuc.ent_khuvuc.Tenkhuvuc}`
+        `${checklist.ent_checklist.ent_hangmuc.Hangmuc}`
           .toLowerCase()
           .indexOf(name.toLowerCase()) !== -1 ||
-          `${item.ent_checklist.ent_hangmuc.ent_khuvuc.ent_toanha.Toanha}`
-          .toLowerCase()
-          .indexOf(name.toLowerCase()) !== -1
+        `${checklist.ent_checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !==
+          -1 ||
+        `${checklist.Gioht}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist.Ghichu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

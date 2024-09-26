@@ -19,8 +19,12 @@ import { useRouter } from 'src/routes/hooks';
 import { IChucvu, IDuan, IKhoiCV, IUser } from 'src/types/khuvuc';
 // routes
 import { paths } from 'src/routes/paths';
+// _mock
+import { _tags, _roles, USER_GENDER_OPTIONS } from 'src/_mock';
 
 import { useSnackbar } from 'src/components/snackbar';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import FormProvider, {
   RHFSwitch,
   RHFTextField,
@@ -31,14 +35,10 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import axios from 'axios';
 import {
-  useGetChinhanh,
-  useGetChucVu,
   useGetChucvu,
   useGetDuan,
   useGetKhoiCV,
-  useGetNhompb,
 } from 'src/api/khuvuc';
-import { IChinhanh, IChucVu, INhompb } from 'src/types/scan';
 
 // ----------------------------------------------------------------------
 
@@ -55,47 +55,20 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [toggleChecklist, setToggleChecklist] = useState(true);
-  const [toggleQlts, setToggleQlts] = useState(false);
-
   const [KhoiCV, setKhoiCV] = useState<IKhoiCV[]>([]);
   const [Duan, setDuan] = useState<IDuan[]>([]);
   const [Chucvu, setChucvu] = useState<IChucvu[]>([]);
-  const [NhomPB, setNhomPB] = useState<INhompb[]>([]);
-  const [ChucVu, setChucVu] = useState<IChucVu[]>([]);
-  const [ChiNhanh, setChiNhanh] = useState<IChinhanh[]>([]);
 
   const { khoiCV } = useGetKhoiCV();
   const { chucVu, chucVuLoading, chucVuEmpty } = useGetChucvu();
   const { duan, duanLoading, duanEmpty } = useGetDuan();
 
-  const { nhompb } = useGetNhompb();
-  const { chucvu } = useGetChucVu();
-  const { chinhanh } = useGetChinhanh();
 
   useEffect(() => {
     if (khoiCV?.length > 0) {
       setKhoiCV(khoiCV);
     }
   }, [khoiCV]);
-
-  useEffect(() => {
-    if (`${currentUser?.Permission}` === '3') {
-      setToggleQlts(true);
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (nhompb?.length > 0) {
-      setNhomPB(nhompb);
-    }
-    if (chucvu?.length > 0) {
-      setChucVu(chucvu);
-    }
-    if (chinhanh?.length > 0) {
-      setChiNhanh(chinhanh);
-    }
-  }, [nhompb, chucvu, chinhanh]);
 
   useEffect(() => {
     if (duan?.length > 0) {
@@ -111,23 +84,26 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const NewUserSchema = Yup.object().shape({
     UserName: Yup.string().required('Tài khoản là bắt buộc'),
-    Emails: Yup.string().required('Email là bắt buộc').email('Chưa đúng định dạng Email'),
-
-    Password: Yup.string().required('Mật khẩu là bắt buộc'),
+    Email: Yup.string().required('Email là bắt buộc').email('Chưa đúng định dạng Email'),
+    Hoten: Yup.string().required('Phải có họ tên'),
+    Sodienthoai: Yup.string().required('Phải có số điện thoại'),
+    Ngaysinh: Yup.mixed<any>().nullable().required('Phải có ngày sinh'),
     // not required
   });
+
 
   const defaultValues = useMemo(
     () => ({
       UserName: currentUser?.UserName || '',
-      Emails: currentUser?.Emails || '',
+      Email: currentUser?.Email || '',
       Password: '',
-      Permission: currentUser?.Permission || null || '',
+      ID_Chucvu: currentUser?.ID_Chucvu || null || '',
+      Hoten: currentUser?.Hoten || '',
+      Sodienthoai: currentUser?.Sodienthoai || '',
+      Gioitinh: currentUser?.Gioitinh || '',
+      Ngaysinh: currentUser?.Ngaysinh || new Date() || null || undefined,
       ID_Duan: currentUser?.ID_Duan || null || '',
       ID_KhoiCV: currentUser?.ID_KhoiCV || null || '',
-      ID_Nhompb: currentUser?.ID_Nhompb || null || '',
-      ID_Chucvu: currentUser?.ID_Chucvu || null || '',
-      ID_Chinhanh: currentUser?.ID_Chinhanh || null || '',
     }),
     [currentUser]
   );
@@ -158,7 +134,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     try {
       if (currentUser !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/ent_user/update/${currentUser?.ID_User}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/update/${currentUser?.ID_User}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -193,44 +169,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
             }
           });
       } else {
-        if (toggleQlts === true) {
           await axios
-            .post(`https://checklist.pmcweb.vn/pmc-assets/api/ent_user/register`, data, {
-              headers: {
-                Accept: 'application/json',
-              },
-            })
-            .then((res) => {
-              reset();
-              enqueueSnackbar('Tạo tài khoản thành công!');
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
-            });
-        }
-        if (toggleChecklist === true) {
-          await axios
-            .post(`https://checklist.pmcweb.vn/be/api/ent_user/register`, data, {
+            .post(`https://checklist.pmcweb.vn/be/api/v2/ent_user/register`, data, {
               headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -263,7 +203,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
                 });
               }
             });
-        }
+        
       }
     } catch (error) {
       enqueueSnackbar({
@@ -275,28 +215,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
     }
   });
 
-  console.log('currentUser',currentUser)
+  console.log('currentUser', currentUser)
 
   const renderPrimary = (
     <Grid xs={12} md={12}>
       <Card sx={{ p: 3 }}>
-        <Stack direction="row" alignItems="center" spacing={0.5} marginBottom={2}>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  defaultChecked={toggleChecklist}
-                  value={toggleChecklist}
-                  onChange={() => setToggleChecklist(!toggleChecklist)}
-                />
-              }
-              label="Checklist"
-            />
-          </FormGroup>
-        </Stack>
-
-        {/* Checklist  */}
-        {toggleChecklist === true && (
           <Box
             rowGap={3}
             columnGap={2}
@@ -314,10 +237,9 @@ export default function UserNewEditForm({ currentUser }: Props) {
                 label="Khối công việc"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                disabled={!toggleChecklist}
               >
                 {KhoiCV?.map((option) => (
-                  <MenuItem key={option.ID_Khoi} value={option.ID_Khoi}>
+                  <MenuItem key={option.ID_KhoiCV} value={option.ID_KhoiCV}>
                     {option.KhoiCV}
                   </MenuItem>
                 ))}
@@ -330,7 +252,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
                 label="Dự án"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                disabled={!toggleChecklist}
               >
                 {Duan?.map((option) => (
                   <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
@@ -343,11 +264,10 @@ export default function UserNewEditForm({ currentUser }: Props) {
             {Chucvu?.length > 0 && (
               <RHFSelect
                 fullWidth
-                name="Permission"
+                name="ID_Chucvu"
                 label="Chức vụ"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                disabled={!toggleChecklist}
               >
                 {Chucvu?.map((option) => (
                   <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
@@ -357,91 +277,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
               </RHFSelect>
             )}
           </Box>
-        )}
-
-        {`${currentUser?.Permission}` === '3' && (
-          <>
-            <Stack direction="row" alignItems="center" spacing={0.5} marginTop={2}>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      defaultChecked={toggleQlts}
-                      value={toggleQlts}
-                      onChange={() => setToggleQlts(!toggleQlts)}
-                    />
-                  }
-                  label="Quản lý tài sản"
-                />
-              </FormGroup>
-            </Stack>
-
-            {/* Quan ly tai san  */}
-            {toggleQlts === true && (
-              <Box
-                rowGap={3}
-                columnGap={2}
-                display="grid"
-                gridTemplateColumns={{
-                  xs: 'repeat(1, 1fr)',
-                  sm: 'repeat(3, 1fr)',
-                }}
-                marginTop={3}
-              >
-                {NhomPB?.length > 0 && (
-                  <RHFSelect
-                    fullWidth
-                    name="ID_Nhompb"
-                    label="Nhóm phòng ban"
-                    InputLabelProps={{ shrink: true }}
-                    PaperPropsSx={{ textTransform: 'capitalize' }}
-                    disabled={!toggleQlts}
-                  >
-                    {NhomPB?.map((option) => (
-                      <MenuItem key={option.ID_Nhompb} value={option.ID_Nhompb}>
-                        {option.Nhompb}
-                      </MenuItem>
-                    ))}
-                  </RHFSelect>
-                )}
-
-                {ChiNhanh?.length > 0 && (
-                  <RHFSelect
-                    fullWidth
-                    name="ID_Chinhanh"
-                    label="Chi nhánh"
-                    InputLabelProps={{ shrink: true }}
-                    PaperPropsSx={{ textTransform: 'capitalize' }}
-                    disabled={!toggleQlts}
-                  >
-                    {ChiNhanh?.map((option) => (
-                      <MenuItem key={option.ID_Chinhanh} value={option.ID_Chinhanh}>
-                        {option.Tenchinhanh}
-                      </MenuItem>
-                    ))}
-                  </RHFSelect>
-                )}
-
-                {ChucVu?.length > 0 && (
-                  <RHFSelect
-                    fullWidth
-                    name="ID_Chucvu"
-                    label="Chức vụ"
-                    InputLabelProps={{ shrink: true }}
-                    PaperPropsSx={{ textTransform: 'capitalize' }}
-                    disabled={!toggleQlts}
-                  >
-                    {ChucVu?.map((option) => (
-                      <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
-                        {option.Chucvu}
-                      </MenuItem>
-                    ))}
-                  </RHFSelect>
-                )}
-              </Box>
-            )}
-          </>
-        )}
 
         <Box
           rowGap={3}
@@ -454,13 +289,22 @@ export default function UserNewEditForm({ currentUser }: Props) {
           marginTop={3}
         >
           <RHFTextField name="UserName" label="Tài khoản" />
-          <RHFTextField name="Emails" label="Email" />
+          <RHFTextField name="Email" label="Email" />
+          <RHFTextField name="Hoten" label="Họ tên" />
+          <RHFTextField name="Sodienthoai" label="Số điện thoại" />
+          <Stack spacing={1}>
+            <Typography variant="subtitle2">Giới tính</Typography>
+            <RHFRadioGroup row name="Gioitinh" spacing={2} options={USER_GENDER_OPTIONS} />
+          </Stack>
+          <DatePicker
+            label="Ngày sinh"
+            value={new Date(values.Ngaysinh)}
+            onChange={(newValue: any) => setValue('Ngaysinh', newValue)}
+          />
 
           {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />}
 
-          {`${currentUser?.Permission}` === '2' && (
-            <RHFTextField name="Password" label="Mật khẩu" />
-          )}
+          {`${currentUser?.ID_Chucvu}` === '4' && <RHFTextField name="Password" label="Mật khẩu" />}
         </Box>
 
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>

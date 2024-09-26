@@ -142,8 +142,8 @@ export function RHFMultiSelect({
               </MenuItem>
             )}
 
-            {options.map((option) => {
-              const selected = field.value.includes(option.value);
+            {options?.map((option) => {
+              const selected = field.value?.includes(option.value);
 
               return (
                 <MenuItem key={option.value} value={option.value}>

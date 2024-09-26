@@ -37,7 +37,7 @@ export default function AccountGeneral() {
 
   const defaultValues = {
     UserName: user?.UserName,
-    Emails: user?.Emails,
+    Email: user?.Email,
     ent_duan: user?.ent_duan?.Duan || '',
     ent_chucvu: user?.ent_chucvu?.Chucvu || '',
     ent_khoicv: user?.ent_khoicv?.KhoiCV || null,
@@ -55,11 +55,9 @@ export default function AccountGeneral() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data', data);
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       enqueueSnackbar('Update success!');
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -80,7 +78,7 @@ export default function AccountGeneral() {
               }}
             >
               <RHFTextField name="UserName" label="Tài khoản" disabled />
-              <RHFTextField name="Emails" label="Email" disabled />
+              <RHFTextField name="Email" label="Email" disabled />
               <RHFTextField name="ent_duan" label="Dự án" disabled />
               <RHFTextField name="ent_chucvu" label="Chức vụ" disabled />
               <RHFTextField name="ent_khoicv" label="Khối công việc" disabled />

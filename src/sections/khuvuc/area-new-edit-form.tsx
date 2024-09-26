@@ -65,8 +65,8 @@ export default function AreaNewEditForm({ currentArea }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [includeTaxes, setIncludeTaxes] = useState(false);
   const [toaNha, setToanha] = useState<IToanha[]>([]);
+
   const [khoiCv, setKhoiCv] = useState<any>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -89,7 +89,6 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     () => ({
       Tenkhuvuc: currentArea?.Tenkhuvuc || '',
       ID_Toanha: currentArea?.ID_Toanha || null,
-      ID_KhoiCV: currentArea?.ID_KhoiCV || null,
       MaQrCode: currentArea?.MaQrCode || '',
       Sothutu: currentArea?.Sothutu || '',
       Makhuvuc: currentArea?.Makhuvuc || '',
@@ -101,7 +100,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
   useEffect(() => {
     if (khoiCV?.length > 0) {
       const transformedData = khoiCV.map((item) => ({
-        value: item.ID_Khoi,
+        value: item.ID_KhoiCV,
         label: item.KhoiCV,
       }));
       setKhoiCv(transformedData);
@@ -134,7 +133,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     try {
       if (currentArea !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -174,7 +173,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_khuvuc/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -216,10 +215,6 @@ export default function AreaNewEditForm({ currentArea }: Props) {
       });
     }
   });
-
-  const handleChangeIncludeTaxes = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setIncludeTaxes(event.target.checked);
-  }, []);
 
 
   const renderDetails = (

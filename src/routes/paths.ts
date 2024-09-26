@@ -2,7 +2,6 @@
 import { paramCase } from 'src/utils/change-case';
 import { _id, _postTitles } from 'src/_mock/assets';
 import { IUser } from 'src/types/khuvuc';
-
 // ----------------------------------------------------------------------
 
 const MOCK_ID = _id[1];
@@ -16,7 +15,6 @@ const ROOTS = {
 };
 
 // ----------------------------------------------------------------------
-
 
 export const paths = {
   
@@ -107,6 +105,8 @@ export const paths = {
       app: `${ROOTS.DASHBOARD}/app`,
       ecommerce: `${ROOTS.DASHBOARD}/ecommerce`,
       statistical_report: `${ROOTS.DASHBOARD}/statistical-report`,
+      location: `${ROOTS.DASHBOARD}/quan-ly-vi-tri`,
+      
       analytics: `${ROOTS.DASHBOARD}/analytics`,
       management: `${ROOTS.DASHBOARD}/management`,
       banking: `${ROOTS.DASHBOARD}/banking`,
@@ -160,6 +160,24 @@ export const paths = {
       new: `${ROOTS.DASHBOARD}/calv/new`,
       details: (id: string) => `${ROOTS.DASHBOARD}/calv/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/calv/${id}/edit`,
+    },
+    phanquyenchecklist: {
+      root: `${ROOTS.DASHBOARD}/phan-ca-hang-muc`,
+      new: `${ROOTS.DASHBOARD}/phan-ca-hang-muc/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/phan-ca-hang-muc/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/phan-ca-hang-muc/${id}/edit`,
+    },
+    sucongoai: {
+      root: `${ROOTS.DASHBOARD}/su-co-ngoai`,
+      // new: `${ROOTS.DASHBOARD}/phan-ca-hang-muc/new`,
+      // details: (id: string) => `${ROOTS.DASHBOARD}/phan-ca-hang-muc/${id}`,
+      // edit: (id: string) => `${ROOTS.DASHBOARD}/phan-ca-hang-muc/${id}/edit`,
+    },
+    chukyduan:  {
+      root: `${ROOTS.DASHBOARD}/chu-ky-du-an`,
+      new: `${ROOTS.DASHBOARD}/chu-ky-du-an/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/chu-ky-du-an/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/chu-ky-du-an/${id}/edit`,
     },
     giamsat: {
       root: `${ROOTS.DASHBOARD}/giamsat`,

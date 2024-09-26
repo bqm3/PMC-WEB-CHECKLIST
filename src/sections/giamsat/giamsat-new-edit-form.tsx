@@ -27,9 +27,6 @@ import FormProvider, { RHFSelect, RHFTextField, RHFRadioGroup } from 'src/compon
 // types
 import { IKhoiCV, ICalv, IGiamsat, IChucvu } from 'src/types/khuvuc';
 import axios from 'axios';
-import { DateTimePicker, TimePicker } from '@mui/x-date-pickers';
-// import moment from 'moment';
-import dayjs from 'dayjs';
 
 // ----------------------------------------------------------------------
 
@@ -68,8 +65,9 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   }, [chucVu]);
 
   const NewProductSchema = Yup.object().shape({
-    Hoten: Yup.string().required('Phải có tên giám sát'),
+    
     ID_KhoiCV: Yup.string(),
+    Hoten: Yup.string().required('Phải có tên giám sát'),
     Sodienthoai: Yup.string().required('Phải có số điện thoại'),
     Ngaysinh: Yup.mixed<any>().nullable().required('Phải có ngày sinh'),
   });
@@ -112,7 +110,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
       if (currentGiamsat !== undefined) {
         await axios
           .put(
-            `https://checklist.pmcweb.vn/be/api/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
+            `https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
             data,
             {
               headers: {
@@ -155,7 +153,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_giamsat/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -229,7 +227,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
                   {khoiCv?.map((item) => (
-                    <MenuItem key={`${item?.ID_Khoi}`} value={`${item?.ID_Khoi}`}>
+                    <MenuItem key={`${item?.ID_KhoiCV}`} value={`${item?.ID_KhoiCV}`}>
                       {item?.KhoiCV}
                     </MenuItem>
                   ))}

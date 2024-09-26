@@ -45,7 +45,7 @@ export default function AnaLyticsDuan({ title, subheader, list, ...other }: Prop
 
   return (
     <Card {...other}>
-      <CardHeader
+      {/* <CardHeader
         title={title}
         subheader={subheader}
         action={
@@ -58,7 +58,7 @@ export default function AnaLyticsDuan({ title, subheader, list, ...other }: Prop
             Xem tất cả
           </Button>
         }
-      />
+      /> */}
 
       <Scrollbar>
         <Stack spacing={3} sx={{ p: 3 }}>

@@ -84,7 +84,7 @@ export default function FileManagerNewFolderDialog({
     }
 
     try {
-      const response = await axios.post('https://checklist.pmcweb.vn/be/api/ent_hangmuc/uploads', formData, {
+      await axios.post('https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/uploads', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${accessToken}`,
@@ -94,11 +94,13 @@ export default function FileManagerNewFolderDialog({
       enqueueSnackbar('Uploads dữ liệu thành công!');
       setLoading(false)
     } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Uploads dữ liệu thất bại';
+
       setLoading(false)
       enqueueSnackbar({
         variant: 'error',
         autoHideDuration: 2000,
-        message: 'Uploads dữ liệu thất bại',
+        message: errorMessage,
       });
     }
   };

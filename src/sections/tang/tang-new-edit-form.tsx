@@ -65,12 +65,9 @@ export default function AreaNewEditForm({ currentTang }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [includeTaxes, setIncludeTaxes] = useState(false);
   const [Duan, setDuan] = useState<IDuan[]>([]);
 
   const { duan, duanLoading, duanEmpty } = useGetDuan();
-
-
 
   useEffect(() => {
     if (duan?.length > 0) {
@@ -111,47 +108,44 @@ export default function AreaNewEditForm({ currentTang }: Props) {
     }
   }, [currentTang, defaultValues, reset]);
 
-
-
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log('data', data);
-     
-        axios
-          .post(`https://checklist.pmcweb.vn/be/api/ent_tang/create`, data, {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-          .then((res) => {
-            reset();
-            enqueueSnackbar('Tạo mới thành công!');
-          })
-          .catch((error) => {
-            if (error.response) {
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `${error.response.data.message}`,
-              });
-            } else if (error.request) {
-              // Lỗi không nhận được phản hồi từ server
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `Không nhận được phản hồi từ máy chủ`,
-              });
-            } else {
-              // Lỗi khi cấu hình request
-              enqueueSnackbar({
-                variant: 'error',
-                autoHideDuration: 2000,
-                message: `Lỗi gửi yêu cầu`,
-              });
-            }
-          });
-      
+
+      axios
+        .post(`https://checklist.pmcweb.vn/be/api/v2/ent_tang/create`, data, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          reset();
+          enqueueSnackbar('Tạo mới thành công!');
+        })
+        .catch((error) => {
+          if (error.response) {
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 2000,
+              message: `${error.response.data.message}`,
+            });
+          } else if (error.request) {
+            // Lỗi không nhận được phản hồi từ server
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 2000,
+              message: `Không nhận được phản hồi từ máy chủ`,
+            });
+          } else {
+            // Lỗi khi cấu hình request
+            enqueueSnackbar({
+              variant: 'error',
+              autoHideDuration: 2000,
+              message: `Lỗi gửi yêu cầu`,
+            });
+          }
+        });
     } catch (error) {
       enqueueSnackbar({
         variant: 'error',
@@ -161,9 +155,6 @@ export default function AreaNewEditForm({ currentTang }: Props) {
     }
   });
 
-  const handleChangeIncludeTaxes = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setIncludeTaxes(event.target.checked);
-  }, []);
 
   const renderDetails = (
     <>
@@ -200,18 +191,12 @@ export default function AreaNewEditForm({ currentTang }: Props) {
               )}
             </Stack>
 
-         
-            <RHFTextField name="Tentang" label="Tên các tầng"  multiline rows={4} />
-
-            
+            <RHFTextField name="Tentang" label="Tên các tầng" multiline rows={4} />
           </Stack>
         </Card>
       </Grid>
     </>
   );
-
- 
-
 
   const renderActions = (
     <>
@@ -221,7 +206,6 @@ export default function AreaNewEditForm({ currentTang }: Props) {
         md={8}
         sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
       >
-       
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
           {!currentTang ? 'Tạo mới' : 'Lưu thay đổi'}
         </LoadingButton>

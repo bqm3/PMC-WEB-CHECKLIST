@@ -17,22 +17,21 @@ interface Props extends CardProps {
   title?: string;
   subheader?: string;
   chart: {
-    categories?: string[];
+    categories: string[];
     colors?: string[];
-    series: {
-      type: string;
-      data: {
-        name: string;
-        data: number[];
-      }[];
-    }[];
+    series:any;
     options?: ApexOptions;
   };
   selectedYear: string;
   selectedKhoiCV: string;
+  selectedTangGiam: string;
   onYearChange: (year: string) => void;
   onKhoiChange: (khoi: string) => void;
+  onTangGiamChange: (tg: string) => void;
   STATUS_OPTIONS: any;
+  tangGiam: any,
+  handleOpenModal: (name: string,key: string ) => void;
+  handleCloseModal: () => void;
 }
 
 export default function ChecklistYearStatistics({
@@ -41,35 +40,74 @@ export default function ChecklistYearStatistics({
   chart,
   selectedYear,
   selectedKhoiCV,
+  selectedTangGiam,
   onYearChange,
   onKhoiChange,
+  onTangGiamChange,
   STATUS_OPTIONS,
+  tangGiam,
+  handleOpenModal,
+  handleCloseModal,
   ...other
 }: Props) {
   const { categories, colors, series, options } = chart;
 
-  // Manage state for the year popover
   const yearPopover = usePopover();
-
-  // Manage state for the KhoiCV popover
   const khoiPopover = usePopover();
+  const tangGiamPopover = usePopover();
+
+  const handleChartClick = (
+    event: any,
+    chartContext: any,
+    { seriesIndex, dataPointIndex, w }: any
+  ) => {
+    if (dataPointIndex !== -1 && categories.length > 0) {
+      const projectName = categories[dataPointIndex];
+      handleOpenModal(projectName, "su-co-ngoai");
+    }
+    
+  };
 
   const chartOptions = useChart({
-    colors,
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ['transparent'],
-    },
-    xaxis: {
-      categories,
-    },
-    tooltip: {
-      y: {
-        formatter: (value: number) => `${value}`,
+    chart: {
+      type: 'bar',
+      stacked: false,
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+      events: {
+        click: handleChartClick, // Attach the click event handler here at the root 'chart' level
       },
     },
-    ...options,
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        barHeight: '30%',  // Adjust height of bars for better visibility
+      },
+    },
+    colors: ['#026e4e', '#e0e7ea'], // Darker for primary, lighter for comparison
+    dataLabels: {
+      enabled: true,
+      style: {
+        colors: ['#fff'],
+      },
+      formatter: (val: any) => val.toFixed(0),
+    },
+    xaxis: {
+      categories, // Use categories for X-axis
+    },
+    grid: {
+      borderColor: '#f1f1f1',
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      y: {
+        formatter: (val: any) => `${val}`,
+      },
+    },
+   
   });
 
   const handleChangeSeries = useCallback(
@@ -88,6 +126,14 @@ export default function ChecklistYearStatistics({
     [khoiPopover, onKhoiChange]
   );
 
+  const handleChangeTangGiam = useCallback(
+    (newValue: string) => {
+      tangGiamPopover.onClose(); // Close the KhoiCV popover
+      onTangGiamChange(newValue);
+    },
+    [tangGiamPopover, onTangGiamChange]
+  );
+
   return (
     <>
       <Card {...other}>
@@ -95,7 +141,7 @@ export default function ChecklistYearStatistics({
           title={title}
           subheader={subheader}
           action={
-            <Box sx={{ gap: 2, display: 'flex' }}>
+            <Box sx={{ gap: 1, display: 'flex' }}>
               <ButtonBase
                 onClick={yearPopover.onOpen} // Open the year popover
                 sx={{
@@ -114,55 +160,32 @@ export default function ChecklistYearStatistics({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
-              <ButtonBase
-                onClick={khoiPopover.onOpen} // Open the KhoiCV popover
-                sx={{
-                  pl: 1,
-                  py: 0.5,
-                  pr: 0.5,
-                  borderRadius: 1,
-                  typography: 'subtitle2',
-                  bgcolor: 'background.neutral',
-                }}
-              >
-                {STATUS_OPTIONS.find((option: any) => option.value === selectedKhoiCV)?.label}
-                <Iconify
-                  width={16}
-                  icon={khoiPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'}
-                  sx={{ ml: 0.5 }}
-                />
-              </ButtonBase>
+            
             </Box>
           }
         />
 
-        {series.map((item) => (
-          <Box key={item.type} sx={{ mt: 3, mx: 3 }}>
-            {item.type === selectedYear && (
-              <Chart dir="ltr" type="bar" series={item.data} options={chartOptions} height={364} />
+        {/* Display chart for selected year */}
+        {series.map((item: any) => (
+          <Box key={item.name} sx={{ mt: 3, mx: 3 }}>
+            {item.name === selectedYear && (
+              <Chart dir="ltr" type="bar" series={[{ name: item.name, data: item.data }]} options={chartOptions} height={364} />
             )}
           </Box>
         ))}
       </Card>
 
+      {/* Popover for selecting year */}
       <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose} sx={{ width: 140 }}>
-        <MenuItem selected={selectedYear === '2024'} onClick={() => handleChangeSeries('2024')}>
-          2024
-        </MenuItem>
-        <MenuItem selected={selectedYear === '2025'} onClick={() => handleChangeSeries('2025')}>
-          2025
-        </MenuItem>
-      </CustomPopover>
-
-      <CustomPopover open={khoiPopover.open} onClose={khoiPopover.onClose} sx={{ width: 140 }}>
-        {STATUS_OPTIONS?.map((item: any) => (
-          <MenuItem selected={item.value === selectedKhoiCV}  onClick={() => handleChangeKhoi(item.value)}>
-            {item.label}
+        {series.map((item: any) => (
+          <MenuItem key={item.name} selected={selectedYear === item.name} onClick={() => handleChangeSeries(item.name)}>
+            {item.name}
           </MenuItem>
         ))}
       </CustomPopover>
     </>
   );
 }
+
 
 

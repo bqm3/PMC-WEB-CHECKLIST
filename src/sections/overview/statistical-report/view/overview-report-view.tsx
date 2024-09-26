@@ -1,5 +1,8 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import axios from 'axios';
+import * as XLSX from 'xlsx';
+// import Spreadsheet from 'react-spreadsheet';/
 // @mui
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -15,80 +18,36 @@ import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { LoadingButton } from '@mui/lab';
 // routes
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
+// api
+import { useGetKhoiCV, useGetKhuVuc } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // _mock
-import {
-  PRODUCT_STOCK_OPTIONS,
-  _jobs,
-  _roles,
-  JOB_SORT_OPTIONS,
-  JOB_BENEFIT_OPTIONS,
-  JOB_EXPERIENCE_OPTIONS,
-  JOB_EMPLOYMENT_TYPE_OPTIONS,
-} from 'src/_mock';
-// api
-import { useGetProducts } from 'src/api/product';
-import {
-  useGetChecklist,
-  useGetCalv,
-  useGetTb_Checklist,
-  useGetChecklistWeb,
-  useGetKhoiCV,
-} from 'src/api/khuvuc';
+import { PRODUCT_STOCK_OPTIONS, _jobs, _roles, REPORT_CHECKLIST } from 'src/_mock';
 // components
 import { useSettingsContext } from 'src/components/settings';
-import {
-  useTable,
-  getComparator,
-  emptyRows,
-  TableNoData,
-  TableSkeleton,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
-} from 'src/components/table';
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useTable, getComparator } from 'src/components/table';
+import { useSnackbar } from 'src/components/snackbar';
 
 // types
 import { IBaoCaoTableFilters, IBaoCaoTableFilterValue, ITbChecklist } from 'src/types/khuvuc';
-import { IProductItem } from 'src/types/product';
 //
-import ProductTableRow from '../product-table-row';
-import ProductTableToolbar from '../product-table-toolbar';
-import ProductTableFiltersResult from '../product-table-filters-result';
+import StatisticalTableToolbar from '../statistical-table-toolbar';
+
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'name', label: 'Product' },
-  { id: 'createdAt', label: 'Create at', width: 160 },
-  { id: 'inventoryType', label: 'Stock', width: 160 },
-  { id: 'price', label: 'Price', width: 140 },
-  { id: 'publish', label: 'Publish', width: 110 },
-  { id: '', width: 88 },
-];
-
-const PUBLISH_OPTIONS = [
-  { value: 'published', label: 'Published' },
-  { value: 'draft', label: 'Draft' },
-];
 
 const defaultFilters: IBaoCaoTableFilters = {
   name: '',
   publish: [],
   stock: [],
   startDate: null,
-  endDate: null,
+  endDate: new Date(),
 };
 
+const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export const OverviewReportView = () => {
@@ -98,61 +57,29 @@ export const OverviewReportView = () => {
 
   const settings = useSettingsContext();
 
-  const [tableData, setTableData] = useState<ITbChecklist[]>([]);
-  const [indexBaoCao, setIndexBaoCao] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [filters, setFilters] = useState(defaultFilters);
-
-  const { products, productsLoading, productsEmpty } = useGetProducts();
-
-  const confirm = useBoolean();
-
-  const { tb_checkList, tb_checkListTotalPages, tb_checklistTotalCount, mutateTb_Checklist } =
-    useGetTb_Checklist({
-      page: table.page,
-      limit: table.rowsPerPage,
-    });
-
-    const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
-
-
-  const { calv } = useGetCalv();
+  const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const { khoiCV } = useGetKhoiCV();
 
-  // Use the checklist data in useEffect to set table data
-  useEffect(() => {
-    if (tb_checkList) {
-      setTableData(tb_checkList);
-    }
-  }, [tb_checkList]);
+  const [indexBaoCao, setIndexBaoCao] = useState(null);
 
-  useEffect(() => {
-    // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach((khoi) => {
-      set_STATUS_OPTIONS((prevOptions) => [
-        ...prevOptions,
-        { value: khoi.ID_Khoi.toString(), label: khoi.KhoiCV },
-      ]);
-    });
-  }, [khoiCV]);
+  const [loading, setLoading] = useState(false);
 
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-  });
+  const [filters, setFilters] = useState(defaultFilters);
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
+  const confirm = useBoolean();
+
+  const STATUS_OPTIONS = useMemo(
+    () => [
+      ...khoiCV.map((khoi: any) => ({
+        value: khoi.ID_KhoiCV.toString(),
+        label: khoi.KhoiCV,
+      })),
+    ],
+    [khoiCV]
   );
-
-  const denseHeight = table.dense ? 60 : 80;
-
-  const canReset = !isEqual(defaultFilters, filters);
-
-  const notFound = (!dataFiltered.length && canReset) || productsEmpty;
 
   const handleFilters = useCallback(
     (name: string, value: IBaoCaoTableFilterValue) => {
@@ -165,184 +92,303 @@ export const OverviewReportView = () => {
     [table]
   );
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
   const handleClickBaoCao = useCallback((value: any) => {
     setIndexBaoCao(value);
   }, []);
 
+  const [tableData, setTableData] = useState<any>([]);
+
+  const handleFile = async (blob: any) => {
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+      setTableData(jsonData); // Cập nhật state với dữ liệu JSON từ Excel
+    };
+
+    reader.readAsArrayBuffer(blob);
+  };
+
+  const handleShowFile = async () => {
+    const response = await axios.post(
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/thong-ke-hang-muc-quan-trong`,
+      {
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        ID_KhoiCVs: filters.publish,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: 'blob',
+      }
+    );
+
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'],
+    });
+
+    // Gọi hàm để xử lý file Excel và cập nhật vào state
+    handleFile(blob);
+  };
+
+  const handleExportReport = async () => {
+    setLoading(true);
+    const response = await axios.post(
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/cac-loai-bao-cao/${indexBaoCao}`,
+      {
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        ID_KhoiCVs: filters.publish,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: 'blob',
+      }
+    );
+
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'],
+    });
+
+    // Create a link element
+    const link = document.createElement('a');
+    // Set the download attribute with a filename
+    link.href = window.URL.createObjectURL(blob);
+    link.download =
+      (indexBaoCao === '1' && 'Tổng hợp ca.xlsx') ||
+      (indexBaoCao === '3' && 'Báo cáo checklist có vấn đề.xlsx') ||
+      (indexBaoCao === '2' && 'Bảng kê các sự cố khẩn cấp nằm ngoài Checklist.xlsx') ||
+      '';
+
+    // Append the link to the body
+    document.body.appendChild(link);
+
+    // Programmatically trigger a click on the link to download the file
+    link.click();
+
+    // Remove the link from the document
+    document.body.removeChild(link);
+    setLoading(false);
+  };
+
+  const handleExportStatistical = async () => {
+    setLoading(true);
+    const response = await axios.post(
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/thong-ke`,
+      {
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: 'blob',
+      }
+    );
+
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'],
+    });
+
+    // Create a link element
+    const link = document.createElement('a');
+
+    // Set the download attribute with a filename
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'Thống kê tra cứu.xlsx';
+
+    // Append the link to the body
+    document.body.appendChild(link);
+
+    // Programmatically trigger a click on the link to download the file
+    link.click();
+
+    // Remove the link from the document
+    document.body.removeChild(link);
+    setLoading(false);
+  };
+
+  const handleExportAllArticleImportant = async () => {
+    setLoading(true);
+    const response = await axios.post(
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/thong-ke-hang-muc-quan-trong`,
+      {
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        ID_KhoiCVs: filters.publish,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: 'blob',
+      }
+    );
+
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'],
+    });
+
+    // Create a link element
+    const link = document.createElement('a');
+
+    // Set the download attribute with a filename
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'Báo cáo tổng hợp Checklist ngăn ngừa rủi ro.xlsx';
+
+    // Append the link to the body
+    document.body.appendChild(link);
+
+    // Programmatically trigger a click on the link to download the file
+    link.click();
+
+    // Remove the link from the document
+    document.body.removeChild(link);
+    setLoading(false);
+  };
+
+  const handleValidate = (data: string) => {
+    // Common validation function
+    const isMissingRequiredFields =
+      filters.startDate === null || filters.endDate === null || filters.publish.length === 0;
+
+    // Display error message
+    const showError = () => {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 2000,
+        message: `Phải nhập đầy đủ thông tin`,
+      });
+    };
+
+    // Validate and perform actions based on `data` value
+    switch (data) {
+      case '3':
+        if (isMissingRequiredFields) {
+          showError();
+        } else {
+          handleExportReport();
+        }
+        break;
+
+      case '4':
+        if (isMissingRequiredFields) {
+          showError();
+        } else {
+          handleExportStatistical();
+        }
+        break;
+      case '5':
+        if (isMissingRequiredFields) {
+          showError();
+        } else {
+          handleExportAllArticleImportant();
+        }
+        break;
+      case '1':
+      case '2':
+        if (filters.startDate === null || filters.endDate === null) {
+          showError();
+        } else {
+          handleExportReport();
+        }
+        break;
+
+      default:
+        // Optional: Handle cases for invalid `data`
+        break;
+    }
+  };
+
   return (
-      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <Stack>
-          <Typography variant="h5" sx={{ mb: 1 }}>
-            Loại báo cáo
-          </Typography>
-          <Stack sx={{ mb: 1 }}>
-            {JOB_EXPERIENCE_OPTIONS.map((option) => (
-              <FormControlLabel
-                key={option.value}
-                control={
-                  <Radio
-                    checked={option.value === indexBaoCao}
-                    onClick={() => handleClickBaoCao(option.value)}
-                  />
-                }
-                label={option.label}
-                sx={{ textTransform: 'capitalize', fontSize: 20 }}
-              />
-            ))}
-          </Stack>
-        </Stack>
-        <Card>
-          <ProductTableToolbar
-            filters={filters}
-            onFilters={handleFilters}
-            //
-            stockOptions={PRODUCT_STOCK_OPTIONS}
-            publishOptions={PUBLISH_OPTIONS}
-          />
-
-          {canReset && (
-            <ProductTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
-
-          {/* <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={tableData.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.id)
-                    )
-                  }
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <Stack>
+        <Typography variant="h5" sx={{ mb: 1 }}>
+          Loại báo cáo
+        </Typography>
+        <Stack sx={{ mb: 1 }}>
+          {REPORT_CHECKLIST.map((option) => (
+            <FormControlLabel
+              key={option.value}
+              control={
+                <Radio
+                  checked={option.value === indexBaoCao}
+                  onClick={() => handleClickBaoCao(option.value)}
                 />
+              }
+              label={option.label}
+              sx={{ textTransform: 'capitalize', fontSize: 20 }}
+            />
+          ))}
+        </Stack>
+      </Stack>
+      <Card>
+        <StatisticalTableToolbar
+          filters={filters}
+          indexBaoCao={indexBaoCao}
+          onFilters={handleFilters}
+          publishOptions={STATUS_OPTIONS}
+        />
+        {/* handleShowFile  */}
+        {/* <Button
+            sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
+            variant="contained"
+            onClick={() => handleShowFile()}
+            disabled={loading}
+          >
+            Preview
+          </Button> */}
+        {`${indexBaoCao}` === '4' ? (
+          <Button
+            sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
+            variant="contained"
+            onClick={() => handleValidate(`${indexBaoCao}`)}
+            disabled={loading}
+          >
+            Xuất Thống Kê
+          </Button>
+        ) : (
+          <Button
+            sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
+            variant="contained"
+            onClick={() => handleValidate(`${indexBaoCao}`)}
+            disabled={loading}
+          >
+            Xuất Báo Cáo
+          </Button>
+        )}
+      </Card>
 
-                <TableBody>
-                  {productsLoading ? (
-                    [...Array(table.rowsPerPage)].map((i, index) => (
-                      <TableSkeleton key={index} sx={{ height: denseHeight }} />
-                    ))
-                  ) : (
-                    <>
-                      {dataFiltered
-                        .slice(
-                          table.page * table.rowsPerPage,
-                          table.page * table.rowsPerPage + table.rowsPerPage
-                        )
-                        .map((row) => (
-                          <ProductTableRow
-                            key={row.id}
-                            row={row}
-                            selected={table.selected.includes(row.id)}
-                            // onSelectRow={() => table.onSelectRow(row.id)}
-                            // onDeleteRow={() => handleDeleteRow(row.id)}
-                            // onEditRow={() => handleEditRow(row.id)}
-                            // onViewRow={() => handleViewRow(row.id)}
-                          />
-                        ))}
-                    </>
-                  )}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer> */}
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
-
-      
+      {tableData.length > 0 && (
+        <table border={1}>
+          <thead>
+            <tr>
+              {tableData[0].map((col: any, index: any) => (
+                <th key={index}>{col}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {tableData.slice(1).map((row: any, rowIndex: any) => (
+              <tr key={rowIndex}>
+                {row.map((cell: any, cellIndex: any) => (
+                  <td key={cellIndex}>{cell}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </Container>
   );
 };
-
-// ----------------------------------------------------------------------
-
-function applyFilter({
-  inputData,
-  comparator,
-  filters,
-}: {
-  inputData: ITbChecklist[];
-  comparator: (a: any, b: any) => number;
-  filters: IBaoCaoTableFilters;
-}) {
-  const { name, stock, publish } = filters;
-
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el) => el[0]);
-
-  // if (name) {
-  //   inputData = inputData.filter(
-  //     (product) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
-  //   );
-  // }
-
-  // if (stock.length) {
-  //   inputData = inputData.filter((product) => stock.includes(product.inventoryType));
-  // }
-
-  // if (publish.length) {
-  //   inputData = inputData.filter((product) => publish.includes(product.publish));
-  // }
-
-  return inputData;
-}

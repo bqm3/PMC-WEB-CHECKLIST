@@ -17,7 +17,7 @@ export default function GiamsatEditPage() {
         <title> Dashboard: Cập nhật khu vực giám sát</title>
       </Helmet>
 
-      <GiamsatEditView id={`${id}`} />
+      {/* <GiamsatEditView id={`${id}`} /> */}
     </>
   );
 }
