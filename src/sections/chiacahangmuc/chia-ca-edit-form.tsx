@@ -67,6 +67,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   const [areasData, setAreasData] = useState<IKhuvuc[]>([]);
 
   const [checkedStates, setCheckedStates] = useState<any>([]);
+  const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
 
   const { khuvuc } = useGetKhuVuc();
   const { thietlapca, khuvucCheck } = useGetDetailPhanCaByDuan(id);
@@ -204,6 +205,20 @@ export default function ChiaCaNewEditForm({ id }: Props) {
     setCheckedStates(updatedCheckedStates);
   };
 
+  const handleSelectAllChange = (event: any) => {
+    const isChecked = event.target.checked;
+    setIsSelectAllChecked(isChecked);
+
+    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+      buildingCheckedStates.map((item: any) => ({
+        ...item,
+        checked: item.Important ? true : isChecked, // Prevent unchecking important items
+      }))
+    );
+
+    setCheckedStates(updatedCheckedStates);
+  };
+
   const onSubmit = async () => {
     setLoading(true);
     const ID_HangmucCheckedTrue = checkedStates
@@ -260,6 +275,28 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   const renderDetails = (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <FormControlLabel
+        title="Chọn tất cả"
+        label="Chọn tất cả"
+        control={
+          <Checkbox
+            size="medium"
+            checked={isSelectAllChecked}
+            onChange={handleSelectAllChange}
+            indeterminate={
+              checkedStates.flat().some((item: any) => item.checked) &&
+              !checkedStates.flat().every((item: any) => item.checked)
+            }
+          />
+        }
+        sx={{
+          '.MuiFormControlLabel-label': {
+            fontWeight: 'bold',
+            fontSize: '17px',
+          },
+        }}
+      />
+
       <Card>
         <Stack spacing={2} flexWrap="wrap" p={2}>
           {areasData.map((area, areaIndex) => {
@@ -336,6 +373,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   const renderOptions = (
     <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 }}>
+      
       <Card>
         <Stack spacing={3} sx={{ p: 3 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

@@ -63,6 +63,7 @@ export default function ChiaCaNewEditForm() {
   const [areasData, setAreasData] = useState<IKhuvuc[]>([]);
 
   const [checkedStates, setCheckedStates] = useState<any>([]);
+  const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
 
   const { khuvuc } = useGetKhuVuc();
 
@@ -139,8 +140,8 @@ export default function ChiaCaNewEditForm() {
           kv.ent_hangmuc.map((hm, index) => ({
             ID_Hangmuc: hm.ID_Hangmuc,
             Important: `${hm.Important}` === '1', // Simplified
-          Index: index,
-          checked: `${hm.Important}` === '1', // Simplified
+            Index: index,
+            checked: `${hm.Important}` === '1', // Simplified
           }))
         )
       );
@@ -166,7 +167,7 @@ export default function ChiaCaNewEditForm() {
 
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;
-  
+
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
       `${index}` === `${buildingIndex}`
         ? buildingCheckedStates?.map((data: any) => ({
@@ -175,10 +176,9 @@ export default function ChiaCaNewEditForm() {
           }))
         : buildingCheckedStates
     );
-  
+
     setCheckedStates(updatedCheckedStates);
   };
-  
 
   // Handle change for individual child checkboxes
   const handleChildChange = (buildingIndex: any, areaIndex: any) => (event: any) => {
@@ -189,6 +189,20 @@ export default function ChiaCaNewEditForm() {
           )
         : buildingCheckedStates
     );
+    setCheckedStates(updatedCheckedStates);
+  };
+
+  const handleSelectAllChange = (event: any) => {
+    const isChecked = event.target.checked;
+    setIsSelectAllChecked(isChecked);
+
+    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+      buildingCheckedStates.map((item: any) => ({
+        ...item,
+        checked: item.Important ? true : isChecked, // Prevent unchecking important items
+      }))
+    );
+
     setCheckedStates(updatedCheckedStates);
   };
 
@@ -248,6 +262,28 @@ export default function ChiaCaNewEditForm() {
 
   const renderDetails = (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <FormControlLabel
+        title="Chọn tất cả"
+        label="Chọn tất cả"
+        control={
+          <Checkbox
+            size="medium"
+            checked={isSelectAllChecked}
+            onChange={handleSelectAllChange}
+            indeterminate={
+              checkedStates.flat().some((item: any) => item.checked) &&
+              !checkedStates.flat().every((item: any) => item.checked)
+            }
+          />
+        }
+        sx={{
+          '.MuiFormControlLabel-label': {
+            fontWeight: 'bold',
+            fontSize: '17px',
+          },
+        }}
+      />
+
       <Card>
         <Stack spacing={2} flexWrap="wrap" p={2}>
           {areasData.map((area, areaIndex) => {
@@ -286,19 +322,18 @@ export default function ChiaCaNewEditForm() {
                 />
                 <div>
                   {area.ent_hangmuc.map((item, itemIndex) => (
-                   <FormControlLabel
-                   key={item.ID_Hangmuc}
-                   label={`${item.Hangmuc}`}
-                   control={
-                     <Checkbox
-                       size="medium"
-                       checked={areaCheckedStates[itemIndex]?.checked}
-                       onChange={handleChildChange(areaIndex, itemIndex)}
-                       disabled={areaCheckedStates[itemIndex]?.Important} // Disable if Important is true
-                     />
-                   }
-                 />
-                 
+                    <FormControlLabel
+                      key={item.ID_Hangmuc}
+                      label={`${item.Hangmuc}`}
+                      control={
+                        <Checkbox
+                          size="medium"
+                          checked={areaCheckedStates[itemIndex]?.checked}
+                          onChange={handleChildChange(areaIndex, itemIndex)}
+                          disabled={areaCheckedStates[itemIndex]?.Important} // Disable if Important is true
+                        />
+                      }
+                    />
                   ))}
                 </div>
               </Stack>
