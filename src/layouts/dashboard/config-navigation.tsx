@@ -63,7 +63,6 @@ export function getRootPathByRole(u: IUser){
 export function useNavData() {
   const { t } = useLocales();
   const { user, logout } = useAuthContext();
-  console.log('u', user)
 
   const data = useMemo(() => {
     const navigationData = [

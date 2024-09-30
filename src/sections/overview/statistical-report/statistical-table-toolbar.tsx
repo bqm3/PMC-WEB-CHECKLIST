@@ -50,7 +50,7 @@ export default function ProductTableToolbar({ filters, onFilters, publishOptions
     (event: SelectChangeEvent<string[]>) => {
       onFilters(
         'publish',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+        typeof event.target.value === 'string' ? event.target.value.split(', ') : event.target.value
       );
     },
     [onFilters]

@@ -1,33 +1,39 @@
-import isEqual from 'lodash/isEqual';
+/* eslint-disable import/no-extraneous-dependencies */
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import axios from 'axios';
-import * as XLSX from 'xlsx';
-// import Spreadsheet from 'react-spreadsheet';/
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import Spreadsheet from 'react-spreadsheet';
 // @mui
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
-import TableContainer from '@mui/material/TableContainer';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { LoadingButton } from '@mui/lab';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 // routes
 import { useRouter } from 'src/routes/hooks';
 // api
 import { useGetKhoiCV, useGetKhuVuc } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
+// auth
+import { useAuthContext } from 'src/auth/hooks';
 // _mock
 import { PRODUCT_STOCK_OPTIONS, _jobs, _roles, REPORT_CHECKLIST } from 'src/_mock';
 // components
+
 import { useSettingsContext } from 'src/components/settings';
 import { useTable, getComparator } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,6 +42,8 @@ import { useSnackbar } from 'src/components/snackbar';
 import { IBaoCaoTableFilters, IBaoCaoTableFilterValue, ITbChecklist } from 'src/types/khuvuc';
 //
 import StatisticalTableToolbar from '../statistical-table-toolbar';
+//
+import InvoicePDF from '../invoice-pdf';
 
 // ----------------------------------------------------------------------
 
@@ -55,9 +63,12 @@ export const OverviewReportView = () => {
 
   const table = useTable();
 
+  const view = useBoolean();
+
   const settings = useSettingsContext();
 
   const { enqueueSnackbar } = useSnackbar();
+  const { user, logout } = useAuthContext();
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
@@ -66,10 +77,10 @@ export const OverviewReportView = () => {
   const [indexBaoCao, setIndexBaoCao] = useState(null);
 
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState<any>(false);
+  const [spreadsheetData, setSpreadsheetData] = useState([]);
 
   const [filters, setFilters] = useState(defaultFilters);
-
-  const confirm = useBoolean();
 
   const STATUS_OPTIONS = useMemo(
     () => [
@@ -96,52 +107,11 @@ export const OverviewReportView = () => {
     setIndexBaoCao(value);
   }, []);
 
-  const [tableData, setTableData] = useState<any>([]);
-
-  const handleFile = async (blob: any) => {
-    const reader = new FileReader();
-
-    reader.onload = (e: any) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-      setTableData(jsonData); // Cập nhật state với dữ liệu JSON từ Excel
-    };
-
-    reader.readAsArrayBuffer(blob);
-  };
-
-  const handleShowFile = async () => {
-    const response = await axios.post(
-      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/thong-ke-hang-muc-quan-trong`,
-      {
-        startDate: filters.startDate,
-        endDate: filters.endDate,
-        ID_KhoiCVs: filters.publish,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        responseType: 'blob',
-      }
-    );
-
-    const blob = new Blob([response.data], {
-      type: response.headers['content-type'],
-    });
-
-    // Gọi hàm để xử lý file Excel và cập nhật vào state
-    handleFile(blob);
-  };
-
+  // xuat file words
   const handleExportReport = async () => {
     setLoading(true);
     const response = await axios.post(
-      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/cac-loai-bao-cao/${indexBaoCao}`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/reports/${indexBaoCao}`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -178,6 +148,32 @@ export const OverviewReportView = () => {
     // Remove the link from the document
     document.body.removeChild(link);
     setLoading(false);
+  };
+
+  // xuat file excel
+  const fetchExcelData = async () => {
+    try {
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/preview-reports/${indexBaoCao}`,
+        {
+          startDate: filters.startDate,
+          endDate: filters.endDate,
+          ID_KhoiCVs: filters.publish,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      // Convert the received data into a format suitable for react-spreadsheet
+      const formattedData = response.data.map((row: any) =>
+        row.map((cell: any) => ({ value: cell }))
+      );
+      setSpreadsheetData(formattedData);
+    } catch (error) {
+      console.error('Error fetching Excel data:', error);
+    }
   };
 
   const handleExportStatistical = async () => {
@@ -221,7 +217,7 @@ export const OverviewReportView = () => {
   const handleExportAllArticleImportant = async () => {
     setLoading(true);
     const response = await axios.post(
-      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/thong-ke-hang-muc-quan-trong`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-article-important`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -255,6 +251,27 @@ export const OverviewReportView = () => {
     // Remove the link from the document
     document.body.removeChild(link);
     setLoading(false);
+  };
+
+  const handlePreviewExportAllArticleImportant = async () => {
+    const response = await axios.post(
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/preview-report-article-important`,
+      {
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        ID_KhoiCVs: filters.publish,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const formattedData = response.data.map((row: any) =>
+      row.map((cell: any) => ({ value: cell }))
+    );
+    setSpreadsheetData(formattedData);
   };
 
   const handleValidate = (data: string) => {
@@ -310,18 +327,75 @@ export const OverviewReportView = () => {
     }
   };
 
+  const handleValidatePreview = (data: string) => {
+    // Common validation function
+    const isMissingRequiredFields =
+      filters.startDate === null || filters.endDate === null || filters.publish.length === 0;
+
+    // Display error message
+    const showError = () => {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 2000,
+        message: `Phải nhập đầy đủ thông tin`,
+      });
+    };
+
+    // Validate and perform actions based on `data` value
+    switch (data) {
+      case '3':
+        if (isMissingRequiredFields) {
+          showError();
+        } else {
+          setShowModal(true);
+          fetchExcelData();
+        }
+        break;
+
+      case '4':
+        if (isMissingRequiredFields) {
+          showError();
+        } else {
+          handleExportStatistical();
+        }
+        break;
+      case '5':
+        if (isMissingRequiredFields) {
+          showError();
+        } else {
+          setShowModal(true);
+          handlePreviewExportAllArticleImportant();
+        }
+        break;
+      case '1':
+      case '2':
+        if (filters.startDate === null || filters.endDate === null) {
+          showError();
+        } else {
+          setShowModal(true);
+          fetchExcelData();
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+    <>
+      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Stack>
         <Typography variant="h5" sx={{ mb: 1 }}>
           Loại báo cáo
         </Typography>
+
         <Stack sx={{ mb: 1 }}>
           {REPORT_CHECKLIST.map((option) => (
             <FormControlLabel
               key={option.value}
               control={
                 <Radio
+                  disabled={option.value === '4'}
                   checked={option.value === indexBaoCao}
                   onClick={() => handleClickBaoCao(option.value)}
                 />
@@ -339,15 +413,7 @@ export const OverviewReportView = () => {
           onFilters={handleFilters}
           publishOptions={STATUS_OPTIONS}
         />
-        {/* handleShowFile  */}
-        {/* <Button
-            sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
-            variant="contained"
-            onClick={() => handleShowFile()}
-            disabled={loading}
-          >
-            Preview
-          </Button> */}
+
         {`${indexBaoCao}` === '4' ? (
           <Button
             sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
@@ -367,28 +433,61 @@ export const OverviewReportView = () => {
             Xuất Báo Cáo
           </Button>
         )}
+        <Button
+          sx={{ m: 2.5, float: 'right' }}
+          variant="contained"
+          color="success"
+          onClick={() => {
+            handleValidatePreview(`${indexBaoCao}`);
+          }}
+          disabled={loading}
+        >
+          Preview
+        </Button>
       </Card>
 
-      {tableData.length > 0 && (
-        <table border={1}>
-          <thead>
-            <tr>
-              {tableData[0].map((col: any, index: any) => (
-                <th key={index}>{col}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {tableData.slice(1).map((row: any, rowIndex: any) => (
-              <tr key={rowIndex}>
-                {row.map((cell: any, cellIndex: any) => (
-                  <td key={cellIndex}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+    
     </Container>
+      <Dialog open={showModal} onClose={() => setShowModal(false)} fullWidth maxWidth="lg">
+      <DialogContent sx={{ mt: 2.5, mr: 2.5 }}>
+        <Spreadsheet data={spreadsheetData}/>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          color="success"
+          variant="contained"
+          onClick={() => handleValidate(`${indexBaoCao}`)}
+        >
+          Download Excel
+        </Button>
+        <Button color="error" variant="contained" onClick={view.onTrue}>
+          Download PDF
+        </Button>
+        <Button color="inherit" variant="contained" onClick={() => setShowModal(false)}>
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+    <Dialog fullScreen open={view.value}>
+      <Box sx={{ height: 1, display: 'flex', flexDirection: 'column' }}>
+        <DialogActions
+          sx={{
+            p: 1.5,
+          }}
+        >
+          <Button color="inherit" variant="contained" onClick={view.onFalse}>
+            Close
+          </Button>
+        </DialogActions>
+
+        <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
+          <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
+            <InvoicePDF spreadsheetData={spreadsheetData} />
+          </PDFViewer>
+        </Box>
+      </Box>
+    </Dialog>
+    </>
   );
 };
