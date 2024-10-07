@@ -90,7 +90,7 @@ export default function AreaTableRow({
      
       <TableCell> {Gioht} </TableCell>
       <TableCell>
-        {Anh !== null && Anh !== undefined && (
+        {(Anh !== null && Anh !== undefined && Anh !== '') && (
           <Avatar
             src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
             variant="rounded"

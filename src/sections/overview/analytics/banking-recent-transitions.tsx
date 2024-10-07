@@ -23,7 +23,8 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { TableHeadCustom } from 'src/components/table';
+import { TableHeadCustom, TablePaginationCustom } from 'src/components/table';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +58,22 @@ export default function BankingRecentTransitions({
   handleViewRow,
   ...other
 }: Props) {
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
+
+  // Sliced data for pagination
+  const paginatedData = tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  const handlePageChange = (event: any, newPage: any) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (event: any) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
@@ -67,14 +84,21 @@ export default function BankingRecentTransitions({
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData.map((row) => (
+              {paginatedData.map((row) => (
                 <BankingRecentTransitionsRow key={row.Anh} row={row} handleViewRow={()=>handleViewRow(row)}/>
               ))}
             </TableBody>
           </Table>
         </Scrollbar>
       </TableContainer>
-
+      <TablePaginationCustom
+        count={tableData.length}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        dense={false}
+      />
       {/* <Divider sx={{ borderStyle: 'dashed' }} />
 
       <Box sx={{ p: 2, textAlign: 'right' }}>

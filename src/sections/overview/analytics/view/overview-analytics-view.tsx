@@ -435,42 +435,7 @@ export default function OverviewAnalyticsView() {
           </LoadingButton>
         </Grid>
         <Grid container spacing={3}>
-          <Grid xs={12} md={12} lg={12}>
-            {dataTotalErrorWeek && (
-              <BankingRecentTransitions
-                title="Sự cố ngày hôm trước"
-                tableData={dataTotalErrorWeek}
-                handleViewRow={handleClickOpen}
-                tableLabels={[
-                  { id: 'checklistName', label: 'Tên checklist' },
-                  { id: 'Ngay', label: 'Ngày' },
-                  { id: 'calv', label: 'Ca làm việc' },
-                  { id: 'note', label: 'Ghi chú' },
-                  { id: 'Giamsat', label: 'Giám sát' },
-                  { id: 'image', label: 'Ảnh' },
-                  { id: '' },
-                ]}
-              />
-            )}
-          </Grid>
-
-          <Grid xs={12} md={12} lg={12}>
-            {dataTotalErrorWeek && (
-              <ChecklistRecentTransitions
-                title="Các checklist lỗi"
-                tableData={dataChecklistsError}
-                tableLabels={[
-                  { id: 'checklistName', label: 'Tên checklist' },
-                  { label: 'Giá trị định danh', id: 'Giatridinhdanh' },
-                  { label: 'Giá trị nhận', id: 'Giatrinhan' },
-                  { label: 'Tầng', id: 'Tentang' },
-                  { label: 'Số thứ tự', id: 'Sothutu' },
-                  { label: 'Mã số', id: 'Maso' },
-                  { label: 'Hạng mục', id: 'Hangmuc' },
-                ]}
-              />
-            )}
-          </Grid>
+         
 
           <Grid xs={12} md={12} lg={12}>
             <Box sx={{ maxHeight: 400, width: '100%', my: 4 }}>
@@ -585,6 +550,43 @@ export default function OverviewAnalyticsView() {
                     'rgb(0, 184, 217)',
                   ],
                 }}
+              />
+            )}
+          </Grid>
+
+          <Grid xs={12} md={12} lg={12}>
+            {dataTotalErrorWeek && (
+              <BankingRecentTransitions
+                title="Sự cố ngày hôm trước"
+                tableData={dataTotalErrorWeek}
+                handleViewRow={handleClickOpen}
+                tableLabels={[
+                  { id: 'checklistName', label: 'Tên checklist' },
+                  { id: 'Ngay', label: 'Ngày' },
+                  { id: 'calv', label: 'Ca làm việc' },
+                  { id: 'note', label: 'Ghi chú' },
+                  { id: 'Giamsat', label: 'Giám sát' },
+                  { id: 'image', label: 'Ảnh' },
+                  { id: '' },
+                ]}
+              />
+            )}
+          </Grid>
+
+          <Grid xs={12} md={12} lg={12}>
+            {dataTotalErrorWeek && (
+              <ChecklistRecentTransitions
+                title="Các checklist lỗi"
+                tableData={dataChecklistsError}
+                tableLabels={[
+                  { id: 'checklistName', label: 'Tên checklist' },
+                  { label: 'Giá trị định danh', id: 'Giatridinhdanh' },
+                  { label: 'Giá trị nhận', id: 'Giatrinhan' },
+                  { label: 'Tầng', id: 'Tentang' },
+                  { label: 'Số thứ tự', id: 'Sothutu' },
+                  { label: 'Mã số', id: 'Maso' },
+                  { label: 'Hạng mục', id: 'Hangmuc' },
+                ]}
               />
             )}
           </Grid>

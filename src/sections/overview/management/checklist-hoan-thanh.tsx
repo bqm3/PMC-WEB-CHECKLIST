@@ -112,7 +112,7 @@ export default function ChecklistsHoanThanh({
       style: {
         colors: ['#fff']
       },
-      formatter: (val: any) => `${val.toFixed(0)}`,
+      formatter: (val: any) => `${`${val?.toFixed(0)}`}`,
     },
     xaxis: {
       categories,

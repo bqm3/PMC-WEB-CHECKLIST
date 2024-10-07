@@ -233,17 +233,6 @@ export default function ChecklistCalvListView() {
     [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
   );
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_ChecklistC));
-    setTableData(deleteRows);
-
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData?.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered?.length,
-    });
-  }, [dataFiltered?.length, dataInPage.length, table, tableData]);
-
   const getStatusText = (status: any) => {
     switch (status) {
       case '1':

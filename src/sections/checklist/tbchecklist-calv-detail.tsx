@@ -324,7 +324,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
-             1
+             {" "}
             </Typography>
             Ngày: {formatDateString(dataChecklistC?.Ngay)}
             <br />

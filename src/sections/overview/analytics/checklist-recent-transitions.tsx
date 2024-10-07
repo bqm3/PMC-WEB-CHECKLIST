@@ -1,30 +1,18 @@
 import { format } from 'date-fns';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import CardHeader from '@mui/material/CardHeader';
 import Card, { CardProps } from '@mui/material/Card';
 import ListItemText from '@mui/material/ListItemText';
-import Badge, { badgeClasses } from '@mui/material/Badge';
 import TableContainer from '@mui/material/TableContainer';
-// utils
-import { fCurrency } from 'src/utils/format-number';
-// components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { TableHeadCustom } from 'src/components/table';
+import { TableHeadCustom, TablePaginationCustom } from 'src/components/table';
 import { IChecklist } from 'src/types/khuvuc';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +44,21 @@ export default function BankingRecentTransitions({
   tableData,
   ...other
 }: Props) {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
+
+  // Sliced data for pagination
+  const paginatedData = tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  const handlePageChange = (event: any, newPage: any) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (event: any) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
@@ -66,14 +69,21 @@ export default function BankingRecentTransitions({
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData.map((row) => (
+              {paginatedData.map((row) => (
                 <BankingRecentTransitionsRow key={row.ID_Checklist} row={row} />
               ))}
             </TableBody>
           </Table>
         </Scrollbar>
       </TableContainer>
-
+      <TablePaginationCustom
+        count={tableData.length}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        dense={false}
+      />
       {/* <Divider sx={{ borderStyle: 'dashed' }} />
 
       <Box sx={{ p: 2, textAlign: 'right' }}>

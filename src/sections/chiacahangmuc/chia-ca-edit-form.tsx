@@ -71,7 +71,6 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   const { khuvuc } = useGetKhuVuc();
   const { thietlapca, khuvucCheck } = useGetDetailPhanCaByDuan(id);
-
   const [Calv, setCalv] = useState<ICalv[]>([]);
   const [ToaNha, setToaNha] = useState<any>();
   const [KhoiCV, setKhoiCV] = useState<any>();
@@ -113,6 +112,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   useEffect(() => {
     if (thietlapca && calv && KhoiCV) {
       const newCalv = calv?.filter((item: any) => `${item.ID_Calv}` === `${thietlapca?.ID_Calv}`);
+
       setOptionCalv(newCalv[0]);
       setSelectedChuky(Number(thietlapca?.Ngaythu));
       const selectedKhoiCV = KhoiCV?.filter(
@@ -122,7 +122,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
       const arrChuky = thietlapca.ent_duan.ent_duan_khoicv;
       const chukyDetail = arrChuky.filter(
-        (item: any) => `${thietlapca?.ent_calv?.ID_KhoiCV}` === `${item.ID_KhoiCV}`
+        (item: any) => `${thietlapca?.ent_calv?.ID_KhoiCV}` === `${item.ID_KhoiCV}` &&  `${item.isDelete}` === "0"
       );
       setChukyData(chukyDetail[0].Chuky);
     }
@@ -159,7 +159,6 @@ export default function ChiaCaNewEditForm({ id }: Props) {
                 optionToaNha.includes(kv.ID_Toanha)
             )
           : khuvuc;
-
       setAreasData(filteredAreas);
       setCheckedStates(
         filteredAreas.map((kv) =>

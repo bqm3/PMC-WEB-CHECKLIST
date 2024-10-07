@@ -92,7 +92,7 @@ export default function AreaTableRow({
       <TableCell> {ent_user?.Hoten} </TableCell>
       <TableCell>
         {' '}
-       {Tong}
+       {TongC} / {Tong}
       </TableCell>
 
       <TableCell>{Giobd} {Giokt ? `- ${Giokt}` : ''}</TableCell>

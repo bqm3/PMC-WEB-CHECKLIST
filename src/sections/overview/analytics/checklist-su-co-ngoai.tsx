@@ -70,7 +70,7 @@ export default function ChecklistYearStatistics({
       style: {
         colors: ['#fff'],
       },
-      formatter: (val: any) => val.toFixed(0),
+      formatter: (val: any) => `${val?.toFixed(0)}`,
     },
     yaxis: {
       title: {
