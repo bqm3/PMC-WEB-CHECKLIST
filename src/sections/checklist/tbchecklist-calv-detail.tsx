@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { CSVLink, CSVDownload } from 'react-csv';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
 import Label from 'src/components/label';
@@ -59,7 +60,8 @@ import {
 //
 import ChecklistTableRow from './detail/checklist-table-row';
 import ChecklistTableToolbar from './detail/checklist-table-toolbar';
-import ChecklistTableFiltersResult from './detail/checklist-table-filters-result';
+import ChecklistTableFiltersResult from './detail/checklist-table-filters-result';//
+import ChecklistPDF from './checklist-pdf';
 
 // ----------------------------------------------------------------------
 
@@ -117,6 +119,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const router = useRouter();
 
   const confirm = useBoolean();
+
+  const view = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -289,15 +293,29 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             }}
           />
 
+          <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
           <CSVLink
             data={dataFormatExcel}
             headers={headers}
             filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_user.Hoten}.csv`}
           >
-            <Button variant="contained" startIcon={<Iconify icon="solar:export-bold" />}>
-              Export
+            <Button
+              variant="contained"
+              color="success"
+              startIcon={<Iconify icon="solar:export-bold" />}
+            >
+              Excel
             </Button>
           </CSVLink>
+          <Button
+            onClick={view.onTrue}
+            variant="contained"
+            color="error"
+            startIcon={<Iconify icon="solar:export-bold" />}
+          >
+            PDF
+          </Button>
+          </Stack>
         </Stack>
 
         <Box
@@ -324,7 +342,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
-             {" "}
+              {' '}
             </Typography>
             Ngày: {formatDateString(dataChecklistC?.Ngay)}
             <br />
@@ -479,6 +497,26 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           </Button>
         }
       />
+
+      <Dialog fullScreen open={view.value}>
+        <Box sx={{ height: 1, display: 'flex', flexDirection: 'column' }}>
+          <DialogActions
+            sx={{
+              p: 1.5,
+            }}
+          >
+            <Button color="inherit" variant="contained" onClick={view.onFalse}>
+              Close
+            </Button>
+          </DialogActions>
+
+          <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
+            <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
+              <ChecklistPDF currentChecklist={currentChecklist} dataChecklistC={dataChecklistC} />
+            </PDFViewer>
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }

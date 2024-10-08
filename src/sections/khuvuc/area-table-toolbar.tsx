@@ -23,7 +23,6 @@ type Props = {
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
-  dataFormatExcel: any;
   headers: any;
 };
 
@@ -33,7 +32,6 @@ export default function OrderTableToolbar({
   //
   canReset,
   headers,
-  dataFormatExcel,
   onResetFilters,
 }: Props) {
   const popover = usePopover();
@@ -46,7 +44,6 @@ export default function OrderTableToolbar({
   );
 
   return (
-    <>
       <Stack
         spacing={2}
         alignItems={{ xs: 'flex-end', md: 'center' }}
@@ -114,31 +111,5 @@ export default function OrderTableToolbar({
           </Button>
         )}
       </Stack>
-
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-       
-        <CSVLink
-          data={dataFormatExcel}
-          headers={headers}
-          filename="Khuvuc.csv"
-          className="btn btn-primary"
-          style={{ textDecoration: 'none', color: 'black'}}
-        >
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:export-bold" />
-            Export
-          </MenuItem>
-        </CSVLink>
-      </CustomPopover>
-    </>
   );
 }

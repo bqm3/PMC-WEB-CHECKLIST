@@ -65,7 +65,7 @@ const TABLE_HEAD = [
   { id: 'Hangmuc', label: 'Tên hạng mục' },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 150 },
   { id: 'ID_Khuvuc', label: 'Khu vực', width: 200 },
-  { id: 'Important', label: 'Quan trọng', width: 100 },
+  { id: 'Important', label: 'Quan trọng', width: 140 },
   { id: 'ID_KhoiCV', label: 'Khối công việc', width: 250,  },
   { id: '', width: 88 },
 ];
@@ -293,20 +293,40 @@ export default function AreaListView() {
     { label: 'Khối công việc', key: 'KhoiCV' },
   ];
 
-  const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
+  const handleDownloadImages  = async () => {
+    try {
+      const selectedRows = table.selected; 
+      // Assuming you have dataInPage which holds the information for each row
+      const selectedQrCodes = dataInPage
+        .filter((row) => selectedRows.includes(row.ID_Hangmuc)) // Filter the selected rows
+        .map((row) => row.MaQrCode); // Replace QrCodeValue with the appropriate field
+  
+      const maQrCodes = selectedQrCodes.join(',');
 
-  useEffect(() => {
-    const formattedData = dataFiltered?.map((item, index) => ({
-      stt: index + 1,
-      Hangmuc: item.Hangmuc || '',
-      MaQrCode: item.MaQrCode || '',
-      Tenkhuvuc: item.ent_khuvuc.Tenkhuvuc,
-      Tieuchuankt: item.Tieuchuankt || '',
-      // KhoiCV:
-      //   item.ent_khoicv.KhoiCV || '',
-    }));
-    setDataFormatExcel(formattedData);
-  }, [dataFiltered]);
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          responseType: 'blob', // Specify the response type as blob to handle the file download
+        }
+      );
+  
+      // Create a blob link to download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'qr_code_hangmuc.zip'); // Set the name for the downloaded file
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error while generating QR codes:', error);
+    }
+  }
 
   return (
     <>
@@ -446,7 +466,6 @@ export default function AreaListView() {
             filters={filters}
             onFilters={handleFilters}
             headers={headers}
-            dataFormatExcel={dataFormatExcel}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
@@ -476,11 +495,20 @@ export default function AreaListView() {
                 )
               }
               action={
+                <>
+                 <Tooltip title="Download">
+                  <IconButton color="primary" onClick={handleDownloadImages}>
+                    <Iconify icon="solar:download-square-bold" />
+                  </IconButton>
+                </Tooltip>
+
                 <Tooltip title="Delete">
                   <IconButton color="primary" onClick={confirm.onTrue}>
                     <Iconify icon="solar:trash-bin-trash-bold" />
                   </IconButton>
                 </Tooltip>
+
+               </>
               }
             />
 

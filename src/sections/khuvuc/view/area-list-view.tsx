@@ -201,7 +201,6 @@ export default function AreaListView() {
   );
 
   const handleDownloadImage = async () => {
-    // const originalImage = `https://api.qrserver.com/v1/create-qr-code/?data="${dataSelect?.MaQrCode}"`;
     const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
     const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Tenkhuvuc}`;
     const image = await fetch(originalImage);
@@ -312,24 +311,40 @@ export default function AreaListView() {
     { label: 'Khối công việc', key: 'KhoiCV' },
   ];
 
-  const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
+  const handleDownloadImages  = async () => {
+    try {
+      const selectedRows = table.selected; 
+      // Assuming you have dataInPage which holds the information for each row
+      const selectedQrCodes = dataInPage
+        .filter((row) => selectedRows.includes(row.ID_Khuvuc)) // Filter the selected rows
+        .map((row) => row.MaQrCode); // Replace QrCodeValue with the appropriate field
+  
+      const maQrCodes = selectedQrCodes.join(',');
 
-  // useEffect(() => {
-  //   console.log('run')
-  //   const formattedData = dataFiltered?.map((item, index) => ({
-  //     stt: index + 1,
-  //     Tenkhuvuc: item.Tenkhuvuc || '',
-  //     Toanha: item.ent_toanha.Toanha || '',
-  //     MaQrCode: item.MaQrCode || '',
-  //     Sothutu: item.Sothutu,
-  //     Makhuvuc: item.Makhuvuc || '',
-  //     KhoiCV:
-  //       item.ent_khoicv.KhoiCV || '',
-  //   }));
-  //   setDataFormatExcel(formattedData);
-  // }, [dataFiltered]);
-
-  // console.log('khuvuc',khuvuc)
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          responseType: 'blob', // Specify the response type as blob to handle the file download
+        }
+      );
+  
+      // Create a blob link to download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'qr_code_khuvuc.zip'); // Set the name for the downloaded file
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error while generating QR codes:', error);
+    }
+  }
 
   return (
     <>
@@ -469,7 +484,6 @@ export default function AreaListView() {
             filters={filters}
             onFilters={handleFilters}
             headers={headers}
-            dataFormatExcel={dataFormatExcel}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
@@ -496,11 +510,20 @@ export default function AreaListView() {
                 table.onSelectAllRows(checked, dataInPage?.map((row) => row?.ID_Khuvuc))
               }
               action={
+               <>
+                 <Tooltip title="Download">
+                  <IconButton color="primary" onClick={handleDownloadImages}>
+                    <Iconify icon="solar:download-square-bold" />
+                  </IconButton>
+                </Tooltip>
+
                 <Tooltip title="Delete">
                   <IconButton color="primary" onClick={confirm.onTrue}>
                     <Iconify icon="solar:trash-bin-trash-bold" />
                   </IconButton>
                 </Tooltip>
+
+               </>
               }
             />
 

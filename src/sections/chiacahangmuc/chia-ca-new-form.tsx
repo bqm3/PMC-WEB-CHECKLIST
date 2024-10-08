@@ -108,9 +108,6 @@ export default function ChiaCaNewEditForm() {
     const chukyDetail = arrChuky?.filter(
       (item: any) => `${event.target.value}` === `${item.ID_KhoiCV}`
     );
-    console.log('ToaNha', ToaNha)
-    console.log('chukyDetail', chukyDetail)
-    console.log('arrChuky', arrChuky)
     setChukyData(chukyDetail[0]?.Chuky || 0);
 
     setOptionKhoiCV(selectedKhoiCV);

@@ -162,8 +162,6 @@ export default function ChecklistCalvListView() {
   );
 
 
-  console.log('dataFiltered', dataFiltered.length)
-
   const denseHeight = table.dense ? 60 : 60;
 
   const canReset = !!filters.name || filters.status !== 'all';
@@ -289,22 +287,64 @@ export default function ChecklistCalvListView() {
   );
 
   const headers = [
-    { label: 'STT', key: 'stt' },
-    { label: 'Tên checklist', key: 'Checklist' },
+    { label: 'Tên tòa nhà', key: 'tentoanha' },
+    { label: 'Mã khu vực', key: 'makhuvuc' },
+    { label: 'Mã QrCode khu vực', key: 'maqrcodekhuvuc' },
+    { label: 'Tên khu vực', key: 'tenkhuvuc' },
+    { label: 'Mã QrCode hạng mục', key: 'maqrcodehangmuc' },
+    { label: 'Tên hạng mục', key: 'tenhangmuc' },
+    { label: 'Tên tầng', key: 'Tentang' },
+    { label: 'Tên khối công việc', key: 'tenkhoicongviec' },
+    { label: 'Thứ tự check', key: 'thutucheck' },
+    { label: 'Mã checklist', key: 'macl' },
+    { label: 'Tên checklist', key: 'tencl' },
+    { label: 'Tiêu chuẩn checklist', key: 'tieuchuan' },
     { label: 'Giá trị định danh', key: 'Giatridinhdanh' },
     { label: 'Giá trị nhận', key: 'Giatrinhan' },
-    { label: 'Tầng', key: 'Tentang' },
-    { label: 'Số thứ tự', key: 'Sothutu' },
-    { label: 'Mã số', key: 'Maso' },
-    { label: 'Hạng mục', key: 'Hangmuc' },
-    { label: 'Ca làm việc', key: 'caLvs' },
   ];
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const khoiCVNames: { [key: string]: string } = {
+      '1': 'Khối làm sạch',
+      '2': 'Khối kỹ thuật',
+      '3': 'Khối bảo vệ',
+      '4': 'Khối dịch vụ',
+      // Add other mappings here
+    };
+
+    const getKhoiCVNamesByIds = useCallback((idKhoiCVs: string[] = []): string => 
+       idKhoiCVs
+        .map((id: string) => khoiCVNames[id] || '') // Ensure 'id' is a string
+        .filter(Boolean) // Filter out any empty strings
+        .join(', ') // Join the names with commas
+    , [khoiCVNames]);
+    
+  
+
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
-  function roundToNearestInteger(value: number) {
-    // Làm tròn lên số nguyên gần nhất
-    return Math.round(value);
-  }
+
+  useEffect(() => {
+    const formattedData = tableData?.map((item, index) => ({
+      tentoanha: item?.ent_khuvuc?.ent_toanha?.Toanha || '',
+      makhuvuc: item?.ent_khuvuc?.Makhuvuc || '',
+      maqrcodekhuvuc: item?.ent_khuvuc?.MaQrCode || '',
+      tenkhuvuc: item?.ent_khuvuc?.Tenkhuvuc || '',
+      maqrcodehangmuc: item?.ent_hangmuc?.MaQrCode || '',
+      tenhangmuc: item?.ent_hangmuc?.Hangmuc || '',
+      Tentang: item?.ent_tang.Tentang || '',
+      tenkhoicongviec: Array.isArray(item?.ent_khuvuc?.ID_KhoiCVs)
+      ? getKhoiCVNamesByIds(item?.ent_khuvuc?.ID_KhoiCVs)
+      : getKhoiCVNamesByIds([item?.ent_khuvuc?.ID_KhoiCVs]) || '',
+      thutucheck: item?.Sothutu || '',
+      macl: item?.Maso || '',
+      tencl: item?.Checklist || '',
+      tieuchuan: item?.Tieuchuan || '',
+      Giatridinhdanh: item?.Giatridinhdanh || '',
+      Giatrinhan: item?.Giatrinhan || '',
+    }));
+    setDataFormatExcel(formattedData);
+  }, [tableData, getKhoiCVNamesByIds]);
+  
 
   return (
     <>
