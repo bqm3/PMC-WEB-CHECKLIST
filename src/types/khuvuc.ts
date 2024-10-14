@@ -109,6 +109,7 @@ export type IDuan = {
   ID_Nhom: string;
   ID_Chinhanh: string;
   ID_Linhvuc: string;
+  Ngaybatdau: string;
   ID_Loaihinh: string;
   ID_Phanloai: string;
   totalKhuvucInDuan: string;

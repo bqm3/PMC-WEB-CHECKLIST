@@ -60,6 +60,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     ID_Phanloai: Yup.string().required('Phải phân loại dự án'),
     ID_Linhvuc: Yup.string().required('Phải có lĩnh vực dự án'),
     ID_Chinhanh: Yup.string().required('Phải có chi nhánh dự án'),
+    Ngaybatdau: Yup.mixed<any>().nullable().required('Phải có bắt đầu'),
   });
 
   const defaultValues = useMemo(
@@ -70,6 +71,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       ID_Linhvuc: currentDuan?.ID_Linhvuc || '',
       ID_Loaihinh: currentDuan?.ID_Loaihinh || '',
       ID_Phanloai: currentDuan?.ID_Phanloai || '',
+      Ngaybatdau: currentDuan?.Ngaybatdau || new Date() ,
       Diachi: currentDuan?.Diachi || '',
       Vido: currentDuan?.Vido || '',
       Kinhdo: currentDuan?.Kinhdo || '',
@@ -342,6 +344,11 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             </Box>
             <RHFTextField name="Duan" label="Tên dự án" />
             <RHFTextField name="Diachi" label="Địa chỉ" />
+            <DatePicker
+            label="Ngày bắt đầu"
+            value={new Date(values.Ngaybatdau)}
+            onChange={(newValue: any) => setValue('Ngaybatdau', newValue)}
+          />
             <RHFTextField name="Vido" label="Vĩ độ" />
             <RHFTextField name="Kinhdo" label="Kinh độ" />
             <RHFTextField name="Logo" label="Đường dẫn logo dự án" />
