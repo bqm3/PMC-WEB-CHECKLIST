@@ -110,9 +110,10 @@ export default function ChecklistsHoanThanh({
     dataLabels: {
       enabled: true,
       style: {
-        colors: ['#fff']
+        colors: ['#fff'],
+        fontSize: "12"
       },
-      formatter: (val: any) => `${`${val?.toFixed(0)}`}`,
+      formatter: (val: any) => `${val?.toFixed(0)}`,
     },
     xaxis: {
       categories,
@@ -196,7 +197,7 @@ export default function ChecklistsHoanThanh({
           title={title}
           subheader={subheader}
           action={
-            <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap', width: 300}}>
+            <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap', width: 360}}>
               <ButtonBase
                 onClick={topPopover.onOpen} // Open the KhoiCV popover
                 sx={{
@@ -257,7 +258,7 @@ export default function ChecklistsHoanThanh({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
-              <ButtonBase
+              {/* <ButtonBase
                 onClick={yearPopover.onOpen} // Open the year popover
                 sx={{
                   pl: 1,
@@ -297,7 +298,7 @@ export default function ChecklistsHoanThanh({
                   }
                   sx={{ ml: 0.5 }}
                 />
-              </ButtonBase>
+              </ButtonBase> */}
              
 
               <ButtonBase

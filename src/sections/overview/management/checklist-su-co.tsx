@@ -190,7 +190,7 @@ export default function ChecklistsSuco({
           title={title}
           subheader={subheader}
           action={
-            <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap', width: 300 }}>
+            <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap', width: 360 }}>
               <ButtonBase
                 onClick={topPopover.onOpen} // Open the KhoiCV popover
                 sx={{
@@ -253,7 +253,7 @@ export default function ChecklistsSuco({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
-              <ButtonBase
+              {/* <ButtonBase
                 onClick={yearPopover.onOpen} // Open the year popover
                 sx={{
                   pl: 1,
@@ -293,7 +293,7 @@ export default function ChecklistsSuco({
                   }
                   sx={{ ml: 0.5 }}
                 />
-              </ButtonBase>
+              </ButtonBase> */}
 
               <ButtonBase
                 onClick={khoiPopover.onOpen} // Open the KhoiCV popover

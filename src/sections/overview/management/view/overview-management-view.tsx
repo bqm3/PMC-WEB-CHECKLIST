@@ -44,11 +44,12 @@ import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
 import AnaLyticsDuan from '../analytics-areas';
 import SuCoListView from '../suco/su-co-list-view';
-import BankingRecentTransitions from '../banking-recent-transitions'
+import BankingRecentTransitions from '../banking-recent-transitions';
+import EcommerceWidgetSummary from '../ecommerce-widget-summary';
+import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -148,7 +149,6 @@ const tangGiam = [
 ];
 
 const top = [
-  { value: '5', label: 'Top 5' },
   { value: '10', label: 'Top 10' },
   { value: '20', label: 'Top 20' },
 ];
@@ -174,7 +174,7 @@ export default function OverviewAnalyticsView() {
   const [selectedKhoiCV, setSelectedKhoiCV] = useState('all');
   const [selectedNhom, setSelectedNhom] = useState('4');
   const [selectedTangGiam, setSelectedTangGiam] = useState('asc');
-  const [selectedTop, setSelectedTop] = useState('5');
+  const [selectedTop, setSelectedTop] = useState('10');
 
   // ===========================
   const [dataTotalYearSuco, setDataTotalYearSuco] = useState<ChartData>({
@@ -186,7 +186,7 @@ export default function OverviewAnalyticsView() {
   const [selectedKhoiCVSuco, setSelectedKhoiCVSuco] = useState('all');
   const [selectedNhomSuco, setSelectedNhomSuco] = useState('4');
   const [selectedTangGiamSuco, setSelectedTangGiamSuco] = useState('desc');
-  const [selectedTopSuco, setSelectedTopSuco] = useState('5');
+  const [selectedTopSuco, setSelectedTopSuco] = useState('10');
 
   // ===============
 
@@ -199,7 +199,14 @@ export default function OverviewAnalyticsView() {
   const [selectedTangGiamSuCoNgoai, setSelectedTangGiamSuCoNgoai] = useState('desc');
 
   // ===============
-
+  const [dataReportChecklistPercentWeek, setDataReportChecklistPercentWeek] = useState<any>();
+  const [dataReportProblemChecklistPercentWeek, setDataProblemChecklistPercentWeek] =
+    useState<any>();
+  const [
+    dataReportExternalIncidentChecklistPercentWeek,
+    setDataExternalIncidentChecklistPercentWeek,
+  ] = useState<any>();
+  const [dataReportPercentChecklist, setDataPercentChecklist] = useState<any>();
   const [openModal, setOpenModal] = useState(false);
   const [selectedCode, setSelectedCode] = useState('');
   const [dataTable, setDataTable] = useState<ISucongoai[]>();
@@ -255,7 +262,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/list-project-none', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/percent-checklist-project', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -281,6 +288,25 @@ export default function OverviewAnalyticsView() {
           }));
 
           setDataPercent(transformedRows);
+        })
+        .catch((err) => console.log('err', err));
+    };
+
+    handleDataPercent();
+  }, [accessToken]);
+
+  useEffect(() => {
+    const handleDataPercent = async () => {
+      await axios
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          const dataRes = res.data.avgCompletionRatios;
+          setDataPercentChecklist(dataRes);
         })
         .catch((err) => console.log('err', err));
     };
@@ -333,6 +359,57 @@ export default function OverviewAnalyticsView() {
     selectedTangGiam,
     selectedTop,
   ]);
+
+  useEffect(() => {
+    const handleTotalKhoiCV = async () => {
+      await axios
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-week`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          setDataReportChecklistPercentWeek(res.data.data);
+        })
+        .catch((err) => console.log('err', err));
+    };
+
+    handleTotalKhoiCV();
+  }, [accessToken]);
+
+  useEffect(() => {
+    const handleTotalKhoiCV = async () => {
+      await axios
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-problem-percent-week`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          setDataProblemChecklistPercentWeek(res.data.data);
+        })
+        .catch((err) => console.log('err', err));
+    };
+
+    handleTotalKhoiCV();
+  }, [accessToken]);
+
+  useEffect(() => {
+    const handleTotalKhoiCV = async () => {
+      await axios
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          setDataExternalIncidentChecklistPercentWeek(res.data.data);
+        })
+        .catch((err) => console.log('err', err));
+    };
+
+    handleTotalKhoiCV();
+  }, [accessToken]);
 
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
@@ -390,7 +467,7 @@ export default function OverviewAnalyticsView() {
       'https://pmcwebvn.sharepoint.com/sites/PMCteam/SitePages/B%C3%A1o-c%C3%A1o-HSSE.aspx?csf=1&web=1&share=EUBekLeeP6hLszUcIm2kXQEBm6ZHozG95Gn14yIxExnPFw&e=HsaK0H';
     window.open(url, '_blank');
   };
-  
+
   const [open, setOpen] = useState(false);
   const [detailChecklist, setDetailChecklist] = useState<any>();
 
@@ -400,8 +477,9 @@ export default function OverviewAnalyticsView() {
   };
   const handleClose = () => {
     setOpen(false);
-    setDetailChecklist(null)
+    setDetailChecklist(null);
   };
+  console.log('dataReportPercentChecklist',dataReportPercentChecklist['Khối kỹ thuật'])
 
   return (
     <>
@@ -426,56 +504,96 @@ export default function OverviewAnalyticsView() {
             Báo cáo HSSE
           </Button>
         </Grid>
+
         <Grid container spacing={3}>
-          <Grid xs={12} md={12} lg={12}>
-            <div>
-              {Object.keys(dataDuan)
-                .sort((a, b) => b.localeCompare(a))
-                .map((groupName) => (
-                  <Accordion key={groupName}>
-                    <AccordionSummary
-                      expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}
-                      aria-controls={`${groupName}-content`}
-                      id={`${groupName}-header`}
-                      sx={{ fontWeight: '700' }}
-                    >
-                      {groupName}
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <AnaLyticsDuan
-                        title={`Thông tin các dự án thuộc ${groupName}`}
-                        list={dataDuan[groupName]}
-                      />
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-            </div>
+          <Grid xs={12} md={4}>
+            <EcommerceWidgetSummary
+              title="Tỉ lệ hoàn thành checklist"
+              key="0"
+              percent={
+                Number(dataReportChecklistPercentWeek?.lastWeekPercentage) -
+                Number(dataReportChecklistPercentWeek?.previousWeekPercentage)
+              }
+              total={`${dataReportChecklistPercentWeek?.lastWeekPercentage}%`}
+              chart={{
+                series: [
+                  Number(dataReportChecklistPercentWeek?.previousWeekPercentage),
+                  Number(dataReportChecklistPercentWeek?.lastWeekPercentage),
+                ],
+              }}
+            />
+          </Grid>
+
+          <Grid xs={12} md={4}>
+            <EcommerceWidgetSummary
+              title="Số lượng sự cố"
+              key="1"
+              percent={
+                ((Number(dataReportProblemChecklistPercentWeek?.lastWeekTotalCount) -
+                  Number(dataReportProblemChecklistPercentWeek?.twoWeeksAgoTotalCount)) /
+                  Number(dataReportProblemChecklistPercentWeek?.twoWeeksAgoTotalCount)) *
+                100
+              }
+              total={`${dataReportProblemChecklistPercentWeek?.lastWeekTotalCount}`}
+              chart={{
+                series: [
+                  Number(dataReportProblemChecklistPercentWeek?.twoWeeksAgoTotalCount),
+                  Number(dataReportProblemChecklistPercentWeek?.lastWeekTotalCount),
+                ],
+                colors: [theme.palette.error.light, theme.palette.error.main], // Màu đỏ cho sự cố
+              }}
+            />
+          </Grid>
+
+          <Grid xs={12} md={4}>
+            <EcommerceWidgetSummary
+              title="Số lượng sự cố ngoài"
+              key="1"
+              percent={
+                ((Number(dataReportExternalIncidentChecklistPercentWeek?.currentWeekCount) -
+                  Number(dataReportExternalIncidentChecklistPercentWeek?.lastWeekCount)) /
+                  Number(dataReportExternalIncidentChecklistPercentWeek?.lastWeekCount)) *
+                100
+              }
+              total={`${dataReportExternalIncidentChecklistPercentWeek?.currentWeekCount}`}
+              chart={{
+                series: [
+                  Number(dataReportExternalIncidentChecklistPercentWeek?.lastWeekCount),
+                  Number(dataReportExternalIncidentChecklistPercentWeek?.currentWeekCount),
+                ],
+                colors: [theme.palette.error.light, theme.palette.error.main], // Màu đỏ cho sự cố ngoài
+              }}
+            />
+          </Grid>
+
+          <Grid xs={12} md={3}>
+            <PercentChecklistWidgetSummary
+              title="Khối kỹ thuật"
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : '' }`}
+            />
+          </Grid>
+          <Grid xs={12} md={3}>
+            <PercentChecklistWidgetSummary
+              title="Khối bảo vệ"
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : '' }`}
+            />
+          </Grid>
+          <Grid xs={12} md={3}>
+            <PercentChecklistWidgetSummary
+              title="Khối dịch vụ"
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : '' }`}
+            />
+          </Grid>
+          <Grid xs={12} md={3}>
+            <PercentChecklistWidgetSummary
+              title="Khối làm sạch"
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : '' }`}
+            />
           </Grid>
 
           <Grid xs={12} md={12} lg={12}>
-            <Box sx={{ maxHeight: 400, width: '100%', my: 3 }}>
-              <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
-                Tỉ lệ hoàn thành checklist hôm qua
-              </Typography>
-              <DataGrid
-                rows={dataPercent}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 20,
-                    },
-                  },
-                }}
-                pageSizeOptions={[20, 30, 50]}
-                disableRowSelectionOnClick
-              />
-            </Box>
-          </Grid>
-
-          <Grid xs={12} md={12} lg={(selectedTop || selectedTopSuco) === '5' ? 6 : 12}>
             <ChecklistsHoanThanh
-              title="Tỉ lệ hoàn thành checklist "
+              title="Tỉ lệ hoàn thành checklist hôm trước"
               subheader="Hoàn thành checklist theo ca"
               chart={{
                 categories: dataTotalYear.categories,
@@ -502,9 +620,9 @@ export default function OverviewAnalyticsView() {
               setShowMax={setShowMax}
             />
           </Grid>
-          <Grid xs={12} md={12} lg={(selectedTop || selectedTopSuco) === '5' ? 6 : 12}>
+          <Grid xs={12} md={12} lg={12}>
             <ChecklistsSuCo
-              title="Sự cố"
+              title="Số lượng sự cố trong ngày"
               subheader="Số lượng sự cố chưa hoàn thành"
               chart={{
                 categories: dataTotalYearSuco.categories,
@@ -549,6 +667,58 @@ export default function OverviewAnalyticsView() {
               handleCloseModal={handleCloseModal}
             />
           </Grid>
+          <Grid xs={12} md={12} lg={12}>
+            <div>
+              {Object.keys(dataDuan)
+                .sort((a, b) => b.localeCompare(a))
+                .map((groupName) => (
+                  <Accordion key={groupName}>
+                    <AccordionSummary
+                      expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}
+                      aria-controls={`${groupName}-content`}
+                      id={`${groupName}-header`}
+                      sx={{ fontWeight: '700' }}
+                    >
+                      {groupName}
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <AnaLyticsDuan
+                        title={`Thông tin các dự án thuộc ${groupName}`}
+                        list={dataDuan[groupName]}
+                      />
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+            </div>
+          </Grid>
+
+          <Grid xs={12} md={12} lg={12}>
+            <Box sx={{ maxHeight: 450, width: '100%', my: 2 }}>
+              <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
+                Tỉ lệ hoàn thành checklist hôm qua
+              </Typography>
+              <DataGrid
+                rows={dataPercent}
+                columns={columns}
+                sx={{
+                  maxHeight: 450,
+                  overflowY: 'auto',
+                  '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
+                  '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
+                  'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
+                }}
+                // initialState={{
+                //   pagination: {
+                //     paginationModel: {
+                //       pageSize: 20,
+                //     },
+                //   },
+                // }}
+                // pageSizeOptions={[20, 30, 50]}
+                disableRowSelectionOnClick
+              />
+            </Box>
+          </Grid>
 
           <Grid xs={12} md={12} lg={12}>
             {dataTotalErrorWeek && (
@@ -573,10 +743,9 @@ export default function OverviewAnalyticsView() {
       <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="lg">
         <DialogTitle>Dự án: {selectedCode}</DialogTitle>
         <DialogContent>
-           {
-            dataTable && dataTable?.length > 0 && openModal === true &&
-            <SuCoListView data={dataTable}/>
-           }
+          {dataTable && dataTable?.length > 0 && openModal === true && (
+            <SuCoListView data={dataTable} />
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Close</Button>
