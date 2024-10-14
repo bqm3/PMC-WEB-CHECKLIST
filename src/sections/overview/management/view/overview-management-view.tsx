@@ -479,7 +479,6 @@ export default function OverviewAnalyticsView() {
     setOpen(false);
     setDetailChecklist(null);
   };
-  console.log('dataReportPercentChecklist',dataReportPercentChecklist['Khối kỹ thuật'])
 
   return (
     <>
