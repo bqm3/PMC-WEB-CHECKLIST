@@ -20,11 +20,6 @@ import { LoadingButton } from '@mui/lab';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS, PERMISSION_STATUS_OPTIONS } from 'src/_mock';
 import {
-  useGetKhuVuc,
-  useGetHangMuc,
-  useGetCalv,
-  useGetGiamsat,
-  useGetDuan,
   useGetUsers,
 } from 'src/api/khuvuc';
 // utils

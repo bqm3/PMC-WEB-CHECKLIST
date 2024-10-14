@@ -14,13 +14,13 @@ export type IKhuvucTableFilters = {
   endDate: Date | null;
 };
 
-export type IChecklistTableFilters ={
+export type IChecklistTableFilters = {
   name: string;
   status: string;
   startDate: Date | null;
   endDate: Date | null;
-  building: string[]
-}
+  building: string[];
+};
 
 export type IBaoCaoTableFilterValue = string | null | string[] | Date;
 
@@ -31,8 +31,6 @@ export type IBaoCaoTableFilters = {
   startDate: Date | null;
   endDate: Date | null;
 };
-
-
 
 export type ITbChecklistTableFilterValue = string | Date | null;
 
@@ -61,7 +59,7 @@ export type E_Toanha = {
 export type E_Duan = {
   Duan: string;
   ID_Duan: string;
-  ent_duan_khoicv: IDuanKhoiCV
+  ent_duan_khoicv: IDuanKhoiCV;
 };
 
 export type E_Calv = {
@@ -77,10 +75,29 @@ export type E_Tang = {
   Sotang: string;
 };
 
-export type INhom ={
+export type INhom = {
   ID_Nhom: string;
   Tennhom: string;
-}
+};
+
+export type IChinhanh = {
+  ID_Chinhanh: string;
+  Tenchinhanh: string;
+};
+
+export type ILinhvuc = {
+  ID_Linhvuc: string;
+  Linhvuc: string;
+};
+export type ILoaihinh = {
+  ID_Loaihinh: string;
+  Loaihinh: string;
+};
+
+export type IPhanloai = {
+  ID_Phanloai: string;
+  Phanloai: string;
+};
 
 export type IDuan = {
   ID_Duan: string;
@@ -90,12 +107,19 @@ export type IDuan = {
   Kinhdo: string;
   Logo: string;
   ID_Nhom: string;
+  ID_Chinhanh: string;
+  ID_Linhvuc: string;
+  ID_Loaihinh: string;
+  ID_Phanloai: string;
   totalKhuvucInDuan: string;
   totalHangmucInDuan: string;
   toanhas: IToanha[];
   ent_nhom: INhom;
-  ent_duan_khoicv: IDuanKhoiCV[]
-  
+  ent_chinhanh: IChinhanh;
+  ent_linhvuc: ILinhvuc;
+  ent_loaihinh: ILoaihinh;
+  ent_phanloai: IPhanloai;
+  ent_duan_khoicv: IDuanKhoiCV[];
 };
 
 export type IGiamsat = {
@@ -124,7 +148,7 @@ export type IThietLapCa = {
   isDelte: string;
   ent_calv: ICalv;
   ent_duan: IDuan;
-}
+};
 
 export type IUser = {
   ID_User: string;
@@ -160,7 +184,7 @@ export type ISucongoai = {
   isDelete: string;
   ent_hangmuc: IHangMuc;
   ent_user: IUser;
-}
+};
 
 export type IChucvu = {
   ID_Chucvu: string;
@@ -182,14 +206,14 @@ export type E_Khuvuc_KhoiCV = {
   ID_Khuvuc: string;
   ID_KhoiCV: string;
   ent_khoicv: E_KhoiCV;
-}
+};
 
 export type E_Calv_KhoiCV = {
   ID_Calv_KhoiCV: string;
   ID_Calv: string;
   ID_KhoiCV: string;
   ent_khoicv: E_KhoiCV;
-}
+};
 
 export type IKhuvuc = {
   ID_Khuvuc: string;
@@ -205,7 +229,7 @@ export type IKhuvuc = {
   ent_toanha: E_Toanha;
   hangMucLength: string;
   ent_hangmuc: IHangMuc[];
-  KhoiCVs: IKhoiCV[]
+  KhoiCVs: IKhoiCV[];
 };
 
 export type ILocation = {
@@ -214,19 +238,18 @@ export type ILocation = {
   ca: string;
   nguoi: string;
   cv: string;
-  detailedCoordinates: IDetailLocation[]
+  detailedCoordinates: IDetailLocation[];
 };
 
 export type IDetailLocation = {
   coordinates: string;
-  detailedItems: IDetailHMLocation[]
-}
+  detailedItems: IDetailHMLocation[];
+};
 
 export type IDetailHMLocation = {
   Gioht: string;
   relatedHangmuc: string;
-}
-
+};
 
 export type IToanha = {
   ID_Toanha: string;
@@ -246,7 +269,6 @@ export type IKhoiCV = {
   KhoiCV: string;
   Chuky: string;
   Ngaybatdau: Date;
-  
 };
 
 export type IDuanKhoiCV = {
@@ -309,7 +331,7 @@ export type ITbChecklist = {
   ent_giamsat: IGiamsat;
   ent_calv: ICalv;
   ent_user: IUser;
-  ent_thietlapca: IThietLapCa
+  ent_thietlapca: IThietLapCa;
 };
 
 export type IChecklist = {

@@ -36,24 +36,6 @@ type Props = {
   currentDuan?: IDuan;
 };
 
-const dataProject = [
-  {
-    ID_Nhom: 1,
-    Nhom: "Nhóm A"
-  },
-  {
-    ID_Nhom: 2,
-    Nhom: "Nhóm B"
-  },
-  {
-    ID_Nhom: 3,
-    Nhom: "Nhóm C"
-  },
-  {
-    ID_Nhom: 4,
-    Nhom: "Nhóm D"
-  }
-]
 
 const STORAGE_KEY = 'accessToken';
 
@@ -66,14 +48,28 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
+  const [phanLoai, setPhanloai] = useState([])
+  const [chiNhanh, setChinhanh] = useState([])
+  const [linhVuc, setLinhvuc] = useState([])
+  const [loaiHinh, setLoaihinh] = useState([])
+  const [nhom, setNhom] = useState([])
+
   const NewProductSchema = Yup.object().shape({
     Duan: Yup.string().required('Phải có tên dự án'),
+    ID_Loaihinh: Yup.string().required('Phải loại hình dự án'),
+    ID_Phanloai: Yup.string().required('Phải phân loại dự án'),
+    ID_Linhvuc: Yup.string().required('Phải có lĩnh vực dự án'),
+    ID_Chinhanh: Yup.string().required('Phải có chi nhánh dự án'),
   });
 
   const defaultValues = useMemo(
     () => ({
       Duan: currentDuan?.Duan || '',
       ID_Nhom: currentDuan?.ID_Nhom || '',
+      ID_Chinhanh: currentDuan?.ID_Chinhanh || '',
+      ID_Linhvuc: currentDuan?.ID_Linhvuc || '',
+      ID_Loaihinh: currentDuan?.ID_Loaihinh || '',
+      ID_Phanloai: currentDuan?.ID_Phanloai || '',
       Diachi: currentDuan?.Diachi || '',
       Vido: currentDuan?.Vido || '',
       Kinhdo: currentDuan?.Kinhdo || '',
@@ -81,6 +77,40 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     }),
     [currentDuan]
   );
+
+  useEffect(() => {
+    const resPhanloai =async ()=> {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_phanloai/all').then((res)=> {
+        setPhanloai(res.data.data)
+      })
+    }
+    const resChinhanh =async ()=> {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_chinhanh/all').then((res)=> {
+        setChinhanh(res.data.data)
+      })
+    }
+    const resLinhvuc =async ()=> {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_linhvuc/all').then((res)=> {
+        setLinhvuc(res.data.data)
+      })
+    }
+    const resLoaihinh =async ()=> {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_loaihinh/all').then((res)=> {
+        setLoaihinh(res.data.data)
+      })
+    }
+    const resNhom =async ()=> {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_nhom/all').then((res)=> {
+        setNhom(res.data.data)
+      })
+    }
+    resPhanloai()
+    resChinhanh()
+    resLoaihinh()
+    resNhom()
+    resLinhvuc()
+  }, []);
+
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -195,7 +225,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
   const renderDetails = (
     <>
       {mdUp && (
-        <Grid md={3}>
+        <Grid md={2}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
             Chi tiết
           </Typography>
@@ -205,28 +235,111 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
         </Grid>
       )}
 
-      <Grid xs={12} md={9}>
+      <Grid xs={12} md={10}>
         <Card>
           {!mdUp && <CardHeader title="Chi tiết" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+              }}
+            >
              <Stack spacing={1.5}>
-              {dataProject?.length > 0 && (
+              {nhom && nhom?.length > 0 && (
                 <RHFSelect
                   name="ID_Nhom"
                   label="Nhóm dự án"
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
-                  {dataProject?.map((item) => (
+                  {nhom?.map((item: any) => (
                     <MenuItem key={item?.ID_Nhom} value={item?.ID_Nhom}>
-                      {item?.Nhom}
+                      {item?.Tennhom}
                     </MenuItem>
                   ))}
                 </RHFSelect>
               )}
             </Stack>
-
+            <Stack spacing={1.5}>
+              {chiNhanh && chiNhanh?.length > 0 && (
+                <RHFSelect
+                  name="ID_Chinhanh"
+                  label="Chi nhánh"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {chiNhanh?.map((item: any) => (
+                    <MenuItem key={item?.ID_Chinhanh} value={item?.ID_Chinhanh}>
+                      {item?.Tenchinhanh}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+            </Box>
+            <Box
+              rowGap={3}
+              columnGap={3}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(3, 1fr)',
+              }}
+            >
+             <Stack spacing={1.5}>
+              {linhVuc && linhVuc?.length > 0 && (
+                <RHFSelect
+                  name="ID_Linhvuc"
+                  label="Lĩnh vực dự án"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {linhVuc?.map((item: any) => (
+                    <MenuItem key={item?.ID_Linhvuc} value={item?.ID_Linhvuc}>
+                      {item?.Linhvuc}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+            <Stack spacing={1.5}>
+              {loaiHinh && loaiHinh?.length > 0 && (
+                <RHFSelect
+                  name="ID_Loaihinh"
+                  label="Loại hình"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {loaiHinh?.map((item: any) => (
+                    <MenuItem key={item?.ID_Loaihinh} value={item?.ID_Loaihinh}>
+                      {item?.Loaihinh}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+            <Stack spacing={1.5}>
+              {phanLoai && phanLoai?.length > 0 && (
+                <RHFSelect
+                  name="ID_Phanloai"
+                  label="Phân loại"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {phanLoai?.map((item: any) => (
+                    <MenuItem key={item?.ID_Phanloai} value={item?.ID_Phanloai}>
+                      {item?.Phanloai}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+            </Box>
             <RHFTextField name="Duan" label="Tên dự án" />
             <RHFTextField name="Diachi" label="Địa chỉ" />
             <RHFTextField name="Vido" label="Vĩ độ" />
