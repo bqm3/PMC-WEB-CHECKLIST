@@ -107,7 +107,6 @@ export default function ChecklistCalvListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-
   const [tableData, setTableData] = useState<ITbChecklist[]>([]);
 
   const { tb_checkList, tb_checkListTotalPages, tb_checklistTotalCount, mutateTb_Checklist } =
@@ -127,13 +126,16 @@ export default function ChecklistCalvListView() {
     }
   }, [tb_checkList]);
 
-  const STATUS_OPTIONS = useMemo(() => [
-    { value: 'all', label: 'Tất cả' },
-    ...khoiCV.map(khoi => ({
-      value: khoi.ID_KhoiCV.toString(),
-      label: khoi.KhoiCV
-    }))
-  ], [khoiCV]);
+  const STATUS_OPTIONS = useMemo(
+    () => [
+      { value: 'all', label: 'Tất cả' },
+      ...khoiCV.map((khoi) => ({
+        value: khoi.ID_KhoiCV.toString(),
+        label: khoi.KhoiCV,
+      })),
+    ],
+    [khoiCV]
+  );
 
   const dateError =
     filters.startDate && filters.endDate

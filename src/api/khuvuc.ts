@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -280,6 +280,33 @@ export function useGetKhuVuc() {
 
   return memoizedValue;
 }
+
+export function useGetLocations() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-location';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      location: (data?.data as ILocation[]) || [],
+      locationLoading: isLoading,
+      locationError: error,
+      locationValidating: isValidating,
+      locationEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 
 export function useGetDuan() {
   const accessToken = localStorage.getItem(STORAGE_KEY);

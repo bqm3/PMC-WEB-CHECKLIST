@@ -46,7 +46,7 @@ const ICONS = {
 
 // ----------------------------------------------------------------------
 export function getRootPathByRole(u: IUser){
-  console.log('u', u.ID_Chucvu)
+  console.log('u', u)
   if (!u) return null;
   switch (u.ID_Chucvu) {
     case '1': // Admin
@@ -72,7 +72,7 @@ export function useNavData() {
         items: (() => {
           if (!user) return [];
 
-          if (user.ID_Chucvu === 2 || user?.ID_Chucvu === 3) {
+          if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2) {
             return [
               {
                 title: t('analytics'),
@@ -87,7 +87,7 @@ export function useNavData() {
             ];
           }
 
-          if(user.ID_Chucvu === 4 || user.ID_Chucvu === 1 ){
+          if(user?.ent_chucvu?.Role === 10 || user?.ent_chucvu?.Role === 4 || user?.ent_chucvu?.Role === 0 ){
             return [
               {
                 title: t('management'),
@@ -106,7 +106,7 @@ export function useNavData() {
         subheader: t('management'),
 
         items:
-          user?.ID_Chucvu === 2 || user?.ID_Chucvu === 3
+          user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2
             ? [
                 // KHU VUC
                 {
@@ -189,7 +189,7 @@ export function useNavData() {
       },
     ];
 
-    if (user?.ID_Chucvu === 2 || user?.ID_Chucvu === 3) {
+    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 ) {
       navigationData[1].items.unshift(
         {
           title: t('building'),
@@ -221,7 +221,7 @@ export function useNavData() {
       );
     }
 
-    if (user?.ID_Chucvu === 1) {
+    if (user?.ent_chucvu?.Role === 10) {
       navigationData[1].items.unshift(
         {
           title: t('project'),

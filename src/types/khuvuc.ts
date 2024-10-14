@@ -165,6 +165,7 @@ export type ISucongoai = {
 export type IChucvu = {
   ID_Chucvu: string;
   Chucvu: string;
+  Role: number;
 };
 
 export type ITang = {
@@ -206,6 +207,26 @@ export type IKhuvuc = {
   ent_hangmuc: IHangMuc[];
   KhoiCVs: IKhoiCV[]
 };
+
+export type ILocation = {
+  id: string;
+  project: string;
+  ca: string;
+  nguoi: string;
+  cv: string;
+  detailedCoordinates: IDetailLocation[]
+};
+
+export type IDetailLocation = {
+  coordinates: string;
+  detailedItems: IDetailHMLocation[]
+}
+
+export type IDetailHMLocation = {
+  Gioht: string;
+  relatedHangmuc: string;
+}
+
 
 export type IToanha = {
   ID_Toanha: string;
