@@ -4,6 +4,8 @@ import axios, { endpoints } from 'src/utils/axios';
 import { useNavigate } from 'react-router-dom';
 import { useRouter } from 'src/routes/hooks';
 //
+// routes
+import { paths } from 'src/routes/paths';
 import { getRootPathByRole } from 'src/layouts/dashboard/config-navigation';
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession } from './utils';
@@ -86,6 +88,8 @@ type Props = {
 export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const router = useRouter();
+  const navigate = useNavigate(); // Use navigate for redirection
+
 
   const initialize = useCallback(async () => {
     try {
@@ -112,6 +116,9 @@ export function AuthProvider({ children }: Props) {
             },
           },
         });
+
+        getRootPathByRole(data, navigate);
+       
       } else {
         dispatch({
           type: Types.INITIAL,
@@ -129,11 +136,13 @@ export function AuthProvider({ children }: Props) {
         },
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     initialize();
   }, [initialize]);
+
 
   // LOGIN
   const login = useCallback(

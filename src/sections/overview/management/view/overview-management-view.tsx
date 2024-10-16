@@ -9,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Accordion from '@mui/material/Accordion';
-import { Box, TextField } from '@mui/material';
+import { Box, Divider, TextField } from '@mui/material';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Dialog from '@mui/material/Dialog';
@@ -137,10 +137,12 @@ const months = [
 
 const nhoms = [
   { value: 'all', label: 'Tất cả' },
-  { value: '1', label: 'Nhóm A' },
-  { value: '2', label: 'Nhóm B' },
-  { value: '3', label: 'Nhóm C' },
-  { value: '4', label: 'Nhóm D' },
+  { value: '1', label: 'Nhóm A1: Trụ sở, văn phòng' },
+  { value: '2', label: 'Nhóm A2: Logistic' },
+  { value: '3', label: 'Nhóm A3: Hợp đồng dịch vụ nhỏ lẻ' },
+  { value: '4', label: 'Nhóm B: Nhà ở - Khoán trọn gói' },
+  { value: '5', label: 'Nhóm C: Nhà ở - Hỗn hợp' },
+  { value: '6', label: 'Nhóm D: Nhà ở - Thực thanh thực chi' },
 ];
 
 const tangGiam = [
@@ -206,7 +208,7 @@ export default function OverviewAnalyticsView() {
     dataReportExternalIncidentChecklistPercentWeek,
     setDataExternalIncidentChecklistPercentWeek,
   ] = useState<any>();
-  const [dataReportPercentChecklist, setDataPercentChecklist] = useState<any>();
+  const [dataReportPercentChecklist, setDataReportPercentChecklist] = useState<any>();
   const [openModal, setOpenModal] = useState(false);
   const [selectedCode, setSelectedCode] = useState('');
   const [dataTable, setDataTable] = useState<ISucongoai[]>();
@@ -306,7 +308,7 @@ export default function OverviewAnalyticsView() {
         })
         .then((res) => {
           const dataRes = res.data.avgCompletionRatios;
-          setDataPercentChecklist(dataRes);
+          setDataReportPercentChecklist(dataRes);
         })
         .catch((err) => console.log('err', err));
     };
@@ -479,6 +481,7 @@ export default function OverviewAnalyticsView() {
     setOpen(false);
     setDetailChecklist(null);
   };
+
 
   return (
     <>
@@ -667,6 +670,25 @@ export default function OverviewAnalyticsView() {
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
+            <Box sx={{ maxHeight: 450, width: '100%', my: 2 }}>
+              <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
+                Tỉ lệ hoàn thành checklist hôm qua
+              </Typography>
+              <DataGrid
+                rows={dataPercent}
+                columns={columns}
+                sx={{
+                  maxHeight: 450,
+                  overflowY: 'auto',
+                  '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
+                  '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
+                  'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
+                }}
+                disableRowSelectionOnClick
+              />
+            </Box>
+          </Grid>
+          <Grid xs={12} md={12} lg={12}>
             <div>
               {Object.keys(dataDuan)
                 .sort((a, b) => b.localeCompare(a))
@@ -691,33 +713,7 @@ export default function OverviewAnalyticsView() {
             </div>
           </Grid>
 
-          <Grid xs={12} md={12} lg={12}>
-            <Box sx={{ maxHeight: 450, width: '100%', my: 2 }}>
-              <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
-                Tỉ lệ hoàn thành checklist hôm qua
-              </Typography>
-              <DataGrid
-                rows={dataPercent}
-                columns={columns}
-                sx={{
-                  maxHeight: 450,
-                  overflowY: 'auto',
-                  '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
-                  '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
-                  'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
-                }}
-                // initialState={{
-                //   pagination: {
-                //     paginationModel: {
-                //       pageSize: 20,
-                //     },
-                //   },
-                // }}
-                // pageSizeOptions={[20, 30, 50]}
-                disableRowSelectionOnClick
-              />
-            </Box>
-          </Grid>
+        
 
           <Grid xs={12} md={12} lg={12}>
             {dataTotalErrorWeek && (

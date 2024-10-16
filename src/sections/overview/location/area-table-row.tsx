@@ -89,7 +89,7 @@ export default function AreaTableRow({
       <TableCell>{project}</TableCell>
       <TableCell> {ca} </TableCell>
 
-      <TableCell> {nguoi} </TableCell>
+      <TableCell sx={{color: 'black', fontWeight: '700'}}> {nguoi} </TableCell>
 
       <TableCell>{cv}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
@@ -121,21 +121,15 @@ export default function AreaTableRow({
           unmountOnExit
           sx={{ bgcolor: 'background.neutral' }}
         >
-          <Stack component={Paper} sx={{ m: 1.5 }}>
+          <Stack component={Paper} sx={{ m: 1, }}>
             {detailedCoordinates?.map((item: any) => (
               <Stack
                 key={item?.coordinates}
                 direction="row"
-                alignItems="center"
-                sx={{
-                  p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-                  '&:not(:last-of-type)': {
-                    borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-                  },
-                }}
+                sx={{ mt: 1, borderWidth: 2, borderColor: 'black', borderTop: 1}}
               >
-                <TableCell>
-                  <Box>{item.coordinates}</Box>
+                <TableCell sx={{color: 'black', fontSize: 15}}>
+                {item.coordinates}
                 </TableCell>
 
                 <TableCell>
@@ -144,12 +138,7 @@ export default function AreaTableRow({
                 key={it?.Gioht}
                 direction="row"
                 alignItems="center"
-                sx={{
-                  p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-                  '&:not(:last-of-type)': {
-                    borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-                  },
-                }}
+               
               >
                 <TableCell>
                   <Box>{it.Gioht}</Box>

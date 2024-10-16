@@ -1,6 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 // routes
 import { paths } from 'src/routes/paths';
+import { useNavigate } from 'react-router-dom';
+
 // locales
 import { useLocales } from 'src/locales';
 // components
@@ -45,20 +47,26 @@ const ICONS = {
 };
 
 // ----------------------------------------------------------------------
-export function getRootPathByRole(u: IUser){
-  console.log('u', u)
-  if (!u) return null;
-  switch (u.ID_Chucvu) {
-    case '1': // Admin
-      return paths.dashboard.general.analytics;
-    case '2': // Manager
-      return paths.dashboard.general.analytics;
-    case '5': // Analytics role
-      return paths.dashboard.general.management;
-    default:
-      return paths.dashboard.general.analytics; 
-  }
+export function getRootPathByRole(data: IUser, navigate:  any) : void{
+  if (!data) return;
+    // Perform role-based redirection only on initial load
+    switch (`${data.ent_chucvu?.Role}`) {
+      case '1':
+      case '2':
+        navigate('/dashboard/analytics');
+        break;
+      case '10':
+      case '4':
+      case '0':
+        navigate('/dashboard/management');
+        break;
+      default:
+        navigate('/dashboard/analytics');
+        break;
+    }
+    
 };
+
 
 export function useNavData() {
   const { t } = useLocales();

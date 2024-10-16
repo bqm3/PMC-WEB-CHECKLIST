@@ -327,7 +327,7 @@ export default function ChecklistsSuco({
           </Box>
         ))}
       </Card>
-      <CustomPopover open={topPopover.open} onClose={topPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={topPopover.open} onClose={topPopover.onClose}>
         {top?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedTop}
@@ -337,7 +337,7 @@ export default function ChecklistsSuco({
           </MenuItem>
         ))}
       </CustomPopover>
-      <CustomPopover open={nhomPopover.open} onClose={nhomPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={nhomPopover.open} onClose={nhomPopover.onClose}>
         {nhoms?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedNhom}
@@ -350,7 +350,7 @@ export default function ChecklistsSuco({
       <CustomPopover
         open={tangGiamPopover.open}
         onClose={tangGiamPopover.onClose}
-        sx={{ width: 140 }}
+      
       >
         {tangGiam?.map((item: any) => (
           <MenuItem
@@ -361,7 +361,7 @@ export default function ChecklistsSuco({
           </MenuItem>
         ))}
       </CustomPopover>
-      <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose}>
         <MenuItem
           selected={selectedYear === '2024'}
           onClick={() => {
@@ -374,7 +374,7 @@ export default function ChecklistsSuco({
           2025
         </MenuItem>
       </CustomPopover>
-      <CustomPopover open={monthPopover.open} onClose={monthPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={monthPopover.open} onClose={monthPopover.onClose}>
         {months?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedMonth}
@@ -385,7 +385,7 @@ export default function ChecklistsSuco({
         ))}
       </CustomPopover>
 
-      <CustomPopover open={khoiPopover.open} onClose={khoiPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={khoiPopover.open} onClose={khoiPopover.onClose}>
         {STATUS_OPTIONS?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedKhoiCV}

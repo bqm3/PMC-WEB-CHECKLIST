@@ -46,13 +46,13 @@ interface Props extends CardProps {
   tangGiam: any;
   top: any;
   setShowMax: any;
-  showMax: any
+  showMax: any;
 }
 
 const SHOWS = [
   { value: '6', label: '50%' },
   { value: '12', label: '100%' },
-]
+];
 
 export default function ChecklistsHoanThanh({
   title,
@@ -103,15 +103,14 @@ export default function ChecklistsHoanThanh({
         text: 'Tỉ lệ hoàn thành (%)',
       },
       labels: {
-        formatter: (val) =>`${Math.round(val)}%`
-        ,
+        formatter: (val) => `${Math.round(val)}%`,
       },
     },
     dataLabels: {
       enabled: true,
       style: {
         colors: ['#fff'],
-        fontSize: "12"
+        fontSize: '12',
       },
       formatter: (val: any) => `${val?.toFixed(0)}`,
     },
@@ -128,9 +127,9 @@ export default function ChecklistsHoanThanh({
         colors: {
           ranges: [
             {
-              from: 0, 
+              from: 0,
               to: 50,
-              color: '#e69138', 
+              color: '#e69138',
             },
           ],
         },
@@ -189,7 +188,6 @@ export default function ChecklistsHoanThanh({
     [topPopover, onTopChange]
   );
 
-
   return (
     <>
       <Card {...other}>
@@ -197,7 +195,7 @@ export default function ChecklistsHoanThanh({
           title={title}
           subheader={subheader}
           action={
-            <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap', width: 360}}>
+            <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap' }}>
               <ButtonBase
                 onClick={topPopover.onOpen} // Open the KhoiCV popover
                 sx={{
@@ -218,7 +216,7 @@ export default function ChecklistsHoanThanh({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
-               <ButtonBase
+              <ButtonBase
                 onClick={nhomPopover.onOpen} // Open the KhoiCV popover
                 sx={{
                   pl: 1,
@@ -253,7 +251,9 @@ export default function ChecklistsHoanThanh({
                 <Iconify
                   width={16}
                   icon={
-                    tangGiamPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                    tangGiamPopover.open
+                      ? 'eva:arrow-ios-upward-fill'
+                      : 'eva:arrow-ios-downward-fill'
                   }
                   sx={{ ml: 0.5 }}
                 />
@@ -299,7 +299,6 @@ export default function ChecklistsHoanThanh({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase> */}
-             
 
               <ButtonBase
                 onClick={khoiPopover.onOpen} // Open the KhoiCV popover
@@ -321,8 +320,6 @@ export default function ChecklistsHoanThanh({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
-
-             
             </Box>
           }
         />
@@ -330,12 +327,12 @@ export default function ChecklistsHoanThanh({
         {series.map((item) => (
           <Box key={item.type} sx={{ mt: 3, mx: 3 }}>
             {item.type === selectedYear && (
-              <Chart  dir="ltr" type="bar" series={item.data} options={chartOptions} height={364} />
+              <Chart dir="ltr" type="bar" series={item.data} options={chartOptions} height={364} />
             )}
           </Box>
         ))}
       </Card>
-      <CustomPopover open={topPopover.open} onClose={topPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={topPopover.open} onClose={topPopover.onClose}>
         {top?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedTop}
@@ -345,7 +342,7 @@ export default function ChecklistsHoanThanh({
           </MenuItem>
         ))}
       </CustomPopover>
-      <CustomPopover open={nhomPopover.open} onClose={nhomPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={nhomPopover.open} onClose={nhomPopover.onClose}>
         {nhoms?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedNhom}
@@ -355,7 +352,7 @@ export default function ChecklistsHoanThanh({
           </MenuItem>
         ))}
       </CustomPopover>
-      <CustomPopover open={tangGiamPopover.open} onClose={tangGiamPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={tangGiamPopover.open} onClose={tangGiamPopover.onClose}>
         {tangGiam?.map((item: any) => (
           <MenuItem
             selected={item.value === tangGiamPopover}
@@ -365,7 +362,7 @@ export default function ChecklistsHoanThanh({
           </MenuItem>
         ))}
       </CustomPopover>
-      <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose}>
         <MenuItem selected={selectedYear === '2024'} onClick={() => handleChangeSeries('2024')}>
           2024
         </MenuItem>
@@ -374,9 +371,7 @@ export default function ChecklistsHoanThanh({
         </MenuItem>
       </CustomPopover>
 
-    
-
-      <CustomPopover open={monthPopover.open} onClose={monthPopover.onClose} sx={{ width: 140 }}>
+      <CustomPopover open={monthPopover.open} onClose={monthPopover.onClose}>
         {months?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedMonth}
@@ -386,8 +381,8 @@ export default function ChecklistsHoanThanh({
           </MenuItem>
         ))}
       </CustomPopover>
-      
-      <CustomPopover open={khoiPopover.open} onClose={khoiPopover.onClose} sx={{ width: 140 }}>
+
+      <CustomPopover open={khoiPopover.open} onClose={khoiPopover.onClose}>
         {STATUS_OPTIONS?.map((item: any) => (
           <MenuItem
             selected={item.value === selectedKhoiCV}
