@@ -5,6 +5,7 @@ import Link from '@mui/material/Link';
 import Box, { BoxProps } from '@mui/material/Box';
 // routes
 import { RouterLink } from 'src/routes/components';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +16,8 @@ export interface LogoProps extends BoxProps {
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ disabledLink = false, sx, ...other }, ref) => {
     const theme = useTheme();
+
+    const { user, logout } = useAuthContext();
 
     const PRIMARY_LIGHT = theme.palette.primary.light;
 
@@ -28,7 +31,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       <Box
         component="img"
         src="/logo/logo-pmc-big.png"
-        sx={{ width: 185, height: 180,  cursor: 'pointer', ...sx }}
+        sx={{ width: 185, height: 180, cursor: 'pointer', ...sx }}
       />
     );
 
@@ -36,8 +39,19 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       return logo;
     }
 
+    const getDashboardLink = () => {
+      if (!user) {
+        return '/';
+      }
+
+      if (`${user.ent_chucvu?.Role}` === '1' || `${user.ent_chucvu?.Role}` === '2') {
+        return '/dashboard/analytics';
+      }
+
+      return '/dashboard/management';
+    };
     return (
-      <Link component={RouterLink} href="/" sx={{ display: 'contents' }}>
+      <Link component={RouterLink} href={getDashboardLink()} sx={{ display: 'contents' }}>
         {logo}
       </Link>
     );

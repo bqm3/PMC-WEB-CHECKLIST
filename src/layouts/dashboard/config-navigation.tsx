@@ -47,25 +47,6 @@ const ICONS = {
 };
 
 // ----------------------------------------------------------------------
-export function getRootPathByRole(data: IUser, navigate:  any) : void{
-  if (!data) return;
-    // Perform role-based redirection only on initial load
-    switch (`${data.ent_chucvu?.Role}`) {
-      case '1':
-      case '2':
-        navigate('/dashboard/analytics');
-        break;
-      case '10':
-      case '4':
-      case '0':
-        navigate('/dashboard/management');
-        break;
-      default:
-        navigate('/dashboard/analytics');
-        break;
-    }
-    
-};
 
 
 export function useNavData() {

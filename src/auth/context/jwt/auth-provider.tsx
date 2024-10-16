@@ -6,7 +6,6 @@ import { useRouter } from 'src/routes/hooks';
 //
 // routes
 import { paths } from 'src/routes/paths';
-import { getRootPathByRole } from 'src/layouts/dashboard/config-navigation';
 import { AuthContext } from './auth-context';
 import { isValidToken, setSession } from './utils';
 import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
@@ -117,7 +116,6 @@ export function AuthProvider({ children }: Props) {
           },
         });
 
-        getRootPathByRole(data, navigate);
        
       } else {
         dispatch({
