@@ -82,27 +82,27 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
 
   useEffect(() => {
     const resPhanloai =async ()=> {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_phanloai/all').then((res)=> {
+      await axios.get('http://localhost:6868/api/v2/ent_phanloai/all').then((res)=> {
         setPhanloai(res.data.data)
       })
     }
     const resChinhanh =async ()=> {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_chinhanh/all').then((res)=> {
+      await axios.get('http://localhost:6868/api/v2/ent_chinhanh/all').then((res)=> {
         setChinhanh(res.data.data)
       })
     }
     const resLinhvuc =async ()=> {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_linhvuc/all').then((res)=> {
+      await axios.get('http://localhost:6868/api/v2/ent_linhvuc/all').then((res)=> {
         setLinhvuc(res.data.data)
       })
     }
     const resLoaihinh =async ()=> {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_loaihinh/all').then((res)=> {
+      await axios.get('http://localhost:6868/api/v2/ent_loaihinh/all').then((res)=> {
         setLoaihinh(res.data.data)
       })
     }
     const resNhom =async ()=> {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_nhom/all').then((res)=> {
+      await axios.get('http://localhost:6868/api/v2/ent_nhom/all').then((res)=> {
         setNhom(res.data.data)
       })
     }
@@ -140,7 +140,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     try {
       if (currentDuan !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, data, {
+          .put(`http://localhost:6868/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -180,7 +180,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/create`, data, {
+          .post(`http://localhost:6868/api/v2/ent_duan/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

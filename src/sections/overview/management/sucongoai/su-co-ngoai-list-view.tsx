@@ -1,22 +1,42 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import { m } from 'framer-motion';
 // @mui
-import { alpha, styled } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Box, FormControl, InputLabel, Menu, MenuItem, Select, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import Image from 'src/components/image';
+import Stack from '@mui/material/Stack';
+// routes
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+// _mock
+import { useGetKhoiCV, useGetKhuVuc, useGetSuCoNgoai } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
+// hooks
+import { useBoolean } from 'src/hooks/use-boolean';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import moment from 'moment';
 // components
+import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   getComparator,
@@ -25,38 +45,26 @@ import {
   TableEmptyRows,
   TablePaginationCustom,
 } from 'src/components/table';
+import { useSnackbar } from 'src/components/snackbar';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { varTranHover } from 'src/components/animate';
+import Lightbox, { useLightBox } from 'src/components/lightbox';
 // types
-import {
-  IKhuvucTableFilters,
-  IBaoCaoTableFilterValue,
-  ISucongoai,
-  TbChecklistCalv,
-} from 'src/types/khuvuc';
+import { IKhuvucTableFilters, IBaoCaoTableFilterValue, ISucongoai } from 'src/types/khuvuc';
 //
-import AreaTableRow from './su-co-table-row';
-import SuCoTableToolbar from './su-co-table-toolbar';
+import AreaTableRow from './su-co-ngoai-table-row';
+import SuCoTableToolbar from './su-co-ngoai-table-toolbar';
 import TableHeadCustom from './table-head-custom';
-
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
-}));
-
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'ID_Checklist', label: 'Mã', width: 100 },
-  { id: 'Checklist', label: 'Tên Checklist' },
-  { id: 'Ketqua', label: 'Kết quả', width: 150 },
-  { id: 'Gioht', label: 'Giờ kiểm tra', width: 150 },
-  { id: 'Hinhanh', label: 'Hình ảnh', width: 150 },
-  { id: 'Ghichu', label: 'Ghi chú', width: 150 },
-  { id: '', label: '', width: 20 },
+  { id: 'ID_Suco', label: 'Mã', width: 50 },
+  { id: 'ID_Hangmuc', label: 'Hạng mục' },
+  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 150 },
+  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 150 },
+  { id: 'Noidungsuco', label: 'Thông tin', width: 200 },
+  { id: 'Tinhtrangxuly', label: 'Tình trạng xử lý', width: 150 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -79,13 +87,23 @@ export default function SuCoListView({ data }: Props) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const [tableData, setTableData] = useState<TbChecklistCalv[]>([]);
+  const [tableData, setTableData] = useState<ISucongoai[]>([]);
 
   useEffect(() => {
     if (data) {
       setTableData(data);
     }
   }, [data]);
+
+  const STATUS_OPTIONS = useMemo(
+    () => [
+      { value: 'all', label: 'Tất cả' },
+      { value: '0', label: 'Chưa xử lý' },
+      { value: '1', label: 'Đang xử lý' },
+      { value: '2', label: 'Đã xử lý' },
+    ],
+    []
+  );
 
   const dateError =
     filters.startDate && filters.endDate
@@ -121,18 +139,6 @@ export default function SuCoListView({ data }: Props) {
     [table]
   );
 
-  const [open, setOpen] = useState(false);
-  const [detailChecklist, setDetailChecklist] = useState<TbChecklistCalv>();
-
-
-  const handleClickOpen = (row: TbChecklistCalv) => {
-    setOpen(true);
-    setDetailChecklist(row);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -145,14 +151,53 @@ export default function SuCoListView({ data }: Props) {
   );
 
   return (
-    <Container sx={{ my: 2 }}>
+    <Container sx={{my: 2}}>
       <Card>
+        <Tabs
+          value={filters?.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {STATUS_OPTIONS?.map((tab) => (
+            <Tab
+              key={tab.value}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters?.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === '2' && 'success') ||
+                    (tab.value === '1' && 'warning') ||
+                    (tab.value === '0' && 'error') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && data?.length}
+                  {tab.value === '0' &&
+                    data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '0').length}
+                  {tab.value === '1' &&
+                    data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '1').length}
+                  {tab.value === '2' &&
+                    data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '2').length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
+
         <SuCoTableToolbar
-          filters={filters}
-          onFilters={handleFilters}
-          canReset={canReset}
-          onResetFilters={handleResetFilters}
-        />
+            filters={filters}
+            onFilters={handleFilters}
+            canReset={canReset}
+            onResetFilters={handleResetFilters}
+          />
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <Scrollbar>
@@ -165,7 +210,7 @@ export default function SuCoListView({ data }: Props) {
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(checked, dataInPage?.map((row) => row.ID_Checklist))
+                  table.onSelectAllRows(checked, dataInPage?.map((row) => row.ID_Suco))
                 }
               />
 
@@ -177,12 +222,11 @@ export default function SuCoListView({ data }: Props) {
                   )
                   .map((row, index) => (
                     <AreaTableRow
-                      key={row.ID_Checklist}
+                      key={row.ID_Suco}
                       row={row}
-                      selected={table.selected.includes(row.ID_Checklist)}
-                      onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
+                      selected={table.selected.includes(row.ID_Suco)}
+                      onSelectRow={() => table.onSelectRow(row.ID_Suco)}
                       index={index}
-                      handleClickOpen={() => handleClickOpen(row)}
                     />
                   ))}
 
@@ -208,38 +252,6 @@ export default function SuCoListView({ data }: Props) {
           onChangeDense={table.onChangeDense}
         />
       </Card>
-
-      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          
-        </DialogTitle> */}
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          {/* <CloseIcon /> */}
-        </IconButton>
-        <DialogContent dividers>
-          <Image
-            minWidth={500}
-            minHeight={500}
-            alt={detailChecklist?.ent_checklist?.Checklist}
-            src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
-            ratio="1/1"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Đóng
-          </Button>
-        </DialogActions>
-      </BootstrapDialog>
     </Container>
   );
 }
@@ -252,7 +264,7 @@ function applyFilter({
   filters,
   dateError,
 }: {
-  inputData: TbChecklistCalv[];
+  inputData: ISucongoai[];
   comparator: (a: any, b: any) => number;
   filters: IKhuvucTableFilters;
   dateError: boolean;
@@ -272,9 +284,13 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        `${order?.ent_checklist?.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${order?.Ghichu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order?.ent_hangmuc?.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.Noidungsuco}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
+  }
+
+  if (status !== 'all') {
+    inputData = inputData?.filter((order) => `${order?.Tinhtrangxuly}` === status);
   }
 
   if (!dateError) {

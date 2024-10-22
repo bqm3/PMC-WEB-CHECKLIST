@@ -18,7 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 // types
 import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IKhoiCV, ISucongoai, TbChecklistCalv } from 'src/types/khuvuc';
+import { IKhuvuc, IKhoiCV, ISucongoai } from 'src/types/khuvuc';
 import { useGetKhoiCV, useGetKhuVuc } from 'src/api/khuvuc';
 // components
 import Label from 'src/components/label';
@@ -31,17 +31,27 @@ import moment from 'moment';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: TbChecklistCalv;
+  row: ISucongoai;
   selected: boolean;
   onSelectRow: VoidFunction;
   index: number;
-  handleClickOpen: VoidFunction;
 };
 
-export default function AreaTableRow({ row, selected, onSelectRow, index, handleClickOpen }: Props) {
+export default function AreaTableRow({ row, selected, onSelectRow, index }: Props) {
   const {
-    ID_Checklist,Gioht, Ghichu, Anh, ent_checklist, Ngay, Ketqua
-   
+    ID_Suco,
+    ID_KV_CV,
+    ID_Hangmuc,
+    Ngaysuco,
+    Giosuco,
+    Noidungsuco,
+    Duongdancacanh,
+    ID_User,
+    Tinhtrangxuly,
+    Ngayxuly,
+    isDelete,
+    ent_hangmuc,
+    ent_user,
   } = row;
 
   const confirm = useBoolean();
@@ -49,7 +59,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
 
   const popover = usePopover();
 
-  const formattedTime = Gioht.slice(0, 5);
+  const formattedTime = Giosuco.slice(0, 5);
 
   const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
 
@@ -60,13 +70,12 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
       </TableCell> */}
 
       <TableCell>
-          C-{ID_Checklist}
+          SC{ID_Suco}
       </TableCell>
-      <TableCell>{ent_checklist?.Checklist}</TableCell>
-      <TableCell>{Ketqua}</TableCell>
+      <TableCell>{ent_hangmuc?.Hangmuc}</TableCell>
       <TableCell>
         <ListItemText
-          primary={moment(Ngay).format('DD-MM-YYYY')}
+          primary={moment(Ngaysuco).format('DD-MM-YYYY')}
           secondary={formattedTime}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
@@ -75,46 +84,25 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
           }}
         />{' '}
       </TableCell>
+      <TableCell> {Ngayxuly ? moment(Ngayxuly).format('DD-MM-YYYY') :''} </TableCell>
+      <TableCell> {Noidungsuco} </TableCell>
       <TableCell>
-        {(Anh !== null && Anh !== undefined && Anh !== '') && (
-          <Avatar
-            src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
-            variant="rounded"
-            sx={{ width: 80, height: 80 }}
-          />
-        )}
-      </TableCell>
-      <TableCell> {Ghichu} </TableCell>
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
+        <Label
+          variant="soft"
+          color={
+            (`${Tinhtrangxuly}` === '2' && 'success') ||
+            (`${Tinhtrangxuly}` === '1' && 'warning') ||
+            (`${Tinhtrangxuly}` === '0' && 'error') ||
+            'default'
+          }
+        >
+          {`${Tinhtrangxuly}` === '0' && 'Chưa xử lý'}
+          {`${Tinhtrangxuly}` === '1' && 'Đang xử lý'}
+          {`${Tinhtrangxuly}` === '2' && 'Đã xử lý'}
+        </Label>
       </TableCell>
     </TableRow>
   );
 
-  return (
-    <>
-      {renderPrimary}
-
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            handleClickOpen();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:eye-bold" />
-          Xem ảnh
-        </MenuItem>
-      </CustomPopover>
-
-     
-    </>
-  );
+  return <>{renderPrimary}</>;
 }

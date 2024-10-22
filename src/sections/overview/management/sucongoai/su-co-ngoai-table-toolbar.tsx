@@ -69,7 +69,7 @@ export default function SuCoTableToolbar({
         }}
       >
         <DatePicker
-          label="Ngày bắt đầu"
+          label="Ngày bắt đầu sự cố"
           value={filters?.startDate}
           onChange={handleFilterStartDate}
           slotProps={{
@@ -83,7 +83,7 @@ export default function SuCoTableToolbar({
         />
 
         <DatePicker
-          label="Ngày kết thúc"
+          label="Ngày kết thúc sự cố"
           value={filters?.endDate}
           onChange={handleFilterEndDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -97,7 +97,7 @@ export default function SuCoTableToolbar({
             fullWidth
             value={filters?.name}
             onChange={handleFilterName}
-            placeholder="Tìm kiếm theo tên checklist, ghi chú..."
+            placeholder="Tìm kiếm theo tên hạng mục, nội dung sự cố..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

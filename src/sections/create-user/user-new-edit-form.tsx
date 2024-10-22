@@ -134,7 +134,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     try {
       if (currentUser !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/update/${currentUser?.ID_User}`, data, {
+          .put(`http://localhost:6868/api/v2/ent_user/update/${currentUser?.ID_User}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -170,7 +170,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           });
       } else {
           await axios
-            .post(`https://checklist.pmcweb.vn/be/api/v2/ent_user/register`, data, {
+            .post(`http://localhost:6868/api/v2/ent_user/register`, data, {
               headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${accessToken}`,

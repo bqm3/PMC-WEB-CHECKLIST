@@ -50,6 +50,8 @@ interface Props extends CardProps {
   nhoms: any;
   tangGiam: any;
   top: any;
+  handleOpenModalSuCo: any;
+  handleCloseModalSuCo: any;
 }
 
 export default function ChecklistsSuco({
@@ -73,6 +75,8 @@ export default function ChecklistsSuco({
   top,
   selectedTop,
   onTopChange,
+  handleOpenModalSuCo,
+  handleCloseModalSuCo,
 
   ...other
 }: Props) {
@@ -86,6 +90,18 @@ export default function ChecklistsSuco({
   const tangGiamPopover = usePopover();
   const topPopover = usePopover();
 
+  const handleChartClick = (
+    event: any,
+    chartContext: any,
+    { seriesIndex, dataPointIndex, w }: any
+  ) => {
+    if (dataPointIndex !== -1 && categories.length > 0) {
+      const projectName = categories[dataPointIndex];
+      handleOpenModalSuCo(projectName, "su-co");
+    }
+    
+  };
+
   const chartOptions = useChart({
     colors: ['#f1c232'], // Default yellow color
     stroke: {
@@ -93,6 +109,7 @@ export default function ChecklistsSuco({
       width: 0,
       colors: ['#f1c232'],
     },
+    
     yaxis: {
       title: {
         text: 'Số lượng sự cố',
@@ -131,7 +148,11 @@ export default function ChecklistsSuco({
         borderRadius: 4, // Optional: make bars rounded,
       },
     },
-
+    chart: {
+      events: {
+        click: handleChartClick, // Attach the click event handler here at the root 'chart' level
+      },
+    },
     ...options, // Merge any additional chart options
   });
 

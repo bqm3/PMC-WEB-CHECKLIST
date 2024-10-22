@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { alpha, styled, useTheme } from '@mui/material/styles';
+
 // components
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image';
@@ -8,27 +9,12 @@ import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Accordion from '@mui/material/Accordion';
 import { Box, Divider, TextField } from '@mui/material';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import TableBody from '@mui/material/TableBody';
-import MenuItem from '@mui/material/MenuItem';
-// _mock
-import {
-  _analyticTasks,
-  _analyticPosts,
-  _analyticTraffic,
-  _analyticOrderTimeline,
-  _ecommerceSalesOverview,
-  _appInstalled,
-  _bankingRecentTransitions,
-} from 'src/_mock';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // hooks
 import { useAuthContext } from 'src/auth/hooks';
@@ -37,14 +23,15 @@ import { useSettingsContext } from 'src/components/settings';
 import { ISucongoai } from 'src/types/khuvuc';
 // api
 import axios from 'axios';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import Spreadsheet from 'react-spreadsheet';
 import { useGetKhoiCV } from 'src/api/khuvuc';
 //
 import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
-import AnaLyticsDuan from '../analytics-areas';
+import SuCoNgoaiListView from '../sucongoai/su-co-ngoai-list-view';
 import SuCoListView from '../suco/su-co-list-view';
-import BankingRecentTransitions from '../banking-recent-transitions';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 // ----------------------------------------------------------------------
@@ -174,7 +161,7 @@ export default function OverviewAnalyticsView() {
   const [selectedYear, setSelectedYear] = useState('2024');
   const [selectedMonth, setSelectedMonth] = useState(`all`);
   const [selectedKhoiCV, setSelectedKhoiCV] = useState('all');
-  const [selectedNhom, setSelectedNhom] = useState('4');
+  const [selectedNhom, setSelectedNhom] = useState('all');
   const [selectedTangGiam, setSelectedTangGiam] = useState('asc');
   const [selectedTop, setSelectedTop] = useState('10');
 
@@ -186,7 +173,7 @@ export default function OverviewAnalyticsView() {
   const [selectedYearSuco, setSelectedYearSuco] = useState('2024');
   const [selectedMonthSuco, setSelectedMonthSuco] = useState(`all`);
   const [selectedKhoiCVSuco, setSelectedKhoiCVSuco] = useState('all');
-  const [selectedNhomSuco, setSelectedNhomSuco] = useState('4');
+  const [selectedNhomSuco, setSelectedNhomSuco] = useState('all');
   const [selectedTangGiamSuco, setSelectedTangGiamSuco] = useState('desc');
   const [selectedTopSuco, setSelectedTopSuco] = useState('10');
 
@@ -210,14 +197,19 @@ export default function OverviewAnalyticsView() {
   ] = useState<any>();
   const [dataReportPercentChecklist, setDataReportPercentChecklist] = useState<any>();
   const [openModal, setOpenModal] = useState(false);
+  const [openModalSuCo, setOpenModalSuCo] = useState(false);
   const [selectedCode, setSelectedCode] = useState('');
+  const [selectedCodeSuCo, setSelectedCodeSuCo] = useState('');
   const [dataTable, setDataTable] = useState<ISucongoai[]>();
+  const [dataTableSuCo, setDataTableSuCo] = useState<any>();
+
+  const [spreadsheetData, setSpreadsheetData] = useState([]);
 
   const handleOpenModal = async (name: string, key: string) => {
     setSelectedCode(name);
     await axios
       .get(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`
+        `http://localhost:6868/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`
       )
       .then((data) => {
         setDataTable(data?.data?.data);
@@ -225,9 +217,22 @@ export default function OverviewAnalyticsView() {
       })
       .catch((error) => console.log('error'));
   };
-
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+  const handleCloseModalSuCo = () => {
+    setOpenModalSuCo(false);
+  };
+
+  const handleOpenModalSuCo = async (name: string, key: string) => {
+    setSelectedCodeSuCo(name);
+    await axios
+      .get(`http://localhost:6868/api/v2/tb_checklistc/${key}?name=${name}`)
+      .then((data) => {
+        setDataTableSuCo(data?.data?.data);
+        setOpenModalSuCo(true);
+      })
+      .catch((error) => console.log('error', error));
   };
 
   const { khoiCV } = useGetKhoiCV();
@@ -246,7 +251,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataDuan = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/ent_duan/du-an-theo-nhom', {
+        .get('http://localhost:6868/api/v2/ent_duan/du-an-theo-nhom', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -264,7 +269,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/percent-checklist-project', {
+        .get('http://localhost:6868/api/v2/tb_checklistc/percent-checklist-project', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -300,7 +305,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
+        .get('http://localhost:6868/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -319,7 +324,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/list-checklist-error', {
+        .get('http://localhost:6868/api/v2/tb_checklistc/list-checklist-error', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -337,7 +342,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/ti-le-hoan-thanh?
+          `http://localhost:6868/api/v2/tb_checklistc/ti-le-hoan-thanh?
           year=${selectedYear}&khoi=${selectedKhoiCV}&month=${selectedMonth}&nhom=${selectedNhom}&tangGiam=${selectedTangGiam}&top=${selectedTop}`,
           {
             headers: {
@@ -365,7 +370,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-week`, {
+        .get(`http://localhost:6868/api/v2/tb_checklistc/report-checklist-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -382,7 +387,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-problem-percent-week`, {
+        .get(`http://localhost:6868/api/v2/tb_checklistc/report-problem-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -399,7 +404,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
+        .get(`http://localhost:6868/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -417,7 +422,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/ti-le-su-co?
+          `http://localhost:6868/api/v2/tb_checklistc/ti-le-su-co?
           year=${selectedYearSuco}&khoi=${selectedKhoiCVSuco}&month=${selectedMonthSuco}&nhom=${selectedNhomSuco}&tangGiam=${selectedTangGiamSuco}&top=${selectedTopSuco}`,
           {
             headers: {
@@ -447,7 +452,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
+          `http://localhost:6868/api/v2/tb_sucongoai/dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -481,7 +486,30 @@ export default function OverviewAnalyticsView() {
     setOpen(false);
     setDetailChecklist(null);
   };
+  const [showModal, setShowModal] = useState<any>(false);
+  const fetchExcelData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:6868/api/v2/tb_checklistc/report-checklist-project-excel`
+      );
 
+      // Kiểm tra phản hồi API để đảm bảo có dữ liệu
+      if (response && response.data) {
+        // Chuyển đổi dữ liệu nhận được thành định dạng phù hợp cho react-spreadsheet
+        const formattedData = response.data.map((row: any) =>
+          row.map((cell: any) => ({ value: cell }))
+        );
+        // Cập nhật state với dữ liệu đã được format
+        setSpreadsheetData(formattedData);
+        setShowModal(true); // Hiển thị modal khi bắt đầu tải dữ liệu
+      } else {
+        console.error('No data returned from API');
+      }
+    } catch (error) {
+      console.error('Error fetching Excel data:', error);
+      setShowModal(false);
+    }
+  };
 
   return (
     <>
@@ -498,13 +526,18 @@ export default function OverviewAnalyticsView() {
           <Typography variant="h4">
             Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''}
           </Typography>
-          <Button
-            variant="contained"
-            startIcon={<Iconify icon="eva:link-2-fill" />}
-            onClick={handleLinkHSSE}
-          >
-            Báo cáo HSSE
-          </Button>
+          <Box display="flex" gap={2} alignItems="center">
+            <Button variant="contained" color="success" onClick={fetchExcelData}>
+              Danh sách dự án
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:link-2-fill" />}
+              onClick={handleLinkHSSE}
+            >
+              Báo cáo HSSE
+            </Button>
+          </Box>
         </Grid>
 
         <Grid container spacing={3}>
@@ -571,25 +604,33 @@ export default function OverviewAnalyticsView() {
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối kỹ thuật"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : '' }`}
+              total={`${
+                dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''
+              }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối bảo vệ"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : '' }`}
+              total={`${
+                dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''
+              }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối dịch vụ"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : '' }`}
+              total={`${
+                dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''
+              }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối làm sạch"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : '' }`}
+              total={`${
+                dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
+              }`}
             />
           </Grid>
 
@@ -647,6 +688,8 @@ export default function OverviewAnalyticsView() {
               nhoms={nhoms}
               tangGiam={tangGiam}
               top={top}
+              handleOpenModalSuCo={handleOpenModalSuCo}
+              handleCloseModalSuCo={handleCloseModalSuCo}
               //
             />
           </Grid>
@@ -688,7 +731,7 @@ export default function OverviewAnalyticsView() {
               />
             </Box>
           </Grid>
-          <Grid xs={12} md={12} lg={12}>
+          {/* <Grid xs={12} md={12} lg={12}>
             <div>
               {Object.keys(dataDuan)
                 .sort((a, b) => b.localeCompare(a))
@@ -713,8 +756,6 @@ export default function OverviewAnalyticsView() {
             </div>
           </Grid>
 
-        
-
           <Grid xs={12} md={12} lg={12}>
             {dataTotalErrorWeek && (
               <BankingRecentTransitions
@@ -731,15 +772,49 @@ export default function OverviewAnalyticsView() {
                 ]}
               />
             )}
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
+
+      <Dialog open={showModal} onClose={() => setShowModal(false)} fullWidth maxWidth="lg">
+        <DialogContent
+          sx={{
+            m: 2,
+            scrollBehavior: 'auto', // Loại bỏ smooth scroll
+            overflow: 'auto', // Đảm bảo cuộn không mượt
+          }}
+        >
+          {spreadsheetData.length > 0 ? (
+            <Spreadsheet data={spreadsheetData} />
+          ) : (
+            <div>Không có dữ liệu để hiển thị</div>
+          )}
+        </DialogContent>
+
+        <DialogActions>
+          <Button color="inherit" variant="contained" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openModalSuCo} onClose={handleCloseModalSuCo} fullWidth maxWidth="lg">
+        <DialogTitle>Dự án: {selectedCodeSuCo}</DialogTitle>
+        <DialogContent>
+          {dataTableSuCo && dataTableSuCo?.length > 0 && openModalSuCo === true && (
+            <SuCoListView data={dataTableSuCo} />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModalSuCo}>Close</Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="lg">
         <DialogTitle>Dự án: {selectedCode}</DialogTitle>
         <DialogContent>
           {dataTable && dataTable?.length > 0 && openModal === true && (
-            <SuCoListView data={dataTable} />
+            <SuCoNgoaiListView data={dataTable} />
           )}
         </DialogContent>
         <DialogActions>

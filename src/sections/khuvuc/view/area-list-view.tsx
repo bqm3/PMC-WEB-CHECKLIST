@@ -159,7 +159,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/delete/${id}`, [], {
+        .put(`http://localhost:6868/api/v2/ent_khuvuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -217,7 +217,7 @@ export default function AreaListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Khuvuc));
     await axios
-      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/delete-mul`, deleteRows, {
+      .put(`http://localhost:6868/api/v2/ent_khuvuc/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -322,7 +322,7 @@ export default function AreaListView() {
       const maQrCodes = selectedQrCodes.join(',');
 
       const response = await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
+        `http://localhost:6868/api/v2/ent_khuvuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
         {},
         {
           headers: {
