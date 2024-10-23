@@ -72,7 +72,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
   const defaultValues = useMemo(
     () => ({
       ID_Duan: currentCycle?.ID_Duan || '',
-      ID_KhoiCV: currentCycle?.ID_KhoiCV || '' ,
+      ID_KhoiCV: currentCycle?.ID_KhoiCV || '',
       Chuky: currentCycle?.Chuky || '',
       Ngaybatdau: currentCycle?.Ngaybatdau || null,
     }),
@@ -105,7 +105,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
     try {
       if (currentCycle !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -114,10 +114,10 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công'
+            });
             router.push(paths.dashboard.chukyduan.root);
           })
           .catch((error) => {
@@ -145,7 +145,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_duan_khoicv/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -242,7 +242,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
             </Stack>
             <RHFTextField name="Chuky" label="Chu kỳ" />
             <RHFTextField type="date" value={values?.Ngaybatdau} name="Ngaybatdau" />
-            
+
           </Stack>
         </Card>
       </Grid>

@@ -127,12 +127,12 @@ export default function SuCoListView() {
     ],
     []
   );
-  
+
 
   const dateError =
-  filters.startDate && filters.endDate
-    ? filters.startDate.getTime() > filters.endDate.getTime()
-    : false;
+    filters.startDate && filters.endDate
+      ? filters.startDate.getTime() > filters.endDate.getTime()
+      : false;
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -166,7 +166,7 @@ export default function SuCoListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_sucongoai/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -210,7 +210,7 @@ export default function SuCoListView() {
   const handleUpdate = async (id: string) => {
     await axios
       .put(
-        `http://localhost:6868/api/v2/tb_sucongoai/status/${id}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
         { Tinhtrangxuly: tinhTrangXuLy, ngayXuLy },
         {
           headers: {
@@ -290,7 +290,7 @@ export default function SuCoListView() {
 
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
 
-  console.log('dataSelect?.Tinhtrangxuly',tinhTrangXuLy)
+  console.log('dataSelect?.Tinhtrangxuly', tinhTrangXuLy)
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -471,7 +471,7 @@ export default function SuCoListView() {
           handleUpdate={() => handleUpdate(dataSelect?.ID_Suco)}
         />
       )}
-      
+
     </>
   );
 }
@@ -481,7 +481,7 @@ export default function SuCoListView() {
 function applyFilter({
   inputData,
   comparator,
-  filters, 
+  filters,
   dateError,
 }: {
   inputData: ISucongoai[];
@@ -505,7 +505,7 @@ function applyFilter({
     inputData = inputData.filter(
       (order) =>
         `${order.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${order.Noidungsuco}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 
+        `${order.Noidungsuco}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
@@ -605,7 +605,7 @@ function NhomTSDialog({
 
           <Scrollbar>
             <Stack sx={{ flexDirection: 'row', width: '100%', gap: 2 }}>
-            {arr?.map((slide: any) => (
+              {arr?.map((slide: any) => (
                 <m.div
                   key={slide}
                   whileHover="hover"

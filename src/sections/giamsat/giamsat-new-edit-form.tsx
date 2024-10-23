@@ -65,7 +65,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
   }, [chucVu]);
 
   const NewProductSchema = Yup.object().shape({
-    
+
     ID_KhoiCV: Yup.string(),
     Hoten: Yup.string().required('Phải có tên giám sát'),
     Sodienthoai: Yup.string().required('Phải có số điện thoại'),
@@ -110,7 +110,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
       if (currentGiamsat !== undefined) {
         await axios
           .put(
-            `http://localhost:6868/api/v2/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
+            `https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/update/${currentGiamsat.ID_Giamsat}`,
             data,
             {
               headers: {
@@ -153,7 +153,7 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_giamsat/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -242,11 +242,11 @@ export default function GiamsatNewEditForm({ currentGiamsat }: Props) {
               <RHFRadioGroup row name="Gioitinh" spacing={2} options={USER_GENDER_OPTIONS} />
             </Stack>
             <Stack spacing={1.5}>
-            <DatePicker
-              label="Ngày sinh"
-              value={new Date(values.Ngaysinh)}
-              onChange={(newValue) => setValue('Ngaysinh', newValue)}
-            />
+              <DatePicker
+                label="Ngày sinh"
+                value={new Date(values.Ngaysinh)}
+                onChange={(newValue) => setValue('Ngaysinh', newValue)}
+              />
             </Stack>
           </Stack>
         </Card>

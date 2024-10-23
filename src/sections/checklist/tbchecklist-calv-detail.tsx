@@ -173,7 +173,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -294,27 +294,27 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           />
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
-          <CSVLink
-            data={dataFormatExcel}
-            headers={headers}
-            filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_user.Hoten}.csv`}
-          >
+            <CSVLink
+              data={dataFormatExcel}
+              headers={headers}
+              filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_user.Hoten}.csv`}
+            >
+              <Button
+                variant="contained"
+                color="success"
+                startIcon={<Iconify icon="solar:export-bold" />}
+              >
+                Excel
+              </Button>
+            </CSVLink>
             <Button
+              onClick={view.onTrue}
               variant="contained"
-              color="success"
+              color="error"
               startIcon={<Iconify icon="solar:export-bold" />}
             >
-              Excel
+              PDF
             </Button>
-          </CSVLink>
-          <Button
-            onClick={view.onTrue}
-            variant="contained"
-            color="error"
-            startIcon={<Iconify icon="solar:export-bold" />}
-          >
-            PDF
-          </Button>
           </Stack>
         </Stack>
 
@@ -399,9 +399,9 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                   rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  //   onSelectAllRows={(checked) =>
-                  //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
-                  //   }
+                //   onSelectAllRows={(checked) =>
+                //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
+                //   }
                 />
 
                 <TableBody>
@@ -445,7 +445,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          
+
         </DialogTitle> */}
         <IconButton
           aria-label="close"
@@ -556,7 +556,7 @@ function applyFilter({
           .toLowerCase()
           .indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1 ||
+        -1 ||
         `${checklist.Gioht}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.Ghichu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );

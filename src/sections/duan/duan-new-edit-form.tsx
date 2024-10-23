@@ -71,7 +71,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       ID_Linhvuc: currentDuan?.ID_Linhvuc || '',
       ID_Loaihinh: currentDuan?.ID_Loaihinh || '',
       ID_Phanloai: currentDuan?.ID_Phanloai || '',
-      Ngaybatdau: currentDuan?.Ngaybatdau || new Date() ,
+      Ngaybatdau: currentDuan?.Ngaybatdau || new Date(),
       Diachi: currentDuan?.Diachi || '',
       Vido: currentDuan?.Vido || '',
       Kinhdo: currentDuan?.Kinhdo || '',
@@ -81,28 +81,28 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
   );
 
   useEffect(() => {
-    const resPhanloai =async ()=> {
-      await axios.get('http://localhost:6868/api/v2/ent_phanloai/all').then((res)=> {
+    const resPhanloai = async () => {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_phanloai/all').then((res) => {
         setPhanloai(res.data.data)
       })
     }
-    const resChinhanh =async ()=> {
-      await axios.get('http://localhost:6868/api/v2/ent_chinhanh/all').then((res)=> {
+    const resChinhanh = async () => {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_chinhanh/all').then((res) => {
         setChinhanh(res.data.data)
       })
     }
-    const resLinhvuc =async ()=> {
-      await axios.get('http://localhost:6868/api/v2/ent_linhvuc/all').then((res)=> {
+    const resLinhvuc = async () => {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_linhvuc/all').then((res) => {
         setLinhvuc(res.data.data)
       })
     }
-    const resLoaihinh =async ()=> {
-      await axios.get('http://localhost:6868/api/v2/ent_loaihinh/all').then((res)=> {
+    const resLoaihinh = async () => {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_loaihinh/all').then((res) => {
         setLoaihinh(res.data.data)
       })
     }
-    const resNhom =async ()=> {
-      await axios.get('http://localhost:6868/api/v2/ent_nhom/all').then((res)=> {
+    const resNhom = async () => {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_nhom/all').then((res) => {
         setNhom(res.data.data)
       })
     }
@@ -140,7 +140,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     try {
       if (currentDuan !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -149,10 +149,10 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công'
+            });
             router.push(paths.dashboard.duan.root);
           })
           .catch((error) => {
@@ -180,7 +180,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_duan/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -251,38 +251,38 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-             <Stack spacing={1.5}>
-              {nhom && nhom?.length > 0 && (
-                <RHFSelect
-                  name="ID_Nhom"
-                  label="Nhóm dự án"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {nhom?.map((item: any) => (
-                    <MenuItem key={item?.ID_Nhom} value={item?.ID_Nhom}>
-                      {item?.Tennhom}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-            </Stack>
-            <Stack spacing={1.5}>
-              {chiNhanh && chiNhanh?.length > 0 && (
-                <RHFSelect
-                  name="ID_Chinhanh"
-                  label="Chi nhánh"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {chiNhanh?.map((item: any) => (
-                    <MenuItem key={item?.ID_Chinhanh} value={item?.ID_Chinhanh}>
-                      {item?.Tenchinhanh}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-            </Stack>
+              <Stack spacing={1.5}>
+                {nhom && nhom?.length > 0 && (
+                  <RHFSelect
+                    name="ID_Nhom"
+                    label="Nhóm dự án"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                  >
+                    {nhom?.map((item: any) => (
+                      <MenuItem key={item?.ID_Nhom} value={item?.ID_Nhom}>
+                        {item?.Tennhom}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
+              </Stack>
+              <Stack spacing={1.5}>
+                {chiNhanh && chiNhanh?.length > 0 && (
+                  <RHFSelect
+                    name="ID_Chinhanh"
+                    label="Chi nhánh"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                  >
+                    {chiNhanh?.map((item: any) => (
+                      <MenuItem key={item?.ID_Chinhanh} value={item?.ID_Chinhanh}>
+                        {item?.Tenchinhanh}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
+              </Stack>
             </Box>
             <Box
               rowGap={3}
@@ -293,62 +293,62 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
                 sm: 'repeat(3, 1fr)',
               }}
             >
-             <Stack spacing={1.5}>
-              {linhVuc && linhVuc?.length > 0 && (
-                <RHFSelect
-                  name="ID_Linhvuc"
-                  label="Lĩnh vực dự án"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {linhVuc?.map((item: any) => (
-                    <MenuItem key={item?.ID_Linhvuc} value={item?.ID_Linhvuc}>
-                      {item?.Linhvuc}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-            </Stack>
-            <Stack spacing={1.5}>
-              {loaiHinh && loaiHinh?.length > 0 && (
-                <RHFSelect
-                  name="ID_Loaihinh"
-                  label="Loại hình"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {loaiHinh?.map((item: any) => (
-                    <MenuItem key={item?.ID_Loaihinh} value={item?.ID_Loaihinh}>
-                      {item?.Loaihinh}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-            </Stack>
-            <Stack spacing={1.5}>
-              {phanLoai && phanLoai?.length > 0 && (
-                <RHFSelect
-                  name="ID_Phanloai"
-                  label="Phân loại"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {phanLoai?.map((item: any) => (
-                    <MenuItem key={item?.ID_Phanloai} value={item?.ID_Phanloai}>
-                      {item?.Phanloai}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
-            </Stack>
+              <Stack spacing={1.5}>
+                {linhVuc && linhVuc?.length > 0 && (
+                  <RHFSelect
+                    name="ID_Linhvuc"
+                    label="Lĩnh vực dự án"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                  >
+                    {linhVuc?.map((item: any) => (
+                      <MenuItem key={item?.ID_Linhvuc} value={item?.ID_Linhvuc}>
+                        {item?.Linhvuc}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
+              </Stack>
+              <Stack spacing={1.5}>
+                {loaiHinh && loaiHinh?.length > 0 && (
+                  <RHFSelect
+                    name="ID_Loaihinh"
+                    label="Loại hình"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                  >
+                    {loaiHinh?.map((item: any) => (
+                      <MenuItem key={item?.ID_Loaihinh} value={item?.ID_Loaihinh}>
+                        {item?.Loaihinh}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
+              </Stack>
+              <Stack spacing={1.5}>
+                {phanLoai && phanLoai?.length > 0 && (
+                  <RHFSelect
+                    name="ID_Phanloai"
+                    label="Phân loại"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                  >
+                    {phanLoai?.map((item: any) => (
+                      <MenuItem key={item?.ID_Phanloai} value={item?.ID_Phanloai}>
+                        {item?.Phanloai}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                )}
+              </Stack>
             </Box>
             <RHFTextField name="Duan" label="Tên dự án" />
             <RHFTextField name="Diachi" label="Địa chỉ" />
             <DatePicker
-            label="Ngày bắt đầu"
-            value={new Date(values.Ngaybatdau)}
-            onChange={(newValue: any) => setValue('Ngaybatdau', newValue)}
-          />
+              label="Ngày bắt đầu"
+              value={new Date(values.Ngaybatdau)}
+              onChange={(newValue: any) => setValue('Ngaybatdau', newValue)}
+            />
             <RHFTextField name="Vido" label="Vĩ độ" />
             <RHFTextField name="Kinhdo" label="Kinh độ" />
             <RHFTextField name="Logo" label="Đường dẫn logo dự án" />
@@ -382,8 +382,8 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
           {renderActions}
         </Grid>
       </FormProvider>
-        {/* <ContactMap contacts={_mapContact} /> */}
-     
+      {/* <ContactMap contacts={_mapContact} /> */}
+
     </>
   );
 }

@@ -107,7 +107,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     }
   }, [khoiCV]);
 
-  
+
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
     defaultValues,
@@ -133,7 +133,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     try {
       if (currentArea !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/v2/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -142,10 +142,10 @@ export default function AreaNewEditForm({ currentArea }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công'
+            });
             router.push(paths.dashboard.khuvuc.root);
           })
           .catch((error) => {
@@ -173,7 +173,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_khuvuc/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -276,7 +276,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
             <RHFTextField name="Sothutu" label="Số thứ tự" />
             <RHFTextField name="Makhuvuc" label="Mã khu vực" />
 
-           
+
           </Stack>
         </Card>
       </Grid>

@@ -137,7 +137,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_giamsat/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -306,9 +306,9 @@ export default function GiamsatListView() {
                   rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(checked, tableData?.map((row) => row.ID_User))
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(checked, tableData?.map((row) => row.ID_User))
+                // }
                 />
 
                 <TableBody>

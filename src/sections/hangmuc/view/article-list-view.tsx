@@ -66,7 +66,7 @@ const TABLE_HEAD = [
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 150 },
   { id: 'ID_Khuvuc', label: 'Khu vực', width: 200 },
   { id: 'Important', label: 'Quan trọng', width: 140 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 250,  },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 250, },
   { id: '', width: 88 },
 ];
 
@@ -156,7 +156,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_hangmuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -214,7 +214,7 @@ export default function AreaListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Hangmuc));
     await axios
-      .put(`http://localhost:6868/api/v2/ent_hangmuc/delete-mul`, deleteRows, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -293,18 +293,18 @@ export default function AreaListView() {
     { label: 'Khối công việc', key: 'KhoiCV' },
   ];
 
-  const handleDownloadImages  = async () => {
+  const handleDownloadImages = async () => {
     try {
-      const selectedRows = table.selected; 
+      const selectedRows = table.selected;
       // Assuming you have dataInPage which holds the information for each row
       const selectedQrCodes = dataInPage
         .filter((row) => selectedRows.includes(row.ID_Hangmuc)) // Filter the selected rows
         .map((row) => row.MaQrCode); // Replace QrCodeValue with the appropriate field
-  
+
       const maQrCodes = selectedQrCodes.join(',');
 
       const response = await axios.post(
-        `http://localhost:6868/api/v2/ent_hangmuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
+        `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
         {},
         {
           headers: {
@@ -314,7 +314,7 @@ export default function AreaListView() {
           responseType: 'blob', // Specify the response type as blob to handle the file download
         }
       );
-  
+
       // Create a blob link to download
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -496,19 +496,19 @@ export default function AreaListView() {
               }
               action={
                 <>
-                 <Tooltip title="Download">
-                  <IconButton color="primary" onClick={handleDownloadImages}>
-                    <Iconify icon="solar:download-square-bold" />
-                  </IconButton>
-                </Tooltip>
+                  <Tooltip title="Download">
+                    <IconButton color="primary" onClick={handleDownloadImages}>
+                      <Iconify icon="solar:download-square-bold" />
+                    </IconButton>
+                  </Tooltip>
 
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton color="primary" onClick={confirm.onTrue}>
+                      <Iconify icon="solar:trash-bin-trash-bold" />
+                    </IconButton>
+                  </Tooltip>
 
-               </>
+                </>
               }
             />
 
@@ -662,11 +662,11 @@ function applyFilter({
   if (status !== 'all') {
     // Convert status to a number for comparison
     const statusAsNumber = parseInt(status, 10);
-  
+
     // Filter inputData based on ID_KhoiCV
     inputData = inputData.filter((order) => {
       const ids = order?.ent_khuvuc?.ent_khuvuc_khoicvs;
-  
+
       // Check if ids is an array and contains the statusAsNumber
       return Array.isArray(ids) && ids.some((item) => Number(item.ID_KhoiCV) === Number(statusAsNumber));
     });

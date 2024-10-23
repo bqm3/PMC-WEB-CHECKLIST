@@ -171,9 +171,9 @@ export default function ChiaCaNewEditForm() {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
       `${index}` === `${buildingIndex}`
         ? buildingCheckedStates?.map((data: any) => ({
-            ...data,
-            checked: data.Important ? true : isChecked, // Prevent unchecking important items
-          }))
+          ...data,
+          checked: data.Important ? true : isChecked, // Prevent unchecking important items
+        }))
         : buildingCheckedStates
     );
 
@@ -185,8 +185,8 @@ export default function ChiaCaNewEditForm() {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: any) =>
       bIndex === buildingIndex
         ? buildingCheckedStates.map((area: any, aIndex: any) =>
-            aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
-          )
+          aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
+        )
         : buildingCheckedStates
     );
     setCheckedStates(updatedCheckedStates);
@@ -220,7 +220,7 @@ export default function ChiaCaNewEditForm() {
       Sochecklist: 100,
     };
     await axios
-      .post(`http://localhost:6868/api/v2/ent_thietlapca/create`, data, {
+      .post(`https://checklist.pmcweb.vn/be/api/v2/ent_thietlapca/create`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

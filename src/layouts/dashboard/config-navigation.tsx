@@ -76,11 +76,20 @@ export function useNavData() {
             ];
           }
 
-          if(user?.ent_chucvu?.Role === 10 || user?.ent_chucvu?.Role === 4 || user?.ent_chucvu?.Role === 0 ){
+          if (user?.ent_chucvu?.Role === 10 || user?.ent_chucvu?.Role === 0) {
             return [
               {
                 title: t('management'),
                 path: paths.dashboard.general.management,
+                icon: ICONS.analytics,
+              },
+            ];
+          }
+          if (user?.ent_chucvu?.Role === 4) {
+            return [
+              {
+                title: t('managementDepartment'),
+                path: paths.dashboard.general.managementDepartment,
                 icon: ICONS.analytics,
               },
             ];
@@ -97,71 +106,71 @@ export function useNavData() {
         items:
           user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2
             ? [
-                // KHU VUC
-                {
-                  title: t('area'),
-                  path: paths.dashboard.khuvuc.root,
-                  icon: ICONS.tour,
-                  children: [
-                    { title: t('list'), path: paths.dashboard.khuvuc.root },
-                    { title: t('create'), path: paths.dashboard.khuvuc.new },
-                  ],
-                },
-                {
-                  title: t('article'),
-                  path: paths.dashboard.hangmuc.root,
-                  icon: ICONS.kanban,
-                  children: [
-                    { title: t('list'), path: paths.dashboard.hangmuc.root },
-                    { title: t('create'), path: paths.dashboard.hangmuc.new },
-                  ],
-                },
-                {
-                  title: t('calv'),
-                  path: paths.dashboard.calv.root,
-                  icon: ICONS.job,
-                  children: [
-                    { title: t('list'), path: paths.dashboard.calv.root },
-                    { title: t('create'), path: paths.dashboard.calv.new },
-                  ],
-                },
-                {
-                  title: t('chukyduan'),
-                  path: paths.dashboard.chukyduan.root,
-                  icon: ICONS.analytics,
-                  children: [
-                    { title: t('create'), path: paths.dashboard.chukyduan.new },
-                    { title: t('list'), path: paths.dashboard.chukyduan.root },
-                  ],
-                },
-                {
-                  title: t('phanquyenchecklist'),
-                  path: paths.dashboard.phanquyenchecklist.root,
-                  icon: ICONS.external,
-                  children: [
-                    { title: t('list'), path: paths.dashboard.phanquyenchecklist.root },
-                    { title: t('create'), path: paths.dashboard.phanquyenchecklist.new },
-                  ],
-                },
-                {
-                  title: t('checklist'),
-                  path: paths.dashboard.checklist.root,
-                  icon: ICONS.lock,
-                  children: [
-                    { title: t('list'), path: paths.dashboard.checklist.root },
-                    { title: t('create'), path: paths.dashboard.checklist.new },
-                    { title: t('calamviec'), path: paths.dashboard.checklist.lists },
-                  ],
-                },
-                {
-                  title: t('suco'),
-                  path: paths.dashboard.sucongoai.root,
-                  icon: ICONS.disabled,
-                  children: [
-                    { title: t('list'), path: paths.dashboard.sucongoai.root },
-                  ],
-                },
-              ]
+              // KHU VUC
+              {
+                title: t('area'),
+                path: paths.dashboard.khuvuc.root,
+                icon: ICONS.tour,
+                children: [
+                  { title: t('list'), path: paths.dashboard.khuvuc.root },
+                  { title: t('create'), path: paths.dashboard.khuvuc.new },
+                ],
+              },
+              {
+                title: t('article'),
+                path: paths.dashboard.hangmuc.root,
+                icon: ICONS.kanban,
+                children: [
+                  { title: t('list'), path: paths.dashboard.hangmuc.root },
+                  { title: t('create'), path: paths.dashboard.hangmuc.new },
+                ],
+              },
+              {
+                title: t('calv'),
+                path: paths.dashboard.calv.root,
+                icon: ICONS.job,
+                children: [
+                  { title: t('list'), path: paths.dashboard.calv.root },
+                  { title: t('create'), path: paths.dashboard.calv.new },
+                ],
+              },
+              {
+                title: t('chukyduan'),
+                path: paths.dashboard.chukyduan.root,
+                icon: ICONS.analytics,
+                children: [
+                  { title: t('create'), path: paths.dashboard.chukyduan.new },
+                  { title: t('list'), path: paths.dashboard.chukyduan.root },
+                ],
+              },
+              {
+                title: t('phanquyenchecklist'),
+                path: paths.dashboard.phanquyenchecklist.root,
+                icon: ICONS.external,
+                children: [
+                  { title: t('list'), path: paths.dashboard.phanquyenchecklist.root },
+                  { title: t('create'), path: paths.dashboard.phanquyenchecklist.new },
+                ],
+              },
+              {
+                title: t('checklist'),
+                path: paths.dashboard.checklist.root,
+                icon: ICONS.lock,
+                children: [
+                  { title: t('list'), path: paths.dashboard.checklist.root },
+                  { title: t('create'), path: paths.dashboard.checklist.new },
+                  { title: t('calamviec'), path: paths.dashboard.checklist.lists },
+                ],
+              },
+              {
+                title: t('suco'),
+                path: paths.dashboard.sucongoai.root,
+                icon: ICONS.disabled,
+                children: [
+                  { title: t('list'), path: paths.dashboard.sucongoai.root },
+                ],
+              },
+            ]
             : [],
       },
 
@@ -178,7 +187,7 @@ export function useNavData() {
       },
     ];
 
-    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 ) {
+    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2) {
       navigationData[1].items.unshift(
         {
           title: t('building'),
@@ -240,8 +249,6 @@ export function useNavData() {
         }
       );
     }
-
-    
 
     return navigationData;
   }, [t, user]);

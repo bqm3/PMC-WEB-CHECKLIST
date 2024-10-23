@@ -56,9 +56,9 @@ import GiamsatTableFiltersResult from '../chia-ca-table-filters-result';
 
 const TABLE_HEAD = [
   { id: 'ID_ThietLapCa', label: 'Mã thiết lập', width: 140 },
-  { id: 'ID_Calv', label: 'Ca làm việc', width: 200},
-  { id: 'Sochecklist', label: 'Số checklist', width: 150},
-  { id: 'Ngaythu', label: 'Ngày thực hiện', width: 140},
+  { id: 'ID_Calv', label: 'Ca làm việc', width: 200 },
+  { id: 'Sochecklist', label: 'Số checklist', width: 150 },
+  { id: 'Ngaythu', label: 'Ngày thực hiện', width: 140 },
   { id: 'ID_KhoiCV', label: 'Khối công việc', width: 200 },
   { id: '', width: 88 },
 ];
@@ -87,7 +87,7 @@ export default function ChiacaListView() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [filters, setFilters] = useState(defaultFilters);
-  
+
   const { thietlapca } = useGetPhanCaByDuan();
 
   const { khoiCV } = useGetKhoiCV();
@@ -139,7 +139,7 @@ export default function ChiacaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_thietlapca/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_thietlapca/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -212,7 +212,7 @@ export default function ChiacaListView() {
               name: 'Dashboard',
               href: paths.dashboard.root,
             },
-           
+
             { name: 'Danh sách' },
           ]}
           sx={{

@@ -17,7 +17,7 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
-  
+
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   pricing: '/pricing',
@@ -106,9 +106,10 @@ export const paths = {
       ecommerce: `${ROOTS.DASHBOARD}/ecommerce`,
       statistical_report: `${ROOTS.DASHBOARD}/statistical-report`,
       location: `${ROOTS.DASHBOARD}/quan-ly-vi-tri`,
-      
+
       analytics: `${ROOTS.DASHBOARD}/analytics`,
       management: `${ROOTS.DASHBOARD}/management`,
+      managementDepartment: `${ROOTS.DASHBOARD}/management-department`,
       banking: `${ROOTS.DASHBOARD}/banking`,
       booking: `${ROOTS.DASHBOARD}/booking`,
       file: `${ROOTS.DASHBOARD}/file`,
@@ -197,7 +198,7 @@ export const paths = {
       new: `${ROOTS.DASHBOARD}/checklist/new`,
       detail: (id: string) => `${ROOTS.DASHBOARD}/checklist/lists/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
-      lists :`${ROOTS.DASHBOARD}/checklist/lists`, 
+      lists :`${ROOTS.DASHBOARD}/checklist/lists`,
     },
     createUser: {
       root: `${ROOTS.DASHBOARD}/create-user`,
@@ -245,7 +246,7 @@ export const paths = {
     accountEmployee: {
       root: `${ROOTS.DASHBOARD}/account-employee`,
     },
-    
+
     user: {
       root: `${ROOTS.DASHBOARD}/userMinimal`,
       new: `${ROOTS.DASHBOARD}/userMinimal/new`,

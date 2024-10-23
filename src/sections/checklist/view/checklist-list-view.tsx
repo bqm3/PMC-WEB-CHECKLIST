@@ -182,7 +182,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -225,7 +225,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Checklist));
     await axios
-      .put(`http://localhost:6868/api/v2/ent_checklist/delete-mul`, deleteRows, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -305,21 +305,21 @@ export default function ChecklistCalvListView() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const khoiCVNames: { [key: string]: string } = {
-      '1': 'Khối làm sạch',
-      '2': 'Khối kỹ thuật',
-      '3': 'Khối bảo vệ',
-      '4': 'Khối dịch vụ',
-      // Add other mappings here
-    };
+    '1': 'Khối làm sạch',
+    '2': 'Khối kỹ thuật',
+    '3': 'Khối bảo vệ',
+    '4': 'Khối dịch vụ',
+    // Add other mappings here
+  };
 
-    const getKhoiCVNamesByIds = useCallback((idKhoiCVs: string[] = []): string => 
-       idKhoiCVs
-        .map((id: string) => khoiCVNames[id] || '') // Ensure 'id' is a string
-        .filter(Boolean) // Filter out any empty strings
-        .join(', ') // Join the names with commas
+  const getKhoiCVNamesByIds = useCallback((idKhoiCVs: string[] = []): string =>
+    idKhoiCVs
+      .map((id: string) => khoiCVNames[id] || '') // Ensure 'id' is a string
+      .filter(Boolean) // Filter out any empty strings
+      .join(', ') // Join the names with commas
     , [khoiCVNames]);
-    
-  
+
+
 
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
 
@@ -333,8 +333,8 @@ export default function ChecklistCalvListView() {
       tenhangmuc: item?.ent_hangmuc?.Hangmuc || '',
       Tentang: item?.ent_tang.Tentang || '',
       tenkhoicongviec: Array.isArray(item?.ent_khuvuc?.ID_KhoiCVs)
-      ? getKhoiCVNamesByIds(item?.ent_khuvuc?.ID_KhoiCVs)
-      : getKhoiCVNamesByIds([item?.ent_khuvuc?.ID_KhoiCVs]) || '',
+        ? getKhoiCVNamesByIds(item?.ent_khuvuc?.ID_KhoiCVs)
+        : getKhoiCVNamesByIds([item?.ent_khuvuc?.ID_KhoiCVs]) || '',
       thutucheck: item?.Sothutu || '',
       macl: item?.Maso || '',
       tencl: item?.Checklist || '',
@@ -344,7 +344,7 @@ export default function ChecklistCalvListView() {
     }));
     setDataFormatExcel(formattedData);
   }, [tableData, getKhoiCVNamesByIds]);
-  
+
 
   return (
     <>

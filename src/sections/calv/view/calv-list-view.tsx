@@ -135,7 +135,7 @@ export default function CalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_calv/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_calv/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -263,7 +263,7 @@ export default function CalvListView() {
                       calv?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
                     {tab.value === '4' &&
                       calv?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
-                       {tab.value === '5' &&
+                    {tab.value === '5' &&
                       calv?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
                   </Label>
                 }
@@ -416,7 +416,7 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.Tenca.toLowerCase().indexOf(name.toLowerCase()) !== -1 
+        order.Tenca.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

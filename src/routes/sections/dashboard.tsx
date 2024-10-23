@@ -20,6 +20,9 @@ const OverviewEcommercePage = lazy(() => import('src/pages/dashboard/ecommerce')
 const OverviewAnalyticsPage = lazy(() => import('src/pages/dashboard/analytics'));
 const StattisticalReportPage = lazy(() => import('src/pages/dashboard/statistical-report'));
 const OverviewManagementPage = lazy(() => import('src/pages/dashboard/management'));
+const OverviewManagementDepartmentPage = lazy(
+  () => import('src/pages/dashboard/management-department')
+);
 const LocationManagementPage = lazy(() => import('src/pages/dashboard/location'));
 const OverviewBankingPage = lazy(() => import('src/pages/dashboard/banking'));
 const OverviewBookingPage = lazy(() => import('src/pages/dashboard/booking'));
@@ -130,7 +133,7 @@ const SuCoListsPage = lazy(() => import('src/pages/dashboard/sucongoai/list'));
 
 // Phân quyền checklist
 const QuanlyCaHangMucListsPage = lazy(() => import('src/pages/dashboard/phanquyenchecklist/list'));
-const QuanlyCaHangMucNewPage  = lazy(() => import('src/pages/dashboard/phanquyenchecklist/new'));
+const QuanlyCaHangMucNewPage = lazy(() => import('src/pages/dashboard/phanquyenchecklist/new'));
 const QuanlyCaHangMucEditPage = lazy(() => import('src/pages/dashboard/phanquyenchecklist/edit'));
 
 // Dự án
@@ -154,7 +157,6 @@ const UserAdminProfilePage = lazy(() => import('src/pages/dashboard/userAdmin/pr
 // -----------------------------------------
 
 export const dashboardRoutes = [
-  
   {
     path: 'dashboard',
     element: (
@@ -167,11 +169,15 @@ export const dashboardRoutes = [
       </AuthGuard>
     ),
     children: [
-      { element:  <OverviewAnalyticsPage />, index: true },
+      {
+        element: <OverviewAnalyticsPage />,
+        index: true,
+      },
       { path: 'ecommerce', element: <OverviewEcommercePage /> },
       { path: 'analytics', element: <OverviewAnalyticsPage /> },
       { path: 'statistical-report', element: <StattisticalReportPage /> },
       { path: 'management', element: <OverviewManagementPage /> },
+      { path: 'management-department', element: <OverviewManagementDepartmentPage /> },
       { path: 'banking', element: <OverviewBankingPage /> },
       { path: 'booking', element: <OverviewBookingPage /> },
       { path: 'file', element: <OverviewFilePage /> },
@@ -334,7 +340,7 @@ export const dashboardRoutes = [
           { path: ':id/edit', element: <ListEditEmployeePage /> },
         ],
       },
-      
+
       {
         path: 'userMinimal',
         children: [

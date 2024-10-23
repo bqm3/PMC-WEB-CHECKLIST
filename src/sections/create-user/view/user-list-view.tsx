@@ -147,7 +147,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_user/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -220,24 +220,24 @@ export default function GiamsatListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-      <CustomBreadcrumbs
-          heading="Danh sách tài khoản"
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'Tài khoản',
-              href: paths.dashboard.createUser.root,
-            },
-            { name: 'Danh sách' },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <CustomBreadcrumbs
+            heading="Danh sách tài khoản"
+            links={[
+              {
+                name: 'Dashboard',
+                href: paths.dashboard.root,
+              },
+              {
+                name: 'Tài khoản',
+                href: paths.dashboard.createUser.root,
+              },
+              { name: 'Danh sách' },
+            ]}
+            sx={{
+              mb: { xs: 3, md: 5 },
+            }}
+          />
           <LoadingButton
             loading={loading}
             variant="contained"
@@ -247,7 +247,7 @@ export default function GiamsatListView() {
             Upload
           </LoadingButton>
         </Stack>
-        
+
         <Tabs
           value={filters.status}
           onChange={handleFilterStatus}

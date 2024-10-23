@@ -209,7 +209,7 @@ export default function OverviewAnalyticsView() {
     setSelectedCode(name);
     await axios
       .get(
-        `http://localhost:6868/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`
       )
       .then((data) => {
         setDataTable(data?.data?.data);
@@ -227,7 +227,7 @@ export default function OverviewAnalyticsView() {
   const handleOpenModalSuCo = async (name: string, key: string) => {
     setSelectedCodeSuCo(name);
     await axios
-      .get(`http://localhost:6868/api/v2/tb_checklistc/${key}?name=${name}`)
+      .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/${key}?name=${name}`)
       .then((data) => {
         setDataTableSuCo(data?.data?.data);
         setOpenModalSuCo(true);
@@ -251,7 +251,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataDuan = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/ent_duan/du-an-theo-nhom', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/ent_duan/du-an-theo-nhom', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -269,7 +269,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/percent-checklist-project', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/percent-checklist-project', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -305,7 +305,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -324,7 +324,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/list-checklist-error', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/list-checklist-error', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -342,7 +342,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_checklistc/ti-le-hoan-thanh?
+          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/ti-le-hoan-thanh?
           year=${selectedYear}&khoi=${selectedKhoiCV}&month=${selectedMonth}&nhom=${selectedNhom}&tangGiam=${selectedTangGiam}&top=${selectedTop}`,
           {
             headers: {
@@ -370,7 +370,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`http://localhost:6868/api/v2/tb_checklistc/report-checklist-percent-week`, {
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -387,7 +387,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`http://localhost:6868/api/v2/tb_checklistc/report-problem-percent-week`, {
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-problem-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -404,7 +404,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`http://localhost:6868/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -422,7 +422,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_checklistc/ti-le-su-co?
+          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/ti-le-su-co?
           year=${selectedYearSuco}&khoi=${selectedKhoiCVSuco}&month=${selectedMonthSuco}&nhom=${selectedNhomSuco}&tangGiam=${selectedTangGiamSuco}&top=${selectedTopSuco}`,
           {
             headers: {
@@ -452,7 +452,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_sucongoai/dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -490,7 +490,7 @@ export default function OverviewAnalyticsView() {
   const fetchExcelData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6868/api/v2/tb_checklistc/report-checklist-project-excel`
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-project-excel`
       );
 
       // Kiểm tra phản hồi API để đảm bảo có dữ liệu
@@ -604,33 +604,29 @@ export default function OverviewAnalyticsView() {
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối kỹ thuật"
-              total={`${
-                dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''
-              }`}
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''
+                }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối bảo vệ"
-              total={`${
-                dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''
-              }`}
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''
+                }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối dịch vụ"
-              total={`${
-                dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''
-              }`}
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''
+                }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối làm sạch"
-              total={`${
-                dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
-              }`}
+              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
+                }`}
             />
           </Grid>
 
@@ -690,7 +686,7 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-              //
+            //
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
@@ -824,7 +820,7 @@ export default function OverviewAnalyticsView() {
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-  
+
 </DialogTitle> */}
         <IconButton
           aria-label="close"

@@ -134,7 +134,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     try {
       if (currentUser !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/v2/ent_user/update/${currentUser?.ID_User}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/update/${currentUser?.ID_User}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -169,41 +169,41 @@ export default function UserNewEditForm({ currentUser }: Props) {
             }
           });
       } else {
-          await axios
-            .post(`http://localhost:6868/api/v2/ent_user/register`, data, {
-              headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
-            })
-            .then((res) => {
-              reset();
-              enqueueSnackbar('Tạo tài khoản thành công!');
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
-            });
-        
+        await axios
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_user/register`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => {
+            reset();
+            enqueueSnackbar('Tạo tài khoản thành công!');
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+
       }
     } catch (error) {
       enqueueSnackbar({
@@ -220,63 +220,63 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const renderPrimary = (
     <Grid xs={12} md={12}>
       <Card sx={{ p: 3 }}>
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
-            }}
-            marginTop={3}
-          >
-            {KhoiCV?.length > 0 && (
-              <RHFSelect
-                fullWidth
-                name="ID_KhoiCV"
-                label="Khối công việc"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {KhoiCV?.map((option) => (
-                  <MenuItem key={option.ID_KhoiCV} value={option.ID_KhoiCV}>
-                    {option.KhoiCV}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )}
-            {Duan?.length > 0 && (
-              <RHFSelect
-                fullWidth
-                name="ID_Duan"
-                label="Dự án"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {Duan?.map((option) => (
-                  <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
-                    {option.Duan}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )}
+        <Box
+          rowGap={3}
+          columnGap={2}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(3, 1fr)',
+          }}
+          marginTop={3}
+        >
+          {KhoiCV?.length > 0 && (
+            <RHFSelect
+              fullWidth
+              name="ID_KhoiCV"
+              label="Khối công việc"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {KhoiCV?.map((option) => (
+                <MenuItem key={option.ID_KhoiCV} value={option.ID_KhoiCV}>
+                  {option.KhoiCV}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          )}
+          {Duan?.length > 0 && (
+            <RHFSelect
+              fullWidth
+              name="ID_Duan"
+              label="Dự án"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {Duan?.map((option) => (
+                <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
+                  {option.Duan}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          )}
 
-            {Chucvu?.length > 0 && (
-              <RHFSelect
-                fullWidth
-                name="ID_Chucvu"
-                label="Chức vụ"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {Chucvu?.map((option) => (
-                  <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
-                    {option.Chucvu}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-            )}
-          </Box>
+          {Chucvu?.length > 0 && (
+            <RHFSelect
+              fullWidth
+              name="ID_Chucvu"
+              label="Chức vụ"
+              InputLabelProps={{ shrink: true }}
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+            >
+              {Chucvu?.map((option) => (
+                <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
+                  {option.Chucvu}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          )}
+        </Box>
 
         <Box
           rowGap={3}

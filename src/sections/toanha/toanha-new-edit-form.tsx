@@ -97,98 +97,98 @@ export default function GiamsatNewEditForm({ currentToanha }: Props) {
   }, [currentToanha, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    
-      try {
-        if (currentToanha !== undefined) {
-          await axios
-            .put(
-              `http://localhost:6868/api/v2/ent_toanha/update/${currentToanha.ID_Toanha}`,
-              data,
-              {
-                headers: {
-                  Accept: 'application/json',
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              }
-            )
-            .then((res) => {
-              reset();
-              enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
-              router.push(paths.dashboard.toanha.root);
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
-            });
-        } else {
-          axios
-            .post(`http://localhost:6868/api/v2/ent_toanha/create`, data, {
+
+    try {
+      if (currentToanha !== undefined) {
+        await axios
+          .put(
+            `https://checklist.pmcweb.vn/be/api/v2/ent_toanha/update/${currentToanha.ID_Toanha}`,
+            data,
+            {
               headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${accessToken}`,
               },
-            })
-            .then((res) => {
-              reset();
-              enqueueSnackbar('Tạo mới thành công!');
-            })
-            .catch((error) => {
-              if (error.response) {
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `${error.response.data.message}`,
-                });
-              } else if (error.request) {
-                // Lỗi không nhận được phản hồi từ server
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Không nhận được phản hồi từ máy chủ`,
-                });
-              } else {
-                // Lỗi khi cấu hình request
-                enqueueSnackbar({
-                  variant: 'error',
-                  autoHideDuration: 2000,
-                  message: `Lỗi gửi yêu cầu`,
-                });
-              }
+            }
+          )
+          .then((res) => {
+            reset();
+            enqueueSnackbar({
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công'
             });
-        }
-      } catch (error) {
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 2000,
-          message: `Lỗi gửi yêu cầu`,
-        });
+            router.push(paths.dashboard.toanha.root);
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+      } else {
+        axios
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_toanha/create`, data, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => {
+            reset();
+            enqueueSnackbar('Tạo mới thành công!');
+          })
+          .catch((error) => {
+            if (error.response) {
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `${error.response.data.message}`,
+              });
+            } else if (error.request) {
+              // Lỗi không nhận được phản hồi từ server
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `Không nhận được phản hồi từ máy chủ`,
+              });
+            } else {
+              // Lỗi khi cấu hình request
+              enqueueSnackbar({
+                variant: 'error',
+                autoHideDuration: 2000,
+                message: `Lỗi gửi yêu cầu`,
+              });
+            }
+          });
+      }
+    } catch (error) {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 2000,
+        message: `Lỗi gửi yêu cầu`,
+      });
       // }
     }
   }
-);
+  );
 
   const renderDetails = (
     <>
@@ -224,11 +224,11 @@ export default function GiamsatNewEditForm({ currentToanha }: Props) {
                 </RHFSelect>
               )}
             </Stack>
-          
+
 
             <RHFTextField name="Toanha" label="Tên tòa nhà" />
             <RHFTextField name="Sotang" label="Số tầng" />
-           
+
           </Stack>
         </Card>
       </Grid>

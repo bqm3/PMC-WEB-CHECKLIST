@@ -111,7 +111,7 @@ export const OverviewReportView = () => {
   const handleExportReport = async () => {
     setLoading(true);
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/reports/${indexBaoCao}`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/reports/${indexBaoCao}`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -154,7 +154,7 @@ export const OverviewReportView = () => {
   const fetchExcelData = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:6868/api/v2/tb_checklistc/preview-reports/${indexBaoCao}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/preview-reports/${indexBaoCao}`,
         {
           startDate: filters.startDate,
           endDate: filters.endDate,
@@ -179,7 +179,7 @@ export const OverviewReportView = () => {
   const handleExportStatistical = async () => {
     setLoading(true);
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/thong-ke`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/thong-ke`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -217,7 +217,7 @@ export const OverviewReportView = () => {
   const handleExportAllArticleImportant = async () => {
     setLoading(true);
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/report-article-important`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-article-important`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -255,7 +255,7 @@ export const OverviewReportView = () => {
 
   const handlePreviewExportAllArticleImportant = async () => {
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/preview-report-article-important`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/preview-report-article-important`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -384,110 +384,110 @@ export const OverviewReportView = () => {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Stack>
-        <Typography variant="h5" sx={{ mb: 1 }}>
-          Loại báo cáo
-        </Typography>
+        <Stack>
+          <Typography variant="h5" sx={{ mb: 1 }}>
+            Loại báo cáo
+          </Typography>
 
-        <Stack sx={{ mb: 1 }}>
-          {REPORT_CHECKLIST.map((option) => (
-            <FormControlLabel
-              key={option.value}
-              control={
-                <Radio
-                  disabled={option.value === '4'}
-                  checked={option.value === indexBaoCao}
-                  onClick={() => handleClickBaoCao(option.value)}
-                />
-              }
-              label={option.label}
-              sx={{ textTransform: 'capitalize', fontSize: 20 }}
-            />
-          ))}
+          <Stack sx={{ mb: 1 }}>
+            {REPORT_CHECKLIST.map((option) => (
+              <FormControlLabel
+                key={option.value}
+                control={
+                  <Radio
+                    disabled={option.value === '4'}
+                    checked={option.value === indexBaoCao}
+                    onClick={() => handleClickBaoCao(option.value)}
+                  />
+                }
+                label={option.label}
+                sx={{ textTransform: 'capitalize', fontSize: 20 }}
+              />
+            ))}
+          </Stack>
         </Stack>
-      </Stack>
-      <Card>
-        <StatisticalTableToolbar
-          filters={filters}
-          indexBaoCao={indexBaoCao}
-          onFilters={handleFilters}
-          publishOptions={STATUS_OPTIONS}
-        />
+        <Card>
+          <StatisticalTableToolbar
+            filters={filters}
+            indexBaoCao={indexBaoCao}
+            onFilters={handleFilters}
+            publishOptions={STATUS_OPTIONS}
+          />
 
-        {`${indexBaoCao}` === '4' ? (
+          {`${indexBaoCao}` === '4' ? (
+            <Button
+              sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
+              variant="contained"
+              onClick={() => handleValidate(`${indexBaoCao}`)}
+              disabled={loading}
+            >
+              Xuất Thống Kê
+            </Button>
+          ) : (
+            <Button
+              sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
+              variant="contained"
+              onClick={() => handleValidate(`${indexBaoCao}`)}
+              disabled={loading}
+            >
+              Xuất Báo Cáo
+            </Button>
+          )}
           <Button
-            sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
+            sx={{ m: 2.5, float: 'right' }}
             variant="contained"
-            onClick={() => handleValidate(`${indexBaoCao}`)}
+            color="success"
+            onClick={() => {
+              handleValidatePreview(`${indexBaoCao}`);
+            }}
             disabled={loading}
           >
-            Xuất Thống Kê
+            Preview
           </Button>
-        ) : (
-          <Button
-            sx={{ m: 2.5, float: 'right', background: '#2986cc' }}
-            variant="contained"
-            onClick={() => handleValidate(`${indexBaoCao}`)}
-            disabled={loading}
-          >
-            Xuất Báo Cáo
-          </Button>
-        )}
-        <Button
-          sx={{ m: 2.5, float: 'right' }}
-          variant="contained"
-          color="success"
-          onClick={() => {
-            handleValidatePreview(`${indexBaoCao}`);
-          }}
-          disabled={loading}
-        >
-          Preview
-        </Button>
-      </Card>
+        </Card>
 
-    
-    </Container>
+
+      </Container>
       <Dialog open={showModal} onClose={() => setShowModal(false)} fullWidth maxWidth="lg">
-      <DialogContent sx={{ mt: 2.5, mr: 2.5 }}>
-        <Spreadsheet data={spreadsheetData}/>
-      </DialogContent>
-      <DialogActions>
-        <Button
-          color="success"
-          variant="contained"
-          onClick={() => handleValidate(`${indexBaoCao}`)}
-        >
-          Download Excel
-        </Button>
-        <Button color="error" variant="contained" onClick={view.onTrue}>
-          Download PDF
-        </Button>
-        <Button color="inherit" variant="contained" onClick={() => setShowModal(false)}>
-          Close
-        </Button>
-      </DialogActions>
-    </Dialog>
-
-    <Dialog fullScreen open={view.value}>
-      <Box sx={{ height: 1, display: 'flex', flexDirection: 'column' }}>
-        <DialogActions
-          sx={{
-            p: 1.5,
-          }}
-        >
-          <Button color="inherit" variant="contained" onClick={view.onFalse}>
+        <DialogContent sx={{ mt: 2.5, mr: 2.5 }}>
+          <Spreadsheet data={spreadsheetData} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="success"
+            variant="contained"
+            onClick={() => handleValidate(`${indexBaoCao}`)}
+          >
+            Download Excel
+          </Button>
+          <Button color="error" variant="contained" onClick={view.onTrue}>
+            Download PDF
+          </Button>
+          <Button color="inherit" variant="contained" onClick={() => setShowModal(false)}>
             Close
           </Button>
         </DialogActions>
+      </Dialog>
 
-        <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
-          <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
-            <InvoicePDF spreadsheetData={spreadsheetData} />
-          </PDFViewer>
+      <Dialog fullScreen open={view.value}>
+        <Box sx={{ height: 1, display: 'flex', flexDirection: 'column' }}>
+          <DialogActions
+            sx={{
+              p: 1.5,
+            }}
+          >
+            <Button color="inherit" variant="contained" onClick={view.onFalse}>
+              Close
+            </Button>
+          </DialogActions>
+
+          <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
+            <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
+              <InvoicePDF spreadsheetData={spreadsheetData} />
+            </PDFViewer>
+          </Box>
         </Box>
-      </Box>
-    </Dialog>
+      </Dialog>
     </>
   );
 };

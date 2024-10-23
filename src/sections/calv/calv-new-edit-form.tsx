@@ -100,7 +100,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
     try {
       if (currentCalv !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/v2/ent_calv/update/${currentCalv.ID_Calv}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_calv/update/${currentCalv.ID_Calv}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -109,10 +109,10 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công'
+            });
             router.push(paths.dashboard.calv.root);
           })
           .catch((error) => {
@@ -140,7 +140,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_calv/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_calv/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

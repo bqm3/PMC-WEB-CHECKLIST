@@ -122,7 +122,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
       const arrChuky = thietlapca.ent_duan.ent_duan_khoicv;
       const chukyDetail = arrChuky.filter(
-        (item: any) => `${thietlapca?.ent_calv?.ID_KhoiCV}` === `${item.ID_KhoiCV}` &&  `${item.isDelete}` === "0"
+        (item: any) => `${thietlapca?.ent_calv?.ID_KhoiCV}` === `${item.ID_KhoiCV}` && `${item.isDelete}` === "0"
       );
       setChukyData(chukyDetail[0].Chuky);
     }
@@ -154,10 +154,10 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       const filteredAreas =
         optionKhoiCV && optionToaNha
           ? khuvuc?.filter(
-              (kv) =>
-                kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV) &&
-                optionToaNha.includes(kv.ID_Toanha)
-            )
+            (kv) =>
+              kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV) &&
+              optionToaNha.includes(kv.ID_Toanha)
+          )
           : khuvuc;
       setAreasData(filteredAreas);
       setCheckedStates(
@@ -183,9 +183,9 @@ export default function ChiaCaNewEditForm({ id }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
       `${index}` === `${buildingIndex}`
         ? buildingCheckedStates?.map((data: any) => ({
-            ...data,
-            checked: data.Important ? true : isChecked, // Prevent unchecking important items
-          }))
+          ...data,
+          checked: data.Important ? true : isChecked, // Prevent unchecking important items
+        }))
         : buildingCheckedStates
     );
 
@@ -197,8 +197,8 @@ export default function ChiaCaNewEditForm({ id }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: any) =>
       bIndex === buildingIndex
         ? buildingCheckedStates.map((area: any, aIndex: any) =>
-            aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
-          )
+          aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
+        )
         : buildingCheckedStates
     );
     setCheckedStates(updatedCheckedStates);
@@ -232,7 +232,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       Sochecklist: 100,
     };
     await axios
-      .put(`http://localhost:6868/api/v2/ent_thietlapca/update/${id}`, data, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_thietlapca/update/${id}`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -372,7 +372,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   const renderOptions = (
     <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 }}>
-      
+
       <Card>
         <Stack spacing={3} sx={{ p: 3 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

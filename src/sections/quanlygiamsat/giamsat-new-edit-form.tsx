@@ -70,7 +70,7 @@ export default function GiamsatNewEditForm({ id }: Props) {
 
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;
-   
+
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
       `${index}` === `${buildingIndex}`
         ? buildingCheckedStates?.map((data: any) => ({ ...data, checked: isChecked }))
@@ -85,8 +85,8 @@ export default function GiamsatNewEditForm({ id }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: any) =>
       bIndex === buildingIndex
         ? buildingCheckedStates.map((area: any, aIndex: any) =>
-            aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
-          )
+          aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
+        )
         : buildingCheckedStates
     );
     setCheckedStates(updatedCheckedStates);
@@ -95,7 +95,7 @@ export default function GiamsatNewEditForm({ id }: Props) {
   const onSubmit = async () => {
     setLoading(true);
     await axios
-      .put(`http://localhost:6868/api/v2/ent_user/set-up/${id}`, checkedStates, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/set-up/${id}`, checkedStates, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -104,10 +104,10 @@ export default function GiamsatNewEditForm({ id }: Props) {
       .then((res) => {
         setLoading(false);
         enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
+          variant: 'success',
+          autoHideDuration: 2000,
+          message: 'Cập nhật thành công'
+        });
       })
       .catch((error) => {
         setLoading(false);

@@ -123,27 +123,27 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
   useEffect(() => {
     let filteredToanha = khuvuc;
-  
+
     // If either ID_Toanha or ID_KhoiCV is present, filter the array
-    if (values.ID_Toanha ) {
+    if (values.ID_Toanha) {
       filteredToanha = khuvuc?.filter((item: any) => {
         const matchToanha = values.ID_Toanha ? `${item.ID_Toanha}` === `${values.ID_Toanha}` : true;
-        return matchToanha ;
+        return matchToanha;
       }) || [];
     }
-  
+
     // Create a new array with the desired structure: { ID_Khuvuc: ID_Khuvuc, Khuvuc: item }
     const newArray = filteredToanha?.map((item: any) => ({
       ID_Khuvuc: item.ID_Khuvuc,
       Khuvuc: item,
     }));
-  
+
     // Update the state with the new array
     setKhuVuc(newArray);
   }, [values.ID_Toanha, khuvuc]);
-  
-  
-  
+
+
+
 
   useEffect(() => {
     if (currentArticle) {
@@ -156,7 +156,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       if (currentArticle !== undefined) {
         await axios
           .put(
-            `http://localhost:6868/api/v2/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`,
+            `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`,
             data,
             {
               headers: {
@@ -168,10 +168,10 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           .then((res) => {
             // reset();
             enqueueSnackbar({
-                variant: 'success',
-                autoHideDuration: 2000,
-                message: 'Cập nhật thành công'
-              });
+              variant: 'success',
+              autoHideDuration: 2000,
+              message: 'Cập nhật thành công'
+            });
             router.push(paths.dashboard.hangmuc.root);
           })
           .catch((error) => {
@@ -199,7 +199,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_hangmuc/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -268,7 +268,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-          
+
               {toaNha?.length > 0 && (
                 <RHFSelect
                   name="ID_Toanha"
