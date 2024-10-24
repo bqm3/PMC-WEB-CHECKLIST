@@ -16,24 +16,22 @@ import Chart, { useChart } from 'src/components/chart';
 interface Props extends CardProps {
   title: string;
   total: string;
- 
+
 }
 
 export default function EcommerceWidgetSummary({
   title,
   total,
- 
+
   sx,
   ...other
 }: Props) {
   const theme = useTheme();
 
-
-
   return (
-    <Card sx={{ display: 'flex', alignItems: 'center', p: 3, ...sx }} {...other}>
+    <Card sx={{ display: 'flex', alignItems: 'center', p: 2.5, ...sx }} {...other}>
       <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="subtitle2" sx={{ mb: 2 }}>
+        <Typography variant="subtitle2" sx={{ mb: 1 }}>
           {title}
         </Typography>
 
@@ -41,8 +39,6 @@ export default function EcommerceWidgetSummary({
           {total} %
         </Typography>
       </Box>
-
-    
     </Card>
   );
 }

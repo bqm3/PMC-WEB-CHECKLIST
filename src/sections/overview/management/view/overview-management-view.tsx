@@ -34,6 +34,9 @@ import SuCoNgoaiListView from '../sucongoai/su-co-ngoai-list-view';
 import SuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
+import BankingExpensesCategories from '../banking-expenses-categories';
+
+
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
@@ -202,6 +205,7 @@ export default function OverviewAnalyticsView() {
   const [selectedCodeSuCo, setSelectedCodeSuCo] = useState('');
   const [dataTable, setDataTable] = useState<ISucongoai[]>();
   const [dataTableSuCo, setDataTableSuCo] = useState<any>();
+  const [dataProjectByLocation, setDataProjectByLocation] = useState<any>();
 
   const [spreadsheetData, setSpreadsheetData] = useState([]);
 
@@ -258,7 +262,11 @@ export default function OverviewAnalyticsView() {
           },
         })
         .then((res) => {
-          setDataDuan(res.data.data);
+          const chartData = Object.keys(res.data.data).map(location => ({
+            label: location,
+            value: res.data.data[location].length,
+          }));
+          setDataDuan(chartData);
         })
         .catch((err) => console.log('err', err));
     };
@@ -600,34 +608,56 @@ export default function OverviewAnalyticsView() {
               }}
             />
           </Grid>
+          <Grid xs={12} md={8}>
+            <BankingExpensesCategories
+              title="Số lượng dự án"
+              chart={{
+                series: dataDuan,
+                colors: [
+                  theme.palette.primary.main,
+                  theme.palette.info.main,
+                  theme.palette.info.darker,
+                  theme.palette.success.main,
+                  theme.palette.warning.main,
+                  theme.palette.success.darker,
+                  theme.palette.error.main,
+                  theme.palette.info.dark,
 
-          <Grid xs={12} md={3}>
-            <PercentChecklistWidgetSummary
-              title="Khối kỹ thuật"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''
-                }`}
+                  theme.palette.warning.dark,
+                ],
+              }}
             />
           </Grid>
-          <Grid xs={12} md={3}>
-            <PercentChecklistWidgetSummary
-              title="Khối bảo vệ"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''
-                }`}
-            />
-          </Grid>
-          <Grid xs={12} md={3}>
-            <PercentChecklistWidgetSummary
-              title="Khối dịch vụ"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''
-                }`}
-            />
-          </Grid>
-          <Grid xs={12} md={3}>
-            <PercentChecklistWidgetSummary
-              title="Khối làm sạch"
-              total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
-                }`}
-            />
+
+          <Grid container xs={12} md={4} sx={{ flexDirection: 'column' }} spacing={1}>
+            <Grid xs={12} md={12}>
+              <PercentChecklistWidgetSummary
+                title="Khối kỹ thuật"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''
+                  }`}
+              />
+            </Grid>
+            <Grid xs={12} md={12}>
+              <PercentChecklistWidgetSummary
+                title="Khối bảo vệ"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''
+                  }`}
+              />
+            </Grid>
+            <Grid xs={12} md={12}>
+              <PercentChecklistWidgetSummary
+                title="Khối dịch vụ"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''
+                  }`}
+              />
+            </Grid>
+            <Grid xs={12} md={12}>
+              <PercentChecklistWidgetSummary
+                title="Khối làm sạch"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
+                  }`}
+              />
+            </Grid>
           </Grid>
 
           <Grid xs={12} md={12} lg={12}>

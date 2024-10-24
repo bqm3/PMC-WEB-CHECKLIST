@@ -61,12 +61,12 @@ import TableHeadCustom from '../table-head-custom';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'ID_Hangmuc', label: 'Mã', width: 80 },
+  { id: 'ID_Hangmuc', label: 'Mã', width: 50 },
   { id: 'Hangmuc', label: 'Tên hạng mục' },
-  { id: 'MaQrCode', label: 'Mã Qr Code', width: 150 },
+  { id: 'MaQrCode', label: 'Mã Qr Code', width: 200 },
   { id: 'ID_Khuvuc', label: 'Khu vực', width: 200 },
-  { id: 'Important', label: 'Quan trọng', width: 140 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 250, },
+  { id: 'Important', label: 'Quan trọng', width: 100 },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 240, },
   { id: '', width: 88 },
 ];
 
