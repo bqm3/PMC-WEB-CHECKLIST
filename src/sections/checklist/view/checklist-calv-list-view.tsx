@@ -585,8 +585,8 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (checklist) =>
-        `${checklist.ent_calv.Tenca}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_giamsat.Hoten}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${checklist?.ent_calv?.Tenca}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_giamsat?.Hoten}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
   if (status !== 'all') {

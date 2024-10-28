@@ -676,13 +676,13 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (checklist) =>
-        `${checklist.Checklist}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_hangmuc.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_khuvuc.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist.ent_khuvuc.Tenkhuvuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${checklist?.Checklist}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.MaQrCode}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_hangmuc?.Hangmuc}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_tang?.Tentang}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_hangmuc?.MaQrCode}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_khuvuc?.MaQrCode}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_khuvuc?.Tenkhuvuc}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
   if (building.length) {
