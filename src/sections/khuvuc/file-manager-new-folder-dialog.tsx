@@ -87,7 +87,6 @@ export default function FileManagerNewFolderDialog({
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      // setUploadedFileName(response.data.filename);
       enqueueSnackbar('Uploads dữ liệu thành công!');
       setLoading(false);
     } catch (error) {

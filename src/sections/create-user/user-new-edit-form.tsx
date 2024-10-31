@@ -84,9 +84,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const NewUserSchema = Yup.object().shape({
     UserName: Yup.string().required('Tài khoản là bắt buộc'),
-    Email: Yup.string().required('Email là bắt buộc').email('Chưa đúng định dạng Email'),
+    Email: Yup.string().email('Chưa đúng định dạng Email').nullable(),
     Hoten: Yup.string().required('Phải có họ tên'),
-    Sodienthoai: Yup.string().required('Phải có số điện thoại'),
     Ngaysinh: Yup.mixed<any>().nullable().required('Phải có ngày sinh'),
     // not required
   });

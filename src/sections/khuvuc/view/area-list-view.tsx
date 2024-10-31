@@ -177,21 +177,21 @@ export default function AreaListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 4000,
+              autoHideDuration: 10000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 4000,
+              autoHideDuration: 10000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 4000,
+              autoHideDuration: 10000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
