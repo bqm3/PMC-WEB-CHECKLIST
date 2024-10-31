@@ -68,7 +68,7 @@ import ChecklistTableFiltersResult from '../tbchecklist-table-filters-result';
 
 const TABLE_HEAD = [
   { id: 'Ngay', label: 'Ngày checklist' },
-  { id: 'ID_Giamsat', label: 'Người checklist' },
+  { id: 'Hoten', label: 'Người checklist' },
   { id: 'Tong', label: 'Số Checklist' },
   { id: 'Giobd', label: 'Giờ ' },
   { id: 'ID_Calv', label: 'Ca làm việc' },
@@ -204,7 +204,7 @@ export default function ChecklistCalvListView() {
           table.onUpdatePageDeleteRow(dataInPage.length);
           enqueueSnackbar({
             variant: 'success',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: `Xóa thành công`,
           });
         })
@@ -212,21 +212,21 @@ export default function ChecklistCalvListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -319,7 +319,7 @@ export default function ChecklistCalvListView() {
           await mutateTb_Checklist();
           enqueueSnackbar({
             variant: 'success',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: 'Cập nhật thành công',
           });
         })
@@ -327,21 +327,21 @@ export default function ChecklistCalvListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -363,7 +363,7 @@ export default function ChecklistCalvListView() {
           await mutateTb_Checklist();
           enqueueSnackbar({
             variant: 'success',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: 'Xóa ca thành công',
           });
         })
@@ -371,21 +371,21 @@ export default function ChecklistCalvListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -586,7 +586,10 @@ function applyFilter({
     inputData = inputData?.filter(
       (checklist) =>
         `${checklist?.ent_calv?.Tenca}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist?.ent_giamsat?.Hoten}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${checklist?.ent_giamsat?.Hoten}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_user?.Hoten}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_user?.UserName}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${checklist?.ent_user?.Email}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
   if (status !== 'all') {

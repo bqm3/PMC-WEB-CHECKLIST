@@ -187,7 +187,7 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
         } else {
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: 'Tạo phòng thất bại',
           });
         }

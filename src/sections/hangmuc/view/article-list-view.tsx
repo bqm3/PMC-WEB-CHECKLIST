@@ -66,7 +66,7 @@ const TABLE_HEAD = [
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 200 },
   { id: 'ID_Khuvuc', label: 'Khu vực', width: 200 },
   { id: 'Important', label: 'Quan trọng', width: 100 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 240, },
+  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 240 },
   { id: '', width: 88 },
 ];
 
@@ -111,13 +111,16 @@ export default function AreaListView() {
 
   const [dataSelect, setDataSelect] = useState<IHangMuc>();
 
-  const STATUS_OPTIONS = useMemo(() => [
-    { value: 'all', label: 'Tất cả' },
-    ...khoiCV.map(khoi => ({
-      value: khoi.ID_KhoiCV.toString(),
-      label: khoi.KhoiCV
-    }))
-  ], [khoiCV]);
+  const STATUS_OPTIONS = useMemo(
+    () => [
+      { value: 'all', label: 'Tất cả' },
+      ...khoiCV.map((khoi) => ({
+        value: khoi.ID_KhoiCV.toString(),
+        label: khoi.KhoiCV,
+      })),
+    ],
+    [khoiCV]
+  );
 
   useEffect(() => {
     if (hangMuc?.length > 0) {
@@ -174,21 +177,21 @@ export default function AreaListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -199,7 +202,8 @@ export default function AreaListView() {
 
   const handleDownloadImage = async () => {
     const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
-    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${dataSelect?.Hangmuc}`;
+    const caption = encodeURIComponent(`${dataSelect?.Hangmuc} - ${dataSelect?.MaQrCode}`);
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${caption}&size=300x300`;
     const image = await fetch(originalImage);
     const imageBlog = await image.blob();
     const imageURL = URL.createObjectURL(imageBlog);
@@ -236,21 +240,21 @@ export default function AreaListView() {
         if (error.response) {
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: `${error.response.data.message}`,
           });
         } else if (error.request) {
           // Lỗi không nhận được phản hồi từ server
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: `Không nhận được phản hồi từ máy chủ`,
           });
         } else {
           // Lỗi khi cấu hình request
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: `Lỗi gửi yêu cầu`,
           });
         }
@@ -301,10 +305,15 @@ export default function AreaListView() {
         .filter((row) => selectedRows.includes(row.ID_Hangmuc)) // Filter the selected rows
         .map((row) => row.MaQrCode); // Replace QrCodeValue with the appropriate field
 
+      const selectedHangMucs = dataInPage
+        .filter((row) => selectedRows.includes(row.ID_Hangmuc)) // Filter the selected rows
+        .map((row) => row.Hangmuc);
+
       const maQrCodes = selectedQrCodes.join(',');
+      const hangMucs = selectedHangMucs.join(',');
 
       const response = await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
+        `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/generate-qr-codes?maQrCodes=${maQrCodes}&hangMucs=${hangMucs}`,
         {},
         {
           headers: {
@@ -326,7 +335,7 @@ export default function AreaListView() {
     } catch (error) {
       console.error('Error while generating QR codes:', error);
     }
-  }
+  };
 
   return (
     <>
@@ -507,7 +516,6 @@ export default function AreaListView() {
                       <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                   </Tooltip>
-
                 </>
               }
             />
@@ -582,7 +590,7 @@ export default function AreaListView() {
         <DialogContent>
           <Card>
             <Image
-              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&amp;size=300`}
+              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&caption=${`${dataSelect?.Hangmuc} - ${dataSelect?.MaQrCode}`}&size=300x300`}
               alt=""
               title=""
             />
@@ -668,7 +676,9 @@ function applyFilter({
       const ids = order?.ent_khuvuc?.ent_khuvuc_khoicvs;
 
       // Check if ids is an array and contains the statusAsNumber
-      return Array.isArray(ids) && ids.some((item) => Number(item.ID_KhoiCV) === Number(statusAsNumber));
+      return (
+        Array.isArray(ids) && ids.some((item) => Number(item.ID_KhoiCV) === Number(statusAsNumber))
+      );
     });
   }
 

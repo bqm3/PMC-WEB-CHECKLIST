@@ -184,21 +184,21 @@ export default function SuCoListView() {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -222,7 +222,7 @@ export default function SuCoListView() {
       .then((res) => {
         enqueueSnackbar({
           variant: 'success',
-          autoHideDuration: 2000,
+          autoHideDuration: 4000,
           message: 'Cập nhật thành công',
         });
         window.location.reload();
@@ -232,21 +232,21 @@ export default function SuCoListView() {
         if (error.response) {
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: `${error.response.data.message}`,
           });
         } else if (error.request) {
           // Lỗi không nhận được phản hồi từ server
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: `Không nhận được phản hồi từ máy chủ`,
           });
         } else {
           // Lỗi khi cấu hình request
           enqueueSnackbar({
             variant: 'error',
-            autoHideDuration: 2000,
+            autoHideDuration: 4000,
             message: `Lỗi gửi yêu cầu`,
           });
         }

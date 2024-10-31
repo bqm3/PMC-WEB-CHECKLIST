@@ -127,21 +127,21 @@ export default function AreaNewEditForm({ currentTang }: Props) {
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `${error.response.data.message}`,
             });
           } else if (error.request) {
             // Lỗi không nhận được phản hồi từ server
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Không nhận được phản hồi từ máy chủ`,
             });
           } else {
             // Lỗi khi cấu hình request
             enqueueSnackbar({
               variant: 'error',
-              autoHideDuration: 2000,
+              autoHideDuration: 4000,
               message: `Lỗi gửi yêu cầu`,
             });
           }
@@ -149,7 +149,7 @@ export default function AreaNewEditForm({ currentTang }: Props) {
     } catch (error) {
       enqueueSnackbar({
         variant: 'error',
-        autoHideDuration: 2000,
+        autoHideDuration: 4000,
         message: `Lỗi gửi yêu cầu`,
       });
     }
