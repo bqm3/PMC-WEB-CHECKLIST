@@ -309,12 +309,13 @@ export default function AreaListView() {
         .filter((row) => selectedRows.includes(row.ID_Hangmuc)) // Filter the selected rows
         .map((row) => row.Hangmuc);
 
-      const maQrCodes = selectedQrCodes.join(',');
-      const hangMucs = selectedHangMucs.join(',');
 
       const response = await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/generate-qr-codes?maQrCodes=${maQrCodes}&hangMucs=${hangMucs}`,
-        {},
+        `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/generate-qr-codes`,
+        {
+          maQrCodes: selectedQrCodes,  // gửi mảng thay vì chuỗi
+          hangMucs: selectedHangMucs,   // gửi mảng thay vì chuỗi
+        },
         {
           headers: {
             Accept: 'application/json',

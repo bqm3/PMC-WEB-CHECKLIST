@@ -319,11 +319,16 @@ export default function AreaListView() {
         .filter((row) => selectedRows.includes(row.ID_Khuvuc)) // Filter the selected rows
         .map((row) => row.MaQrCode); // Replace QrCodeValue with the appropriate field
 
-      const maQrCodes = selectedQrCodes.join(',');
+      const selectedHangMucs = dataInPage
+        .filter((row) => selectedRows.includes(row.ID_Khuvuc)) // Filter the selected rows
+        .map((row) => row.Tenkhuvuc);
 
       const response = await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/generate-qr-codes?maQrCodes=${maQrCodes}`,
-        {},
+        `https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/generate-qr-codes`,
+        {
+          maQrCodes: selectedQrCodes,  // gửi mảng thay vì chuỗi
+          khuVucs: selectedHangMucs,   // gửi mảng thay vì chuỗi
+        },
         {
           headers: {
             Accept: 'application/json',
