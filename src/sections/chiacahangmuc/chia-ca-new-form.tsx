@@ -104,7 +104,9 @@ export default function ChiaCaNewEditForm() {
 
   const handleChangeKhoiCV = (event: any) => {
     const selectedKhoiCV = KhoiCV.find((item: any) => item.ID_KhoiCV === event.target.value);
+    console.log('selectedKhoiCV', selectedKhoiCV)
     const arrChuky = ToaNha[0]?.ent_duan?.ent_duan_khoicv;
+    console.log('arrChuky', arrChuky)
     const chukyDetail = arrChuky?.filter(
       (item: any) => `${event.target.value}` === `${item.ID_KhoiCV}`
     );
@@ -131,39 +133,38 @@ export default function ChiaCaNewEditForm() {
 
   useEffect(() => {
     if (khuvuc) {
-      const filteredAreas = optionKhoiCV
-        ? khuvuc.filter((kv) => kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV))
-        : khuvuc;
-      setAreasData(filteredAreas);
-      setCheckedStates(
-        filteredAreas.map((kv) =>
-          kv.ent_hangmuc.map((hm, index) => ({
-            ID_Hangmuc: hm.ID_Hangmuc,
-            Important: `${hm.Important}` === '1', // Simplified
-            Index: index,
-            checked: `${hm.Important}` === '1', // Simplified
-          }))
-        )
-      );
-    }
-    if (optionToaNha) {
-      const filteredAreas = optionToaNha
-        ? khuvuc.filter((kv) => optionToaNha.includes(kv.ID_Toanha))
-        : khuvuc;
+      let filteredAreas;
+
+      // Kiểm tra xem optionKhoiCV có giá trị không
+      if (optionKhoiCV) {
+        filteredAreas = khuvuc.filter((kv) => kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV));
+        console.log('Filtered by optionKhoiCV:', filteredAreas);
+      }
+      // Nếu optionKhoiCV không có, xét đến optionToaNha
+      else if (optionToaNha) {
+        filteredAreas = khuvuc.filter((kv) => optionToaNha.includes(kv.ID_Toanha));
+        console.log('Filtered by optionToaNha:', filteredAreas);
+      }
+      // Nếu cả hai không có, giữ nguyên khuvuc
+      else {
+        filteredAreas = khuvuc;
+        console.log('No filters applied:', filteredAreas);
+      }
 
       setAreasData(filteredAreas);
       setCheckedStates(
         filteredAreas.map((kv) =>
           kv.ent_hangmuc.map((hm, index) => ({
             ID_Hangmuc: hm.ID_Hangmuc,
-            Important: `${hm.Important}` === '1', // Simplified
+            Important: `${hm.Important}` === '1', // Đơn giản hóa
             Index: index,
-            checked: `${hm.Important}` === '1', // Simplified
+            checked: `${hm.Important}` === '1', // Đơn giản hóa
           }))
         )
       );
     }
   }, [khuvuc, optionKhoiCV, optionToaNha]);
+
 
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;
