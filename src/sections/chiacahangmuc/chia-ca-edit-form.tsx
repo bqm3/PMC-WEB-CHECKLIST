@@ -146,25 +146,39 @@ export default function ChiaCaNewEditForm({ id }: Props) {
     const {
       target: { value },
     } = event;
-    setOptionToaNha(typeof value === 'string' ? value.split(',') : value);
+
+    // Check if `value` is an array and update `optionToaNha` with either adding or removing the selected item.
+    setOptionToaNha((prevSelected: any) => {
+      const selectedValues = typeof value === 'string' ? value.split(',') : value;
+
+      // Toggle logic: check if the value is already selected; if so, remove it; otherwise, add it
+      return selectedValues.includes(value[value.length - 1])
+        ? selectedValues
+        : [...selectedValues];
+    });
   };
 
   useEffect(() => {
-    if (khuvuc && optionKhoiCV && optionToaNha) {
-      const filteredAreas =
-        optionKhoiCV && optionToaNha
-          ? khuvuc?.filter(
-            (kv) =>
-              kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV) &&
-              optionToaNha.includes(kv.ID_Toanha)
-          )
-          : khuvuc;
+    if (khuvuc) {
+      let filteredAreas = khuvuc;
+
+      // Apply building filter if `optionToaNha` is selected
+      if (optionToaNha) {
+        filteredAreas = filteredAreas.filter((kv) => optionToaNha.includes(kv.ID_Toanha));
+      }
+
+      // Apply work block filter if `optionKhoiCV` is selected
+      if (optionKhoiCV) {
+        filteredAreas = filteredAreas.filter((kv) => kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV));
+      }
+
       setAreasData(filteredAreas);
+
       setCheckedStates(
         filteredAreas.map((kv) =>
           kv.ent_hangmuc.map((hm, index) => ({
             ID_Hangmuc: hm.ID_Hangmuc,
-            Important: `${hm.Important}` === '1', // Simplified
+            Important: `${hm.Important}` === '1',
             Index: index,
             checked: khuvucCheck.some(
               (checkItem) =>
@@ -176,6 +190,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       );
     }
   }, [khuvuc, optionKhoiCV, khuvucCheck, optionToaNha]);
+
 
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;

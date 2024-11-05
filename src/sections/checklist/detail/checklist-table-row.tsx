@@ -68,7 +68,7 @@ export default function AreaTableRow({
     <TableRow
       hover
       selected={selected}
-      style={{ backgroundColor: `${status}` === '1' ? '#FFAB0029' : '' }}
+      style={{ backgroundColor: `${ent_checklist?.Tinhtrang}` === '1' ? '#FFAB0029' : '' }}
     >
       <TableCell> {ent_checklist?.Checklist} </TableCell>
       <TableCell>

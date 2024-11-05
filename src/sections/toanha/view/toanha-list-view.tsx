@@ -374,8 +374,8 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.ent_duan.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Toanha.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order?.ent_duan?.Duan}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.Toanha}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

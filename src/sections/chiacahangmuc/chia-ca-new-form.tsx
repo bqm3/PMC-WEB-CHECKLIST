@@ -104,9 +104,7 @@ export default function ChiaCaNewEditForm() {
 
   const handleChangeKhoiCV = (event: any) => {
     const selectedKhoiCV = KhoiCV.find((item: any) => item.ID_KhoiCV === event.target.value);
-    console.log('selectedKhoiCV', selectedKhoiCV)
     const arrChuky = ToaNha[0]?.ent_duan?.ent_duan_khoicv;
-    console.log('arrChuky', arrChuky)
     const chukyDetail = arrChuky?.filter(
       (item: any) => `${event.target.value}` === `${item.ID_KhoiCV}`
     );
@@ -128,27 +126,30 @@ export default function ChiaCaNewEditForm() {
     const {
       target: { value },
     } = event;
-    setOptionToaNha(typeof value === 'string' ? value.split(',') : value);
+
+    // Check if `value` is an array and update `optionToaNha` with either adding or removing the selected item.
+    setOptionToaNha((prevSelected: any) => {
+      const selectedValues = typeof value === 'string' ? value.split(',') : value;
+
+      // Toggle logic: check if the value is already selected; if so, remove it; otherwise, add it
+      return selectedValues.includes(value[value.length - 1])
+        ? selectedValues
+        : [...selectedValues];
+    });
   };
 
   useEffect(() => {
     if (khuvuc) {
-      let filteredAreas;
+      let filteredAreas = khuvuc;
 
-      // Kiểm tra xem optionKhoiCV có giá trị không
+      // Apply building filter if `optionToaNha` is selected
+      if (optionToaNha) {
+        filteredAreas = filteredAreas.filter((kv) => optionToaNha.includes(kv.ID_Toanha));
+      }
+
+      // Apply work block filter if `optionKhoiCV` is selected
       if (optionKhoiCV) {
-        filteredAreas = khuvuc.filter((kv) => kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV));
-        console.log('Filtered by optionKhoiCV:', filteredAreas);
-      }
-      // Nếu optionKhoiCV không có, xét đến optionToaNha
-      else if (optionToaNha) {
-        filteredAreas = khuvuc.filter((kv) => optionToaNha.includes(kv.ID_Toanha));
-        console.log('Filtered by optionToaNha:', filteredAreas);
-      }
-      // Nếu cả hai không có, giữ nguyên khuvuc
-      else {
-        filteredAreas = khuvuc;
-        console.log('No filters applied:', filteredAreas);
+        filteredAreas = filteredAreas.filter((kv) => kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV));
       }
 
       setAreasData(filteredAreas);
