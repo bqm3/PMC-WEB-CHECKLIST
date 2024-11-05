@@ -209,12 +209,13 @@ export default function OverviewAnalyticsView() {
     setSelectedCode(name);
     await axios
       .get(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       )
       .then((data) => {
         setDataTable(data?.data?.data);
@@ -315,12 +316,15 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-report-checklist-percent-yesterday', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+        .get(
+          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-report-checklist-percent-yesterday',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
         .then((res) => {
           const dataRes = res.data.avgCompletionRatios;
           setDataReportPercentChecklist(dataRes);
@@ -418,7 +422,8 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/chi-nhanh-report-external-incident-percent-week`,
+        .get(
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/chi-nhanh-report-external-incident-percent-week`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -626,34 +631,42 @@ export default function OverviewAnalyticsView() {
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối kỹ thuật"
-              total={`${(dataReportPercentChecklist && dataReportPercentChecklist['Khối kỹ thuật']) ? dataReportPercentChecklist['Khối kỹ thuật'] : 0
+              total={`${dataReportPercentChecklist && dataReportPercentChecklist['Khối kỹ thuật']
+                ? dataReportPercentChecklist['Khối kỹ thuật']
+                : 0
                 }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối bảo vệ"
-              total={`${(dataReportPercentChecklist && dataReportPercentChecklist['Khối bảo vệ']) ? dataReportPercentChecklist['Khối bảo vệ'] : 0
+              total={`${dataReportPercentChecklist && dataReportPercentChecklist['Khối bảo vệ']
+                ? dataReportPercentChecklist['Khối bảo vệ']
+                : 0
                 }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối dịch vụ"
-              total={`${(dataReportPercentChecklist && dataReportPercentChecklist['Khối dịch vụ']) ? dataReportPercentChecklist['Khối dịch vụ'] : 0
+              total={`${dataReportPercentChecklist && dataReportPercentChecklist['Khối dịch vụ']
+                ? dataReportPercentChecklist['Khối dịch vụ']
+                : 0
                 }`}
             />
           </Grid>
           <Grid xs={12} md={3}>
             <PercentChecklistWidgetSummary
               title="Khối làm sạch"
-              total={`${(dataReportPercentChecklist && dataReportPercentChecklist['Khối làm sạch']) ? dataReportPercentChecklist['Khối làm sạch'] : 0
+              total={`${dataReportPercentChecklist && dataReportPercentChecklist['Khối làm sạch']
+                ? dataReportPercentChecklist['Khối làm sạch']
+                : 0
                 }`}
             />
           </Grid>
 
           <Grid xs={12} md={12} lg={12}>
-            {dataTotalYear &&
+            {dataTotalYear && (
               <ChecklistsHoanThanh
                 title="Tỉ lệ hoàn thành checklist hôm trước"
                 subheader="Hoàn thành checklist theo ca"
@@ -681,11 +694,11 @@ export default function OverviewAnalyticsView() {
                 showMax={showMax}
                 setShowMax={setShowMax}
               />
-            }
+            )}
           </Grid>
 
           <Grid xs={12} md={12} lg={12}>
-            {dataTotalYearSuco &&
+            {dataTotalYearSuco && (
               <ChecklistsSuCo
                 title="Số lượng sự cố trong ngày"
                 subheader="Số lượng sự cố chưa hoàn thành"
@@ -714,7 +727,7 @@ export default function OverviewAnalyticsView() {
                 handleCloseModalSuCo={handleCloseModalSuCo}
               //
               />
-            }
+            )}
           </Grid>
           {/* <Grid xs={12} md={12} lg={12}>
             {
@@ -847,9 +860,6 @@ export default function OverviewAnalyticsView() {
       </Dialog>
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-
-</DialogTitle> */}
         <IconButton
           aria-label="close"
           onClick={handleClose}

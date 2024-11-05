@@ -242,11 +242,11 @@ export default function ChecklistCalvListView() {
       case '2':
         return 'Khối kỹ thuật';
       case '3':
-        return 'Khối Bảo vệ';
+        return 'Khối bảo vệ vệ';
       case '4':
-        return 'Dự án';
+        return 'Khối dịch án';
       case 'all':
-        return 'Khối bảo vệ, Làm sạch, Kỹ thuật, Dự án';
+        return 'Khối Bảo vệ, Làm sạch, Kỹ thuật, Dự án';
       default:
         return '';
     }

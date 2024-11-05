@@ -85,7 +85,7 @@ export default function BankingRecentTransitions({
 
             <TableBody>
               {paginatedData.map((row) => (
-                <BankingRecentTransitionsRow key={row.Anh} row={row} handleViewRow={()=>handleViewRow(row)}/>
+                <BankingRecentTransitionsRow key={row.Anh} row={row} handleViewRow={() => handleViewRow(row)} />
               ))}
             </TableBody>
           </Table>
@@ -163,23 +163,23 @@ function BankingRecentTransitionsRow({ row, handleViewRow }: BankingRecentTransi
           />
         </TableCell>
 
-        <TableCell align="center">
-        {(row.Anh !== null && row.Anh !== undefined) ? (
-          <Avatar
-            src={`https://lh3.googleusercontent.com/d/${row.Anh}=s1000?authuser=0`}
-            variant="rounded"
-            sx={{ width: 80, height: 80 }}
-          />
-        ) : (
-          <Avatar
-          src={row.image}
-          variant="rounded"
-          sx={{ width: 80, height: 80 }}
-        />
-          
-        )}
-      </TableCell>
-      
+        <TableCell align="center" onClick={handleViewRow} sx={{ cursor: 'pointer' }}>
+          {(row.Anh !== null && row.Anh !== undefined) ? (
+            <Avatar
+              src={`https://lh3.googleusercontent.com/d/${row.Anh}=s1000?authuser=0`}
+              variant="rounded"
+              sx={{ width: 80, height: 80 }}
+            />
+          ) : (
+            <Avatar
+              src={row.image}
+              variant="rounded"
+              sx={{ width: 80, height: 80 }}
+            />
+
+          )}
+        </TableCell>
+
 
         <TableCell align="right" sx={{ pr: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -194,7 +194,7 @@ function BankingRecentTransitionsRow({ row, handleViewRow }: BankingRecentTransi
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem onClick={()=> {
+        <MenuItem onClick={() => {
           popover.onClose();
           handleViewRow()
         }}>

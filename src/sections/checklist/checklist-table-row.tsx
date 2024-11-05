@@ -77,7 +77,7 @@ export default function AreaTableRow({
 
   const popover = usePopover();
 
-  const shiftNamesKhoiCV = ent_khuvuc.ent_khuvuc_khoicvs
+  const shiftNamesKhoiCV = ent_khuvuc?.ent_khuvuc_khoicvs
     .map((calvId) => {
       const workShift = khoiCV?.find((shift) => `${shift.ID_KhoiCV}` === `${calvId.ID_KhoiCV}`);
       return workShift ? calvId.ent_khoicv.KhoiCV : null;
@@ -94,18 +94,18 @@ export default function AreaTableRow({
         (`${name}` === 'Khối bảo vệ' && 'error') ||
         'default'
       }
-      style={{margin: 2}}
+      style={{ margin: 2 }}
     >
       {name}
     </Label>
   ));
   let backgroundColorStyle;
 
-if (Tinhtrang === '1') {
-  backgroundColorStyle = '#FF563029';
-} else {
-  backgroundColorStyle = (index % 2 !== 0) ? '#f3f6f4' : '';
-}
+  if (Tinhtrang === '1') {
+    backgroundColorStyle = '#FF563029';
+  } else {
+    backgroundColorStyle = (index % 2 !== 0) ? '#f3f6f4' : '';
+  }
   const renderPrimary = (
     <TableRow
       hover

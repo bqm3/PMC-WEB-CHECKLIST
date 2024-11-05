@@ -65,7 +65,7 @@ export default function CalvTableRow({
         </Box>
       </TableCell>
 
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <ListItemText
           primary={Duan}
           // secondary={ent_khoicv?.KhoiCV}
@@ -75,7 +75,8 @@ export default function CalvTableRow({
             color: 'text.disabled',
           }}
         />
-      </TableCell>
+      </TableCell> */}
+      <TableCell>{Duan}</TableCell>
       <TableCell>{Diachi}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton
@@ -99,24 +100,22 @@ export default function CalvTableRow({
 
   const renderSecondary = (
     <TableRow>
-      <TableCell sx={{ p: 0, border: 'none' }} colSpan={8}>
+      <TableCell sx={{ p: 0, border: 'none' }} colSpan={12}>
         <Collapse
           in={collapse.value}
           timeout="auto"
           unmountOnExit
           sx={{ bgcolor: 'background.neutral' }}
         >
-          <Stack component={Paper} sx={{ m: 1.5 }}>
+          <Stack component={Paper} sx={{ m: 1 }}>
             {toanhas?.map((item: any) => (
               <Stack
                 key={item.ID_Khuvuc}
                 direction="row"
                 alignItems="center"
                 sx={{
-                  p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-                  '&:not(:last-of-type)': {
-                    borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-                  },
+                  p: (theme) => theme.spacing(1, 1, 1, 1),
+
                 }}
               >
                 <ListItemText
@@ -127,14 +126,13 @@ export default function CalvTableRow({
                   secondaryTypographyProps={{
                     component: 'span',
                     color: 'text.disabled',
-                    mt: 0.5,
                   }}
                 />
 
-                <TableCell align="center"> {item.Sotang} tầng</TableCell>
-                <TableCell align="center"> {item.khuvucLength} Khu vực</TableCell>
-                <TableCell align="center"> {item.totalHangmucInToanha} Hạng mục</TableCell>
-                <TableCell align="center" width={200}> {item?.tenKhois?.join(", \n")}</TableCell>
+                <TableCell> {item.Sotang} tầng</TableCell>
+                <TableCell> {item.khuvucLength} Khu vực</TableCell>
+                <TableCell> {item.totalHangmucInToanha} Hạng mục</TableCell>
+                <TableCell width={300}> {item?.tenKhois?.join(", \n")}</TableCell>
               </Stack>
             ))}
           </Stack>

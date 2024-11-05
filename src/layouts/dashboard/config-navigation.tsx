@@ -139,8 +139,8 @@ export function useNavData() {
                 path: paths.dashboard.chukyduan.root,
                 icon: ICONS.analytics,
                 children: [
-                  { title: t('create'), path: paths.dashboard.chukyduan.new },
                   { title: t('list'), path: paths.dashboard.chukyduan.root },
+                  { title: t('create'), path: paths.dashboard.chukyduan.new },
                 ],
               },
               {

@@ -68,7 +68,7 @@ export default function AreaTableRow({
     <TableRow
       hover
       selected={selected}
-      style={{ backgroundColor: `${status}` === '0' ? '#FFAB0029' : '' }}
+      style={{ backgroundColor: `${status}` === '1' ? '#FFAB0029' : '' }}
     >
       <TableCell> {ent_checklist?.Checklist} </TableCell>
       <TableCell>
@@ -87,9 +87,9 @@ export default function AreaTableRow({
         {' '}
         {Ketqua} {`${ent_checklist?.isCheck}` === '1' ? `(${ent_checklist?.Giatrinhan})` : ''}
       </TableCell>
-     
+
       <TableCell> {Gioht} </TableCell>
-      <TableCell>
+      <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
         {(Anh !== null && Anh !== undefined && Anh !== '') && (
           <Avatar
             src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}

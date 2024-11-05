@@ -50,11 +50,11 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'ID_Checklist', label: 'Mã', width: 100 },
-  { id: 'Checklist', label: 'Tên Checklist' },
+  { id: 'Checklist', label: 'Checklist', width: 200 },
+  { id: 'Hangmuc', label: 'Hạng mục' },
   { id: 'Ketqua', label: 'Kết quả', width: 150 },
-  { id: 'Gioht', label: 'Giờ kiểm tra', width: 150 },
-  { id: 'Hinhanh', label: 'Hình ảnh', width: 150 },
+  { id: 'Gioht', label: 'Giờ kiểm tra', width: 120 },
+  { id: 'Hinhanh', label: 'Hình ảnh', width: 100 },
   { id: 'Ghichu', label: 'Ghi chú', width: 150 },
   { id: '', label: '', width: 20 },
 ];
@@ -211,7 +211,7 @@ export default function SuCoListView({ data }: Props) {
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          
+
         </DialogTitle> */}
         <IconButton
           aria-label="close"

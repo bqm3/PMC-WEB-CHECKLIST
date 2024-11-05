@@ -214,8 +214,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
     }
   });
 
-  console.log('currentUser', currentUser)
-
   const renderPrimary = (
     <Grid xs={12} md={12}>
       <Card sx={{ p: 3 }}>

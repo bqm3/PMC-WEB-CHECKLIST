@@ -65,9 +65,9 @@ const TABLE_HEAD = [
   { id: 'Hangmuc', label: 'Tên hạng mục' },
   { id: 'MaQrCode', label: 'Mã Qr Code', width: 200 },
   { id: 'ID_Khuvuc', label: 'Khu vực', width: 200 },
-  { id: 'Important', label: 'Quan trọng', width: 100 },
+  { id: 'Important', label: 'Quan trọng', width: 120 },
   { id: 'ID_KhoiCV', label: 'Khối công việc', width: 240 },
-  { id: '', width: 88 },
+  { id: '', width: 10 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -203,7 +203,7 @@ export default function AreaListView() {
   const handleDownloadImage = async () => {
     const qrCodeData = encodeURIComponent(String(dataSelect?.MaQrCode || ''));
     const caption = encodeURIComponent(`${dataSelect?.Hangmuc} - ${dataSelect?.MaQrCode}`);
-    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${caption}&size=300x300`;
+    const originalImage = `https://quickchart.io/qr?text=${qrCodeData}&caption=${caption}&size=300x300&captionFontSize=8`;
     const image = await fetch(originalImage);
     const imageBlog = await image.blob();
     const imageURL = URL.createObjectURL(imageBlog);
@@ -591,7 +591,7 @@ export default function AreaListView() {
         <DialogContent>
           <Card>
             <Image
-              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&caption=${`${dataSelect?.Hangmuc} - ${dataSelect?.MaQrCode}`}&size=300x300`}
+              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&caption=${`${dataSelect?.Hangmuc} - ${dataSelect?.MaQrCode}`}&size=300x300&captionFontSize=8`}
               alt=""
               title=""
             />

@@ -40,8 +40,8 @@ type Props = {
 
 export default function AreaTableRow({ row, selected, onSelectRow, index, handleClickOpen }: Props) {
   const {
-    ID_Checklist,Gioht, Ghichu, Anh, ent_checklist, Ngay, Ketqua
-   
+    ID_Checklist, Gioht, Ghichu, Anh, ent_checklist, Ngay, Ketqua
+
   } = row;
 
   const confirm = useBoolean();
@@ -59,10 +59,11 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell> */}
 
-      <TableCell>
-          C-{ID_Checklist}
-      </TableCell>
+      {/* <TableCell>
+        C-{ID_Checklist}
+      </TableCell> */}
       <TableCell>{ent_checklist?.Checklist}</TableCell>
+      <TableCell>{ent_checklist?.ent_hangmuc?.Hangmuc}</TableCell>
       <TableCell>{Ketqua}</TableCell>
       <TableCell>
         <ListItemText
@@ -75,7 +76,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
           }}
         />{' '}
       </TableCell>
-      <TableCell>
+      <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
         {(Anh !== null && Anh !== undefined && Anh !== '') && (
           <Avatar
             src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
@@ -114,7 +115,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
         </MenuItem>
       </CustomPopover>
 
-     
+
     </>
   );
 }

@@ -16,6 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // hooks
 import { useAuthContext } from 'src/auth/hooks';
 // components
@@ -36,8 +37,6 @@ import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 import BankingExpensesCategories from '../banking-expenses-categories';
 
-
-// ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
 
@@ -87,7 +86,6 @@ const columns: GridColDef<[number]>[] = [
   {
     field: 'Khối làm sạch',
     headerName: 'Khối làm sạch',
-    // type: 'number',
     width: 150,
     editable: true,
   },
@@ -96,16 +94,12 @@ const columns: GridColDef<[number]>[] = [
     headerName: 'Khối dịch vụ',
     width: 150,
     editable: true,
-    // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
   },
   {
     field: 'Khối bảo vệ',
     headerName: 'Khối bảo vệ',
-    // description: 'This column has a value getter and is not sortable.',
-    // sortable: false,
     width: 160,
     editable: true,
-    // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
   },
 ];
 
@@ -206,6 +200,11 @@ export default function OverviewAnalyticsView() {
   const [dataTable, setDataTable] = useState<ISucongoai[]>();
   const [dataTableSuCo, setDataTableSuCo] = useState<any>();
   const [dataProjectByLocation, setDataProjectByLocation] = useState<any>();
+  const [openDataChecklistMonth, setOpenDataChecklistMonth] = useState<any>(false);
+  const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
+    month: null,
+    year: null
+  });
 
   const [spreadsheetData, setSpreadsheetData] = useState([]);
 
@@ -262,7 +261,7 @@ export default function OverviewAnalyticsView() {
           },
         })
         .then((res) => {
-          const chartData = Object.keys(res.data.data).map(location => ({
+          const chartData = Object.keys(res.data.data).map((location) => ({
             label: location,
             value: res.data.data[location].length,
           }));
@@ -519,6 +518,70 @@ export default function OverviewAnalyticsView() {
     }
   };
 
+  const handleOpenChecklistMonth = () => {
+    setOpenDataChecklistMonth(true);
+  };
+
+  const handleCloseChecklistMonth = () => {
+    setOpenDataChecklistMonth(false);
+  };
+
+  const handleYearChange = (value: Date | null) => {
+    // Check if the selected date is valid and update the year
+    if (value) {
+      setDataChecklistMonth((prev: any) => ({
+        ...prev,
+        year: value.getFullYear(), // Get the year from the date
+      }));
+    }
+  };
+
+  const handleMonthChange = (value: Date | null) => {
+    if (value) {
+      setDataChecklistMonth((prev: any) => ({
+        ...prev,
+        month: value.getMonth() + 1, // Months are 0-indexed in JavaScript
+      }));
+    }
+  };
+
+
+  const fetchChecklistMonth = async () => {
+    try {
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-years?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
+        null, // Use null as the second parameter because POST requests without a body can pass null
+        { responseType: 'blob' } // Important to specify responseType as blob
+      );
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // Create a link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Bao_cao_checklist_du_an_${dataChecklistMonth.month}_${dataChecklistMonth.year}.xlsx`); // Set the file name
+
+      // Append to body and trigger the download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      link.remove(); // Prefer link.remove() over parentNode to directly remove the element
+
+      // Release the blob URL after downloading
+      window.URL.revokeObjectURL(url);
+
+      // Close the modal or perform any other UI updates
+      setOpenDataChecklistMonth(false);
+    } catch (error) {
+      console.error('Error downloading the file:', error);
+      setOpenDataChecklistMonth(false);
+    }
+  };
+
+
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -535,6 +598,16 @@ export default function OverviewAnalyticsView() {
             Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''}
           </Typography>
           <Box display="flex" gap={2} alignItems="center">
+            {
+              user?.ent_chucvu?.Role === 10 && <>
+                <Button variant="contained" color="info" onClick={handleOpenChecklistMonth}>
+                  Báo cáo vị trí
+                </Button>
+                <Button variant="contained" color="info" onClick={handleOpenChecklistMonth}>
+                  Báo cáo checklist
+                </Button>
+              </>
+            }
             <Button variant="contained" color="success" onClick={fetchExcelData}>
               Danh sách dự án
             </Button>
@@ -879,6 +952,37 @@ export default function OverviewAnalyticsView() {
           </Button>
         </DialogActions>
       </BootstrapDialog>
+
+      <Dialog
+        open={openDataChecklistMonth}
+        onClose={handleCloseChecklistMonth}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Báo cáo checklist</DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="space-between" alignItems="center" gap={1} m={1}>
+
+            <DatePicker
+              label="Tháng" // Corrected
+              openTo="month"
+              views={['month']}
+              value={dataChecklistMonth.month ? new Date(2024, dataChecklistMonth.month - 1) : null}
+              onChange={handleMonthChange}
+            />
+            <DatePicker
+              label="Năm" // Corrected
+              views={['year']}
+              value={dataChecklistMonth.year ? new Date(dataChecklistMonth.year, 0) : null}
+              onChange={handleYearChange}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseChecklistMonth}>Close</Button>
+          <Button color='success' variant='contained' onClick={fetchChecklistMonth}>Xuất file</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
