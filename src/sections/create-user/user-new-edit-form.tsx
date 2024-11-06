@@ -301,7 +301,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
           {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />}
 
-          {`${currentUser?.ID_Chucvu}` === '4' && <RHFTextField name="Password" label="Mật khẩu" />}
+          {(`${currentUser?.ent_chucvu?.Role}` === '2' || `${currentUser?.ent_chucvu?.Role}` === '3') && <RHFTextField name="Password" label="Mật khẩu" />}
         </Box>
 
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>

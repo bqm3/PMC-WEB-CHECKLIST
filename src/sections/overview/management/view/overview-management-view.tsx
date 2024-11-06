@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Box, Divider, TextField } from '@mui/material';
+import { Box, CircularProgress, Divider, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -199,7 +199,7 @@ export default function OverviewAnalyticsView() {
   const [selectedCodeSuCo, setSelectedCodeSuCo] = useState('');
   const [dataTable, setDataTable] = useState<ISucongoai[]>();
   const [dataTableSuCo, setDataTableSuCo] = useState<any>();
-  const [dataProjectByLocation, setDataProjectByLocation] = useState<any>();
+  const [loadingReport, setLoadingReport] = useState<any>();
   const [openDataChecklistMonth, setOpenDataChecklistMonth] = useState<any>(false);
   const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
     month: null,
@@ -518,6 +518,14 @@ export default function OverviewAnalyticsView() {
     }
   };
 
+  const handleOpenChecklistLocation = () => {
+    setOpenDataChecklistMonth(true);
+  };
+
+  const handleCloseChecklistLocation = () => {
+    setOpenDataChecklistMonth(true);
+  };
+
   const handleOpenChecklistMonth = () => {
     setOpenDataChecklistMonth(true);
   };
@@ -548,6 +556,7 @@ export default function OverviewAnalyticsView() {
 
   const fetchChecklistMonth = async () => {
     try {
+      setLoadingReport(true)
       const response = await axios.post(
         `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-years?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
         null, // Use null as the second parameter because POST requests without a body can pass null
@@ -574,12 +583,49 @@ export default function OverviewAnalyticsView() {
 
       // Close the modal or perform any other UI updates
       setOpenDataChecklistMonth(false);
+      setLoadingReport(false)
     } catch (error) {
       console.error('Error downloading the file:', error);
       setOpenDataChecklistMonth(false);
+      setLoadingReport(false)
     }
   };
+  const fetchChecklistLocation = async () => {
+    try {
+      setLoadingReport(true)
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-location-times?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
+        null, // Use null as the second parameter because POST requests without a body can pass null
+        { responseType: 'blob' } // Important to specify responseType as blob
+      );
 
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // Create a link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Bao_cao_checklist_vi_pham_${dataChecklistMonth.month}_${dataChecklistMonth.year}.xlsx`); // Set the file name
+
+      // Append to body and trigger the download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      link.remove(); // Prefer link.remove() over parentNode to directly remove the element
+
+      // Release the blob URL after downloading
+      window.URL.revokeObjectURL(url);
+
+      // Close the modal or perform any other UI updates
+      setOpenDataChecklistMonth(false);
+      setLoadingReport(false)
+    } catch (error) {
+      console.error('Error downloading the file:', error);
+      setOpenDataChecklistMonth(false);
+      setLoadingReport(false)
+    }
+  };
 
 
   return (
@@ -600,7 +646,7 @@ export default function OverviewAnalyticsView() {
           <Box display="flex" gap={2} alignItems="center">
             {
               user?.ent_chucvu?.Role === 10 && <>
-                <Button variant="contained" color="info" onClick={handleOpenChecklistMonth}>
+                <Button variant="contained" color="info" onClick={handleOpenChecklistLocation}>
                   Báo cáo vị trí
                 </Button>
                 <Button variant="contained" color="info" onClick={handleOpenChecklistMonth}>
@@ -980,7 +1026,42 @@ export default function OverviewAnalyticsView() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseChecklistMonth}>Close</Button>
-          <Button color='success' variant='contained' onClick={fetchChecklistMonth}>Xuất file</Button>
+          <Button color='success' variant='contained' disabled={loadingReport} onClick={fetchChecklistMonth}>
+            {loadingReport ? <CircularProgress size={24} color="inherit" /> : "Xuất file"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDataChecklistMonth}
+        onClose={handleCloseChecklistLocation}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Báo cáo vị trí</DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="space-between" alignItems="center" gap={1} m={1}>
+
+            <DatePicker
+              label="Tháng" // Corrected
+              openTo="month"
+              views={['month']}
+              value={dataChecklistMonth.month ? new Date(2024, dataChecklistMonth.month - 1) : null}
+              onChange={handleMonthChange}
+            />
+            <DatePicker
+              label="Năm" // Corrected
+              views={['year']}
+              value={dataChecklistMonth.year ? new Date(dataChecklistMonth.year, 0) : null}
+              onChange={handleYearChange}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseChecklistLocation}>Close</Button>
+          <Button color='success' variant='contained' disabled={loadingReport} onClick={fetchChecklistLocation}>
+            {loadingReport ? <CircularProgress size={24} color="inherit" /> : "Xuất file"}
+          </Button>
         </DialogActions>
       </Dialog>
     </>
