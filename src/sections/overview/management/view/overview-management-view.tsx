@@ -201,6 +201,7 @@ export default function OverviewAnalyticsView() {
   const [dataTableSuCo, setDataTableSuCo] = useState<any>();
   const [loadingReport, setLoadingReport] = useState<any>();
   const [openDataChecklistMonth, setOpenDataChecklistMonth] = useState<any>(false);
+  const [openDataChecklistLocation, setOpenDataChecklistLocation] = useState<any>(false);
   const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
     month: null,
     year: null
@@ -519,11 +520,11 @@ export default function OverviewAnalyticsView() {
   };
 
   const handleOpenChecklistLocation = () => {
-    setOpenDataChecklistMonth(true);
+    setOpenDataChecklistLocation(true);
   };
 
   const handleCloseChecklistLocation = () => {
-    setOpenDataChecklistMonth(true);
+    setOpenDataChecklistLocation(true);
   };
 
   const handleOpenChecklistMonth = () => {
@@ -706,16 +707,12 @@ export default function OverviewAnalyticsView() {
               }}
             />
           </Grid>
-
           <Grid xs={12} md={4}>
             <EcommerceWidgetSummary
               title="Số lượng sự cố ngoài"
               key="1"
               percent={
-                ((Number(dataReportExternalIncidentChecklistPercentWeek?.currentWeekCount) -
-                  Number(dataReportExternalIncidentChecklistPercentWeek?.lastWeekCount)) /
-                  Number(dataReportExternalIncidentChecklistPercentWeek?.lastWeekCount)) *
-                100
+                dataReportExternalIncidentChecklistPercentWeek?.percentageChange
               }
               total={`${dataReportExternalIncidentChecklistPercentWeek?.currentWeekCount}`}
               chart={{
@@ -1033,7 +1030,7 @@ export default function OverviewAnalyticsView() {
       </Dialog>
 
       <Dialog
-        open={openDataChecklistMonth}
+        open={openDataChecklistLocation}
         onClose={handleCloseChecklistLocation}
         fullWidth
         maxWidth="sm"

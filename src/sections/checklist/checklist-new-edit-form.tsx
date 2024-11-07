@@ -91,6 +91,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
     () => ({
       Checklist: currentChecklist?.Checklist || '',
       Giatridinhdanh: currentChecklist?.Giatridinhdanh || '',
+      Giatriloi: currentChecklist?.Giatriloi || '',
       Giatrinhan: currentChecklist?.Giatrinhan || '',
       MaQrCode: currentChecklist?.MaQrCode || '',
       Sothutu: currentChecklist?.Sothutu || '',
@@ -378,11 +379,19 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
               <RHFTextField name="Sothutu" label="Số thứ tự" />
               <RHFTextField name="Maso" label="Mã số" />
             </Stack>
-            <Stack>
-              <RHFTextField name="Giatridinhdanh" label="Giá trị định danh" />
-              <Typography style={{ paddingTop: 10 }} variant="caption" color="primary">
-                Nếu không có không phải nhập
-              </Typography>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+              <Stack width='50%'>
+                <RHFTextField name="Giatridinhdanh" label="Giá trị định danh" />
+                <Typography style={{ paddingTop: 10 }} variant="caption" color="primary">
+                  Nếu không có không phải nhập
+                </Typography>
+              </Stack>
+              <Stack width='50%'>
+                <RHFTextField name="Giatriloi" label="Giá trị lỗi" />
+                <Typography style={{ paddingTop: 10 }} variant="caption" color="primary">
+                  Nếu không có không phải nhập
+                </Typography>
+              </Stack>
             </Stack>
             <Stack>
               <RHFTextField name="Giatrinhan" label="Giá trị nhận" />

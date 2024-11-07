@@ -346,6 +346,7 @@ export type IChecklist = {
   Checklist: string;
   Giatridinhdanh: string;
   Giatrinhan: string;
+  Giatriloi: string;
   Ghichu: string;
   Tieuchuan: string;
   Tinhtrang: string;
