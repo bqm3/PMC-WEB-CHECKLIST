@@ -81,15 +81,15 @@ export default function EcommerceWidgetSummary({
   const renderTrending = (
     <Stack direction="row" alignItems="center" sx={{ mt: 2, mb: 1 }}>
       <Iconify
-        icon={(percent < 0 && (title === 'Số lượng sự cố' || title === 'Số lượng sự cố ngoài')) ? 'eva:trending-down-fill' : 'eva:trending-up-fill'}
+        icon={(percent < 0) ? 'eva:trending-down-fill' : 'eva:trending-up-fill'}
         sx={{
           mr: 1,
           p: 0.5,
           width: 24,
           height: 24,
           borderRadius: '50%',
-          color: (percent > 0 && (`${title}` === 'Số lượng sự cố' || `${title}` === 'Số lượng sự cố ngoài')) ? 'error.main' : 'success.main', // Màu sắc theo trạng thái
-          bgcolor: alpha((percent > 0 && (`${title}` === 'Số lượng sự cố' || `${title}` === 'Số lượng sự cố ngoài')) ? theme.palette.error.main : theme.palette.success.main, 0.16),
+          color: (percent < 0) ? 'error.main' : 'success.main',
+          bgcolor: alpha((percent < 0) ? theme.palette.error.main : theme.palette.success.main, 0.16),
         }}
       />
   

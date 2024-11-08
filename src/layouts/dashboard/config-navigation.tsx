@@ -245,6 +245,7 @@ export function useNavData() {
           children: [
             { title: t('create'), path: paths.dashboard.createUser.root },
             { title: t('list'), path: paths.dashboard.createUser.list },
+            { title: t('user_error'), path: paths.dashboard.createUser.error},
           ],
         }
       );

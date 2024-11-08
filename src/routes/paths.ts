@@ -203,6 +203,7 @@ export const paths = {
     createUser: {
       root: `${ROOTS.DASHBOARD}/create-user`,
       list: `${ROOTS.DASHBOARD}/create-user/list`,
+      error: `${ROOTS.DASHBOARD}/create-user/error`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/create-user/${id}/edit`,
     },
     duan: {

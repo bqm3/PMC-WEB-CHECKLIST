@@ -98,6 +98,7 @@ const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
 const CreateEmployeePage = lazy(() => import('src/pages/dashboard/create-employee/new'));
 const ListEmployeePage = lazy(() => import('src/pages/dashboard/create-employee/list'));
 const ListEditEmployeePage = lazy(() => import('src/pages/dashboard/create-employee/edit'));
+const ListEditEmployeeError = lazy(() => import('src/pages/dashboard/create-employee/error'));
 
 const EmployeeAccountPage = lazy(() => import('src/pages/dashboard/account/account'));
 
@@ -338,6 +339,7 @@ export const dashboardRoutes = [
           { element: <CreateEmployeePage />, index: true },
           { path: 'list', element: <ListEmployeePage /> },
           { path: ':id/edit', element: <ListEditEmployeePage /> },
+          { path: ':error', element: <ListEditEmployeeError /> },
         ],
       },
 
