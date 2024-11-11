@@ -393,6 +393,7 @@ export default function AreaListView() {
                       (tab.value === '1' && 'success') ||
                       (tab.value === '2' && 'warning') ||
                       (tab.value === '3' && 'error') ||
+                      (tab.value === '4' && 'info') ||
                       'default'
                     }
                   >
@@ -464,6 +465,23 @@ export default function AreaListView() {
                           ids.startsWith('4,') ||
                           ids.includes(',4,') ||
                           ids.endsWith(',4')
+                        );
+                      }).length}
+                    {tab.value === '5' &&
+                      hangMuc?.filter((item) => {
+                        let ids = item.ent_khuvuc.ID_KhoiCVs;
+
+                        // Chuyển đổi IDs thành chuỗi nếu nó không phải là chuỗi
+                        if (typeof ids !== 'string') {
+                          ids = String(ids);
+                        }
+
+                        // Kiểm tra các điều kiện để tìm '1'
+                        return (
+                          ids === '5' ||
+                          ids.startsWith('5,') ||
+                          ids.includes(',5,') ||
+                          ids.endsWith(',5')
                         );
                       }).length}
                   </Label>

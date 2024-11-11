@@ -242,11 +242,13 @@ export default function ChecklistCalvListView() {
       case '2':
         return 'Khối kỹ thuật';
       case '3':
-        return 'Khối bảo vệ vệ';
+        return 'Khối bảo vệ';
       case '4':
-        return 'Khối dịch án';
+        return 'Khối dự án';
+      case '5':
+        return 'Khối F&B';
       case 'all':
-        return 'Khối Bảo vệ, Làm sạch, Kỹ thuật, Dự án';
+        return 'Khối Bảo vệ, Làm sạch, Kỹ thuật, Dự án, F&B';
       default:
         return '';
     }
@@ -445,6 +447,7 @@ export default function ChecklistCalvListView() {
                     (tab.value === '1' && 'success') ||
                     (tab.value === '2' && 'warning') ||
                     (tab.value === '3' && 'error') ||
+                    (tab.value === '4' && 'info') ||
                     'default'
                   }
                 >
@@ -458,6 +461,8 @@ export default function ChecklistCalvListView() {
                     tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
                   {tab.value === '4' &&
                     tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
+                  {tab.value === '5' &&
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
                 </Label>
               }
             />

@@ -274,6 +274,8 @@ export default function CalvListView() {
                       duankhoicv?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
                     {tab.value === '4' &&
                       duankhoicv?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
+                    {tab.value === '5' &&
+                      duankhoicv?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
                   </Label>
                 }
               />

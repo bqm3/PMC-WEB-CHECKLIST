@@ -88,6 +88,7 @@ const STATUS_OPTIONS = [
   { value: 'Khối làm sạch', label: 'Khối làm sạch' },
   { value: 'Khối dịch vụ', label: 'Khối dịch vụ' },
   { value: 'Khối bảo vệ', label: 'Khối bảo vệ' },
+  { value: 'Khối F&B', label: 'Khối F&B' },
 ];
 // ----------------------------------------------------------------------
 
@@ -171,7 +172,7 @@ export default function LocationManagementsView() {
             mb: { xs: 3, md: 5 },
           }}
         />
-       
+
       </Stack>
 
       <Card>
@@ -210,6 +211,8 @@ export default function LocationManagementsView() {
                     location?.filter((item) => `${item.cv}` === 'Khối bảo vệ').length}
                   {tab.value === 'Khối kỹ thuật' &&
                     location?.filter((item) => `${item.cv}` === 'Khối kỹ thuật').length}
+                  {tab.value === 'Khối F&B' &&
+                    location?.filter((item) => `${item.cv}` === 'Khối F&B').length}
                 </Label>
               }
             />

@@ -100,7 +100,16 @@ const columns: GridColDef<[number]>[] = [
     headerName: 'Khối bảo vệ',
     // description: 'This column has a value getter and is not sortable.',
     // sortable: false,
-    width: 160,
+    width: 150,
+    editable: true,
+    // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
+  },
+  {
+    field: 'Khối F&B',
+    headerName: 'Khối F&B',
+    // description: 'This column has a value getter and is not sortable.',
+    // sortable: false,
+    width: 150,
     editable: true,
     // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
   },
@@ -302,6 +311,9 @@ export default function OverviewAnalyticsView() {
               : null,
             'Khối bảo vệ': project.createdKhois['Khối bảo vệ']?.completionRatio
               ? `${project.createdKhois['Khối bảo vệ']?.completionRatio} %`
+              : null,
+            'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio
+              ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
               : null,
           }));
 
@@ -660,6 +672,15 @@ export default function OverviewAnalyticsView() {
               title="Khối làm sạch"
               total={`${dataReportPercentChecklist && dataReportPercentChecklist['Khối làm sạch']
                 ? dataReportPercentChecklist['Khối làm sạch']
+                : 0
+                }`}
+            />
+          </Grid>
+          <Grid xs={12} md={3}>
+            <PercentChecklistWidgetSummary
+              title="Khối F&B"
+              total={`${dataReportPercentChecklist && dataReportPercentChecklist['Khối F&B']
+                ? dataReportPercentChecklist['Khối F&B']
                 : 0
                 }`}
             />

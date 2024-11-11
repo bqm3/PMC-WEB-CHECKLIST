@@ -244,6 +244,7 @@ export default function ChiacaListView() {
                       (tab.value === '1' && 'success') ||
                       (tab.value === '2' && 'warning') ||
                       (tab.value === '3' && 'error') ||
+                      (tab.value === '4' && 'info') ||
                       'default'
                     }
                   >
@@ -257,6 +258,8 @@ export default function ChiacaListView() {
                       thietlapca?.filter((item) => `${item.ent_calv.ID_KhoiCV}` === '3').length}
                     {tab.value === '4' &&
                       thietlapca?.filter((item) => `${item.ent_calv.ID_KhoiCV}` === '4').length}
+                    {tab.value === '5' &&
+                      thietlapca?.filter((item) => `${item.ent_calv.ID_KhoiCV}` === '5').length}
                   </Label>
                 }
               />

@@ -98,7 +98,13 @@ const columns: GridColDef<[number]>[] = [
   {
     field: 'Khối bảo vệ',
     headerName: 'Khối bảo vệ',
-    width: 160,
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'Khối F&B',
+    headerName: 'Khối F&B',
+    width: 150,
     editable: true,
   },
 ];
@@ -299,6 +305,9 @@ export default function OverviewAnalyticsView() {
               : null,
             'Khối bảo vệ': project.createdKhois['Khối bảo vệ']?.completionRatio
               ? `${project.createdKhois['Khối bảo vệ']?.completionRatio} %`
+              : null,
+            'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio
+              ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
               : null,
           }));
 
@@ -524,7 +533,7 @@ export default function OverviewAnalyticsView() {
   };
 
   const handleCloseChecklistLocation = () => {
-    setOpenDataChecklistLocation(true);
+    setOpenDataChecklistLocation(false);
   };
 
   const handleOpenChecklistMonth = () => {
@@ -771,6 +780,11 @@ export default function OverviewAnalyticsView() {
               <PercentChecklistWidgetSummary
                 title="Khối làm sạch"
                 total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
+                  }`}
+              />
+              <PercentChecklistWidgetSummary
+                title="Khối F&B"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối F&B'] : ''
                   }`}
               />
             </Grid>
