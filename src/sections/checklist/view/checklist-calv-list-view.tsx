@@ -69,7 +69,7 @@ import ChecklistTableFiltersResult from '../tbchecklist-table-filters-result';
 const TABLE_HEAD = [
   { id: 'Ngay', label: 'Ngày checklist' },
   { id: 'Hoten', label: 'Người checklist' },
-  { id: 'Tong', label: 'Số Checklist' },
+  { id: 'Tong', label: 'Số Checklist 2' },
   { id: 'Giobd', label: 'Giờ ' },
   { id: 'ID_Calv', label: 'Ca làm việc' },
   { id: 'ID_ThietLapCa', label: 'Thiết lập ca' },
