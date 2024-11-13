@@ -10,6 +10,7 @@ import { fNumber, fPercent } from 'src/utils/format-number';
 // components
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
+import { CircularProgress } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -81,18 +82,18 @@ export default function EcommerceWidgetSummary({
   const renderTrending = (
     <Stack direction="row" alignItems="center" sx={{ mt: 2, mb: 1 }}>
       <Iconify
-        icon={(percent < 0) ? 'eva:trending-down-fill' : 'eva:trending-up-fill'}
+        icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'}
         sx={{
           mr: 1,
           p: 0.5,
           width: 24,
           height: 24,
           borderRadius: '50%',
-          color: (percent < 0) ? 'error.main' : 'success.main',
-          bgcolor: alpha((percent < 0) ? theme.palette.error.main : theme.palette.success.main, 0.16),
+          color: percent < 0 ? 'error.main' : 'success.main',
+          bgcolor: alpha(percent < 0 ? theme.palette.error.main : theme.palette.success.main, 0.16),
         }}
       />
-  
+
       <Typography variant="subtitle2" component="div" noWrap>
         {fPercent(percent)}
         <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
@@ -101,7 +102,6 @@ export default function EcommerceWidgetSummary({
       </Typography>
     </Stack>
   );
-  
 
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', p: 3, ...sx }} {...other}>
@@ -110,11 +110,18 @@ export default function EcommerceWidgetSummary({
           {title}
         </Typography>
 
-        <Typography variant="h3" gutterBottom>
-          {total}
-        </Typography>
-
-        {renderTrending}
+        {`${total}` === `undefined%` || `${total}` === `undefined` || `${total}` === `null` || `${total}` === `` ? (
+          <CircularProgress />
+        ) : (
+          <>
+            {' '}
+            <Typography variant="h3" gutterBottom>
+              {' '}
+              {total}{' '}
+            </Typography>{' '}
+            {renderTrending}{' '}
+          </>
+        )}
       </Box>
 
       <Chart

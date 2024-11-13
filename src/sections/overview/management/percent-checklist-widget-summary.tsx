@@ -10,13 +10,13 @@ import { fNumber, fPercent } from 'src/utils/format-number';
 // components
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
+import { CircularProgress } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 interface Props extends CardProps {
   title: string;
   total: string;
-
 }
 
 export default function EcommerceWidgetSummary({
@@ -35,9 +35,15 @@ export default function EcommerceWidgetSummary({
           {title}
         </Typography>
 
-        <Typography variant="h3" gutterBottom>
-          {total} %
-        </Typography>
+        {`${total}` === `` ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <Typography variant="h3" gutterBottom>
+              {total}%
+            </Typography>
+          </>
+        )}
       </Box>
     </Card>
   );
