@@ -61,6 +61,23 @@ export function useNavData() {
         items: (() => {
           if (!user) return [];
 
+          // Kiểm tra nếu user có ID_Duan
+          if (user.ID_Duan !== null) {
+            return [
+              {
+                title: t('analytics'),
+                path: paths.dashboard.general.analytics,
+                icon: ICONS.analytics,
+              },
+              {
+                title: t('statistical report'),
+                path: paths.dashboard.general.statistical_report,
+                icon: ICONS.file,
+              },
+            ];
+          }
+
+          // Các điều kiện với Role thông thường
           if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2) {
             return [
               {
@@ -102,9 +119,8 @@ export function useNavData() {
       // MANAGEMENT
       {
         subheader: t('management'),
-
         items:
-          user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2
+          user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ID_Duan !== null
             ? [
               // KHU VUC
               {
@@ -187,7 +203,8 @@ export function useNavData() {
       },
     ];
 
-    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2) {
+    // Kiểm tra nếu Role là 1, 2, 10, 4 hoặc user.ID_Duan không phải null
+    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ID_Duan !== null) {
       navigationData[1].items.unshift(
         {
           title: t('building'),
@@ -245,9 +262,23 @@ export function useNavData() {
           children: [
             { title: t('create'), path: paths.dashboard.createUser.root },
             { title: t('list'), path: paths.dashboard.createUser.list },
-            { title: t('user_error'), path: paths.dashboard.createUser.error},
+            { title: t('user_error'), path: paths.dashboard.createUser.error },
           ],
         }
+      );
+    }
+
+    if (user?.ent_chucvu?.Role === 4) {
+      navigationData[1].items.unshift(
+        {
+          title: t('project'),
+          path: paths.dashboard.duan.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('list'), path: paths.dashboard.duan.root },
+          ],
+        },
+
       );
     }
 
@@ -256,3 +287,4 @@ export function useNavData() {
 
   return data;
 }
+

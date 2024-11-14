@@ -46,11 +46,6 @@ import {
 import { useSnackbar } from 'src/components/snackbar';
 // types
 import {
-  ICalv,
-  IDuan,
-  IGiamsat,
-  IHangMuc,
-  IKhuvuc,
   IKhuvucTableFilters,
   IKhuvucTableFilterValue,
   IUser,
@@ -73,7 +68,7 @@ const TABLE_HEAD = [
   { id: 'Hoten', label: 'Họ tên', width: 150 },
   { id: 'Email', label: 'Email', width: 150 },
   { id: 'Sodienthoai', label: 'Số điện thoại', width: 150 },
-  { id: 'ID_KhoiCV', label: 'Khối công việc', width: 150 },
+  { id: 'ID_Duan', label: 'Dự án', width: 150 },
   { id: '', width: 40 },
 ];
 
@@ -281,8 +276,6 @@ export default function GiamsatListView() {
                   {tab.value === '3' &&
                     user?.filter((order) => `${order.ID_Chucvu}` === '3').length}
 
-                  {tab.value === '4' &&
-                    user?.filter((order) => `${order.ID_Chucvu}` === '4').length}
                 </Label>
               }
             />

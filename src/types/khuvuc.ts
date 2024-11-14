@@ -165,6 +165,7 @@ export type IUser = {
   Gioitinh: string;
   Email: string;
   Password: string;
+  PasswordPrivate: string;
   isDelete: string;
   ent_khoicv: E_KhoiCV;
   ent_duan: IDuan;

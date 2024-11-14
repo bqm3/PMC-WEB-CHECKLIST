@@ -10,9 +10,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 // routes
 import { useRouter } from 'src/routes/hooks';
 // types
@@ -25,20 +23,10 @@ import { _tags, _roles, USER_GENDER_OPTIONS } from 'src/_mock';
 import { useSnackbar } from 'src/components/snackbar';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import FormProvider, {
-  RHFSwitch,
-  RHFTextField,
-  RHFUploadAvatar,
-  RHFAutocomplete,
-  RHFSelect,
-  RHFRadioGroup,
-} from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFSelect, RHFRadioGroup } from 'src/components/hook-form';
+import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
-import {
-  useGetChucvu,
-  useGetDuan,
-  useGetKhoiCV,
-} from 'src/api/khuvuc';
+import { useGetChucvu, useGetDuan, useGetKhoiCV, useGetNhomDuAn } from 'src/api/khuvuc';
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +51,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const { chucVu, chucVuLoading, chucVuEmpty } = useGetChucvu();
   const { duan, duanLoading, duanEmpty } = useGetDuan();
 
+  const { nhomduan } = useGetNhomDuAn();
 
   useEffect(() => {
     if (khoiCV?.length > 0) {
@@ -89,7 +78,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
     Ngaysinh: Yup.mixed<any>().nullable().required('Phải có ngày sinh'),
     // not required
   });
-
 
   const defaultValues = useMemo(
     () => ({
@@ -130,10 +118,22 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
+    const selectedIds = checkedStates
+      .flatMap((group: any) =>
+        group.projects
+          .filter((project: any) => project.checked)
+          .map((project: any) => project.ID_Duan)
+      );
+
+    console.log(selectedIds);
+    const newData = {
+      ...data,
+      arr_Duan: selectedIds
+    }
     try {
       if (currentUser !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/update/${currentUser?.ID_User}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/update/${currentUser?.ID_User}`, newData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -169,7 +169,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           });
       } else {
         await axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_user/register`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_user/register`, newData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -202,7 +202,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
               });
             }
           });
-
       }
     } catch (error) {
       enqueueSnackbar({
@@ -213,6 +212,181 @@ export default function UserNewEditForm({ currentUser }: Props) {
       // }
     }
   });
+
+  const [areasData, setAreasData] = useState<any>([]);
+  const [checkedStates, setCheckedStates] = useState<any>([]);
+  const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
+
+  useEffect(() => {
+    if (nhomduan) {
+      setAreasData(nhomduan);
+
+      const initialCheckedStates = nhomduan.map((area: any) => ({
+        Tenchinhanh: area?.Tenchinhanh,
+        projects: area.projects.map((project: any) => ({
+          ID_Duan: project.ID_Duan,
+          checked: false,
+        })),
+      }));
+
+      setCheckedStates(initialCheckedStates);
+    }
+  }, [nhomduan]);
+
+  // Handle change for parent checkboxes
+  const handleParentChange = (buildingIndex: number) => (event: any) => {
+    const isChecked = event.target.checked;
+
+    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: number) =>
+      index === buildingIndex
+        ? {
+          ...buildingCheckedStates,
+          projects: buildingCheckedStates.projects.map((project: any) => ({
+            ...project,
+            checked: isChecked,
+          })),
+        }
+        : buildingCheckedStates
+    );
+
+    setCheckedStates(updatedCheckedStates);
+
+    // Update select all checked state
+    setIsSelectAllChecked(
+      updatedCheckedStates.every((building: any) =>
+        building.projects.every((project: any) => project.checked)
+      )
+    );
+  };
+
+  // Handle change for individual child checkboxes
+  const handleChildChange = (buildingIndex: number, projectIndex: number) => (event: any) => {
+    const isChecked = event.target.checked;
+
+    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: number) =>
+      bIndex === buildingIndex
+        ? {
+          ...buildingCheckedStates,
+          projects: buildingCheckedStates.projects.map((project: any, pIndex: number) =>
+            pIndex === projectIndex ? { ...project, checked: isChecked } : project
+          ),
+        }
+        : buildingCheckedStates
+    );
+
+    setCheckedStates(updatedCheckedStates);
+
+    // Update select all checked state
+    const isAllSelected = updatedCheckedStates.every((building: any) =>
+      building.projects.every((project: any) => project.checked)
+    );
+
+    setIsSelectAllChecked(isAllSelected);
+  };
+
+  // Handle select all checkbox
+  const handleSelectAllChange = (event: any) => {
+    const isChecked = event.target.checked;
+    setIsSelectAllChecked(isChecked);
+
+    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) => ({
+      ...buildingCheckedStates,
+      projects: buildingCheckedStates.projects.map((project: any) => ({
+        ...project,
+        checked: isChecked,
+      })),
+    }));
+
+    setCheckedStates(updatedCheckedStates);
+  };
+
+  const renderChildren = (
+    <Box>
+      <FormControlLabel
+        title="Chọn tất cả"
+        label="Chọn tất cả"
+        control={
+          <Checkbox
+            size="medium"
+            checked={isSelectAllChecked}
+            onChange={handleSelectAllChange}
+            indeterminate={
+              checkedStates?.flat()?.some((item: any) => item?.checked) &&
+              !checkedStates?.flat()?.every((item: any) => item?.checked)
+            }
+          />
+        }
+        sx={{
+          '.MuiFormControlLabel-label': {
+            fontWeight: 'bold',
+            fontSize: '17px',
+          },
+          mt: 2,
+          pt: 2
+        }}
+      />
+
+      <Card>
+        <Stack spacing={2} flexWrap="wrap" p={2}>
+          {areasData?.map((group: any, groupIndex: any) => {
+            const areaCheckedStates = checkedStates[groupIndex]?.projects || [];
+
+            const isIndeterminate =
+              areaCheckedStates.some((item: any) => item.checked) &&
+              !areaCheckedStates.every((item: any) => item.checked);
+            const isParentChecked = areaCheckedStates.every((item: any) => item.checked);
+
+            return (
+              <Stack
+                key={group?.Tenchinhanh}
+                spacing={2}
+                padding={2}
+                border="1px solid #ccc"
+                borderRadius={1}
+              >
+                {/* Parent Checkbox */}
+                <FormControlLabel
+                  title={group?.Tenchinhanh}
+                  label={group?.Tenchinhanh}
+                  control={
+                    <Checkbox
+                      size="medium"
+                      checked={isParentChecked}
+                      indeterminate={isIndeterminate}
+                      onChange={handleParentChange(groupIndex)}
+                    />
+                  }
+                  sx={{
+                    '.MuiFormControlLabel-label': {
+                      fontWeight: 'bold',
+                      fontSize: '17px',
+                    },
+                  }}
+                />
+
+                {/* Child Checkboxes */}
+                <div>
+                  {group?.projects?.map((project: any, projectIndex: any) => (
+                    <FormControlLabel
+                      key={project.ID_Duan}
+                      label={project.Duan}
+                      control={
+                        <Checkbox
+                          size="medium"
+                          checked={areaCheckedStates[projectIndex]?.checked || false}
+                          onChange={handleChildChange(groupIndex, projectIndex)}
+                        />
+                      }
+                    />
+                  ))}
+                </div>
+              </Stack>
+            );
+          })}
+        </Stack>
+      </Card>
+    </Box>
+  );
 
   const renderPrimary = (
     <Grid xs={12} md={12}>
@@ -301,8 +475,13 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
           {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />}
 
-          {(`${currentUser?.ent_chucvu?.Role}` === '2' || `${currentUser?.ent_chucvu?.Role}` === '3') && <RHFTextField name="Password" label="Mật khẩu" />}
+          {(`${currentUser?.ent_chucvu?.Role}` === '2' ||
+            `${currentUser?.ent_chucvu?.Role}` === '3') && (
+              <RHFTextField name="Password" label="Mật khẩu" />
+            )}
         </Box>
+
+        {renderChildren}
 
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

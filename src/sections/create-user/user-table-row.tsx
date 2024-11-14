@@ -1,17 +1,11 @@
-import { format } from 'date-fns';
+
 // @mui
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import { IDuan, IUser } from 'src/types/khuvuc';
@@ -82,7 +76,7 @@ export default function CalvTableRow({
       <TableCell sx={{ alignItems: 'center' }}>{Hoten}</TableCell>
       <TableCell sx={{ alignItems: 'center' }}>{Email}</TableCell>
       <TableCell sx={{ alignItems: 'center' }}>{Sodienthoai}</TableCell>
-      <TableCell sx={{ alignItems: 'center' }}>{ent_khoicv?.KhoiCV}</TableCell>
+      <TableCell sx={{ alignItems: 'center' }}>{ent_duan?.Duan}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

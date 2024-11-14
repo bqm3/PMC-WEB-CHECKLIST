@@ -858,6 +858,33 @@ export function useGetDetailPhanCaByDuan(id?: string) {
   return memoizedValue;
 }
 
+export function useGetNhomDuAn() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_duan/du-an`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      nhomduan: (data?.data as any),
+      nhomduanLoading: isLoading,
+      nhomduanError: error,
+      nhomduanValidating: isValidating,
+      nhomduanEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetProfile(id: string){
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_user/${id}`;

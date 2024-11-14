@@ -28,6 +28,7 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  onViewDuAnRow: VoidFunction;
 };
 
 export default function CalvTableRow({
@@ -36,6 +37,7 @@ export default function CalvTableRow({
   onViewRow,
   onSelectRow,
   onDeleteRow,
+  onViewDuAnRow,
 }: Props) {
   const { ID_Duan, Duan, Diachi, toanhas, totalKhuvucInDuan, totalHangmucInDuan } = row;
 
@@ -161,6 +163,15 @@ export default function CalvTableRow({
         >
           <Iconify icon="solar:eye-bold" />
           Xem
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onViewDuAnRow();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:eye-bold" />
+          Xem tổng quan
         </MenuItem>
         <MenuItem
           onClick={() => {
