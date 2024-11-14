@@ -165,6 +165,7 @@ export type IUser = {
   Gioitinh: string;
   Email: string;
   Password: string;
+  PasswordPrivate: string;
   isDelete: string;
   ent_khoicv: E_KhoiCV;
   ent_duan: IDuan;
@@ -370,6 +371,7 @@ export type TbChecklistCalv = {
   ID_Checklistchitiet: string;
   ID_ChecklistC: string;
   ID_Checklist: string;
+  isCheckListLai: string;
   Ketqua: string;
   Anh: string;
   Ngay: string;

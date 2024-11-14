@@ -12,6 +12,8 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import { LoadingButton } from '@mui/lab';
+import { Stack } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -40,16 +42,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
+import { useAuthContext } from 'src/auth/hooks';
 // types
-import {
-  ICalv,
-  IDuan,
-  IGiamsat,
-  IHangMuc,
-  IKhuvuc,
-  IKhuvucTableFilters,
-  IKhuvucTableFilterValue,
-} from 'src/types/khuvuc';
+import { IDuan, IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 //
 import DuanTableRow from '../duan-table-row';
 import DuanTableToolbar from '../duan-table-toolbar';
@@ -78,6 +73,7 @@ export default function GiamsatListView() {
   const table = useTable({ defaultOrderBy: 'ID_Duan' });
 
   const settings = useSettingsContext();
+  const { user, logout } = useAuthContext();
 
   const router = useRouter();
 
@@ -193,6 +189,121 @@ export default function GiamsatListView() {
     [router]
   );
 
+  const handleUpdateSuccess = useCallback(async () => {
+    try {
+      // Dữ liệu gửi lên API đăng nhập
+      const data = {
+        UserName: user?.UserName,
+        Password: user?.PasswordPrivate,
+      };
+      localStorage.removeItem('accessToken');
+      // Gọi API đăng nhập
+      const urlHttp = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/login';
+      const res = await axios.post(urlHttp, data);
+
+      // Kiểm tra nếu đăng nhập thành công
+      if (res.status === 200) {
+        const { token } = res.data;
+
+        localStorage.setItem('accessToken', token); // Lưu token vào sessionStorage
+        window.location.reload(); // Reload lại trang
+      } else {
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: 'Đăng nhập lại không thành công. Vui lòng thử lại!',
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 4000,
+        message: 'Đăng nhập lại không thành công. Vui lòng thử lại!',
+      });
+    }
+  }, [user, enqueueSnackbar]);
+
+  const handleViewRowDuan = useCallback(
+    async (id: string) => {
+      try {
+        const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/update/${id}`, [], {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        // Lưu ID_Duan vào localStorage
+        localStorage.setItem('ID_Duan', id);
+
+        // Gọi handleUpdateSuccess để đăng nhập lại
+        await handleUpdateSuccess();
+      } catch (error) {
+        if (error.response) {
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 4000,
+            message: `${error.response.data.message}`,
+          });
+        } else if (error.request) {
+          // Lỗi không nhận được phản hồi từ server
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 4000,
+            message: 'Không nhận được phản hồi từ máy chủ',
+          });
+        } else {
+          // Lỗi khi cấu hình request
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 4000,
+            message: 'Lỗi gửi yêu cầu',
+          });
+        }
+      }
+    },
+    [accessToken, enqueueSnackbar, handleUpdateSuccess] // Add handleUpdateSuccess to dependencies
+  );
+
+  const handleReload = useCallback(async () => {
+    try {
+      const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/clear`, [], {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Lưu ID_Duan vào localStorage
+      localStorage.removeItem('ID_Duan');
+
+      // Gọi handleUpdateSuccess để đăng nhập lại
+      await handleUpdateSuccess();
+    } catch (error) {
+      if (error.response) {
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: `${error.response.data.message}`,
+        });
+      } else if (error.request) {
+        // Lỗi không nhận được phản hồi từ server
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: 'Không nhận được phản hồi từ máy chủ',
+        });
+      } else {
+        // Lỗi khi cấu hình request
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: 'Lỗi gửi yêu cầu',
+        });
+      }
+    }
+  }, [accessToken, enqueueSnackbar, handleUpdateSuccess])
+
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       handleFilters('status', newValue);
@@ -203,23 +314,28 @@ export default function GiamsatListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <CustomBreadcrumbs
-          heading="Danh sách dự án"
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.dashboard.root,
-            },
-            {
-              name: 'Dự án',
-              href: paths.dashboard.duan.root,
-            },
-            { name: 'Danh sách' },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <CustomBreadcrumbs
+            heading="Danh sách dự án"
+            links={[
+              {
+                name: 'Dashboard',
+                href: paths.dashboard.root,
+              },
+              {
+                name: 'Dự án',
+                href: paths.dashboard.duan.root,
+              },
+              { name: 'Danh sách' },
+            ]}
+            sx={{
+              mb: { xs: 3, md: 5 },
+            }}
+          />
+          <Button variant="contained" startIcon={<Iconify icon="eva:refresh-fill" />} onClick={() => handleReload()}>
+            Reset dự án
+          </Button>
+        </Stack>
 
         <Card>
           <DuanTableToolbar
@@ -287,6 +403,7 @@ export default function GiamsatListView() {
                         onSelectRow={() => table.onSelectRow(row.ID_Duan)}
                         onDeleteRow={() => handleDeleteRow(row.ID_Duan)}
                         onViewRow={() => handleViewRow(row.ID_Duan)}
+                        onViewDuAnRow={() => handleViewRowDuan(row.ID_Duan)}
                       />
                     ))}
 

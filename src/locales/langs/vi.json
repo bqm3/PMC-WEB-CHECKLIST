@@ -67,5 +67,6 @@
   "demo": {
     "title": "Vietnamese"
   },
-  "user_error": "Tài khoản lỗi"
+  "user_error": "Tài khoản lỗi",
+  "resetPassWord": "Thiết lập lại mật khẩu"
 }

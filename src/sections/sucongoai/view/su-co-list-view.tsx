@@ -568,7 +568,7 @@ function NhomTSDialog({
 
       <DialogContent>
         <Stack spacing={3} sx={{ p: 2 }}>
-          <TextField value={dataSelect?.ent_hangmuc.Hangmuc} label="Hạng mục" disabled />
+          <TextField value={dataSelect?.ent_hangmuc?.Hangmuc} label="Hạng mục" disabled />
           <TextField
             value={`${dataSelect?.Giosuco} ${moment(dataSelect?.Ngaysuco).format('DD-MM-YYYY')}`}
             label="Ngày sự cố"

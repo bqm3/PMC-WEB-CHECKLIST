@@ -155,6 +155,7 @@ export default function OverviewAnalyticsView() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [dataDuan, setDataDuan] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [dataPercent, setDataPercent] = useState<any>([]);
 
   const [showMax, setShowMax] = useState<any>('6');
@@ -260,6 +261,7 @@ export default function OverviewAnalyticsView() {
 
   useEffect(() => {
     const handleDataDuan = async () => {
+      setIsLoading(true);
       await axios
         .get('https://checklist.pmcweb.vn/be/api/v2/ent_duan/du-an-theo-nhom', {
           headers: {
@@ -273,8 +275,12 @@ export default function OverviewAnalyticsView() {
             value: res.data.data[location].length,
           }));
           setDataDuan(chartData);
+          setIsLoading(false);
         })
-        .catch((err) => console.log('err', err));
+        .catch((err) => {
+          setIsLoading(false);
+          console.log('err', err);
+      });      
     };
 
     handleDataDuan();
@@ -737,7 +743,8 @@ export default function OverviewAnalyticsView() {
           </Grid>
           <Grid xs={12} md={8}>
             <BankingExpensesCategories
-              title="Số lượng dự án"
+              title= "Số lượng dự án"
+              isLoading = {isLoading}
               chart={{
                 series: dataDuan,
                 colors: [
