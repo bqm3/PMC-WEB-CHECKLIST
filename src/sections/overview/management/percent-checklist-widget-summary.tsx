@@ -31,12 +31,12 @@ export default function EcommerceWidgetSummary({
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', p: 2.5, ...sx }} {...other}>
       <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        <Typography variant="subtitle2" sx={{ mb: 2 }}>
           {title}
         </Typography>
 
         <Typography variant="h3" gutterBottom>
-          {total} %
+          {total !== 'null' ? total : '0'} %
         </Typography>
       </Box>
     </Card>

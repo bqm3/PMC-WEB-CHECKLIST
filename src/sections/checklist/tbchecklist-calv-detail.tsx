@@ -4,10 +4,6 @@ import { CSVLink, CSVDownload } from 'react-csv';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import Label from 'src/components/label';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -16,8 +12,6 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import Dialog from '@mui/material/Dialog';
-import { Box } from '@mui/material';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -25,7 +19,16 @@ import Typography from '@mui/material/Typography';
 import Image from 'src/components/image';
 import IconButton from '@mui/material/IconButton';
 // import CloseIcon from '@mui/material/';
-
+import Stack from '@mui/material/Stack';
+import {
+  Pagination,
+  paginationClasses,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Box
+} from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -133,6 +136,9 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
 
   const { calv } = useGetCalv();
+
+  const [rowsPerPageCustom, setRowsPerPageCustom] = useState(table?.rowsPerPage || 30); // Giá trị mặc định của số mục trên mỗi trang
+
 
   // Use the checklist data in useEffect to set table data
   useEffect(() => {
@@ -271,6 +277,12 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     return dateString;
   };
 
+  console.log(dataFiltered
+    .slice(
+      table.page * table.rowsPerPage,
+      table.page * table.rowsPerPage + table.rowsPerPage
+    ))
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -377,9 +389,12 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData?.length}
+              rowCount={dataInPage?.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_Checklist))
+                table.onSelectAllRows(
+                  checked,
+                  dataInPage.map((row) => row?.ID_Checklist)
+                )
               }
               action={
                 <Tooltip title="Delete">
@@ -405,18 +420,22 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                 />
 
                 <TableBody>
-                  {dataInPage.map((row) => (
-                    <ChecklistTableRow
-                      key={row.ID_Checklist}
-                      calv={calv}
-                      row={row}
-                      selected={table.selected.includes(row.ID_Checklist)}
-                      onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
-                      onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
-                      onViewRow={() => handleViewRow(row.ID_Checklist)}
-                      handleClickOpen={() => handleClickOpen(row)}
-                    />
-                  ))}
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    ).map((row, index) => (
+                      <ChecklistTableRow
+                        key={`${row.ID_Checklist}_${index}`}
+                        calv={calv}
+                        row={row}
+                        selected={table.selected.includes(row.ID_Checklist)}
+                        onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
+                        onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
+                        onViewRow={() => handleViewRow(row.ID_Checklist)}
+                        handleClickOpen={() => handleClickOpen(row)}
+                      />
+                    ))}
 
                   <TableEmptyRows
                     height={denseHeight}
@@ -429,17 +448,53 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             </Scrollbar>
           </TableContainer>
 
-          <TablePaginationCustom
-            count={dataFiltered?.length}
-            rowsPerPageOptions={[20, 30, 50]}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
+          <Stack
+            sx={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              margin: '16px',
+            }}
+          >
+            {/* Bộ chọn số mục hiển thị mỗi trang */}
+            <FormControl variant="outlined" size="small">
+              <InputLabel>Số mục mỗi trang</InputLabel>
+              <Select
+                value={rowsPerPageCustom}
+                onChange={(event: any) => {
+                  setRowsPerPageCustom(Number(event.target.value));
+                  table.onChangeRowsPerPage(event); // Truyền trực tiếp event vào table.onChangeRowsPerPage
+                }}
+                label="Số mục mỗi trang"
+                style={{ width: '150px' }}
+              >
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+              </Select>
+
+            </FormControl>
+
+
+            {/* Thành phần phân trang */}
+            <Stack>
+              <Pagination
+                count={Math.ceil(dataFiltered.length / rowsPerPageCustom)} // Số trang
+                page={table.page + 1} // Phân trang bắt đầu từ 1
+                onChange={(event, newPage) => table.onChangePage(event, newPage - 1)} // Điều chỉnh để bắt đầu từ 0
+                boundaryCount={2}
+                sx={{
+                  my: 1,
+                  // mx: 1,
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                }}
+              />
+              <Typography variant='subtitle2' sx={{ textAlign: 'right', fontSize: 14, paddingRight: 1 }}>
+                Tổng: {dataFiltered?.length}
+              </Typography>
+            </Stack>
+          </Stack>
         </Card>
       </Container>
 

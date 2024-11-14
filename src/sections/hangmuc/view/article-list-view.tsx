@@ -338,6 +338,8 @@ export default function AreaListView() {
     }
   };
 
+  console.log('dataSelect?.MaQrCode', dataSelect?.MaQrCode)
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -609,7 +611,7 @@ export default function AreaListView() {
         <DialogContent>
           <Card>
             <Image
-              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&caption=${`${dataSelect?.Hangmuc} - ${dataSelect?.MaQrCode}`}&size=300x300&captionFontSize=8`}
+              src={`https://quickchart.io/qr?text=${dataSelect?.MaQrCode}&caption=${`${dataSelect?.Hangmuc} - ${dataSelect?.MaQrCode}`}&size=350x350&captionFontSize=8`}
               alt=""
               title=""
             />

@@ -210,7 +210,7 @@ export default function OverviewAnalyticsView() {
   const [openDataChecklistLocation, setOpenDataChecklistLocation] = useState<any>(false);
   const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
     month: null,
-    year: null
+    year: null,
   });
 
   const [spreadsheetData, setSpreadsheetData] = useState([]);
@@ -563,10 +563,9 @@ export default function OverviewAnalyticsView() {
     }
   };
 
-
   const fetchChecklistMonth = async () => {
     try {
-      setLoadingReport(true)
+      setLoadingReport(true);
       const response = await axios.post(
         `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-years?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
         null, // Use null as the second parameter because POST requests without a body can pass null
@@ -579,7 +578,10 @@ export default function OverviewAnalyticsView() {
       // Create a link element
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Bao_cao_checklist_du_an_${dataChecklistMonth.month}_${dataChecklistMonth.year}.xlsx`); // Set the file name
+      link.setAttribute(
+        'download',
+        `Bao_cao_checklist_du_an_${dataChecklistMonth.month}_${dataChecklistMonth.year}.xlsx`
+      ); // Set the file name
 
       // Append to body and trigger the download
       document.body.appendChild(link);
@@ -593,16 +595,16 @@ export default function OverviewAnalyticsView() {
 
       // Close the modal or perform any other UI updates
       setOpenDataChecklistMonth(false);
-      setLoadingReport(false)
+      setLoadingReport(false);
     } catch (error) {
       console.error('Error downloading the file:', error);
       setOpenDataChecklistMonth(false);
-      setLoadingReport(false)
+      setLoadingReport(false);
     }
   };
   const fetchChecklistLocation = async () => {
     try {
-      setLoadingReport(true)
+      setLoadingReport(true);
       const response = await axios.post(
         `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-location-times?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
         null, // Use null as the second parameter because POST requests without a body can pass null
@@ -615,7 +617,10 @@ export default function OverviewAnalyticsView() {
       // Create a link element
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Bao_cao_checklist_vi_pham_${dataChecklistMonth.month}_${dataChecklistMonth.year}.xlsx`); // Set the file name
+      link.setAttribute(
+        'download',
+        `Bao_cao_checklist_vi_pham_${dataChecklistMonth.month}_${dataChecklistMonth.year}.xlsx`
+      ); // Set the file name
 
       // Append to body and trigger the download
       document.body.appendChild(link);
@@ -629,14 +634,13 @@ export default function OverviewAnalyticsView() {
 
       // Close the modal or perform any other UI updates
       setOpenDataChecklistMonth(false);
-      setLoadingReport(false)
+      setLoadingReport(false);
     } catch (error) {
       console.error('Error downloading the file:', error);
       setOpenDataChecklistMonth(false);
-      setLoadingReport(false)
+      setLoadingReport(false);
     }
   };
-
 
   return (
     <>
@@ -654,8 +658,8 @@ export default function OverviewAnalyticsView() {
             Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''}
           </Typography>
           <Box display="flex" gap={2} alignItems="center">
-            {
-              user?.ent_chucvu?.Role === 10 && <>
+            {user?.ent_chucvu?.Role === 10 && (
+              <>
                 <Button variant="contained" color="info" onClick={handleOpenChecklistLocation}>
                   Báo cáo vị trí
                 </Button>
@@ -663,7 +667,7 @@ export default function OverviewAnalyticsView() {
                   Báo cáo checklist
                 </Button>
               </>
-            }
+            )}
             <Button variant="contained" color="success" onClick={fetchExcelData}>
               Danh sách dự án
             </Button>
@@ -720,9 +724,7 @@ export default function OverviewAnalyticsView() {
             <EcommerceWidgetSummary
               title="Số lượng sự cố ngoài"
               key="1"
-              percent={
-                dataReportExternalIncidentChecklistPercentWeek?.percentageChange
-              }
+              percent={dataReportExternalIncidentChecklistPercentWeek?.percentageChange}
               total={`${dataReportExternalIncidentChecklistPercentWeek?.currentWeekCount}`}
               chart={{
                 series: [
@@ -754,34 +756,36 @@ export default function OverviewAnalyticsView() {
             />
           </Grid>
 
-          <Grid container xs={12} md={4} sx={{ flexDirection: 'column' }} spacing={1}>
-            <Grid xs={12} md={12}>
+          <Grid container xs={12} md={4} sx={{ flexDirection: 'row', gap: 0 }} rowSpacing={0}>
+            <Grid xs={12} md={6} sx={{ mb: 0 }}>
               <PercentChecklistWidgetSummary
                 title="Khối kỹ thuật"
                 total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''
                   }`}
               />
             </Grid>
-            <Grid xs={12} md={12}>
+            <Grid xs={12} md={6} sx={{ mb: 0 }}>
               <PercentChecklistWidgetSummary
                 title="Khối bảo vệ"
                 total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''
                   }`}
               />
             </Grid>
-            <Grid xs={12} md={12}>
+            <Grid xs={12} md={6} sx={{ mb: 0 }}>
               <PercentChecklistWidgetSummary
                 title="Khối dịch vụ"
                 total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''
                   }`}
               />
             </Grid>
-            <Grid xs={12} md={12}>
+            <Grid xs={12} md={6} sx={{ mb: 0 }}>
               <PercentChecklistWidgetSummary
                 title="Khối làm sạch"
                 total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
                   }`}
               />
+            </Grid>
+            <Grid xs={12} md={6} sx={{ mb: 0 }}>
               <PercentChecklistWidgetSummary
                 title="Khối F&B"
                 total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối F&B'] : ''
@@ -1019,7 +1023,6 @@ export default function OverviewAnalyticsView() {
         <DialogTitle>Báo cáo checklist</DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="space-between" alignItems="center" gap={1} m={1}>
-
             <DatePicker
               label="Tháng" // Corrected
               openTo="month"
@@ -1037,8 +1040,13 @@ export default function OverviewAnalyticsView() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseChecklistMonth}>Close</Button>
-          <Button color='success' variant='contained' disabled={loadingReport} onClick={fetchChecklistMonth}>
-            {loadingReport ? <CircularProgress size={24} color="inherit" /> : "Xuất file"}
+          <Button
+            color="success"
+            variant="contained"
+            disabled={loadingReport}
+            onClick={fetchChecklistMonth}
+          >
+            {loadingReport ? <CircularProgress size={24} color="inherit" /> : 'Xuất file'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -1052,7 +1060,6 @@ export default function OverviewAnalyticsView() {
         <DialogTitle>Báo cáo vị trí</DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="space-between" alignItems="center" gap={1} m={1}>
-
             <DatePicker
               label="Tháng" // Corrected
               openTo="month"
@@ -1070,8 +1077,13 @@ export default function OverviewAnalyticsView() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseChecklistLocation}>Close</Button>
-          <Button color='success' variant='contained' disabled={loadingReport} onClick={fetchChecklistLocation}>
-            {loadingReport ? <CircularProgress size={24} color="inherit" /> : "Xuất file"}
+          <Button
+            color="success"
+            variant="contained"
+            disabled={loadingReport}
+            onClick={fetchChecklistLocation}
+          >
+            {loadingReport ? <CircularProgress size={24} color="inherit" /> : 'Xuất file'}
           </Button>
         </DialogActions>
       </Dialog>
