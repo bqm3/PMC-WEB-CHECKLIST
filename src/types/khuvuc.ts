@@ -371,6 +371,7 @@ export type TbChecklistCalv = {
   ID_Checklistchitiet: string;
   ID_ChecklistC: string;
   ID_Checklist: string;
+  isCheckListLai: string;
   Ketqua: string;
   Anh: string;
   Ngay: string;

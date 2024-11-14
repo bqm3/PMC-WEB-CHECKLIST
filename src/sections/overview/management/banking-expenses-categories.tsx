@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { ApexOptions } from 'apexcharts';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -6,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import Card, { CardProps } from '@mui/material/Card';
+import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress
 // hooks
 import { useResponsive } from 'src/hooks/use-responsive';
 // components
@@ -15,6 +17,7 @@ import Chart, { useChart } from 'src/components/chart';
 
 interface Props extends CardProps {
   title?: string;
+  isLoading?: boolean;
   subheader?: string;
   chart: {
     colors?: string[];
@@ -26,7 +29,7 @@ interface Props extends CardProps {
   };
 }
 
-export default function BankingExpensesCategories({ title, subheader, chart, ...other }: Props) {
+export default function BankingExpensesCategories({ title, isLoading, subheader, chart, ...other }: Props) {
   const theme = useTheme();
 
   const smUp = useResponsive('up', 'sm');
@@ -90,13 +93,20 @@ export default function BankingExpensesCategories({ title, subheader, chart, ...
           },
         }}
       >
-        <Chart
-          dir="ltr"
-          type="polarArea"
-          series={chartSeries}
-          options={chartOptions}
-          height={smUp ? 320 : 380}
-        />
+        {/* Show loading spinner if data is still loading */}
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 320 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Chart
+            dir="ltr"
+            type="polarArea"
+            series={chartSeries}
+            options={chartOptions}
+            height={smUp ? 320 : 380}
+          />
+        )}
       </Box>
 
       <Divider sx={{ borderStyle: 'dashed' }} />
@@ -110,14 +120,28 @@ export default function BankingExpensesCategories({ title, subheader, chart, ...
           <Box component="span" sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>
             Chi nhánh
           </Box>
-          {totalCategories}
+          {/* Show loading spinner for totalCategories */}
+          {isLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress size={24} />
+            </Box>
+          ) : (
+            totalCategories
+          )}
         </Stack>
 
         <Stack sx={{ py: 2 }}>
           <Box component="span" sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>
             Dự án
           </Box>
-          {totalProjects}
+          {/* Show loading spinner for totalProjects */}
+          {isLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress size={24} />
+            </Box>
+          ) : (
+            totalProjects
+          )}
         </Stack>
       </Box>
     </Card>

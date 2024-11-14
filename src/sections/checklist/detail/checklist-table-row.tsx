@@ -50,6 +50,7 @@ export default function AreaTableRow({
     ID_Checklistchitiet,
     ID_ChecklistC,
     ID_Checklist,
+    isCheckListLai,
     Ketqua,
     Anh,
     Gioht,
@@ -70,11 +71,11 @@ export default function AreaTableRow({
       selected={selected}
       style={{ backgroundColor: `${ent_checklist?.Tinhtrang}` === '1' ? '#FFAB0029' : '' }}
     >
-      <TableCell> {ent_checklist?.Checklist} </TableCell>
+      <TableCell> {ent_checklist?.Checklist}   {`${isCheckListLai}` === "1" ? (<span style={{ color: 'red' }}>(CheckList lại)</span>) : ""} </TableCell>
       <TableCell>
         <ListItemText
           primary={ent_checklist?.ent_hangmuc?.Hangmuc}
-          secondary={`${ent_checklist?.ent_khuvuc?.Tenkhuvuc} - ${ent_checklist?.ent_khuvuc?.ent_toanha.Toanha}`}
+          secondary={`${ent_checklist?.ent_khuvuc?.Tenkhuvuc} - ${ent_checklist?.ent_khuvuc?.ent_toanha?.Toanha}`}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
             component: 'span',

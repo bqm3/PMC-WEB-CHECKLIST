@@ -204,6 +204,7 @@ export const paths = {
       root: `${ROOTS.DASHBOARD}/create-user`,
       list: `${ROOTS.DASHBOARD}/create-user/list`,
       error: `${ROOTS.DASHBOARD}/create-user/error`,
+      resetPassWord: `${ROOTS.DASHBOARD}/create-user/resetPassWord`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/create-user/${id}/edit`,
     },
     duan: {
