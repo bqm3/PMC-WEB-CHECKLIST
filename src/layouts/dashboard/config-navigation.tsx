@@ -236,7 +236,7 @@ export function useNavData() {
       );
     }
 
-    if (user?.ent_chucvu?.Role === 10) {
+    if (user?.ent_chucvu?.Role === 10 && user?.ID_Duan == null) {
       navigationData[1].items.unshift(
         {
           title: t('project'),
@@ -266,6 +266,29 @@ export function useNavData() {
             { title: t('resetPassWord'), path: paths.dashboard.createUser.resetPassWord },
           ],
         }
+      );
+    }
+
+    if (user?.ent_chucvu?.Role === 10 && user?.ID_Duan !== null) {
+      navigationData[1].items.unshift(
+        {
+          title: t('project'),
+          path: paths.dashboard.duan.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('create'), path: paths.dashboard.duan.new },
+            { title: t('list'), path: paths.dashboard.duan.root },
+          ],
+        },
+        {
+          title: t('baocaovitri'),
+          path: paths.dashboard.general.location,
+          icon: ICONS.analytics,
+          children: [
+            { title: t('list'), path: paths.dashboard.general.location },
+          ]
+        },
+
       );
     }
 

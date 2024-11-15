@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useMemo, useEffect, useState } from 'react';
+import { alpha } from '@mui/material/styles';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 // @mui
@@ -13,6 +14,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Button, CircularProgress } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
@@ -54,9 +56,16 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
   const [loaiHinh, setLoaihinh] = useState([])
   const [nhom, setNhom] = useState([])
 
+  const [image, setImage] = useState<any>(null);
+
   const NewProductSchema = Yup.object().shape({
     Duan: Yup.string().required('Phải có tên dự án'),
     ID_Loaihinh: Yup.string().required('Phải loại hình dự án'),
+    ID_Nhom: Yup.mixed<any>().nullable().required('Khong'),
+    Diachi: Yup.mixed<any>().nullable().required('Khong'),
+    Vido: Yup.mixed<any>().nullable().required('Khong'),
+    Kinhdo: Yup.mixed<any>().nullable().required('Khong'),
+    Logo: Yup.mixed<any>().nullable().required('Khong'),
     ID_Phanloai: Yup.string().required('Phải phân loại dự án'),
     ID_Linhvuc: Yup.string().required('Phải có lĩnh vực dự án'),
     ID_Chinhanh: Yup.string().required('Phải có chi nhánh dự án'),
@@ -130,30 +139,54 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
 
   const values = watch();
 
+
   useEffect(() => {
     if (currentDuan) {
       reset(defaultValues);
     }
   }, [currentDuan, defaultValues, reset]);
 
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setValue('Logo', file);
+    }
+  };
+
   const onSubmit = handleSubmit(async (data) => {
+    // Create a FormData object
+    const formData = new FormData();
+    formData.append('ID_Nhom', data?.ID_Nhom);
+    formData.append('ID_Linhvuc', data?.ID_Linhvuc);
+    formData.append('ID_Loaihinh', data?.ID_Loaihinh);
+    formData.append('ID_Chinhanh', data?.ID_Chinhanh);
+    formData.append('ID_Phanloai', data?.ID_Phanloai);
+    formData.append('Duan', data?.Duan);
+    formData.append('Ngaybatdau', data?.Ngaybatdau);
+    formData.append('Diachi', data?.Diachi);
+    formData.append('Vido', data?.Vido);
+    formData.append('Kinhdo', data?.Kinhdo);
+    formData.append('Logo', data?.Logo);
+
     try {
       if (currentDuan !== undefined) {
+        // Sending a PUT request with FormData
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, data, {
+          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, formData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'multipart/form-data', // Set correct Content-Type
             },
           })
           .then((res) => {
-            reset();
+            // reset();
             enqueueSnackbar({
               variant: 'success',
               autoHideDuration: 4000,
-              message: 'Cập nhật thành công'
+              message: 'Cập nhật thành công',
             });
-            router.push(paths.dashboard.duan.root);
+            // router.push(paths.dashboard.duan.root);
           })
           .catch((error) => {
             if (error.response) {
@@ -163,14 +196,12 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
                 message: `${error.response.data.message}`,
               });
             } else if (error.request) {
-              // Lỗi không nhận được phản hồi từ server
               enqueueSnackbar({
                 variant: 'error',
                 autoHideDuration: 4000,
                 message: `Không nhận được phản hồi từ máy chủ`,
               });
             } else {
-              // Lỗi khi cấu hình request
               enqueueSnackbar({
                 variant: 'error',
                 autoHideDuration: 4000,
@@ -179,16 +210,22 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             }
           });
       } else {
+        // Sending a POST request with FormData
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/create`, formData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'multipart/form-data', // Set correct Content-Type
             },
           })
           .then((res) => {
             reset();
-            enqueueSnackbar('Tạo mới thành công!');
+            enqueueSnackbar({
+              variant: 'success',
+              autoHideDuration: 4000,
+              message: 'Tạo mới thành công!',
+            });
           })
           .catch((error) => {
             if (error.response) {
@@ -198,14 +235,12 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
                 message: `${error.response.data.message}`,
               });
             } else if (error.request) {
-              // Lỗi không nhận được phản hồi từ server
               enqueueSnackbar({
                 variant: 'error',
                 autoHideDuration: 4000,
                 message: `Không nhận được phản hồi từ máy chủ`,
               });
             } else {
-              // Lỗi khi cấu hình request
               enqueueSnackbar({
                 variant: 'error',
                 autoHideDuration: 4000,
@@ -220,9 +255,39 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
         autoHideDuration: 4000,
         message: `Lỗi gửi yêu cầu`,
       });
-      // }
     }
   });
+
+
+  const renderPlaceholder = (
+    <Box gap={2}>
+      <Button
+        variant="contained"
+        component="label"
+      >
+        Upload Image
+        <input
+          type="file"
+          accept="image/*"
+          hidden
+          onChange={handleImageChange}
+        />
+      </Button>
+
+      {image && (
+        <Box mt={2} textAlign="center">
+          <Typography variant="subtitle1">Image Preview:</Typography>
+          <Box
+            component="img"
+            src={image}
+            alt="Selected"
+            sx={{ width: 200, height: 200, objectFit: 'cover', mt: 1 }}
+          />
+        </Box>
+      )}
+
+    </Box>
+  );
 
   const renderDetails = (
     <>
@@ -352,6 +417,9 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             <RHFTextField name="Vido" label="Vĩ độ" />
             <RHFTextField name="Kinhdo" label="Kinh độ" />
             <RHFTextField name="Logo" label="Đường dẫn logo dự án" />
+            {renderPlaceholder}
+
+
           </Stack>
         </Card>
       </Grid>

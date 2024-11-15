@@ -280,7 +280,7 @@ export default function OverviewAnalyticsView() {
         .catch((err) => {
           setIsLoading(false);
           console.log('err', err);
-      });      
+        });
     };
 
     handleDataDuan();
@@ -510,6 +510,31 @@ export default function OverviewAnalyticsView() {
     setDetailChecklist(null);
   };
   const [showModal, setShowModal] = useState<any>(false);
+
+  const handleDownload = async (data: any) => {
+    try {
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-project-percent-excel`, null, // Use null as the second parameter because POST requests without a body can pass null
+        { responseType: 'blob' } // Important to specify responseType as blob
+      );
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // Create a link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute(
+        'download',
+        `Bao_cao_checklist_du_an.xlsx`
+      ); // Set the file name
+
+    } catch (error) {
+      console.error('Error fetching Excel data:', error);
+      setShowModal(false);
+    }
+  }
+
   const fetchExcelData = async () => {
     try {
       const response = await axios.get(
@@ -743,8 +768,8 @@ export default function OverviewAnalyticsView() {
           </Grid>
           <Grid xs={12} md={8}>
             <BankingExpensesCategories
-              title= "Số lượng dự án"
-              isLoading = {isLoading}
+              title="Số lượng dự án"
+              isLoading={isLoading}
               chart={{
                 series: dataDuan,
                 colors: [
@@ -959,6 +984,9 @@ export default function OverviewAnalyticsView() {
         </DialogContent>
 
         <DialogActions>
+          <Button color="success" variant="contained" onClick={() => handleDownload(spreadsheetData)}>
+            Download
+          </Button>
           <Button color="inherit" variant="contained" onClick={() => setShowModal(false)}>
             Close
           </Button>

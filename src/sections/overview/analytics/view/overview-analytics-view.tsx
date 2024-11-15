@@ -460,7 +460,7 @@ export default function OverviewAnalyticsView() {
 
           <Grid xs={12} md={12} lg={12}>
             <ChecklistsHoanThanh
-              title="Tỉ lệ hoàn thành checklist "
+              title="Tỉ lệ hoàn thành checklist"
               subheader="Hoàn thành checklist theo ca"
               chart={{
                 categories: dataTotalYear?.categories,
