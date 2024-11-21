@@ -77,7 +77,7 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
         maxWidth: 400,
         justifyContent: 'center',
         // backgroundColor: 'red',
-        
+
       }}
     >
       <Stack
@@ -143,7 +143,8 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
       sx={{
         minHeight: '100vh',
         backgroundImage: 'url(/assets/illustrations/bg.jpg)',
-        backgroundSize: 'cover', // Đảm bảo hình nền bao phủ toàn bộ khu vực
+        backgroundSize: '100% 100%', // Đảm bảo hình nền bao phủ toàn bộ khu vực
+        backgroundRepeat: 'no-repeat', // Đảm bảo hình nền không tự đ��ng lặp
         backgroundPosition: 'center', // Đảm bảo hình nền được đặt ở giữa
       }}
     >
