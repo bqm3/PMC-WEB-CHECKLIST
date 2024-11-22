@@ -204,7 +204,7 @@ export function useNavData() {
     ];
 
     // Kiểm tra nếu Role là 1, 2, 10, 4 hoặc user.ID_Duan không phải null
-    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ID_Duan !== null) {
+    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || (user?.ID_Duan !== null && user?.ent_chucvu?.Role !== 3)) {
       navigationData[1].items.unshift(
         {
           title: t('building'),
@@ -304,6 +304,11 @@ export function useNavData() {
         },
 
       );
+    }
+
+    if (user?.ent_chucvu?.Role === 3 && user?.ID_Duan !== null) {
+      navigationData[1].items = [];  // Hoặc loại bỏ các mục không mong muốn
+      navigationData[0].items = [];  // Hoặc loại bỏ các mục không mong muốn
     }
 
     return navigationData;

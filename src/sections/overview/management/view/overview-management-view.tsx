@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Box, CircularProgress, Divider, TextField } from '@mui/material';
+import { Box, CircularProgress, Divider, TextField, List, ListItem, } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -214,7 +214,60 @@ export default function OverviewAnalyticsView() {
     year: null,
   });
 
-  const [spreadsheetData, setSpreadsheetData] = useState([]);
+  const [spreadsheetData, setSpreadsheetData] = useState<any>([]);
+  const [messages, setMessages] = useState<any>([]); // Danh sách tin nhắn
+  const [inputMessage, setInputMessage] = useState(""); // Tin nhắn người dùng nhập
+  const [loading, setLoading] = useState(false); // Trạng thái đang gửi API
+
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return;
+
+    // Thêm tin nhắn người dùng vào danh sách
+    setMessages((prev: any) => [...prev, { role: "user", content: inputMessage }]);
+    setLoading(true);
+
+    try {
+      // Gửi tin nhắn đến API
+      const response = await axios.post("https://checklist.pmcweb.vn/be/api/v2/chat", {
+        message: inputMessage,
+      });
+
+      // Thêm phản hồi của bot vào danh sách
+      const botReply = response.data.reply;
+      setMessages((prev: any) => [...prev, { role: "assistant", content: botReply }]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setInputMessage("");
+      setLoading(false);
+    }
+  };
+  const isCodeBlock = (content: any) => content.startsWith("```") && content.endsWith("```");
+
+  const renderMessageContent = (message: any) => {
+    if (isCodeBlock(message.content)) {
+      // Xử lý code block (loại bỏ dấu ``` và hiển thị giao diện code)
+      const codeContent = message.content.slice(3, -3);
+      return (
+        <Box
+          sx={{
+            fontFamily: "monospace",
+            backgroundColor: "#f4f4f4",
+            color: "#333",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            padding: "8px",
+            whiteSpace: "pre-wrap",
+            overflowX: "auto",
+          }}
+        >
+          {codeContent}
+        </Box>
+      );
+    }
+    // Trả về nội dung bình thường nếu không phải code block
+    return <Typography>{message.content}</Typography>;
+  };
 
   const handleOpenModal = async (name: string, key: string) => {
     setSelectedCode(name);
@@ -514,7 +567,8 @@ export default function OverviewAnalyticsView() {
   const handleDownload = async (data: any) => {
     try {
       const response = await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-project-percent-excel`, null, // Use null as the second parameter because POST requests without a body can pass null
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-project-percent-excel`,
+        null, // Use null as the second parameter because POST requests without a body can pass null
         { responseType: 'blob' } // Important to specify responseType as blob
       );
 
@@ -529,11 +583,18 @@ export default function OverviewAnalyticsView() {
         `Bao_cao_checklist_du_an.xlsx`
       ); // Set the file name
 
+      // Trigger the download by clicking the link
+      link.click();
+
+      // Optional: Revoke the object URL after download
+      window.URL.revokeObjectURL(url);
+
     } catch (error) {
       console.error('Error fetching Excel data:', error);
       setShowModal(false);
     }
-  }
+  };
+
 
   const fetchExcelData = async () => {
     try {
@@ -709,6 +770,74 @@ export default function OverviewAnalyticsView() {
             >
               Báo cáo HSSE
             </Button>
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              maxWidth: "600px",
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            {/* Hiển thị danh sách tin nhắn */}
+            <List
+              sx={{
+                maxHeight: "400px",
+                overflowY: "auto",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: 2,
+              }}
+            >
+              {messages.map((message: any, index: number) => (
+                <ListItem
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    justifyContent: message.role === "user" ? "flex-end" : "flex-start",
+                    textAlign: message.role === "user" ? "right" : "left",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      padding: "8px 12px",
+                      borderRadius: "12px",
+                      backgroundColor: message.role === "user" ? "#1976d2" : "#e0e0e0",
+                      color: message.role === "user" ? "#fff" : "#000",
+                      maxWidth: "70%",
+                      overflowWrap: "break-word",
+                    }}
+                  >
+                    {renderMessageContent(message)}
+                  </Box>
+                </ListItem>
+              ))}
+            </List>
+
+            {/* Nhập tin nhắn */}
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Nhập tin nhắn..."
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !loading) handleSendMessage();
+                }}
+                disabled={loading}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSendMessage}
+                disabled={loading || !inputMessage.trim()}
+              >
+                Gửi
+              </Button>
+            </Box>
           </Box>
         </Grid>
 
