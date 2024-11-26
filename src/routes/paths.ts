@@ -197,6 +197,7 @@ export const paths = {
       root: `${ROOTS.DASHBOARD}/checklist`,
       new: `${ROOTS.DASHBOARD}/checklist/new`,
       detail: (id: string) => `${ROOTS.DASHBOARD}/checklist/lists/${id}`,
+      not: (id: string) => `${ROOTS.DASHBOARD}/checklist/lists-not/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
       lists :`${ROOTS.DASHBOARD}/checklist/lists`,
     },
@@ -318,5 +319,15 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}/edit`,
       },
     },
+    index_report: {
+      root: `${ROOTS.DASHBOARD}/index_report`,
+      new: `${ROOTS.DASHBOARD}/index_report/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/index_report/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/index_report/${id}/edit`,
+      demo: {
+        details: `${ROOTS.DASHBOARD}/index_report/${MOCK_ID}`,
+        edit: `${ROOTS.DASHBOARD}/index_report/${MOCK_ID}/edit`,
+      },
+    }
   },
 };

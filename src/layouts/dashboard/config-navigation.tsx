@@ -186,6 +186,16 @@ export function useNavData() {
                   { title: t('list'), path: paths.dashboard.sucongoai.root },
                 ],
               },
+              {
+                title: t('index_report'),
+                path: paths.dashboard.index_report.root,
+                icon: ICONS.file,
+                // children: [
+                //   { title: t('create_chiso'), path: paths.dashboard.index_report.new },
+                //   { title: t('create_hangmuc_chiso'), path: paths.dashboard.index_report.root },
+                //   { title: t('list_baocao_chiso'), path: paths.dashboard.index_report.root },
+                // ],
+              },
             ]
             : [],
       },

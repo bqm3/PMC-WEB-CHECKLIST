@@ -3,3 +3,4 @@ export { default as ChecklistCreateView } from './checklist-create-view';
 export { default as ChecklistEditView } from './checklist-edit-view';
 export { default as ChecklistCalvListView } from './checklist-calv-list-view';
 export { default as CalvChecklistDetailsView}  from './checklist-calv-view';
+export { default as NotCalvChecklistDetailsView}  from './checklist-not-calv-view';
