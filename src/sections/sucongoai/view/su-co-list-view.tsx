@@ -27,6 +27,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useGetKhoiCV, useGetKhuVuc, useGetSuCoNgoai } from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
+import { getImageUrls } from 'src/utils/get-image';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -59,6 +60,7 @@ import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 
 import TableSelectedAction from '../table-selected-action';
 import TableHeadCustom from '../table-head-custom';
+
 
 // ----------------------------------------------------------------------
 
@@ -553,7 +555,10 @@ function NhomTSDialog({
   onClose,
   handleUpdate,
 }: ConfirmTransferDialogProps) {
-  const arr: any = dataSelect?.Duongdancacanh?.split(',').map((slide: any) => `https://lh3.googleusercontent.com/d/${slide}=s1000?authuser=0`);
+  const arr: any = dataSelect?.Duongdancacanh?.split(',').map((slide: any) => 
+  `${getImageUrls(3,slide)}`);
+
+  console.log("arr",arr)
 
   const {
     selected: selectedImage,

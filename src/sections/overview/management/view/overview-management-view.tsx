@@ -17,6 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// utils
+import { getImageUrls } from 'src/utils/get-image';
 // hooks
 import { useAuthContext } from 'src/auth/hooks';
 // components
@@ -36,6 +38,7 @@ import SuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 import BankingExpensesCategories from '../banking-expenses-categories';
+
 
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
@@ -1167,7 +1170,7 @@ export default function OverviewAnalyticsView() {
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
-            src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            src={`${getImageUrls(1,detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>

@@ -35,6 +35,8 @@ import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
 import { useGetChecklistWeb, useGetCalv, useGetKhoiCV } from 'src/api/khuvuc';
+// utils
+import { getImageUrls } from 'src/utils/get-image';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -65,6 +67,7 @@ import ChecklistTableRow from './detail/checklist-table-row';
 import ChecklistTableToolbar from './detail/checklist-table-toolbar';
 import ChecklistTableFiltersResult from './detail/checklist-table-filters-result';//
 import ChecklistPDF from './checklist-pdf';
+
 
 // ----------------------------------------------------------------------
 
@@ -262,7 +265,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       ghichu: item.Ghichu || '',
       anh:
         item.Anh !== undefined && item.Anh !== null
-          ? `https://lh3.googleusercontent.com/d/${item.Anh}=s1000?authuser=0$`
+          ? getImageUrls(1,item.Anh)
           : '',
     }));
     setDataFormatExcel(formattedData);
@@ -519,7 +522,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
-            src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            // src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            src = {`${getImageUrls(1,detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>

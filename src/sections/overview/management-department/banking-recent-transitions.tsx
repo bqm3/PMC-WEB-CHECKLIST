@@ -18,12 +18,14 @@ import Badge, { badgeClasses } from '@mui/material/Badge';
 import TableContainer from '@mui/material/TableContainer';
 // utils
 import { fCurrency } from 'src/utils/format-number';
+import { getImageUrls } from 'src/utils/get-image';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { TableHeadCustom } from 'src/components/table';
+
 
 // ----------------------------------------------------------------------
 
@@ -124,7 +126,8 @@ function BankingRecentTransitionsRow({ row, handleViewRow }: BankingRecentTransi
         <TableCell align="center">
           {row.Anh !== null && row.Anh !== undefined ? (
             <Avatar
-              src={`https://lh3.googleusercontent.com/d/${row.Anh}=s1000?authuser=0`}
+              //src={`https://lh3.googleusercontent.com/d/${row.Anh}=s1000?authuser=0`}
+              src = {`${getImageUrls(1,row?.Anh)}`}
               variant="rounded"
               sx={{ width: 80, height: 80 }}
             />

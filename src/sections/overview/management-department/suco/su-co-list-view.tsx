@@ -14,6 +14,7 @@ import Dialog, { DialogProps } from '@mui/material/Dialog';
 import Image from 'src/components/image';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
+import { getImageUrls } from 'src/utils/get-image';
 // components
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -36,6 +37,7 @@ import {
 import AreaTableRow from './su-co-table-row';
 import SuCoTableToolbar from './su-co-table-toolbar';
 import TableHeadCustom from './table-head-custom';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -230,7 +232,7 @@ export default function SuCoListView({ data }: Props) {
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
-            src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            src= {`${getImageUrls(3,detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>
