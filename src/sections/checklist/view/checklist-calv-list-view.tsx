@@ -307,6 +307,11 @@ export default function ChecklistCalvListView() {
     window.open(url, '_blank');
   }, []);
 
+  const handleViewNot = useCallback((id: string) => {
+    const url = paths.dashboard.checklist.not(id);
+    window.open(url, '_blank');
+  }, []);
+
   const handleOpenChecklistC = useCallback(
     async (id: string) => {
       await axios
@@ -533,6 +538,7 @@ export default function ChecklistCalvListView() {
                     onSelectRow={() => table.onSelectRow(row.ID_ChecklistC)}
                     // onDeleteRow={() => handleDeleteRow(row.ID_ChecklistC)}
                     onViewRow={() => handleViewRow(row.ID_ChecklistC)}
+                    onViewNot={()=> handleViewNot(row.ID_ChecklistC)}
                     onOpenChecklist={() => handleOpenChecklistC(row.ID_ChecklistC)}
                     onRemoveChecklist={() => handleRemoveChecklistC(row.ID_ChecklistC)}
                   />

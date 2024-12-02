@@ -16,6 +16,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+// utils
+import { getImageUrls } from 'src/utils/get-image';
 // hooks
 import { useAuthContext } from 'src/auth/hooks';
 // components
@@ -898,7 +900,7 @@ export default function OverviewAnalyticsView() {
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
-            src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            src = {`${getImageUrls(1,detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>

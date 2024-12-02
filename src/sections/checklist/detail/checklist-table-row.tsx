@@ -8,6 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
+// utils
+import { fCurrency } from 'src/utils/format-number';
+import { getImageUrls } from 'src/utils/get-image';
+// types
+import { IOrderItem } from 'src/types/order';
 import { IKhuvuc, IHangMuc, IChecklist, ICalv, TbChecklistCalv } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
@@ -47,7 +52,20 @@ export default function AreaTableRow({
   const confirm = useBoolean();
 
   const popover = usePopover();
-  const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null;
+  const newViewImage = (item: any) => {
+    if (!item || !Array.isArray(item)) return null; // Kiểm tra `item` có phải mảng không
+
+    return item.map((i: any, index: number) => (
+      <Avatar
+        key={index} // Thêm key để React tránh cảnh báo
+        onClick={() => handleClickOpen()}
+        src={i} // Hiển thị URL hình ảnh từ `i`
+        variant="rounded"
+        sx={{ width: 80, height: 80, cursor: 'pointer' }}
+      />
+    ));
+  };
+
   const renderPrimary = (
     <TableRow
       hover
@@ -77,22 +95,17 @@ export default function AreaTableRow({
       </TableCell>
 
       <TableCell> {Gioht} </TableCell>
-      {
-        arrImage !== null ?
-          <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
-            {arrImage !== null &&
-              arrImage?.map((image: any) => (
-                <Avatar
-                  src={`https://lh3.googleusercontent.com/d/${image}=s1000?authuser=0`}
-                  variant="rounded"
-                  sx={{ width: 80, height: 80 }}
-                />
-              ))}
-          </TableCell>
-          :
-          <TableCell> {" "}</TableCell>
-      }
+      <TableCell sx={{ flexDirection: 'row' }}>
+        {Anh ? (
 
+          <div style={{ display: 'flex', overflow: 'auto', gap: 4 }}>
+            {newViewImage(Anh?.split(',').map((item: any) => getImageUrls(1, item)))}
+          </div>
+
+        ) : (
+          <></>
+        )}
+      </TableCell>
 
       <TableCell> {Ghichu} </TableCell>
 

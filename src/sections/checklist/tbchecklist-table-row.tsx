@@ -33,7 +33,8 @@ type Props = {
   selected: boolean;
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
-  // onDeleteRow: VoidFunction;
+  onViewNot: VoidFunction;
+  onDeleteRow: VoidFunction;
   onOpenChecklist: VoidFunction;
   onRemoveChecklist: VoidFunction;
 };
@@ -42,6 +43,7 @@ export default function AreaTableRow({
   row,
   selected,
   onViewRow,
+  onViewNot,
   onSelectRow,
   // onDeleteRow,
   onOpenChecklist,
@@ -157,6 +159,15 @@ export default function AreaTableRow({
         >
           <Iconify icon="solar:eye-bold" />
           Xem chi tiết
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onViewNot();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:eye-bold" />
+          Not Checklist
         </MenuItem>
         {`${Tinhtrang}` === '1' && (
           <MenuItem

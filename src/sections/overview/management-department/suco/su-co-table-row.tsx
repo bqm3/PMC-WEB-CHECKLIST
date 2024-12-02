@@ -16,6 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { useBoolean } from 'src/hooks/use-boolean';
 // utils
 import { fCurrency } from 'src/utils/format-number';
+import { getImageUrls } from 'src/utils/get-image';
 // types
 import { IOrderItem } from 'src/types/order';
 import { IKhuvuc, IKhoiCV, ISucongoai, TbChecklistCalv } from 'src/types/khuvuc';
@@ -24,6 +25,7 @@ import { useGetKhoiCV, useGetKhuVuc } from 'src/api/khuvuc';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import moment from 'moment';
+
 
 // ----------------------------------------------------------------------
 
@@ -71,21 +73,15 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
           }}
         />{' '}
       </TableCell>
-      {
-        arrImage !== null ?
-          <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
-            {arrImage !== null &&
-              arrImage?.map((image: any) => (
-                <Avatar
-                  src={`https://lh3.googleusercontent.com/d/${image}=s1000?authuser=0`}
-                  variant="rounded"
-                  sx={{ width: 80, height: 80 }}
-                />
-              ))}
-          </TableCell>
-          :
-          <TableCell> {" "}</TableCell>
-      }
+      <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
+        {(Anh !== null && Anh !== undefined && Anh !== '') && (
+          <Avatar
+            src={`${getImageUrls(3, Anh)}`}
+            variant="rounded"
+            sx={{ width: 80, height: 80 }}
+          />
+        )}
+      </TableCell>
       <TableCell> {Ghichu} </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

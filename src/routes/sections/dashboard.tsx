@@ -160,6 +160,7 @@ const TCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/tli
 const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
 const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'));
 const CaChecklistDetailPage = lazy(() => import('src/pages/dashboard/checklist/detail'));
+const NotCaChecklistDetailPage = lazy(() => import('src/pages/dashboard/checklist/not-detail'));
 
 const UserAdminProfilePage = lazy(() => import('src/pages/dashboard/userAdmin/profile'));
 // -----------------------------------------
@@ -280,6 +281,7 @@ export const dashboardRoutes = [
           { path: 'list', element: <CheckListListsPage /> },
           { path: ':id/edit', element: <CheckListEditPage /> },
           { path: 'lists/:id', element: <CaChecklistDetailPage /> },
+          { path: 'lists-not/:id', element: <NotCaChecklistDetailPage /> },
           { path: 'new', element: <CheckListNewPage /> },
           { path: 'lists', element: <TCheckListListsPage /> },
         ],
@@ -439,6 +441,15 @@ export const dashboardRoutes = [
       { path: 'kanban', element: <KanbanPage /> },
       { path: 'permission', element: <PermissionDeniedPage /> },
       { path: 'blank', element: <BlankPage /> },
+      {
+        path: 'index_report',
+        children: [
+          { element: <HangMucListsPage />, index: true },
+          { path: 'list', element: <HangMucListsPage /> },
+          { path: ':id/edit', element: <HangMucEditPage /> },
+          { path: 'new', element: <HangMucNewPage /> },
+        ],
+      },
     ],
   },
 ];

@@ -69,5 +69,9 @@
     "title": "Vietnamese"
   },
   "user_error": "Tài khoản lỗi",
-  "resetPassWord": "Thiết lập lại mật khẩu"
+  "resetPassWord": "Thiết lập lại mật khẩu",
+  "index_report": "Báo cáo chỉ số",
+  "create_chiso": "Thêm loại chỉ số",
+  "create_hangmuc_chiso": "Thêm hạng mục chỉ số",
+  "list_baocao_chiso": "Danh sách báo cáo chỉ số"
 }

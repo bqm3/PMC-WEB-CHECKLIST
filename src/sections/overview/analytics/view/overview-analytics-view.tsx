@@ -13,6 +13,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+// utils
+import { getImageUrls } from 'src/utils/get-image';
 // hooks
 import { paths } from 'src/routes/paths';
 import { useAuthContext } from 'src/auth/hooks';
@@ -37,6 +39,7 @@ import ChecklistRecentTransitions from '../checklist-recent-transitions';
 import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
+
 
 // ==========================================================
 
@@ -626,7 +629,8 @@ export default function OverviewAnalyticsView() {
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
-            src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            // src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            src = {`${getImageUrls(1,detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>
