@@ -72,14 +72,14 @@ import ChecklistPDF from './checklist-pdf';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'Checklist', label: 'Tên checklist', width: 150 },
+  { id: 'Checklist', label: 'Tên checklist' },
   { id: 'ID_Hangmuc', label: 'Hạng mục (Khu vực- Tòa)', width: 250 },
   { id: 'ID_Tang', label: 'Tầng', width: 100 },
-  { id: 'Ketqua', label: 'Kết quả', width: 100 },
-  { id: 'Gioht', label: 'Giờ Checklist', width: 100 },
+  { id: 'Ketqua', label: 'Kết quả', width: 120 },
+  { id: 'Gioht', label: 'Giờ', width: 80 },
   { id: 'Anh', label: 'Hình ảnh', width: 100 },
   { id: 'Ghichu', label: 'Ghi chú', width: 100 },
-  { id: '', width: 88 },
+  { id: '', width: 10 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -264,6 +264,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       kq: item.Ketqua,
       ghichu: item.Ghichu || '',
       anh:
+        // const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null
         item.Anh !== undefined && item.Anh !== null
           ? getImageUrls(1,item.Anh)
           : '',
@@ -279,12 +280,6 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
     return dateString;
   };
-
-  console.log(dataFiltered
-    .slice(
-      table.page * table.rowsPerPage,
-      table.page * table.rowsPerPage + table.rowsPerPage
-    ))
 
   return (
     <>

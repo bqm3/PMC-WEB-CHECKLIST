@@ -133,6 +133,12 @@ const ChukyDuanEditPage = lazy(() => import('src/pages/dashboard/chukyduan/edit'
 // Sự cố
 const SuCoListsPage = lazy(() => import('src/pages/dashboard/sucongoai/list'));
 
+// Báo cáo chỉ số
+const BaoCaoChiSoListsPage = lazy(() => import('src/pages/dashboard/baocaochiso/list'));
+const BaoCaoChiSoThongTinPage = lazy(() => import('src/pages/dashboard/baocaochiso/list_cs'));
+const BaoCaoChiSoNewPage = lazy(() => import('src/pages/dashboard/baocaochiso/new'));
+const BaoCaoChiSoEditPage = lazy(() => import('src/pages/dashboard/baocaochiso/edit'));
+
 // Phân quyền checklist
 const QuanlyCaHangMucListsPage = lazy(() => import('src/pages/dashboard/phanquyenchecklist/list'));
 const QuanlyCaHangMucNewPage = lazy(() => import('src/pages/dashboard/phanquyenchecklist/new'));
@@ -321,6 +327,17 @@ export const dashboardRoutes = [
         ],
       },
       {
+        path: 'bao-cao-chi-so',
+        children: [
+          { element: <BaoCaoChiSoListsPage />, index: true },
+          { path: 'list', element: <BaoCaoChiSoListsPage /> },
+          { path: 'thong-tin', element: <BaoCaoChiSoThongTinPage /> },
+          { path: ':id/edit', element: <BaoCaoChiSoEditPage /> },
+          { path: 'new', element: <BaoCaoChiSoNewPage /> },
+        ],
+      },
+
+      {
         path: 'order-booking',
         children: [
           { element: <OrderBookingListPage />, index: true },
@@ -343,7 +360,7 @@ export const dashboardRoutes = [
           { path: 'list', element: <ListEmployeePage /> },
           { path: ':id/edit', element: <ListEditEmployeePage /> },
           { path: 'error', element: <ListEditEmployeeError /> },
-          { path: 'resetPassWord', element: <ListEditEmployeeResetPW/> },
+          { path: 'resetPassWord', element: <ListEditEmployeeResetPW /> },
         ],
       },
 

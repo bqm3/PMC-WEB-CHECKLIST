@@ -34,7 +34,7 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onViewNot: VoidFunction;
-  onDeleteRow: VoidFunction;
+  // onDeleteRow: VoidFunction;
   onOpenChecklist: VoidFunction;
   onRemoveChecklist: VoidFunction;
 };
@@ -45,7 +45,7 @@ export default function AreaTableRow({
   onViewRow,
   onViewNot,
   onSelectRow,
-  onDeleteRow,
+  // onDeleteRow,
   onOpenChecklist,
   onRemoveChecklist,
   calv,
@@ -94,7 +94,7 @@ export default function AreaTableRow({
       <TableCell> {ent_user?.Hoten} </TableCell>
       <TableCell>
         {' '}
-       {TongC} / {Tong}
+        {TongC} / {Tong}
       </TableCell>
 
       <TableCell>{Giobd} {Giokt ? `- ${Giokt}` : ''}</TableCell>
@@ -104,7 +104,7 @@ export default function AreaTableRow({
         </Label>
       </TableCell>
       <TableCell>
-          {ent_thietlapca?.Ngaythu ? `Ngày ${ent_thietlapca?.Ngaythu}` : ''}
+        {ent_thietlapca?.Ngaythu ? `Ngày ${ent_thietlapca?.Ngaythu}` : ''}
       </TableCell>
       <TableCell>
         {' '}
@@ -120,7 +120,7 @@ export default function AreaTableRow({
           {ent_khoicv.KhoiCV}
         </Label>
       </TableCell>
-      
+
       <TableCell>
         {' '}
         <Label
@@ -132,7 +132,7 @@ export default function AreaTableRow({
           {`${Tinhtrang}` === '0' ? 'Đang mở' : 'Đã khóa'}
         </Label>
       </TableCell>
-     
+
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -173,7 +173,7 @@ export default function AreaTableRow({
           <MenuItem
             onClick={() => {
               confirm.onTrue();
-              
+
             }}
           >
             <Iconify color="error" icon="mdi:lock-open-outline" />
@@ -204,7 +204,7 @@ export default function AreaTableRow({
           }
         />
 
-<ConfirmDialog
+        <ConfirmDialog
           open={confirm2.value}
           onClose={confirm2.onFalse}
           title="Xóa ca làm việc"
@@ -217,7 +217,7 @@ export default function AreaTableRow({
         />
       </CustomPopover>
 
-      
+
     </>
   );
 }

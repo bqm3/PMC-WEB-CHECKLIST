@@ -1,14 +1,8 @@
-import { format } from 'date-fns';
-// @mui
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -21,7 +15,6 @@ import { getImageUrls } from 'src/utils/get-image';
 import { IOrderItem } from 'src/types/order';
 import { IKhuvuc, IHangMuc, IChecklist, ICalv, TbChecklistCalv } from 'src/types/khuvuc';
 // components
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -48,17 +41,11 @@ export default function AreaTableRow({
   handleClickOpen,
 }: Props) {
   const {
-    ID_Checklistchitiet,
-    ID_ChecklistC,
-    ID_Checklist,
     isCheckListLai,
     Ketqua,
     Anh,
     Gioht,
     Ghichu,
-    isDelete,
-    status,
-    tb_checklistc,
     ent_checklist,
   } = row;
 
@@ -92,8 +79,8 @@ export default function AreaTableRow({
       </TableCell>
       <TableCell>
         <ListItemText
-          primary={ent_checklist?.ent_hangmuc?.Hangmuc}
-          secondary={`${ent_checklist?.ent_khuvuc?.Tenkhuvuc} - ${ent_checklist?.ent_khuvuc?.ent_toanha?.Toanha}`}
+          primary={ent_checklist?.ent_hangmuc?.Hangmuc || ''}
+          secondary={`${ent_checklist?.ent_khuvuc?.Tenkhuvuc || ''} - ${ent_checklist?.ent_khuvuc?.ent_toanha?.Toanha || ''}`}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
             component: 'span',
@@ -101,7 +88,7 @@ export default function AreaTableRow({
           }}
         />
       </TableCell>
-      <TableCell> {ent_checklist?.ent_tang?.Tentang} </TableCell>
+      <TableCell> {ent_checklist?.ent_tang?.Tentang || ''} </TableCell>
       <TableCell>
         {' '}
         {Ketqua} {`${ent_checklist?.isCheck}` === '1' ? `(${ent_checklist?.Giatrinhan})` : ''}
@@ -109,16 +96,16 @@ export default function AreaTableRow({
 
       <TableCell> {Gioht} </TableCell>
       <TableCell sx={{ flexDirection: 'row' }}>
-      {Anh ? (
-       
+        {Anh ? (
+
           <div style={{ display: 'flex', overflow: 'auto', gap: 4 }}>
-            {newViewImage(Anh?.split(',').map((item: any) => getImageUrls(1,item)))}
+            {newViewImage(Anh?.split(',').map((item: any) => getImageUrls(1, item)))}
           </div>
-     
-      ) : (
-       <></>
-      )}
-         </TableCell>
+
+        ) : (
+          <></>
+        )}
+      </TableCell>
 
       <TableCell> {Ghichu} </TableCell>
 

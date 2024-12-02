@@ -501,7 +501,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_checklistc/ti-le-su-co?
+          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/ti-le-su-co?
           year=${selectedYearSuco}&khoi=${selectedKhoiCVSuco}&month=${selectedMonthSuco}&nhom=${selectedNhomSuco}&tangGiam=${selectedTangGiamSuco}&top=${selectedTopSuco}`,
           {
             headers: {
@@ -865,7 +865,7 @@ export default function OverviewAnalyticsView() {
 
           <Grid xs={12} md={4}>
             <EcommerceWidgetSummary
-              title="Số lượng sự cố"
+              title="Số lượng ca checklist"
               key="1"
               percent={
                 ((Number(dataReportProblemChecklistPercentWeek?.lastWeekTotalCount) -

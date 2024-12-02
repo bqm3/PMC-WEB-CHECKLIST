@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -117,6 +117,33 @@ export function useGetCalvDetail(id: string) {
   return memoizedValue;
 }
 
+export function useGetChiSoDetail(id: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/hangmuc-chiso/byDuan/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      hmChiSo: (data?.data as IHangMucChiSo) || [],
+      hmChiSoLoading: isLoading,
+      hmChiSoError: error,
+      hmChiSoValidating: isValidating,
+      hmChiSoEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetCalvFilter(inp : any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const dataInput = {
@@ -220,6 +247,33 @@ export function useGetKhoiCV() {
       khoiCVError: error,
       khoiCVValidating: isValidating,
       khoiCVEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetLoaiCS() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/loai-chiso/byDuan`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      loaiCS: (data?.data as ILoaiChiSo[]) || [],
+      loaiCSLoading: isLoading,
+      loaiCSError: error,
+      loaiCSValidating: isValidating,
+      loaiCSEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -1004,6 +1058,60 @@ export function useGetSuCoNgoai() {
       sucongoaiError: error,
       sucongoaiValidating: isValidating,
       sucongoaiEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetLoaiChiSo() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/loai-chiso/`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      loaichiso: (data?.data as ILoaiChiSo[]) || [],
+      loaichisoLoading: isLoading,
+      loaichisoError: error,
+      loaichisoValidating: isValidating,
+      loaichisoEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetLoaiChiSoByDuan(){
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/hangmuc-chiso/byDuan/`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      hmCS: (data?.data as IHangMucChiSo[]) || [],
+      hmCSLoading: isLoading,
+      hmCSError: error,
+      hmCSValidating: isValidating,
+      hmCSEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );

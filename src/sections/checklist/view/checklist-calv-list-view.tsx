@@ -16,18 +16,18 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import { Stack, TextField, Typography } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import {
-  useGetChecklist,
-  useGetCalv,
-  useGetTb_Checklist,
-  useGetChecklistWeb,
-  useGetKhoiCV,
-} from 'src/api/khuvuc';
+import { useGetCalv, useGetTb_Checklist, useGetKhoiCV } from 'src/api/khuvuc';
 
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -35,7 +35,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 // components
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -49,12 +48,8 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 // types
 import {
-  IChecklist,
-  IKhuvucTableFilters,
-  IKhuvucTableFilterValue,
   ITbChecklist,
   ITbChecklistTableFilters,
   ITbChecklistTableFilterValue,
@@ -95,11 +90,7 @@ export default function ChecklistCalvListView() {
 
   const router = useRouter();
 
-  const popover = usePopover();
-  const popover2 = usePopover();
-
   const confirm = useBoolean();
-  const confirm2 = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -108,6 +99,11 @@ export default function ChecklistCalvListView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const [tableData, setTableData] = useState<ITbChecklist[]>([]);
+  const [showModal, setShowModal] = useState<any>(false);
+  const [dateFilter, setDateFilter] = useState<any>({
+    startDate: null,
+    endDate: null,
+  });
 
   const { tb_checkList, tb_checkListTotalPages, tb_checklistTotalCount, mutateTb_Checklist } =
     useGetTb_Checklist({
@@ -125,6 +121,13 @@ export default function ChecklistCalvListView() {
       setTableData(tb_checkList);
     }
   }, [tb_checkList]);
+
+  const handleDateChange = (date: any, type: 'startDate' | 'endDate') => {
+    setDateFilter((prevState: any) => ({
+      ...prevState,
+      [type]: date, // Cập nhật startDate hoặc endDate tùy thuộc vào type
+    }));
+  };
 
   const STATUS_OPTIONS = useMemo(
     () => [
@@ -187,53 +190,50 @@ export default function ChecklistCalvListView() {
     [table]
   );
 
-  const handleDeleteRow = useCallback(
-    async (id: string) => {
-      await axios
-        .put(`http://localhost:6868/api/v2/ent_checklist/delete/${id}`, [], {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((res) => {
-          // reset();
-          const deleteRow = tableData?.filter((row) => row.ID_ChecklistC !== id);
-          setTableData(deleteRow);
 
-          table.onUpdatePageDeleteRow(dataInPage.length);
-          enqueueSnackbar({
-            variant: 'success',
-            autoHideDuration: 4000,
-            message: `Xóa thành công`,
-          });
-        })
-        .catch((error) => {
-          if (error.response) {
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 4000,
-              message: `${error.response.data.message}`,
-            });
-          } else if (error.request) {
-            // Lỗi không nhận được phản hồi từ server
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 4000,
-              message: `Không nhận được phản hồi từ máy chủ`,
-            });
-          } else {
-            // Lỗi khi cấu hình request
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 4000,
-              message: `Lỗi gửi yêu cầu`,
-            });
-          }
+  const handleFilterSubmit = async () => {
+    await axios
+      .post(`http://localhost:6868/api/v2/tb_checklistc/date`, dateFilter, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        setTableData(res.data.data);
+        setShowModal(false);
+        enqueueSnackbar({
+          variant: 'success',
+          autoHideDuration: 4000,
+          message: `Tìm kiếm thành công`,
         });
-    },
-    [accessToken, enqueueSnackbar, dataInPage.length, table, tableData] // Add accessToken and enqueueSnackbar as dependencies
-  );
+      })
+      .catch((error) => {
+        if (error.response) {
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 4000,
+            message: `${error.response.data.message}`,
+          });
+        } else if (error.request) {
+          // Lỗi không nhận được phản hồi từ server
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 4000,
+            message: `Không nhận được phản hồi từ máy chủ`,
+          });
+        } else {
+          // Lỗi khi cấu hình request
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 4000,
+            message: `Lỗi gửi yêu cầu`,
+          });
+        }
+      });
+  };
+
+
 
   const getStatusText = (status: any) => {
     switch (status) {
@@ -456,18 +456,18 @@ export default function ChecklistCalvListView() {
                     'default'
                   }
                 >
-                  {tab.value === 'all' && tb_checkList?.length}
+                  {tab.value === 'all' && dataFiltered?.length}
                   {tab.value === '1' &&
-                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
+                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
 
                   {tab.value === '2' &&
-                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
+                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
                   {tab.value === '3' &&
-                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
+                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
                   {tab.value === '4' &&
-                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
+                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
                   {tab.value === '5' &&
-                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
+                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
                 </Label>
               }
             />
@@ -478,6 +478,8 @@ export default function ChecklistCalvListView() {
           onFilters={handleFilters}
           onPrint={handlePrint}
           dateError={dateError}
+          departmentOptions={STATUS_OPTIONS}
+          setShowModal={setShowModal}
           //
           canReset={canReset}
           onResetFilters={handleResetFilters}
@@ -534,7 +536,7 @@ export default function ChecklistCalvListView() {
                     row={row}
                     selected={table.selected.includes(row.ID_ChecklistC)}
                     onSelectRow={() => table.onSelectRow(row.ID_ChecklistC)}
-                    onDeleteRow={() => handleDeleteRow(row.ID_ChecklistC)}
+                    // onDeleteRow={() => handleDeleteRow(row.ID_ChecklistC)}
                     onViewRow={() => handleViewRow(row.ID_ChecklistC)}
                     onViewNot={()=> handleViewNot(row.ID_ChecklistC)}
                     onOpenChecklist={() => handleOpenChecklistC(row.ID_ChecklistC)}
@@ -564,6 +566,50 @@ export default function ChecklistCalvListView() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
+
+      <Dialog open={showModal} onClose={() => setShowModal(false)} fullWidth maxWidth="sm">
+        <DialogContent sx={{ mt: 2.5, mr: 2.5 }}>
+          <Typography variant="h5" pb={2}>
+            Tìm kiếm theo ngày
+          </Typography>
+          <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+            <DatePicker
+              label="Ngày bắt đầu"
+              value={dateFilter.startDate}
+              onChange={(date) => handleDateChange(date, 'startDate')} // Gọi hàm với type 'startDate'
+              slotProps={{ textField: { fullWidth: true } }}
+              sx={{
+                maxWidth: { md: 200 },
+              }}
+            />
+
+            <DatePicker
+              label="Ngày kết thúc"
+              value={dateFilter.endDate}
+              onChange={(date) => handleDateChange(date, 'endDate')} // Gọi hàm với type 'endDate'
+              slotProps={{ textField: { fullWidth: true } }}
+              sx={{
+                maxWidth: { md: 200 },
+              }}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button color="inherit" variant="contained" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+          <Button
+            color="success"
+            variant="contained"
+            onClick={() => {
+              // setShowModal(false);
+              handleFilterSubmit();
+            }}
+          >
+            Tìm kiếm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
