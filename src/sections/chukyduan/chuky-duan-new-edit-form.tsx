@@ -105,7 +105,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
     try {
       if (currentCycle !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`, data, {
+          .put(`http://localhost:6868/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -145,7 +145,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/create`, data, {
+          .post(`http://localhost:6868/api/v2/ent_duan_khoicv/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

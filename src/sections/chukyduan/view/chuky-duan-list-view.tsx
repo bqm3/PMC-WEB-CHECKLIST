@@ -150,7 +150,7 @@ export default function CalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/delete/${id}`, [], {
+        .put(`http://localhost:6868/api/v2/ent_duan_khoicv/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

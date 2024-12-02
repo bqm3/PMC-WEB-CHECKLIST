@@ -149,7 +149,7 @@ export default function AreaTableRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 150 }}
       >
         <MenuItem
           onClick={() => {
@@ -166,8 +166,8 @@ export default function AreaTableRow({
             popover.onClose();
           }}
         >
-          <Iconify icon="solar:eye-bold" />
-          Not Checklist
+         <Iconify icon="eva:close-circle-fill" />
+          Chưa checklist
         </MenuItem>
         {`${Tinhtrang}` === '1' && (
           <MenuItem
