@@ -186,6 +186,16 @@ export function useNavData() {
                   { title: t('list'), path: paths.dashboard.sucongoai.root },
                 ],
               },
+              {
+                title: t('baocaochiso'),
+                path: paths.dashboard.baocaochiso.root,
+                icon: ICONS.disabled,
+                children: [
+                  { title: t('list'), path: paths.dashboard.baocaochiso.root },
+                  { title: t('create'), path: paths.dashboard.baocaochiso.new },
+                  { title: t('thông tin'), path: paths.dashboard.baocaochiso.thongTin },
+                ],
+              },
             ]
             : [],
       },

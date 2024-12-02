@@ -70,11 +70,15 @@ const useStyles = () =>
           width: '5%',
         },
         tableCell_2: {
-          width: '50%',
-          paddingRight: 16,
+          width: '40%',
+          paddingRight: 4,
         },
         tableCell_3: {
           width: '15%',
+        },
+        tableCell_4: {
+          width: '25%',
+          paddingRight: 4,
         },
       }),
     []
@@ -92,7 +96,7 @@ export default function InvoicePDF({ dataChecklistC, currentChecklist }: Props) 
   //   Anh, Ghichu, Gioht, ID_Checklist, ID_ChecklistC, ID_Checklistchitiet, Ketqua, ent_checklist, tb_checklistc, status
   // } = currentChecklist;
 
-  const {ent_calv, ent_user, ent_khoicv,Ngay, Giobd, Giokt, Tinhtrang} = dataChecklistC
+  const { ent_calv, ent_user, ent_khoicv, Ngay, Giobd, Giokt, Tinhtrang } = dataChecklistC
 
   const styles = useStyles();
 
@@ -109,7 +113,7 @@ export default function InvoicePDF({ dataChecklistC, currentChecklist }: Props) 
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
-          <Image source="/logo/logo-pmc-big.png" style={{ width: 110, height: 80 }} />
+          <Image source="/logo/logo-pmc-big.png" style={{ width: 110, height: 90 }} />
 
           {/* <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text style={styles.h3}>{dataChecklistC?.Tinhtrang === 0 ? 'Mở ra' : 'Đóng ca'}</Text>
@@ -153,7 +157,7 @@ export default function InvoicePDF({ dataChecklistC, currentChecklist }: Props) 
                 <Text style={styles.subtitle2}>#</Text>
               </View>
 
-              <View style={styles.tableCell_3}>
+              <View style={styles.tableCell_4}>
                 <Text style={styles.subtitle2}>Tên checklist</Text>
               </View>
 
@@ -174,7 +178,7 @@ export default function InvoicePDF({ dataChecklistC, currentChecklist }: Props) 
                 <Text style={styles.subtitle2}>Ghi chú</Text>
               </View>
 
-             
+
             </View>
           </View>
 
@@ -185,19 +189,19 @@ export default function InvoicePDF({ dataChecklistC, currentChecklist }: Props) 
                   <Text>{index + 1}</Text>
                 </View>
 
-                <View style={styles.tableCell_3}>
+                <View style={styles.tableCell_4}>
                   <Text>{item.ent_checklist.Checklist}</Text>
                 </View>
 
                 <View style={styles.tableCell_2}>
-                <Text style={styles.subtitle2}>{item.ent_checklist.ent_hangmuc.Hangmuc}</Text>
-                <Text>{item.ent_checklist.ent_khuvuc.Tenkhuvuc} - {item.ent_checklist.ent_khuvuc.ent_toanha.Toanha}</Text>
+                  <Text style={styles.subtitle2}>{item.ent_checklist.ent_hangmuc.Hangmuc}</Text>
+                  <Text>{item.ent_checklist.ent_khuvuc.Tenkhuvuc} - {item.ent_checklist.ent_khuvuc.ent_toanha.Toanha}</Text>
                 </View>
 
                 <View style={styles.tableCell_3}>
                   <Text>{item.ent_checklist.ent_tang.Tentang}</Text>
                 </View>
-              
+
                 <View style={styles.tableCell_3}>
                   <Text>{item.Ketqua} {`${item.ent_checklist?.isCheck}` === '1' ? `(${item.ent_checklist?.Giatrinhan})` : ''}</Text>
                 </View>

@@ -188,6 +188,41 @@ export type ISucongoai = {
   ent_user: IUser;
 };
 
+export type ILoaiChiSo = {
+  ID_LoaiCS: string;
+  ID_Duan_Loai: string;
+  TenLoaiCS: string;
+  isDelete: string;
+}
+
+export type IHangMucChiSo = {
+  ID_Hangmuc_Chiso: string;
+  ID_Duan: string;
+  ID_LoaiCS: string;
+  Ten_Hangmuc_Chiso: string;
+  Heso: string;
+  Donvi: string;
+  ent_loai_chiso: ILoaiChiSo;
+  isDelete: string;
+}
+
+export type IBaocaochiso = {
+  ID_Baocaochiso: string;
+  ID_User: string;
+  ID_Hangmuc_Chiso: string;
+  Day: string;
+  Month: string;
+  Year: string;
+  Chiso: string;
+  Image: string;
+  Chiso_Before: string
+  Chiso_Read_Img: string;
+  Ghichu: string;
+  isDelete: string;
+  // ent_hangmuc_chiso: IHangMucChiSo;
+  ent_user: IUser;
+}
+
 export type IChucvu = {
   ID_Chucvu: string;
   Chucvu: string;

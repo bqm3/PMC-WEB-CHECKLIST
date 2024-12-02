@@ -18,24 +18,27 @@ import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
 import { _tags, _roles } from 'src/_mock';
 // api
-import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetDuan } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetLoaiCS } from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // types
-import { IKhoiCV, ICalv, IDuanKhoiCV, IDuan } from 'src/types/khuvuc';
+import { IKhoiCV, ICalv, ILoaiChiSo, IHangMucChiSo } from 'src/types/khuvuc';
 import axios from 'axios';
+import { DateTimePicker, TimePicker } from '@mui/x-date-pickers';
+// import moment from 'moment';
+import dayjs from 'dayjs';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentCycle?: IDuanKhoiCV;
+  currentLoaiCS?: IHangMucChiSo;
 };
 
 const STORAGE_KEY = 'accessToken';
 
-export default function ArticleNewEditForm({ currentCycle }: Props) {
+export default function ChiSoNewEditForm({ currentLoaiCS }: Props) {
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
@@ -44,39 +47,31 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
-  const [duAn, setDuan] = useState<IDuan[]>([]);
+  const [loaics, setLoaiCS] = useState<ILoaiChiSo[]>([]);
 
-  const { khoiCV } = useGetKhoiCV();
-  const { duan } = useGetDuan();
+  const { loaiCS } = useGetLoaiCS();
 
   useEffect(() => {
-    if (khoiCV?.length > 0) {
-      setKhoiCv(khoiCV);
+    if (loaiCS?.length > 0) {
+      setLoaiCS(loaiCS);
     }
-  }, [khoiCV]);
-
-  useEffect(() => {
-    if (duan?.length > 0) {
-      setDuan(duan);
-    }
-  }, [duan]);
+  }, [loaiCS]);
 
   const NewProductSchema = Yup.object().shape({
-    ID_Duan: Yup.string(),
-    ID_KhoiCV: Yup.string(),
-    Chuky: Yup.string().required('Phải có chu kỳ cho khối công việc'),
-    Ngaybatdau: Yup.mixed<any>().nullable().required('Phải có ngày bắt đầu'),
+    Ten_Hangmuc_Chiso: Yup.string().required('Phải có tên chỉ số'),
+    ID_LoaiCS: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      ID_Duan: currentCycle?.ID_Duan || '',
-      ID_KhoiCV: currentCycle?.ID_KhoiCV || '',
-      Chuky: currentCycle?.Chuky || '',
-      Ngaybatdau: currentCycle?.Ngaybatdau || null,
+      Ten_Hangmuc_Chiso: currentLoaiCS?.Ten_Hangmuc_Chiso || '',
+      ID_LoaiCS: `${currentLoaiCS?.ID_LoaiCS}` || '' || null || undefined,
+      ID_Duan: `${currentLoaiCS?.ID_Duan}` || '' || null || undefined,
+      Heso: currentLoaiCS?.Heso || '',
+      Donvi: currentLoaiCS?.Donvi || '',
+      isDelete: currentLoaiCS?.isDelete || '0',
     }),
-    [currentCycle]
+    [currentLoaiCS]
   );
 
   const methods = useForm({
@@ -96,29 +91,33 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
   const values = watch();
 
   useEffect(() => {
-    if (currentCycle) {
+    if (currentLoaiCS) {
       reset(defaultValues);
     }
-  }, [currentCycle, defaultValues, reset]);
+  }, [currentLoaiCS, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (currentCycle !== undefined) {
+      if (currentLoaiCS !== undefined) {
         await axios
-          .put(`http://localhost:6868/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`, data, {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
+          .put(
+            `http://localhost:6868/api/v2/hangmuc-chiso/update/${currentLoaiCS.ID_Hangmuc_Chiso}`,
+            data,
+            {
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          )
           .then((res) => {
             reset();
             enqueueSnackbar({
               variant: 'success',
               autoHideDuration: 4000,
-              message: 'Cập nhật thành công'
+              message: 'Cập nhật thành công',
             });
-            router.push(paths.dashboard.chukyduan.root);
+            router.push(paths.dashboard.baocaochiso.root);
           })
           .catch((error) => {
             if (error.response) {
@@ -145,7 +144,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_duan_khoicv/create`, data, {
+          .post(`http://localhost:6868/api/v2/hangmuc-chiso/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -197,7 +196,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
             Chi tiết
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Khối công việc, Dự án, Ngày bắt đầu,...
+            Tên loại chỉ số, đơn vị, hệ số...
           </Typography>
         </Grid>
       )}
@@ -208,41 +207,30 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
-              {duAn?.length > 0 && (
+              {loaics?.length > 0 && (
                 <RHFSelect
-                  name="ID_Duan"
-                  label="Dự án"
+                  name="ID_LoaiCS"
+                  label="Loại chỉ số"
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
-                  {duAn?.map((item) => (
-                    <MenuItem key={`${item?.ID_Duan}`} value={`${item?.ID_Duan}`}>
-                      {item?.Duan}
+                  {loaics?.map((item) => (
+                    <MenuItem key={`${item?.ID_LoaiCS}`} value={`${item?.ID_LoaiCS}`}>
+                      {item?.TenLoaiCS}
                     </MenuItem>
                   ))}
                 </RHFSelect>
               )}
             </Stack>
 
+            <RHFTextField name="Ten_Hangmuc_Chiso" label="Tên hạng mục chỉ số" />
             <Stack spacing={1.5}>
-              {khoiCv?.length > 0 && (
-                <RHFSelect
-                  name="ID_KhoiCV"
-                  label="Khối công việc"
-                  InputLabelProps={{ shrink: true }}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                >
-                  {khoiCv?.map((item) => (
-                    <MenuItem key={`${item?.ID_KhoiCV}`} value={`${item?.ID_KhoiCV}`}>
-                      {item?.KhoiCV}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              )}
+              <Typography variant="subtitle2">Giá trị</Typography>
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                <RHFTextField type='number' name="Heso" label="Hệ số" />
+                <RHFTextField name="Donvi" label="Đơn vị" />
+              </Stack>
             </Stack>
-            <RHFTextField name="Chuky" label="Chu kỳ" />
-            <RHFTextField type="date" value={values?.Ngaybatdau} name="Ngaybatdau" />
-
           </Stack>
         </Card>
       </Grid>
@@ -258,7 +246,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
         sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
       >
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-          {!currentCycle ? 'Tạo mới' : 'Lưu thay đổi'}
+          {!currentLoaiCS ? 'Tạo mới' : 'Lưu thay đổi'}
         </LoadingButton>
       </Grid>
     </>

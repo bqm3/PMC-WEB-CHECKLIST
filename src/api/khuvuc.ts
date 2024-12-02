@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -11,7 +11,7 @@ const STORAGE_KEY = 'accessToken';
 
 export function useGetChuKyDuAn() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/';
+  const URL = 'http://localhost:6868/api/v2/ent_duan_khoicv/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -38,7 +38,7 @@ export function useGetChuKyDuAn() {
 
 export function useGetChuKyDuAnDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_duan_khoicv/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -65,7 +65,7 @@ export function useGetChuKyDuAnDetail(id: string) {
 
 export function useGetCalv() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_calv/';
+  const URL = 'http://localhost:6868/api/v2/ent_calv/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -92,7 +92,7 @@ export function useGetCalv() {
 
 export function useGetCalvDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_calv/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_calv/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -117,12 +117,39 @@ export function useGetCalvDetail(id: string) {
   return memoizedValue;
 }
 
+export function useGetChiSoDetail(id: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/hangmuc-chiso/byDuan/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      hmChiSo: (data?.data as IHangMucChiSo) || [],
+      hmChiSoLoading: isLoading,
+      hmChiSoError: error,
+      hmChiSoValidating: isValidating,
+      hmChiSoEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetCalvFilter(inp : any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const dataInput = {
     ID_KhoiCV: inp?.ID_KhoiCV
   }
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_calv/`;
+  const URL = `http://localhost:6868/api/v2/ent_calv/`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'post',
@@ -150,7 +177,7 @@ export function useGetCalvFilter(inp : any) {
 
 export function useGetToanha() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_toanha/';
+  const URL = 'http://localhost:6868/api/v2/ent_toanha/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -177,7 +204,7 @@ export function useGetToanha() {
 
 export function useGetTang() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_tang/';
+  const URL = 'http://localhost:6868/api/v2/ent_tang/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -203,7 +230,7 @@ export function useGetTang() {
 }
 
 export function useGetKhoiCV() {
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_khoicv`;
+  const URL = `http://localhost:6868/api/v2/ent_khoicv`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -227,9 +254,36 @@ export function useGetKhoiCV() {
   return memoizedValue;
 }
 
+export function useGetLoaiCS() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/loai-chiso/byDuan`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      loaiCS: (data?.data as ILoaiChiSo[]) || [],
+      loaiCSLoading: isLoading,
+      loaiCSError: error,
+      loaiCSValidating: isValidating,
+      loaiCSEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetChucvu() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_chucvu`;
+  const URL = `http://localhost:6868/api/v2/ent_chucvu`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -256,7 +310,7 @@ export function useGetChucvu() {
 
 export function useGetKhuVuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/filter';
+  const URL = 'http://localhost:6868/api/v2/ent_khuvuc/filter';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'post',
@@ -283,7 +337,7 @@ export function useGetKhuVuc() {
 
 export function useGetLocations() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-location';
+  const URL = 'http://localhost:6868/api/v2/tb_checklistc/report-location';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -310,7 +364,7 @@ export function useGetLocations() {
 
 export function useGetDuan() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_duan';
+  const URL = 'http://localhost:6868/api/v2/ent_duan';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -337,7 +391,7 @@ export function useGetDuan() {
 
 export function useGetDuanWeb() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_duan/thong-tin-du-an';
+  const URL = 'http://localhost:6868/api/v2/ent_duan/thong-tin-du-an';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -364,7 +418,7 @@ export function useGetDuanWeb() {
 
 export function useGetGiamsat() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/';
+  const URL = 'http://localhost:6868/api/v2/ent_giamsat/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -391,7 +445,7 @@ export function useGetGiamsat() {
 
 export function useGetGiamsatDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_giamsat/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -418,7 +472,7 @@ export function useGetGiamsatDetail(id: string) {
 
 export function useGetDuanDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_duan/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_duan/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -445,7 +499,7 @@ export function useGetDuanDetail(id: string) {
 
 export function useGetToanhaDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_toanha/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_toanha/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -472,7 +526,7 @@ export function useGetToanhaDetail(id: string) {
 
 export function useGetKhuVucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_khuvuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -499,7 +553,7 @@ export function useGetKhuVucDetail(id: string) {
 
 export function useGetHangMuc() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/';
+  const URL = 'http://localhost:6868/api/v2/ent_hangmuc/';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -526,7 +580,7 @@ export function useGetHangMuc() {
 
 export function useGetUsers() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/get-online';
+  const URL = 'http://localhost:6868/api/v2/ent_user/get-online';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -553,7 +607,7 @@ export function useGetUsers() {
 
 export function useGetHangMucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_hangmuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -580,7 +634,7 @@ export function useGetHangMucDetail(id: string) {
 
 export function useGetChecklist(pag: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/?page=${Number(pag?.page) + 1}&limit=${pag?.limit}`;
+  const URL = `http://localhost:6868/api/v2/ent_checklist/?page=${Number(pag?.page) + 1}&limit=${pag?.limit}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -610,7 +664,7 @@ export function useGetChecklist(pag: any) {
 
 export function useGetTb_Checklist(pag: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/?page=0&limit=300`;
+  const URL = `http://localhost:6868/api/v2/tb_checklistc/?page=0&limit=300`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -641,7 +695,7 @@ export function useGetTb_Checklist(pag: any) {
 
 export function useGetTb_ChecklistDetail(id:any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/ca/${id}`;
+  const URL = `http://localhost:6868/api/v2/tb_checklistc/ca/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -669,7 +723,7 @@ export function useGetTb_ChecklistDetail(id:any) {
 
 export function useGetChecklistWeb() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/all`;
+  const URL = `http://localhost:6868/api/v2/ent_checklist/all`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -696,7 +750,7 @@ export function useGetChecklistWeb() {
 
 export function useGetChecklistDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_checklist/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -723,7 +777,7 @@ export function useGetChecklistDetail(id: string) {
 
 export function useGetUserDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_user/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_user/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -750,7 +804,7 @@ export function useGetUserDetail(id: string) {
 
 export function useGetKhuvucByToanha(id?: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_toanha/khuvuc/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_toanha/khuvuc/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -778,7 +832,7 @@ export function useGetKhuvucByToanha(id?: string) {
 
 export function useGetGiamSatByDuan(){
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/gs';
+  const URL = 'http://localhost:6868/api/v2/ent_user/gs';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -805,7 +859,7 @@ export function useGetGiamSatByDuan(){
 
 export function useGetPhanCaByDuan(){
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_thietlapca';
+  const URL = 'http://localhost:6868/api/v2/ent_thietlapca';
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -832,7 +886,7 @@ export function useGetPhanCaByDuan(){
 
 export function useGetDetailPhanCaByDuan(id?: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_thietlapca/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_thietlapca/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -860,7 +914,7 @@ export function useGetDetailPhanCaByDuan(id?: string) {
 
 export function useGetNhomDuAn() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_duan/du-an`;
+  const URL = `http://localhost:6868/api/v2/ent_duan/du-an`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -887,7 +941,7 @@ export function useGetNhomDuAn() {
 
 export function useGetProfile(id: string){
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_user/${id}`;
+  const URL = `http://localhost:6868/api/v2/ent_user/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -986,7 +1040,7 @@ export function useGetProfile(id: string){
 
 export function useGetSuCoNgoai() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/`;
+  const URL = `http://localhost:6868/api/v2/tb_sucongoai/`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -1004,6 +1058,60 @@ export function useGetSuCoNgoai() {
       sucongoaiError: error,
       sucongoaiValidating: isValidating,
       sucongoaiEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetLoaiChiSo() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/loai-chiso/`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      loaichiso: (data?.data as ILoaiChiSo[]) || [],
+      loaichisoLoading: isLoading,
+      loaichisoError: error,
+      loaichisoValidating: isValidating,
+      loaichisoEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetLoaiChiSoByDuan(){
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `http://localhost:6868/api/v2/hangmuc-chiso/byDuan/`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      hmCS: (data?.data as IHangMucChiSo[]) || [],
+      hmCSLoading: isLoading,
+      hmCSError: error,
+      hmCSValidating: isValidating,
+      hmCSEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );

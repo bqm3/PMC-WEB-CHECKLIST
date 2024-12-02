@@ -18,76 +18,72 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 // types
 import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IKhoiCV, ISucongoai, TbChecklistCalv } from 'src/types/khuvuc';
+import { IKhuvuc, IKhoiCV, IBaocaochiso, IHangMucChiSo } from 'src/types/khuvuc';
 import { useGetKhoiCV, useGetKhuVuc } from 'src/api/khuvuc';
 // components
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useState } from 'react';
 import moment from 'moment';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: TbChecklistCalv;
+  row: IHangMucChiSo;
   selected: boolean;
+  onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
+  onDeleteRow: VoidFunction;
   index: number;
-  handleClickOpen: VoidFunction;
 };
 
-export default function AreaTableRow({ row, selected, onSelectRow, index, handleClickOpen }: Props) {
+export default function AreaTableRow({
+  row,
+  selected,
+  onViewRow,
+  onSelectRow,
+  onDeleteRow,
+  index,
+}: Props) {
   const {
-    ID_Checklist, Gioht, Ghichu, Anh, ent_checklist, Ngay, Ketqua
+    Donvi,
+    Heso,
+    ID_LoaiCS,
+    Ten_Hangmuc_Chiso,
+    ID_Hangmuc_Chiso,
+    ent_loai_chiso
   } = row;
 
   const confirm = useBoolean();
-  const collapse = useBoolean();
 
   const popover = usePopover();
 
-  const formattedTime = Gioht.slice(0, 5);
-
   const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
-
-  const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null;
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
-      {/* <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell> */}
 
-      <TableCell>{ent_checklist?.Checklist}</TableCell>
-      <TableCell>{ent_checklist?.ent_hangmuc?.Hangmuc}</TableCell>
-      <TableCell>{Ketqua}</TableCell>
       <TableCell>
-        <ListItemText
-          primary={moment(Ngay).format('DD-MM-YYYY')}
-          secondary={formattedTime}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
+        <Box
+          onClick={onViewRow}
+          sx={{
+            cursor: 'pointer',
+            '&:hover': {
+              textDecoration: 'underline',
+            },
           }}
-        />{' '}
+        >
+          SC{ID_Hangmuc_Chiso}
+        </Box>
       </TableCell>
-      {
-        arrImage !== null ?
-          <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
-            {arrImage !== null &&
-              arrImage?.map((image: any) => (
-                <Avatar
-                  src={`https://lh3.googleusercontent.com/d/${image}=s1000?authuser=0`}
-                  variant="rounded"
-                  sx={{ width: 80, height: 80 }}
-                />
-              ))}
-          </TableCell>
-          :
-          <TableCell> {" "}</TableCell>
-      }
-      <TableCell> {Ghichu} </TableCell>
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell>{ent_loai_chiso?.TenLoaiCS}</TableCell>
+
+      <TableCell> {Ten_Hangmuc_Chiso} </TableCell>
+      <TableCell> {Heso} </TableCell>
+      <TableCell> {Donvi} </TableCell>
+      <TableCell>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -98,7 +94,6 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
   return (
     <>
       {renderPrimary}
-
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
@@ -107,16 +102,27 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
       >
         <MenuItem
           onClick={() => {
-            handleClickOpen();
+            onViewRow();
             popover.onClose();
           }}
         >
           <Iconify icon="solar:eye-bold" />
-          Xem ảnh
+          Cập nhật
         </MenuItem>
+
       </CustomPopover>
 
-
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="PMC thông báo"
+        content="Bạn có thực sự muốn xóa không?"
+        action={
+          <Button variant="contained" color="error" onClick={onDeleteRow}>
+            Xóa
+          </Button>
+        }
+      />
     </>
   );
 }

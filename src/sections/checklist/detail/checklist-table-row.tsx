@@ -1,26 +1,15 @@
-import { format } from 'date-fns';
-// @mui
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-// utils
-import { fCurrency } from 'src/utils/format-number';
-// types
-import { IOrderItem } from 'src/types/order';
 import { IKhuvuc, IHangMuc, IChecklist, ICalv, TbChecklistCalv } from 'src/types/khuvuc';
 // components
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -47,35 +36,33 @@ export default function AreaTableRow({
   handleClickOpen,
 }: Props) {
   const {
-    ID_Checklistchitiet,
-    ID_ChecklistC,
-    ID_Checklist,
     isCheckListLai,
     Ketqua,
     Anh,
     Gioht,
     Ghichu,
-    isDelete,
-    status,
-    tb_checklistc,
     ent_checklist,
   } = row;
 
   const confirm = useBoolean();
 
   const popover = usePopover();
-
+  const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null;
   const renderPrimary = (
     <TableRow
       hover
       selected={selected}
       style={{ backgroundColor: `${ent_checklist?.Tinhtrang}` === '1' ? '#FFAB0029' : '' }}
     >
-      <TableCell> {ent_checklist?.Checklist}   {`${isCheckListLai}` === "1" ? (<span style={{ color: 'red' }}>(CheckList lại)</span>) : ""} </TableCell>
+      <TableCell>
+        {' '}
+        {ent_checklist?.Checklist}{' '}
+        {`${isCheckListLai}` === '1' ? <span style={{ color: 'red' }}>(CheckList lại)</span> : ''}{' '}
+      </TableCell>
       <TableCell>
         <ListItemText
-          primary={ent_checklist?.ent_hangmuc?.Hangmuc}
-          secondary={`${ent_checklist?.ent_khuvuc?.Tenkhuvuc} - ${ent_checklist?.ent_khuvuc?.ent_toanha?.Toanha}`}
+          primary={ent_checklist?.ent_hangmuc?.Hangmuc || ''}
+          secondary={`${ent_checklist?.ent_khuvuc?.Tenkhuvuc || ''} - ${ent_checklist?.ent_khuvuc?.ent_toanha?.Toanha || ''}`}
           primaryTypographyProps={{ typography: 'body2' }}
           secondaryTypographyProps={{
             component: 'span',
@@ -83,22 +70,29 @@ export default function AreaTableRow({
           }}
         />
       </TableCell>
-      <TableCell> {ent_checklist?.ent_tang?.Tentang} </TableCell>
+      <TableCell> {ent_checklist?.ent_tang?.Tentang || ''} </TableCell>
       <TableCell>
         {' '}
         {Ketqua} {`${ent_checklist?.isCheck}` === '1' ? `(${ent_checklist?.Giatrinhan})` : ''}
       </TableCell>
 
       <TableCell> {Gioht} </TableCell>
-      <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
-        {(Anh !== null && Anh !== undefined && Anh !== '') && (
-          <Avatar
-            src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
-            variant="rounded"
-            sx={{ width: 80, height: 80 }}
-          />
-        )}
-      </TableCell>
+      {
+        arrImage !== null ?
+          <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
+            {arrImage !== null &&
+              arrImage?.map((image: any) => (
+                <Avatar
+                  src={`https://lh3.googleusercontent.com/d/${image}=s1000?authuser=0`}
+                  variant="rounded"
+                  sx={{ width: 80, height: 80 }}
+                />
+              ))}
+          </TableCell>
+          :
+          <TableCell> {" "}</TableCell>
+      }
+
 
       <TableCell> {Ghichu} </TableCell>
 
