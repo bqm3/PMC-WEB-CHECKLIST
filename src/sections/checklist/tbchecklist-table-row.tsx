@@ -34,7 +34,7 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onViewNot: VoidFunction;
-  onDeleteRow: VoidFunction;
+  // onDeleteRow: VoidFunction;
   onOpenChecklist: VoidFunction;
   onRemoveChecklist: VoidFunction;
 };
