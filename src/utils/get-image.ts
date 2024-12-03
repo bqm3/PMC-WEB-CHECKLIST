@@ -24,7 +24,8 @@ export default function funcBaseUri_Image(key: any, image: any) {
 
 export function getImageUrls( key: any,item: any) {
   if (!item) return null;
-  const image = item.endsWith('.jpg') || item.endsWith('.jpeg') || item.endsWith('.png')
+  const image = item.endsWith('.jpg') || item.endsWith('.jpeg') || item.endsWith('.png') 
+             || item.endsWith('.JPG') || item.endsWith('.JPEG') || item.endsWith('.PNG')
   ? funcBaseUri_Image(key, item.trim())
   : `https://lh3.googleusercontent.com/d/${item.trim()}=s1000?authuser=0$`;
   console.log('image', image)
