@@ -27,7 +27,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Box
+  Box,
 } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
@@ -65,9 +65,8 @@ import {
 //
 import ChecklistTableRow from './detail/checklist-table-row';
 import ChecklistTableToolbar from './detail/checklist-table-toolbar';
-import ChecklistTableFiltersResult from './detail/checklist-table-filters-result';//
+import ChecklistTableFiltersResult from './detail/checklist-table-filters-result'; //
 import ChecklistPDF from './checklist-pdf';
-
 
 // ----------------------------------------------------------------------
 
@@ -134,6 +133,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
   const [filters, setFilters] = useState(defaultFilters);
 
+  const [filtersTrangthai, setFiltersTrangthai] = useState<any>("all");
+
   const [tableData, setTableData] = useState<TbChecklistCalv[]>([]);
 
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
@@ -141,7 +142,6 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const { calv } = useGetCalv();
 
   const [rowsPerPageCustom, setRowsPerPageCustom] = useState(table?.rowsPerPage || 30); // Giá trị mặc định của số mục trên mỗi trang
-
 
   // Use the checklist data in useEffect to set table data
   useEffect(() => {
@@ -154,6 +154,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
+    filtersTrangthai,
   });
 
   const dataInPage = dataFiltered?.slice(
@@ -175,6 +176,14 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
         ...prevState,
         [name]: value,
       }));
+    },
+    [table]
+  );
+
+  const handleFiltersTinhtrang = useCallback(
+    (name: string, value: any) => {
+      table.onResetPage();
+      setFiltersTrangthai(value);
     },
     [table]
   );
@@ -265,9 +274,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       ghichu: item.Ghichu || '',
       anh:
         // const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null
-        item.Anh !== undefined && item.Anh !== null
-          ? getImageUrls(1, item.Anh)
-          : '',
+        item.Anh !== undefined && item.Anh !== null ? getImageUrls(1, item.Anh) : '',
     }));
     setDataFormatExcel(formattedData);
   }, [tableData]);
@@ -354,7 +361,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
               {' '}
             </Typography>
-            Ngày: {dataChecklistC?.Ngay ? formatDateString(dataChecklistC?.Ngay) : dataChecklistC?.Ngay}
+            Ngày:{' '}
+            {dataChecklistC?.Ngay ? formatDateString(dataChecklistC?.Ngay) : dataChecklistC?.Ngay}
             <br />
             Giờ bắt đầu - kết thúc: {dataChecklistC?.Giobd} - {dataChecklistC?.Giokt}
             <br />
@@ -369,6 +377,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
+            handleFiltersTinhtrang={handleFiltersTinhtrang}
           />
 
           {canReset && (
@@ -412,9 +421,9 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                   rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                //   onSelectAllRows={(checked) =>
-                //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
-                //   }
+                  //   onSelectAllRows={(checked) =>
+                  //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
+                  //   }
                 />
 
                 <TableBody>
@@ -422,7 +431,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                     .slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
-                    ).map((row, index) => (
+                    )
+                    .map((row, index) => (
                       <ChecklistTableRow
                         key={`${row.ID_Checklist}_${index}`}
                         calv={calv}
@@ -470,9 +480,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                 <MenuItem value={30}>30</MenuItem>
                 <MenuItem value={50}>50</MenuItem>
               </Select>
-
             </FormControl>
-
 
             {/* Thành phần phân trang */}
             <Stack>
@@ -488,7 +496,10 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                   justifyContent: 'flex-end',
                 }}
               />
-              <Typography variant='subtitle2' sx={{ textAlign: 'right', fontSize: 14, paddingRight: 1 }}>
+              <Typography
+                variant="subtitle2"
+                sx={{ textAlign: 'right', fontSize: 14, paddingRight: 1 }}
+              >
                 Tổng: {dataFiltered?.length}
               </Typography>
             </Stack>
@@ -581,11 +592,13 @@ function applyFilter({
   inputData,
   comparator,
   filters, // dateError,
+  filtersTrangthai,
 }: {
   inputData: TbChecklistCalv[];
   comparator: (a: any, b: any) => number;
   filters: IKhuvucTableFilters;
   // dateError: boolean;
+  filtersTrangthai: any;
 }) {
   const { status, name } = filters;
 
@@ -599,6 +612,12 @@ function applyFilter({
 
   inputData = stabilizedThis.map((el) => el[0]);
 
+  if (filtersTrangthai !== "all") {
+    inputData = inputData.filter(
+      (checklist) => `${checklist?.ent_checklist?.Tinhtrang}` === `${filtersTrangthai}`
+    );
+  }
+
   if (name) {
     inputData = inputData.filter(
       (checklist) =>
@@ -610,7 +629,7 @@ function applyFilter({
           .toLowerCase()
           .indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !==
-        -1 ||
+          -1 ||
         `${checklist.Gioht}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.Ghichu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
