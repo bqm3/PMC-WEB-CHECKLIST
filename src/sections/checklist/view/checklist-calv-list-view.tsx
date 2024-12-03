@@ -193,7 +193,7 @@ export default function ChecklistCalvListView() {
 
   const handleFilterSubmit = async () => {
     await axios
-      .post(`http://localhost:6868/api/v2/tb_checklistc/date`, dateFilter, {
+      .post(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/date`, dateFilter, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -264,7 +264,7 @@ export default function ChecklistCalvListView() {
         endDate: filters.endDate,
         tenBoPhan: khoiText,
       };
-      const response = await axios.post('http://localhost:6868/api/v2/tb_checklistc/baocao', data, {
+      const response = await axios.post('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/baocao', data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -315,7 +315,7 @@ export default function ChecklistCalvListView() {
   const handleOpenChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_checklistc/open/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/open/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -360,7 +360,7 @@ export default function ChecklistCalvListView() {
   const handleRemoveChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_checklistc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -538,7 +538,7 @@ export default function ChecklistCalvListView() {
                     onSelectRow={() => table.onSelectRow(row.ID_ChecklistC)}
                     // onDeleteRow={() => handleDeleteRow(row.ID_ChecklistC)}
                     onViewRow={() => handleViewRow(row.ID_ChecklistC)}
-                    onViewNot={()=> handleViewNot(row.ID_ChecklistC)}
+                    onViewNot={() => handleViewNot(row.ID_ChecklistC)}
                     onOpenChecklist={() => handleOpenChecklistC(row.ID_ChecklistC)}
                     onRemoveChecklist={() => handleRemoveChecklistC(row.ID_ChecklistC)}
                   />

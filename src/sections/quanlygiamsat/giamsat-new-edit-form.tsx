@@ -95,7 +95,7 @@ export default function GiamsatNewEditForm({ id }: Props) {
   const onSubmit = async () => {
     setLoading(true);
     await axios
-      .put(`http://localhost:6868/api/v2/ent_user/set-up/${id}`, checkedStates, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/set-up/${id}`, checkedStates, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

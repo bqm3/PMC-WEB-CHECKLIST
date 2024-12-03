@@ -159,7 +159,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_hangmuc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -218,7 +218,7 @@ export default function AreaListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Hangmuc));
     await axios
-      .put(`http://localhost:6868/api/v2/ent_hangmuc/delete-mul`, deleteRows, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -311,7 +311,7 @@ export default function AreaListView() {
 
 
       const response = await axios.post(
-        `http://localhost:6868/api/v2/ent_hangmuc/generate-qr-codes`,
+        `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/generate-qr-codes`,
         {
           maQrCodes: selectedQrCodes,  // gửi mảng thay vì chuỗi
           hangMucs: selectedHangMucs,   // gửi mảng thay vì chuỗi

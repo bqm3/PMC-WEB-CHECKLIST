@@ -142,7 +142,7 @@ export default function BaoCaoListView() {
 
     await axios
       .post(
-        'http://localhost:6868/api/v2/duan-loaics/create',
+        'https://checklist.pmcweb.vn/be/api/v2/duan-loaics/create',
         {
           ID_LoaiCS: idsString,
         },
@@ -175,7 +175,7 @@ export default function BaoCaoListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_sucongoai/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

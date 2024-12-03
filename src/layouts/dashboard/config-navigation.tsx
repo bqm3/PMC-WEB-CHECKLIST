@@ -189,7 +189,7 @@ export function useNavData() {
               {
                 title: t('baocaochiso'),
                 path: paths.dashboard.baocaochiso.root,
-                icon: ICONS.disabled,
+                icon: ICONS.blog,
                 children: [
                   { title: t('list'), path: paths.dashboard.baocaochiso.root },
                   { title: t('create'), path: paths.dashboard.baocaochiso.new },

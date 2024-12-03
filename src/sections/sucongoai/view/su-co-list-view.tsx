@@ -168,7 +168,7 @@ export default function SuCoListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_sucongoai/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -212,7 +212,7 @@ export default function SuCoListView() {
   const handleUpdate = async (id: string) => {
     await axios
       .put(
-        `http://localhost:6868/api/v2/tb_sucongoai/status/${id}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
         { Tinhtrangxuly: tinhTrangXuLy, ngayXuLy },
         {
           headers: {
@@ -555,10 +555,8 @@ function NhomTSDialog({
   onClose,
   handleUpdate,
 }: ConfirmTransferDialogProps) {
-  const arr: any = dataSelect?.Duongdancacanh?.split(',').map((slide: any) => 
-  `${getImageUrls(3,slide)}`);
-
-  console.log("arr",arr)
+  const arr: any = dataSelect?.Duongdancacanh?.split(',').map((slide: any) =>
+    `${getImageUrls(3, slide)}`);
 
   const {
     selected: selectedImage,

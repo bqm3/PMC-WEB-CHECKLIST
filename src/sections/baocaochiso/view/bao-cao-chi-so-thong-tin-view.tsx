@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 // routes
 import { paths } from 'src/routes/paths';
 // _mock
-import {  useGetLoaiChiSoByDuan } from 'src/api/khuvuc';
+import { useGetLoaiChiSoByDuan } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
@@ -35,7 +35,7 @@ import AreaTableRow from '../area-baocaochiso-checklist';
 
 const TABLE_HEAD = [
   { id: '', },
-  { id: '', },
+  { id: '', width: 40 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -86,7 +86,7 @@ export default function BaoCaoHangThangListView() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:6868/api/v2/ent_baocaochiso`, {
+        const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/ent_baocaochiso`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -108,85 +108,81 @@ export default function BaoCaoHangThangListView() {
   );
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <CustomBreadcrumbs
-            heading="Báo cáo chỉ số hello"
-            links={[
-              {
-                name: 'Dashboard',
-                href: paths.dashboard.root,
-              },
-              { name: 'Danh sách' },
-            ]}
-            sx={{
-              mb: { xs: 3, md: 5 },
-            }}
-          />
-        </Stack>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <CustomBreadcrumbs
+          heading="Báo cáo chỉ số"
+          links={[
+            {
+              name: 'Dashboard',
+              href: paths.dashboard.root,
+            },
+            { name: 'Danh sách' },
+          ]}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
+      </Stack>
 
-        <Card>
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataInPage?.length}
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataBaocao?.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(checked, dataInPage?.map((row: any) => row.ID_Khuvuc))
-                  // }
-                />
-
-                <TableBody>
-                  {dataBaocao?.map((row: any, index: any) => (
-                    <AreaTableRow
-                      key={index}
-                      row={row}
-                      selected={table.selected.includes(row?.ent_khuvuc?.ID_Khuvuc)}
-                      onSelectRow={() => table.onSelectRow(row?.ent_khuvuc?.ID_Khuvuc)}
-                      onDeleteRow={() => console.log('abc')}
-                      onViewRow={() => console.log('abc')}
-                      // khoiCV={khoiCV}
-                      index={index}
-                    />
-                  ))}
-                  <TableNoData notFound={!dataBaocao} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
+      <Card>
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <TableSelectedAction
             dense={table.dense}
-            onChangeDense={table.onChangeDense}
+            numSelected={table.selected.length}
+            rowCount={dataInPage?.length}
+            action={
+              <Tooltip title="Delete">
+                <IconButton color="primary" onClick={confirm.onTrue}>
+                  <Iconify icon="solar:trash-bin-trash-bold" />
+                </IconButton>
+              </Tooltip>
+            }
           />
-        </Card>
-      </Container>
-    </>
+
+          <Scrollbar>
+            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={dataBaocao?.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(checked, dataInPage?.map((row: any) => row.ID_Khuvuc))
+              // }
+              />
+
+              <TableBody>
+                {dataBaocao?.map((row: any, index: any) => (
+                  <AreaTableRow
+                    key={index}
+                    row={row}
+                    selected={table.selected.includes(row?.ent_khuvuc?.ID_Khuvuc)}
+                    onSelectRow={() => table.onSelectRow(row?.ent_khuvuc?.ID_Khuvuc)}
+                    // khoiCV={khoiCV}
+                    index={index}
+                  />
+                ))}
+                <TableNoData notFound={!dataBaocao} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
+
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

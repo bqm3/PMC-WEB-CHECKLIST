@@ -9,11 +9,9 @@ import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // utils
-import { fCurrency } from 'src/utils/format-number';
 import { getImageUrls } from 'src/utils/get-image';
 // types
-import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IHangMuc, IChecklist, ICalv, TbChecklistCalv } from 'src/types/khuvuc';
+import { ICalv, TbChecklistCalv } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';

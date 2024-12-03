@@ -20,18 +20,14 @@ type Props = {
   row: any;
   khoiCV: any;
   selected: boolean;
-  onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
-  onDeleteRow: VoidFunction;
   index: number;
 };
 
 export default function AreaTableRow({
   row,
   selected,
-  onViewRow,
   onSelectRow,
-  onDeleteRow,
   khoiCV,
   index,
 }: Props) {
@@ -89,7 +85,6 @@ export default function AreaTableRow({
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
       <TableCell>
         <Box
-          onClick={onViewRow}
           sx={{
             cursor: 'pointer',
             '&:hover': {
@@ -122,79 +117,6 @@ export default function AreaTableRow({
     </TableRow>
   );
 
-  // const renderSecondary = (
-  //   <TableRow>
-  //     <TableCell sx={{ p: 0, border: 'none' }} colSpan={8}>
-  //       <Collapse
-  //         in={collapse.value}
-  //         timeout="auto"
-  //         unmountOnExit
-  //         sx={{ bgcolor: 'background.neutral' }}
-  //       >
-  //         <Stack component={Paper} sx={{ m: 1.5 }}>
-  //           {hangmucs?.map((hangmuc: any) => {
-  //             const hangmucData = hangmuc?.ent_hangmuc?.dataValues;
-  //             const hangmucChecklist = hangmuc?.ent_hangmuc?.checklists;
-
-  //             return (
-  //               <Stack
-  //                 key={hangmucData?.ID_Hangmuc}
-  //                 direction="row"
-  //                 alignItems="center"
-  //                 sx={{
-  //                   p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-  //                   '&:not(:last-of-type)': {
-  //                     borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-  //                   },
-  //                 }}
-  //               >
-  //                 <TableCell>
-  //                   <Box>HM{hangmucData?.ID_Hangmuc}</Box>
-  //                 </TableCell>
-
-  //                 <ListItemText
-  //                   primary={hangmucData?.Hangmuc}
-  //                   primaryTypographyProps={{
-  //                     typography: 'body2',
-  //                   }}
-  //                 />
-
-  //                 <Stack component={Paper} sx={{ m: 1.5 }}>
-  //                   {hangmucChecklist?.map((checklist: any) => (
-  //                     <Stack
-  //                       key={checklist?.ID_Checklist}
-  //                       direction="row"
-  //                       alignItems="center"
-  //                       sx={{
-  //                         p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-  //                         '&:not(:last-of-type)': {
-  //                           borderBottom: (theme) =>
-  //                             `solid 2px ${theme.palette.background.neutral}`,
-  //                         },
-  //                       }}
-  //                     >
-  //                       <TableCell>
-  //                         <Box>Checklist{checklist?.ID_Checklist}</Box>
-  //                       </TableCell>
-
-  //                       <ListItemText
-  //                         primary={checklist?.Checklist}
-  //                         primaryTypographyProps={{
-  //                           typography: 'body2',
-  //                         }}
-  //                       />
-  //                     </Stack>
-  //                   ))}
-  //                 </Stack>
-  //               </Stack>
-  //             );
-  //           })}
-  //         </Stack>
-  //       </Collapse>
-  //     </TableCell>
-  //   </TableRow>
-  // );
-
   const renderSecondary = (
     <TableRow>
       <TableCell sx={{ p: 0, border: 'none' }} colSpan={8}>
@@ -223,7 +145,7 @@ export default function AreaTableRow({
                     borderRadius: 1,
                     boxShadow: (theme) => theme.shadows[1],
                     '&:last-of-type': {
-                      mb: 0,
+                      mb: 2,
                     },
                   }}
                 >

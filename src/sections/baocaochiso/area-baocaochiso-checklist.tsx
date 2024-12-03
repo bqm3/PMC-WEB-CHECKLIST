@@ -25,9 +25,7 @@ import Iconify from 'src/components/iconify';
 type Props = {
   row: any;
   selected: boolean;
-  onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
-  onDeleteRow: VoidFunction;
   index: number;
 };
 
@@ -39,7 +37,7 @@ const TABLE_HEAD = [
   { id: 'Chiso', label: 'Số tiêu thụ', width: 120 },
   { id: 'Chiso_Before', label: 'Số tiêu thụ tháng trước', width: 200 },
   { id: 'Hoten', label: 'Người gửi', width: 200 },
-  { id: 'Anh', label: 'Hình ảnh', width: 200 },
+  { id: 'Anh', label: 'Hình ảnh', width: 150 },
   { id: 'Ghichu', label: 'Ghi chú', width: 100 },
   { id: '', width: 20 },
 ];
@@ -56,9 +54,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function AreaTableRow({
   row,
   selected,
-  onViewRow,
   onSelectRow,
-  onDeleteRow,
   index,
 }: Props) {
   const collapse = useBoolean();
@@ -85,7 +81,6 @@ export default function AreaTableRow({
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
       <TableCell>
         <Box
-          onClick={onViewRow}
           sx={{
             cursor: 'pointer',
             '&:hover': {
@@ -129,7 +124,7 @@ export default function AreaTableRow({
               alignItems="center"
               sx={{
                 p: (theme) => theme.spacing(1.5, 2),
-                borderBottom: (theme) => `solid 2px ${theme.palette.divider}`,
+                // borderBottom: (theme) => `solid 2px ${theme.palette.divider}`,
                 bgcolor: 'background.paper',
                 fontWeight: 'bold',
               }}
@@ -150,12 +145,12 @@ export default function AreaTableRow({
                 key={item?.ID_Baocaochiso}
                 direction="row"
                 alignItems="center"
-                sx={{
-                  p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-                  '&:not(:last-of-type)': {
-                    borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-                  },
-                }}
+              // sx={{
+              //   p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
+              //   '&:not(:last-of-type)': {
+              //     borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
+              //   },
+              // }}
               >
                 {TABLE_HEAD.map((column) => (
                   <TableCell

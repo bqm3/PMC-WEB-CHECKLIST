@@ -187,7 +187,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       if (currentChecklist !== undefined) {
         await axios
           .put(
-            `http://localhost:6868/api/v2/ent_checklist/update/${currentChecklist.ID_Checklist}`,
+            `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/update/${currentChecklist.ID_Checklist}`,
             data,
             {
               headers: {
@@ -230,7 +230,7 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_checklist/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

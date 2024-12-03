@@ -63,7 +63,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       try {
         const accessToken = localStorage.getItem(STORAGE_KEY);
         const response = await axios.put(
-          `http://localhost:6868/api/v2/ent_checklist/filter-mul-web/${id}`,
+          `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/filter-mul-web/${id}`,
           { dataHangmuc: dataChecklistC?.ID_Hangmucs, ID_KhoiCV: dataChecklistC?.ID_KhoiCV },
           {
             headers: {
@@ -73,7 +73,6 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           }
         );
         setData(response.data.data);
-        console.log('data', response.data.data);
       } catch (error) {
         console.log('Error fetching data:', error);
       }
@@ -92,97 +91,93 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   };
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <CustomBreadcrumbs
-            heading="Danh mục chưa checklist theo ca"
-            links={[
-              {
-                name: 'Dashboard',
-                href: paths.dashboard.root,
-              },
-              {
-                name: 'Checklist',
-                href: paths.dashboard.checklist.root,
-              },
-              { name: 'Danh sách' },
-            ]}
-            sx={{
-              mb: { xs: 3, md: 5 },
-            }}
-          />
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <CustomBreadcrumbs
+          heading="Danh mục chưa checklist theo ca"
+          links={[
+            {
+              name: 'Dashboard',
+              href: paths.dashboard.root,
+            },
+            {
+              name: 'Checklist',
+              href: paths.dashboard.checklist.root,
+            },
+            { name: 'Danh sách' },
+          ]}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
+      </Stack>
+
+      <Box
+        rowGap={5}
+        display="grid"
+        alignItems="center"
+        gridTemplateColumns={{
+          xs: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+        }}
+        sx={{ pb: 2 }}
+      >
+        <Stack sx={{ typography: 'body2' }}>
+          <Typography variant="subtitle1" sx={{ mb: 1 }}>
+            Thông tin trong ca
+          </Typography>
+          Ca: {dataChecklistC?.ent_calv?.Tenca}
+          <br />
+          Người Checklist: {dataChecklistC?.ent_user?.Hoten}
+          <br />
+          Khối công việc: {dataChecklistC?.ent_khoicv?.KhoiCV}
+          <br />
         </Stack>
 
-        <Box
-          rowGap={5}
-          display="grid"
-          alignItems="center"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
-          }}
-          sx={{ pb: 2 }}
-        >
-          <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
-              Thông tin trong ca
-            </Typography>
-            Ca: {dataChecklistC?.ent_calv?.Tenca}
-            <br />
-            Người Checklist: {dataChecklistC?.ent_user?.Hoten}
-            <br />
-            Khối công việc: {dataChecklistC?.ent_khoicv?.KhoiCV}
-            <br />
-          </Stack>
+        <Stack sx={{ typography: 'body2' }}>
+          <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
+            {' '}
+          </Typography>
+          Ngày: {formatDateString(dataChecklistC?.Ngay)}
+          <br />
+          Giờ bắt đầu - kết thúc: {dataChecklistC?.Giobd} - {dataChecklistC?.Giokt}
+          <br />
+          Tình trạng: {dataChecklistC?.Tinhtrang === 0 ? 'Mở ra' : 'Đóng ca'}
+          <br />
+        </Stack>
+      </Box>
 
-          <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
-              {' '}
-            </Typography>
-            Ngày: {formatDateString(dataChecklistC?.Ngay)}
-            <br />
-            Giờ bắt đầu - kết thúc: {dataChecklistC?.Giobd} - {dataChecklistC?.Giokt}
-            <br />
-            Tình trạng: {dataChecklistC?.Tinhtrang === 0 ? 'Mở ra' : 'Đóng ca'}
-            <br />
-          </Stack>
-        </Box>
+      <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+        <Scrollbar>
+          <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+            <TableHeadCustom
+              order={table.order}
+              orderBy={table.orderBy}
+              headLabel={TABLE_HEAD}
+              rowCount={data?.length}
+              numSelected={table.selected.length}
+              onSort={table.onSort}
+            // onSelectAllRows={(checked) =>
+            //   table.onSelectAllRows(checked, dataInPage?.map((row: any) => row.ID_Khuvuc))
+            // }
+            />
 
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={data?.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(checked, dataInPage?.map((row: any) => row.ID_Khuvuc))
-                // }
-              />
-
-              <TableBody>
-                {data?.map((row: any, index: any) => (
-                  <AreaTableRow
-                    key={index}
-                    row={row}
-                    selected={table.selected.includes(row?.ent_khuvuc?.ID_Khuvuc)}
-                    onSelectRow={() => table.onSelectRow(row?.ent_khuvuc?.ID_Khuvuc)}
-                    onDeleteRow={() => console.log('abc')}
-                    onViewRow={() => console.log('abc')}
-                    khoiCV={khoiCV}
-                    index={index}
-                  />
-                ))}
-                <TableNoData notFound={!data} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-      </Container>
-    </>
+            <TableBody>
+              {data?.map((row: any, index: any) => (
+                <AreaTableRow
+                  key={index}
+                  row={row}
+                  selected={table.selected.includes(row?.ent_khuvuc?.ID_Khuvuc)}
+                  onSelectRow={() => table.onSelectRow(row?.ent_khuvuc?.ID_Khuvuc)}
+                  khoiCV={khoiCV}
+                  index={index}
+                />
+              ))}
+              <TableNoData notFound={!data} />
+            </TableBody>
+          </Table>
+        </Scrollbar>
+      </TableContainer>
+    </Container>
   );
 }

@@ -126,7 +126,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_duan/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -198,7 +198,7 @@ export default function GiamsatListView() {
       };
       localStorage.removeItem('accessToken');
       // Gọi API đăng nhập
-      const urlHttp = 'http://localhost:6868/api/v2/ent_user/login';
+      const urlHttp = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/login';
       const res = await axios.post(urlHttp, data);
 
       // Kiểm tra nếu đăng nhập thành công
@@ -226,7 +226,7 @@ export default function GiamsatListView() {
   const handleViewRowDuan = useCallback(
     async (id: string) => {
       try {
-        const res = await axios.put(`http://localhost:6868/api/v2/ent_user/duan/update/${id}`, [], {
+        const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/update/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -267,7 +267,7 @@ export default function GiamsatListView() {
 
   const handleReload = useCallback(async () => {
     try {
-      const res = await axios.put(`http://localhost:6868/api/v2/ent_user/duan/clear`, [], {
+      const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/clear`, [], {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

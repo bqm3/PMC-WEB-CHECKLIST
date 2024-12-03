@@ -182,7 +182,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -223,7 +223,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Checklist));
+    const deleteRows = tableData?.filter((row) => !table.selected.includes(row?.ID_Checklist));
     setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
@@ -266,7 +266,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       anh:
         // const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null
         item.Anh !== undefined && item.Anh !== null
-          ? getImageUrls(1,item.Anh)
+          ? getImageUrls(1, item.Anh)
           : '',
     }));
     setDataFormatExcel(formattedData);
@@ -354,7 +354,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
               {' '}
             </Typography>
-            Ngày: {formatDateString(dataChecklistC?.Ngay)}
+            Ngày: {dataChecklistC?.Ngay ? formatDateString(dataChecklistC?.Ngay) : dataChecklistC?.Ngay}
             <br />
             Giờ bắt đầu - kết thúc: {dataChecklistC?.Giobd} - {dataChecklistC?.Giokt}
             <br />
@@ -518,7 +518,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
             // src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
-            src = {`${getImageUrls(1,detailChecklist?.Anh)}`}
+            src={`${getImageUrls(1, detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>
