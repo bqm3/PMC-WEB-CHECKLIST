@@ -50,8 +50,8 @@ export default function BankingExpensesCategories({ title, isLoading, subheader,
     legend: {
       position: 'right',
       itemMargin: {
-        horizontal: 10,
-        vertical: 7,
+        horizontal: 2,
+        vertical: 1,
       },
     },
     tooltip: {
@@ -104,7 +104,7 @@ export default function BankingExpensesCategories({ title, isLoading, subheader,
             type="polarArea"
             series={chartSeries}
             options={chartOptions}
-            height={smUp ? 320 : 380}
+            height={smUp ? 360 : 500}
           />
         )}
       </Box>

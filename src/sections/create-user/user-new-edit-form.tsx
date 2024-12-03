@@ -125,7 +125,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
           .map((project: any) => project.ID_Duan)
       );
 
-    console.log(selectedIds);
     const newData = {
       ...data,
       arr_Duan: selectedIds
@@ -409,6 +408,9 @@ export default function UserNewEditForm({ currentUser }: Props) {
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
             >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
               {KhoiCV?.map((option) => (
                 <MenuItem key={option.ID_KhoiCV} value={option.ID_KhoiCV}>
                   {option.KhoiCV}
@@ -423,7 +425,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
               label="Dự án"
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
+
             >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
               {Duan?.map((option) => (
                 <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
                   {option.Duan}

@@ -31,12 +31,13 @@ import Spreadsheet from 'react-spreadsheet';
 import { useGetKhoiCV } from 'src/api/khuvuc';
 //
 import ChecklistsHoanThanh from '../checklist-hoan-thanh';
+import EcommerceYearlySales from '../ecommerce-yearly-sales';
+import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
 import SuCoNgoaiListView from '../sucongoai/su-co-ngoai-list-view';
 import SuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
-import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 import BankingExpensesCategories from '../banking-expenses-categories';
 
 
@@ -898,7 +899,7 @@ export default function OverviewAnalyticsView() {
               }}
             />
           </Grid>
-          <Grid xs={12} md={8}>
+          <Grid xs={12} md={5}>
             <BankingExpensesCategories
               title="Số lượng dự án"
               isLoading={isLoading}
@@ -913,14 +914,51 @@ export default function OverviewAnalyticsView() {
                   theme.palette.success.darker,
                   theme.palette.error.main,
                   theme.palette.info.dark,
-
                   theme.palette.warning.dark,
                 ],
               }}
             />
           </Grid>
+          {/* <Grid xs={12} md={7} lg={7}>
+            <EcommerceYearlySales
+              title="Yearly Sales"
+              subheader="(+43%) than last year"
+              chart={{
+                categories: [
+                  'Thứ 2',
+                  'Thứ 3',
+                  'Thứ 4',
+                  'Thứ 5',
+                  'Thứ 6',
+                  'Thứ 7',
+                  'Chủ nhật',
 
-          <Grid container xs={12} md={4} sx={{ flexDirection: 'row', gap: 0 }} rowSpacing={0}>
+                ],
+                series: [
+                  {
+                    year: '2024',
+                    data: [
+                      {
+                        name: 'Khối bảo vệ',
+                        data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 35, 51, 49],
+                      },
+                      {
+                        name: 'Khối làm sạch',
+                        data: [51, 35, 41, 10, 91, 69, 62, 148, 91, 69, 62, 49],
+                      },
+                      {
+                        name: 'Khối kỹ thuật',
+                        data: [56, 13, 34, 10, 77, 99, 88, 45, 77, 99, 88, 77],
+                      },
+                    ],
+                  },
+
+                ],
+              }}
+            />
+          </Grid> */}
+
+          <Grid container xs={12} md={7} sx={{ flexDirection: 'row', gap: 0 }} rowSpacing={0}>
             <Grid xs={12} md={6} sx={{ mb: 0 }}>
               <PercentChecklistWidgetSummary
                 title="Khối kỹ thuật"
@@ -1170,7 +1208,7 @@ export default function OverviewAnalyticsView() {
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
-            src={`${getImageUrls(1,detailChecklist?.Anh)}`}
+            src={`${getImageUrls(1, detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>
