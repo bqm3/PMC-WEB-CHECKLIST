@@ -1,84 +1,33 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CSVLink, CSVDownload } from 'react-csv';
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+
 // @mui
-import { alpha, styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import { ConfirmDialog } from 'src/components/custom-dialog';
+
 import Typography from '@mui/material/Typography';
-import Image from 'src/components/image';
-import IconButton from '@mui/material/IconButton';
-// import CloseIcon from '@mui/material/';
 import Stack from '@mui/material/Stack';
-import {
-  Pagination,
-  paginationClasses,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Box,
-} from '@mui/material';
+import { Box } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetChecklistWeb, useGetCalv, useGetKhoiCV } from 'src/api/khuvuc';
-// hooks
-import { useBoolean } from 'src/hooks/use-boolean';
-
+import { _orders } from 'src/_mock';
+import { useGetKhoiCV } from 'src/api/khuvuc';
 // components
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import {
-  useTable,
-  getComparator,
-  emptyRows,
-  TableNoData,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
-} from 'src/components/table';
-import { useSnackbar } from 'src/components/snackbar';
+import { useTable, TableHeadCustom, TableNoData } from 'src/components/table';
 // types
-import {
-  IChecklist,
-  IKhuvucTableFilters,
-  IKhuvucTableFilterValue,
-  TbChecklistCalv,
-} from 'src/types/khuvuc';
+import { TbChecklistCalv } from 'src/types/khuvuc';
 //
-import ChecklistTableRow from './detail/checklist-table-row';
-import ChecklistTableToolbar from './detail/checklist-table-toolbar';
-import ChecklistTableFiltersResult from './detail/checklist-table-filters-result'; //
-import ChecklistPDF from './checklist-pdf';
+import AreaTableRow from './area-not-checklist';
 
 // ----------------------------------------------------------------------
-
-// const TABLE_HEAD = [
-//   { id: 'Checklist', label: 'Tên checklist', width: 150 },
-//   { id: 'ID_Hangmuc', label: 'Hạng mục (Khu vực- Tòa)', width: 250 },
-//   { id: 'ID_Tang', label: 'Tầng', width: 100 },
-//   { id: 'Ketqua', label: 'Kết quả', width: 100 },
-//   { id: 'Gioht', label: 'Giờ Checklist', width: 100 },
-//   { id: 'Anh', label: 'Hình ảnh', width: 100 },
-//   { id: 'Ghichu', label: 'Ghi chú', width: 100 },
-//   { id: '', width: 88 },
-// ];
 
 const TABLE_HEAD = [
   { id: 'ID_Khuvuc', label: 'Mã', width: 50 },
@@ -88,13 +37,6 @@ const TABLE_HEAD = [
   { id: 'ID_KhoiCV', label: 'Khối công việc', width: 250 },
   { id: '', width: 88 },
 ];
-
-const defaultFilters: IKhuvucTableFilters = {
-  name: '',
-  status: 'all',
-  startDate: null,
-  endDate: null,
-};
 
 const STORAGE_KEY = 'accessToken';
 
@@ -106,7 +48,12 @@ type Props = {
 // ----------------------------------------------------------------------
 
 export default function TbChecklistCalvListView({ currentChecklist, dataChecklistC }: Props) {
+  const params = useParams();
+  const { id } = params;
+
   const table = useTable({ defaultOrderBy: 'ID_Khuvuc' });
+
+  const { khoiCV } = useGetKhoiCV();
   const [data, setData] = useState<any>();
 
   const settings = useSettingsContext();
@@ -116,7 +63,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       try {
         const accessToken = localStorage.getItem(STORAGE_KEY);
         const response = await axios.put(
-          `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/filter-mul/${dataChecklistC.ID_ChecklistC}/${dataChecklistC.ID_Calv}`,
+          `http://localhost:6868/api/v2/ent_checklist/filter-mul-web/${id}`,
           { dataHangmuc: dataChecklistC?.ID_Hangmucs, ID_KhoiCV: dataChecklistC?.ID_KhoiCV },
           {
             headers: {
@@ -125,15 +72,24 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             },
           }
         );
-        setData(response.data);
-        console.log('data', response.data);
+        setData(response.data.data);
+        console.log('data', response.data.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, [dataChecklistC]);
+  }, [id, dataChecklistC]);
+
+  const formatDateString = (dateString: any) => {
+    if (dateString) {
+      const [year, month, day] = dateString.split('-');
+      return `${day}-${month}-${year}`;
+    }
+
+    return dateString;
+  };
 
   return (
     <>
@@ -158,6 +114,41 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           />
         </Stack>
 
+        <Box
+          rowGap={5}
+          display="grid"
+          alignItems="center"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+          }}
+          sx={{ pb: 2 }}
+        >
+          <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+              Thông tin trong ca
+            </Typography>
+            Ca: {dataChecklistC?.ent_calv?.Tenca}
+            <br />
+            Người Checklist: {dataChecklistC?.ent_user?.Hoten}
+            <br />
+            Khối công việc: {dataChecklistC?.ent_khoicv?.KhoiCV}
+            <br />
+          </Stack>
+
+          <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>
+              {' '}
+            </Typography>
+            Ngày: {formatDateString(dataChecklistC?.Ngay)}
+            <br />
+            Giờ bắt đầu - kết thúc: {dataChecklistC?.Giobd} - {dataChecklistC?.Giokt}
+            <br />
+            Tình trạng: {dataChecklistC?.Tinhtrang === 0 ? 'Mở ra' : 'Đóng ca'}
+            <br />
+          </Stack>
+        </Box>
+
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
@@ -169,9 +160,25 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(checked, data?.map((row) => row.ID_Khuvuc))
+                //   table.onSelectAllRows(checked, dataInPage?.map((row: any) => row.ID_Khuvuc))
                 // }
               />
+
+              <TableBody>
+                {data?.map((row: any, index: any) => (
+                  <AreaTableRow
+                    key={index}
+                    row={row}
+                    selected={table.selected.includes(row?.ent_khuvuc?.ID_Khuvuc)}
+                    onSelectRow={() => table.onSelectRow(row?.ent_khuvuc?.ID_Khuvuc)}
+                    onDeleteRow={() => console.log('abc')}
+                    onViewRow={() => console.log('abc')}
+                    khoiCV={khoiCV}
+                    index={index}
+                  />
+                ))}
+                <TableNoData notFound={!data} />
+              </TableBody>
             </Table>
           </Scrollbar>
         </TableContainer>
