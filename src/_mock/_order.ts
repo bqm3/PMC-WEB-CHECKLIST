@@ -32,6 +32,14 @@ export const PERMISSION_STATUS_OPTIONS = [
   { value: '4', label: 'Giám sát' },
 ];
 
+export const ROLE_STATUS_OPTIONS = [
+  { value: '2', label: 'Giám đốc dự án' },
+  { value: '5', label: 'Ban giám đốc' },
+  { value: '7', label: 'Ban quản trị' },
+  { value: '11', label: 'Ban quản trị khối' },
+  { value: '6', label: 'Trung tâm ứng phó sự cố' },
+];
+
 const ITEMS = [...Array(3)].map((_, index) => ({
   id: _mock.id(index),
   sku: `16H9UR${index}`,

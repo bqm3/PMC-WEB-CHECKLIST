@@ -142,7 +142,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           .then((res) => {
             reset();
             enqueueSnackbar('Cập nhật tài khoản!');
-            router.push(paths.dashboard.createUser.list);
+            router.push(paths.dashboard.quanlytaikhoan.list);
           })
           .catch((error) => {
             if (error.response) {

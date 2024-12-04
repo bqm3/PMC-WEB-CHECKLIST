@@ -71,7 +71,6 @@ export default function AreaTableRow({
       style={{ backgroundColor: `${ent_checklist?.Tinhtrang}` === '1' ? '#FFAB0029' : '' }}
     >
       <TableCell>
-        {' '}
         {ent_checklist?.Checklist}{' '}
         {`${isCheckListLai}` === '1' ? <span style={{ color: 'red' }}>(CheckList lại)</span> : ''}{' '}
       </TableCell>

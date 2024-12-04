@@ -93,7 +93,6 @@ export default function BaoCaoHangThangListView() {
           },
         });
         setDataBaocao(response.data.data); // Không bị trùng tên
-        console.log('data', response.data.data); // Sử dụng biến đã đổi tên
       } catch (error) {
         console.log('Error fetching data:', error);
       }

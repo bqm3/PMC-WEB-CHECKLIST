@@ -18,11 +18,9 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import Typography from '@mui/material/Typography';
 import Image from 'src/components/image';
 import IconButton from '@mui/material/IconButton';
-// import CloseIcon from '@mui/material/';
 import Stack from '@mui/material/Stack';
 import {
   Pagination,
-  paginationClasses,
   Select,
   MenuItem,
   FormControl,
@@ -32,9 +30,7 @@ import {
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-// _mock
-import { _orders, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetChecklistWeb, useGetCalv, useGetKhoiCV } from 'src/api/khuvuc';
+import { useGetCalv } from 'src/api/khuvuc';
 // utils
 import { getImageUrls } from 'src/utils/get-image';
 // hooks
@@ -52,12 +48,10 @@ import {
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
-  TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 // types
 import {
-  IChecklist,
   IKhuvucTableFilters,
   IKhuvucTableFilterValue,
   TbChecklistCalv,
@@ -72,7 +66,7 @@ import ChecklistPDF from './checklist-pdf';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'Checklist', label: 'Tên checklist' },
+  { id: 'ID_Checklist', label: 'Tên checklist' },
   { id: 'ID_Hangmuc', label: 'Hạng mục (Khu vực- Tòa)', width: 250 },
   { id: 'ID_Tang', label: 'Tầng', width: 100 },
   { id: 'Ketqua', label: 'Kết quả', width: 120 },
@@ -118,7 +112,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function TbChecklistCalvListView({ currentChecklist, dataChecklistC }: Props) {
-  const table = useTable({ defaultOrderBy: 'ID_Checklist' });
+  const table = useTable({ defaultOrderBy: 'Gioht' });
 
   const settings = useSettingsContext();
 
@@ -127,6 +121,10 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const confirm = useBoolean();
 
   const view = useBoolean();
+
+
+  const [open, setOpen] = useState(false);
+  const [detailChecklist, setDetailChecklist] = useState<TbChecklistCalv>();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -237,9 +235,6 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     setFilters(defaultFilters);
   }, []);
 
-  const [open, setOpen] = useState(false);
-  const [detailChecklist, setDetailChecklist] = useState<TbChecklistCalv>();
-
   const handleClickOpen = (data: TbChecklistCalv) => {
     setOpen(true);
     setDetailChecklist(data);
@@ -255,8 +250,27 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     [router]
   );
 
-  useEffect(() => {
-    const formattedData = tableData?.map((item, index) => ({
+  // useEffect(() => {
+  //   const formattedData = tableData?.map((item, index) => ({
+  //     stt: index + 1,
+  //     hangMuc: item.ent_checklist.ent_hangmuc.Hangmuc || '',
+  //     tenChecklist: item.ent_checklist.Checklist || '',
+  //     gioKt: item.Gioht || '',
+  //     kq: item.Ketqua,
+  //     ghichu: item.Ghichu || '',
+  //     anh:
+  //       // const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null
+  //       item.Anh !== undefined && item.Anh !== null
+  //         ? getImageUrls(1, item.Anh)
+  //         : '',
+  //   }));
+  //   setDataFormatExcel(formattedData);
+  // }, [tableData]);
+
+  // const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
+
+  const prepareCsvData = () =>
+    tableData?.map((item, index) => ({
       stt: index + 1,
       hangMuc: item.ent_checklist.ent_hangmuc.Hangmuc || '',
       tenChecklist: item.ent_checklist.Checklist || '',
@@ -269,8 +283,13 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           ? getImageUrls(1, item.Anh)
           : '',
     }));
+
+
+  const handleExport = () => {
+    // Tạo dữ liệu CSV và cập nhật trạng thái trước khi tải xuống
+    const formattedData = prepareCsvData();
     setDataFormatExcel(formattedData);
-  }, [tableData]);
+  };
 
   const formatDateString = (dateString: any) => {
     if (dateString) {
@@ -306,6 +325,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
           <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
             <CSVLink
               data={dataFormatExcel}
+              onClick={handleExport}
               headers={headers}
               filename={`${dataChecklistC?.Ngay}_${dataChecklistC?.ent_khoicv.KhoiCV}_${dataChecklistC?.ent_calv.Tenca}_${dataChecklistC?.ent_user.Hoten}.csv`}
             >
@@ -588,6 +608,7 @@ function applyFilter({
   // dateError: boolean;
 }) {
   const { status, name } = filters;
+  console.log('filters', filters)
 
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 

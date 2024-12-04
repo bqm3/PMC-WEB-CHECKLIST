@@ -207,12 +207,20 @@ export const paths = {
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
       lists :`${ROOTS.DASHBOARD}/checklist/lists`,
     },
+    quanlytaikhoan: {
+      root: `${ROOTS.DASHBOARD}/quan-ly-tai-khoan`,
+      list: `${ROOTS.DASHBOARD}/quan-ly-tai-khoan/list`,
+      error: `${ROOTS.DASHBOARD}/quan-ly-tai-khoan/error`,
+      resetPassWord: `${ROOTS.DASHBOARD}/quan-ly-tai-khoan/resetPassWord`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/quan-ly-tai-khoan/${id}/edit`,
+    },
+
     createUser: {
-      root: `${ROOTS.DASHBOARD}/create-user`,
-      list: `${ROOTS.DASHBOARD}/create-user/list`,
-      error: `${ROOTS.DASHBOARD}/create-user/error`,
-      resetPassWord: `${ROOTS.DASHBOARD}/create-user/resetPassWord`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/create-user/${id}/edit`,
+      root: `${ROOTS.DASHBOARD}/tai-khoan`,
+      list: `${ROOTS.DASHBOARD}/tai-khoan/list`,
+      // error: `${ROOTS.DASHBOARD}/tai-khoan/error`,
+      // resetPassWord: `${ROOTS.DASHBOARD}/tai-khoan/resetPassWord`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/tai-khoan/${id}/edit`,
     },
     duan: {
       root: `${ROOTS.DASHBOARD}/duan`,

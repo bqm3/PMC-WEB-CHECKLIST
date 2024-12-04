@@ -364,7 +364,7 @@ export default function SuCoListView() {
             filters={filters}
             onFilters={handleFilters}
             headers={headers}
-            dataFormatExcel={dataFormatExcel}
+            // dataFormatExcel={dataFormatExcel}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}

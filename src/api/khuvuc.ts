@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -343,6 +343,7 @@ export function useGetLocations() {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
     }).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
@@ -605,6 +606,33 @@ export function useGetUsers() {
   return memoizedValue;
 }
 
+export function useGetRoleUsers() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/get-role';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      user: (data?.data as IUser[]) || [],
+      userLoading: isLoading,
+      userError: error,
+      userValidating: isValidating,
+      userEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetHangMucDetail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/${id}`;
@@ -705,8 +733,6 @@ export function useGetTb_ChecklistDetail(id:any) {
       },
     }).then((res) => res.json());
   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
-  console.log('error', error)
-  console.log('data', data)
 
   const memoizedValue = useMemo(
     () => ({
@@ -992,29 +1018,29 @@ export function useGetProfile(id: string){
 //   return memoizedValue;
 // }
 
-// export function useGetChinhanh(){
-//   const URL = 'https://checklist.pmcweb.vn/pmc-assets/api/ent_chinhanh/all';
-//   const fetCher = (url: string) =>
-//     fetch(url, {
-//       method: 'get',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     }).then((res) => res.json());
-//   const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+export function useGetChinhanh(){
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_chinhanh/all';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
 
-//   const memoizedValue = useMemo(
-//     () => ({
-//       chinhanh: (data?.data as IChinhanh[]) || [],
-//       chinhanhLoading: isLoading,
-//       chinhanhError: error,
-//       chinhanhValidating: isValidating,
-//     }),
-//     [data, error, isLoading, isValidating]
-//   );
+  const memoizedValue = useMemo(
+    () => ({
+      chinhanh: (data?.data as IChinhanh[]) || [],
+      chinhanhLoading: isLoading,
+      chinhanhError: error,
+      chinhanhValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
 
-//   return memoizedValue;
-// }
+  return memoizedValue;
+}
 
 // export function useGetChucVu(){
 //   const URL = 'https://checklist.pmcweb.vn/pmc-assets/api/ent_chucvu/all';

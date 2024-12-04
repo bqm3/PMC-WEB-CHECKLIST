@@ -7,12 +7,12 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 // api
 import { useGetRoom } from 'src/api/product';
-import { useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail } from 'src/api/khuvuc'
+import {useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail} from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 
 //
-import ResetPassForm from '../user-resetpass-form';
+import UserErrorForm from '../user-error-form';
 
 
 // ----------------------------------------------------------------------
@@ -21,16 +21,19 @@ type Props = {
   id: string;
 };
 
-export default function ResetPassView({ id }: Props) {
+export default function UserErrorView({ id }: Props) {
   const settings = useSettingsContext();
+
+  const { user: currentUser } = useGetUserDetail(id);
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-        heading="Thiết Lập Lại Mật Khẩu"
+        heading="Tài khoản lỗi"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'Thiết lập lại mật khẩu',
+            name: 'Tài khoản lỗi',
             href: paths.dashboard.createUser.list,
           },
         ]}
@@ -39,7 +42,7 @@ export default function ResetPassView({ id }: Props) {
         }}
       />
 
-      <ResetPassForm />
+      <UserErrorForm />
     </Container>
   );
 }

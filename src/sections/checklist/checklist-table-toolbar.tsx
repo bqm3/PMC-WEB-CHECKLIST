@@ -12,17 +12,18 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import Checkbox from '@mui/material/Checkbox';
+// components
+import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useBoolean } from 'src/hooks/use-boolean';
+
 // types
 import {
   IKhuvucTableFilters,
   IKhuvucTableFilterValue,
   IChecklistTableFilters,
 } from 'src/types/khuvuc';
-// components
-import Iconify from 'src/components/iconify';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useBoolean } from 'src/hooks/use-boolean';
 
 import { CSVLink } from 'react-csv';
 
@@ -39,11 +40,13 @@ type Props = {
   onResetFilters: VoidFunction;
   dataFormatExcel: any;
   headers: any;
+  handleExport: any
 };
 
 export default function OrderTableToolbar({
   filters,
   onFilters,
+  handleExport,
   //
   headers,
   dataFormatExcel,
@@ -161,6 +164,7 @@ export default function OrderTableToolbar({
       >
         <CSVLink
           data={dataFormatExcel}
+          onClick={handleExport}
           headers={headers}
           filename="Checklist.csv"
           className="btn btn-primary"

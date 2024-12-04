@@ -8,23 +8,19 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 // types
-import { IKhuvucTableFilters, IBaoCaoTableFilterValue } from 'src/types/khuvuc';
+import { IKhuvucTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-import { CSVLink } from 'react-csv';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   filters: IKhuvucTableFilters;
-  onFilters: (name: string, value: IBaoCaoTableFilterValue) => void;
+  onFilters: (name: string, value: IKhuvucTableFilterValue) => void;
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
-  dataFormatExcel: any;
-  headers: any;
 };
 
 export default function OrderTableToolbar({
@@ -32,8 +28,6 @@ export default function OrderTableToolbar({
   onFilters,
   //
   canReset,
-  headers,
-  dataFormatExcel,
   onResetFilters,
 }: Props) {
   const popover = usePopover();
@@ -41,20 +35,6 @@ export default function OrderTableToolbar({
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onFilters('name', event.target.value);
-    },
-    [onFilters]
-  );
-
-  const handleFilterStartDate = useCallback(
-    (newValue: Date | null) => {
-      onFilters('startDate', newValue);
-    },
-    [onFilters]
-  );
-
-  const handleFilterEndDate = useCallback(
-    (newValue: Date | null) => {
-      onFilters('endDate', newValue);
     },
     [onFilters]
   );
@@ -73,36 +53,36 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <DatePicker
-          label="Ngày bắt đầu sự cố"
-          value={filters.startDate}
-          onChange={handleFilterStartDate}
+        {/* <DatePicker
+          label="Ngày bắt đầu"
+          // value={filters.startDate}
+          // onChange={handleFilterStartDate}
           slotProps={{
             textField: {
               fullWidth: true,
             },
           }}
           sx={{
-            maxWidth: { md: 160 },
+            maxWidth: { md: 200 },
           }}
         />
 
         <DatePicker
-          label="Ngày kết thúc sự cố"
-          value={filters.endDate}
-          onChange={handleFilterEndDate}
+          label="Ngày kết thúc"
+          // value={filters.endDate}
+          // onChange={handleFilterEndDate}
           slotProps={{ textField: { fullWidth: true } }}
           sx={{
-            maxWidth: { md: 160 },
+            maxWidth: { md: 200 },
           }}
-        />
+        /> */}
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Tìm kiếm theo tên hạng mục, nội dung sự cố..."
+            placeholder="Tìm kiếm theo tài khoản, số điện thoại,..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -112,9 +92,9 @@ export default function OrderTableToolbar({
             }}
           />
 
-          {/* <IconButton onClick={popover.onOpen}>
+          <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton> */}
+          </IconButton>
         </Stack>
 
         {canReset && (
@@ -129,30 +109,39 @@ export default function OrderTableToolbar({
         )}
       </Stack>
 
-      {/* <CustomPopover
+      <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
         sx={{ width: 140 }}
       >
-       
-        <CSVLink
-          data={dataFormatExcel}
-          headers={headers}
-          filename="Khuvuc.csv"
-          className="btn btn-primary"
-          style={{ textDecoration: 'none', color: 'black'}}
+        <MenuItem
+          onClick={() => {
+            popover.onClose();
+          }}
         >
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:export-bold" />
-            Export
-          </MenuItem>
-        </CSVLink>
-      </CustomPopover> */}
+          <Iconify icon="solar:printer-minimalistic-bold" />
+          Print
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:import-bold" />
+          Import
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:export-bold" />
+          Export
+        </MenuItem>
+      </CustomPopover>
     </>
   );
 }

@@ -1,17 +1,13 @@
 import { useEffect, useMemo } from 'react';
 // routes
 import { paths } from 'src/routes/paths';
-import { useNavigate } from 'react-router-dom';
 
 // locales
 import { useLocales } from 'src/locales';
 // components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 // auth
 import { useAuthContext } from 'src/auth/hooks';
-import { IUser } from 'src/types/khuvuc';
 
 // ----------------------------------------------------------------------
 
@@ -267,13 +263,13 @@ export function useNavData() {
         },
         {
           title: t('createaccount'),
-          path: paths.dashboard.createUser.root,
+          path: paths.dashboard.quanlytaikhoan.root,
           icon: ICONS.user,
           children: [
-            { title: t('create'), path: paths.dashboard.createUser.root },
-            { title: t('list'), path: paths.dashboard.createUser.list },
-            { title: t('user_error'), path: paths.dashboard.createUser.error },
-            { title: t('resetPassWord'), path: paths.dashboard.createUser.resetPassWord },
+            { title: t('create'), path: paths.dashboard.quanlytaikhoan.root },
+            { title: t('list'), path: paths.dashboard.quanlytaikhoan.list },
+            { title: t('user_error'), path: paths.dashboard.quanlytaikhoan.error },
+            { title: t('resetPassWord'), path: paths.dashboard.quanlytaikhoan.resetPassWord },
           ],
         }
       );
@@ -321,6 +317,42 @@ export function useNavData() {
       navigationData[0].items = [];  // Hoặc loại bỏ các mục không mong muốn
     }
 
+    if (user?.ent_chucvu?.Role === 1 && user?.arr_Duan !== null) {
+      navigationData[1].items.unshift(
+        {
+          title: t('project'),
+          path: paths.dashboard.duan.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('list'), path: paths.dashboard.duan.root },
+          ],
+        },
+
+      );
+    }
+
+    if (user?.ent_chucvu?.Role === 5 && user?.arr_Duan !== null) {
+      navigationData[1].items.unshift(
+        {
+          title: t('project'),
+          path: paths.dashboard.duan.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('list'), path: paths.dashboard.duan.root },
+          ],
+        },
+
+      );
+    }
+    // {
+    //   title: t('project'),
+    //   path: paths.dashboard.duan.root,
+    //   icon: ICONS.tour,
+    //   children: [
+    //     { title: t('create'), path: paths.dashboard.duan.new },
+    //     { title: t('list'), path: paths.dashboard.duan.root },
+    //   ],
+    // },
     return navigationData;
   }, [t, user]);
 

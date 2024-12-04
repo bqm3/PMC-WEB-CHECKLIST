@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 // @mui
 import { alpha } from '@mui/material/styles';
@@ -11,15 +11,17 @@ import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
-import TableContainer from '@mui/material/TableContainer';
-import { LoadingButton } from '@mui/lab';
+import TableContainer from '@mui/material/TableContainer'
 import { Stack } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { LoadingButton } from '@mui/lab';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetChinhanh, useGetDuanWeb } from 'src/api/khuvuc';
+import { _orders, ROLE_STATUS_OPTIONS } from 'src/_mock';
+import {
+  useGetRoleUsers,
+} from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
@@ -42,72 +44,72 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
-import { useAuthContext } from 'src/auth/hooks';
 // types
-import { IDuan, IChecklistTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc';
+import {
+  IKhuvucTableFilters,
+  IKhuvucTableFilterValue,
+  IUser,
+} from 'src/types/khuvuc';
 //
-import DuanTableRow from '../duan-table-row';
-import DuanTableToolbar from '../duan-table-toolbar';
-import DuanTableFiltersResult from '../duan-table-filters-result';
+import DuanTableRow from '../user-table-row';
+import DuanTableToolbar from '../user-table-toolbar';
+import DuanTableFiltersResult from '../user-table-filters-result';
+import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog'
+
 
 // ----------------------------------------------------------------------
 
+const STATUS_OPTIONS = [{ value: 'all', label: 'Tất cả' }, ...ROLE_STATUS_OPTIONS];
+
 const TABLE_HEAD = [
-  { id: 'ID_Duan', label: 'Mã dự án', width: 150 },
-  { id: 'Duan', label: 'Tên dự án', width: 300 },
-  { id: 'ID_Chinhanh', label: 'Chi nhánh', width: 200 },
-  { id: 'Diachi', label: 'Địa chỉ' },
-  { id: '', width: 10 },
+  { id: 'ID_User', label: 'Mã ', width: 50 },
+  { id: 'UserName', label: 'Tài khoản', width: 150 },
+  { id: 'ID_Chucvu', label: 'Chức vụ', width: 150 },
+  { id: 'Hoten', label: 'Họ tên', width: 150 },
+  { id: 'Email', label: 'Email', width: 150 },
+  { id: 'Sodienthoai', label: 'Số điện thoại', width: 150 },
+  { id: 'ID_Duan', label: 'Dự án', width: 150 },
+  { id: '', width: 40 },
 ];
 
-const defaultFilters: IChecklistTableFilters = {
+const defaultFilters: IKhuvucTableFilters = {
   name: '',
   status: 'all',
   startDate: null,
   endDate: null,
-  building: [],
 };
 
 const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function GiamsatListView() {
-  const table = useTable({ defaultOrderBy: 'ID_Duan' });
+  const table = useTable({ defaultOrderBy: 'ID_User' });
 
   const settings = useSettingsContext();
-  const { user, logout } = useAuthContext();
 
   const router = useRouter();
 
   const confirm = useBoolean();
 
+  const upload = useBoolean();
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const [loading, setLoading] = useState<Boolean | any>(false);
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { duan, duanLoading, duanEmpty } = useGetDuanWeb();
+  const { user, userLoading, userEmpty } = useGetRoleUsers();
 
-  const { chinhanh } = useGetChinhanh();
-
-  const [tableData, setTableData] = useState<IDuan[]>([]);
-
-  const DEPARTMENT_OPTIONS = useMemo(
-    () => [
-      ...chinhanh.map((it: any) => ({
-        value: it.ID_Chinhanh.toString(),
-        label: it.Tenchinhanh,
-      })),
-    ],
-    [chinhanh]
-  );
+  const [tableData, setTableData] = useState<IUser[]>([]);
 
   useEffect(() => {
-    if (duan?.length > 0) {
-      setTableData(duan);
+    if (user?.length > 0) {
+      setTableData(user);
     }
-  }, [duan]);
+  }, [user]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -140,7 +142,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -148,7 +150,7 @@ export default function GiamsatListView() {
         })
         .then((res) => {
           // reset();
-          const deleteRow = tableData?.filter((row) => row.ID_Duan !== id);
+          const deleteRow = tableData?.filter((row) => row.ID_User !== id);
           setTableData(deleteRow);
 
           table.onUpdatePageDeleteRow(dataInPage.length);
@@ -182,7 +184,7 @@ export default function GiamsatListView() {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_Duan));
+    const deleteRows = tableData?.filter((row) => !table.selected.includes(row.ID_User));
     setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
@@ -198,125 +200,10 @@ export default function GiamsatListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.duan.edit(id));
+      router.push(paths.dashboard.createUser.edit(id));
     },
     [router]
   );
-
-  const handleUpdateSuccess = useCallback(async () => {
-    try {
-      // Dữ liệu gửi lên API đăng nhập
-      const data = {
-        UserName: user?.UserName,
-        Password: user?.PasswordPrivate,
-      };
-      localStorage.removeItem('accessToken');
-      // Gọi API đăng nhập
-      const urlHttp = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/login';
-      const res = await axios.post(urlHttp, data);
-
-      // Kiểm tra nếu đăng nhập thành công
-      if (res.status === 200) {
-        const { token } = res.data;
-
-        localStorage.setItem('accessToken', token); // Lưu token vào sessionStorage
-        window.location.reload(); // Reload lại trang
-      } else {
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 4000,
-          message: 'Đăng nhập lại không thành công. Vui lòng thử lại!',
-        });
-      }
-    } catch (error) {
-      enqueueSnackbar({
-        variant: 'error',
-        autoHideDuration: 4000,
-        message: 'Đăng nhập lại không thành công. Vui lòng thử lại!',
-      });
-    }
-  }, [user, enqueueSnackbar]);
-
-  const handleViewRowDuan = useCallback(
-    async (id: string) => {
-      try {
-        const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/update/${id}`, [], {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        // Lưu ID_Duan vào localStorage
-        localStorage.setItem('ID_Duan', id);
-
-        // Gọi handleUpdateSuccess để đăng nhập lại
-        await handleUpdateSuccess();
-      } catch (error) {
-        if (error.response) {
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: `${error.response.data.message}`,
-          });
-        } else if (error.request) {
-          // Lỗi không nhận được phản hồi từ server
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: 'Không nhận được phản hồi từ máy chủ',
-          });
-        } else {
-          // Lỗi khi cấu hình request
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: 'Lỗi gửi yêu cầu',
-          });
-        }
-      }
-    },
-    [accessToken, enqueueSnackbar, handleUpdateSuccess] // Add handleUpdateSuccess to dependencies
-  );
-
-  const handleReload = useCallback(async () => {
-    try {
-      const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/clear`, [], {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      // Lưu ID_Duan vào localStorage
-      localStorage.removeItem('ID_Duan');
-
-      // Gọi handleUpdateSuccess để đăng nhập lại
-      await handleUpdateSuccess();
-    } catch (error) {
-      if (error.response) {
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 4000,
-          message: `${error.response.data.message}`,
-        });
-      } else if (error.request) {
-        // Lỗi không nhận được phản hồi từ server
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 4000,
-          message: 'Không nhận được phản hồi từ máy chủ',
-        });
-      } else {
-        // Lỗi khi cấu hình request
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 4000,
-          message: 'Lỗi gửi yêu cầu',
-        });
-      }
-    }
-  }, [accessToken, enqueueSnackbar, handleUpdateSuccess])
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -330,15 +217,15 @@ export default function GiamsatListView() {
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <CustomBreadcrumbs
-            heading="Danh sách dự án"
+            heading="Danh sách quản lý tài khoản"
             links={[
               {
                 name: 'Dashboard',
                 href: paths.dashboard.root,
               },
               {
-                name: 'Dự án',
-                href: paths.dashboard.duan.root,
+                name: 'Tài khoản',
+                href: paths.dashboard.createUser.root,
               },
               { name: 'Danh sách' },
             ]}
@@ -346,18 +233,66 @@ export default function GiamsatListView() {
               mb: { xs: 3, md: 5 },
             }}
           />
-          {
-            user?.ID_Chucvu !== 2 && <Button variant="contained" startIcon={<Iconify icon="eva:refresh-fill" />} onClick={() => handleReload()}>
-              Reset dự án
-            </Button>
-          }
+          <LoadingButton
+            loading={loading}
+            variant="contained"
+            startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+            onClick={upload.onTrue}
+          >
+            Upload
+          </LoadingButton>
         </Stack>
+
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {STATUS_OPTIONS.map((tab) => (
+            <Tab
+              key={tab.value}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === '2' && 'success') ||
+                    (tab.value === '5' && 'warning') ||
+                    (tab.value === '6' && 'error') ||
+                    (tab.value === '7' && 'info') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && user?.length}
+                  {tab.value === '2' &&
+                    user?.filter((it) => `${it.ID_Chucvu}` === '2').length}
+
+                  {tab.value === '5' &&
+                    user?.filter((it) => `${it.ID_Chucvu}` === '5').length}
+                  {tab.value === '6' &&
+                    user?.filter((it) => `${it.ID_Chucvu}` === '6').length}
+                  {tab.value === '7' &&
+                    user?.filter((it) => `${it.ID_Chucvu}` === '7').length}
+                  {tab.value === '11' &&
+                    user?.filter((it) => `${it.ID_Chucvu}` === '11').length}
+
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
 
         <Card>
           <DuanTableToolbar
             filters={filters}
             onFilters={handleFilters}
-            departmentOptions={DEPARTMENT_OPTIONS}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
@@ -381,7 +316,7 @@ export default function GiamsatListView() {
               numSelected={table.selected.length}
               rowCount={tableData?.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_Duan))
+                table.onSelectAllRows(checked, tableData?.map((row) => row?.ID_User))
               }
               action={
                 <Tooltip title="Delete">
@@ -402,7 +337,7 @@ export default function GiamsatListView() {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Duan))
+                    table.onSelectAllRows(checked, tableData?.map((row) => row.ID_User))
                   }
                 />
 
@@ -414,14 +349,12 @@ export default function GiamsatListView() {
                     )
                     .map((row) => (
                       <DuanTableRow
-                        key={row.ID_Duan}
+                        key={row.ID_User}
                         row={row}
-                        selected={table.selected.includes(row.ID_Duan)}
-                        onSelectRow={() => table.onSelectRow(row.ID_Duan)}
-                        onDeleteRow={() => handleDeleteRow(row.ID_Duan)}
-                        onViewRow={() => handleViewRow(row.ID_Duan)}
-                        onViewDuAnRow={() => handleViewRowDuan(row.ID_Duan)}
-                        user={user}
+                        selected={table.selected.includes(row.ID_User)}
+                        onSelectRow={() => table.onSelectRow(row.ID_User)}
+                        onDeleteRow={() => handleDeleteRow(row.ID_User)}
+                        onViewRow={() => handleViewRow(row.ID_User)}
                       />
                     ))}
 
@@ -448,6 +381,12 @@ export default function GiamsatListView() {
           />
         </Card>
       </Container>
+
+      <FileManagerNewFolderDialog
+        open={upload.value}
+        onClose={upload.onFalse}
+        setLoading={setLoading}
+      />
 
       <ConfirmDialog
         open={confirm.value}
@@ -482,12 +421,12 @@ function applyFilter({
   comparator,
   filters, // dateError,
 }: {
-  inputData: IDuan[];
+  inputData: IUser[];
   comparator: (a: any, b: any) => number;
-  filters: IChecklistTableFilters;
+  filters: IKhuvucTableFilters;
   // dateError: boolean;
 }) {
-  const { status, name, building } = filters;
+  const { status, name } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 
@@ -502,14 +441,16 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (order) =>
-        order.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.Diachi.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order.UserName}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.Hoten}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.ent_chucvu.Chucvu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.ent_duan?.Duan}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.Email}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
-
-  if (building.length) {
-    inputData = inputData.filter((item) => building.includes(String(item?.ID_Chinhanh)));
+  if (status !== 'all') {
+    inputData = inputData?.filter((order) => `${order?.ID_Chucvu}` === status);
   }
 
   return inputData;

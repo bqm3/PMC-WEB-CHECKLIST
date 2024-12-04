@@ -6,26 +6,37 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-// types
-import {IKhuvucTableFilters, IKhuvucTableFilterValue} from 'src/types/khuvuc'
+import Checkbox from '@mui/material/Checkbox';
 // components
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
+import { useBoolean } from 'src/hooks/use-boolean';
+// types
+import { IChecklistTableFilters, IKhuvucTableFilterValue } from 'src/types/khuvuc'
 // ----------------------------------------------------------------------
 
 type Props = {
-  filters: IKhuvucTableFilters;
+  filters: IChecklistTableFilters;
   onFilters: (name: string, value: IKhuvucTableFilterValue) => void;
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
+  departmentOptions: {
+    value: string;
+    label: string;
+  }[];
 };
 
 export default function OrderTableToolbar({
   filters,
   onFilters,
+  departmentOptions,
   //
   canReset,
   onResetFilters,
@@ -35,6 +46,16 @@ export default function OrderTableToolbar({
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onFilters('name', event.target.value);
+    },
+    [onFilters]
+  );
+
+  const handleFilterToanha = useCallback(
+    (event: SelectChangeEvent<string[]>) => {
+      onFilters(
+        'building',
+        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+      );
     },
     [onFilters]
   );
@@ -53,29 +74,40 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        {/* <DatePicker
-          label="Ngày bắt đầu"
-          // value={filters.startDate}
-          // onChange={handleFilterStartDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-            },
-          }}
+        <FormControl
           sx={{
-            maxWidth: { md: 200 },
+            flexShrink: 0,
+            width: { xs: 1, md: 200 },
           }}
-        />
+        >
+          <InputLabel>Chi nhánh</InputLabel>
 
-        <DatePicker
-          label="Ngày kết thúc"
-          // value={filters.endDate}
-          // onChange={handleFilterEndDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            maxWidth: { md: 200 },
-          }}
-        /> */}
+          <Select
+            multiple
+            value={filters?.building || []} // Ensure it's an empty array when null
+            onChange={handleFilterToanha}
+            input={<OutlinedInput label="Chi nhánh" />}
+            renderValue={
+              (selected) =>
+                departmentOptions
+                  .filter((option) => selected.includes(option.value)) // Find matching options
+                  .map((option) => option.label) // Map to labels
+                  .join(', ') // Join the labels with a comma
+            }
+            sx={{ textTransform: 'capitalize' }}
+          >
+            {departmentOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                <Checkbox
+                  disableRipple
+                  size="small"
+                  checked={filters?.building.includes(option.value)}
+                />
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField

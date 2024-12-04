@@ -19,14 +19,13 @@ interface Props extends DialogProps {
   title?: string;
   //
   onCreate?: VoidFunction;
-  setLoading: any;
   onUpdate?: VoidFunction;
   //
   folderName?: string;
   onChangeFolderName?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   //
   open: boolean;
-  isNewFolder: any;
+  setLoading: any;
   onClose: VoidFunction;
 }
 
@@ -36,14 +35,13 @@ export default function FileManagerNewFolderDialog({
   title = 'Upload Files',
   open,
   onClose,
+  setLoading,
   //
   onCreate,
-  setLoading,
   onUpdate,
   //
   folderName,
   onChangeFolderName,
-  isNewFolder,
   ...other
 }: Props) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
@@ -73,8 +71,6 @@ export default function FileManagerNewFolderDialog({
 
   const handleUpload = async () => {
     onClose();
-    setLoading(true);
-
     const formData = new FormData();
     if (Array.isArray(files)) {
       files.forEach((file) => {
@@ -83,58 +79,27 @@ export default function FileManagerNewFolderDialog({
     } else {
       formData.append('files', files); // Fallback for a single file upload
     }
+    setLoading(true);
+    try {
+      await axios.post('https://checklist.pmcweb.vn/be/api/v2/ent_user/uploads', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      // setUploadedFileName(response.data.filename);
+      enqueueSnackbar('Uploads dữ liệu thành công!');
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      const errorMessage = error.response?.data?.message || 'Uploads dữ liệu thất bại';
 
-    if (isNewFolder) {
-      await axios
-        .post('https://checklist.pmcweb.vn/be/api/v2/ent_checklist/uploads', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then(() => {
-          setLoading(false);
-          enqueueSnackbar('Uploads dữ liệu thành công!');
-        })
-        .catch((err) => {
-          setLoading(false);
-
-          // Lấy thông báo lỗi từ response nếu có
-          const errorMessage = err.response?.data?.message || 'Uploads dữ liệu thất bại';
-
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: errorMessage,
-          });
-        });
-    } else {
-      await axios
-        .post('https://checklist.pmcweb.vn/be/api/v2/ent_checklist/fix-uploads', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then(() => {
-          setLoading(false);
-          enqueueSnackbar('Uploads dữ liệu thành công!');
-        })
-        .catch((err) => {
-          setLoading(false);
-
-          // Lấy thông báo lỗi từ response nếu có
-          const errorMessage = err.response?.data?.message || 'Uploads dữ liệu thất bại';
-
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: errorMessage,
-          });
-        });
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 4000,
+        message: errorMessage,
+      });
     }
-
-
   };
 
   const handleRemoveFile = (inputFile: File | string) => {

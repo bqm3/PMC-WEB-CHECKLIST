@@ -27,7 +27,7 @@ interface Props extends CardProps {
       }[];
     }[];
     options?: ApexOptions;
-  };
+  } | any;
 }
 
 export default function EcommerceYearlySales({ title, subheader, chart, ...other }: Props) {
@@ -35,7 +35,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
 
   const popover = usePopover();
 
-  const [seriesData, setSeriesData] = useState('2023');
+  const [seriesData, setSeriesData] = useState('Tất cả');
 
   const chartOptions = useChart({
     colors,
@@ -45,6 +45,10 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
     },
     xaxis: {
       categories,
+    },
+    yaxis: {
+      min: 0,
+      max: 100,
     },
     ...options,
   });
@@ -86,7 +90,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
           }
         />
 
-        {series.map((item) => (
+        {series?.map((item: any) => (
           <Box key={item.year} sx={{ mt: 3, mx: 3 }}>
             {item.year === seriesData && (
               <Chart dir="ltr" type="area" series={item.data} options={chartOptions} height={364} />
@@ -95,8 +99,8 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
         ))}
       </Card>
 
-      <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 140 }}>
-        {series.map((option) => (
+      {/* <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 140 }}>
+        {series?.map((option: any) => (
           <MenuItem
             key={option.year}
             selected={option.year === seriesData}
@@ -105,7 +109,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
             {option.year}
           </MenuItem>
         ))}
-      </CustomPopover>
+      </CustomPopover> */}
     </>
   );
 }

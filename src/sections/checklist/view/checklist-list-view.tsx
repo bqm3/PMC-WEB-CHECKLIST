@@ -96,6 +96,8 @@ export default function ChecklistCalvListView() {
 
   const upload = useBoolean();
 
+  const uploadData = useBoolean();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
@@ -116,11 +118,6 @@ export default function ChecklistCalvListView() {
 
   const [rowsPerPageCustom, setRowsPerPageCustom] = useState(table?.rowsPerPage || 30); // Giá trị mặc định của số mục trên mỗi trang
 
-  const handleRowsPerPageChange = (event: any) => {
-    const val = event.target.value;
-    setRowsPerPageCustom(val);
-    table?.onChangeRowsPerPage(val);
-  };
 
   const STATUS_OPTIONS = useMemo(
     () => [
@@ -313,26 +310,26 @@ export default function ChecklistCalvListView() {
     // Add other mappings here
   };
 
-  const getKhoiCVNamesByIds = useCallback((idKhoiCVs: string[] = []): string =>
-    idKhoiCVs
-      .map((id: string) => khoiCVNames[id] || '') // Ensure 'id' is a string
-      .filter(Boolean) // Filter out any empty strings
-      .join(', ') // Join the names with commas
-    , [khoiCVNames]);
-
-
+  const getKhoiCVNamesByIds = useCallback(
+    (idKhoiCVs: string[] = []): string =>
+      idKhoiCVs
+        .map((id: string) => khoiCVNames[id] || '') // Đảm bảo 'id' là string
+        .filter(Boolean) // Loại bỏ chuỗi rỗng
+        .join(', '), // Nối các tên bằng dấu phẩy
+    [khoiCVNames]
+  );
 
   const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
 
-  useEffect(() => {
-    const formattedData = tableData?.map((item, index) => ({
+  const prepareCsvData = () =>
+    tableData?.map((item, index) => ({
       tentoanha: item?.ent_khuvuc?.ent_toanha?.Toanha || '',
       makhuvuc: item?.ent_khuvuc?.Makhuvuc || '',
       maqrcodekhuvuc: item?.ent_khuvuc?.MaQrCode || '',
       tenkhuvuc: item?.ent_khuvuc?.Tenkhuvuc || '',
       maqrcodehangmuc: item?.ent_hangmuc?.MaQrCode || '',
       tenhangmuc: item?.ent_hangmuc?.Hangmuc || '',
-      Tentang: item?.ent_tang.Tentang || '',
+      Tentang: item?.ent_tang?.Tentang || '',
       tenkhoicongviec: Array.isArray(item?.ent_khuvuc?.ID_KhoiCVs)
         ? getKhoiCVNamesByIds(item?.ent_khuvuc?.ID_KhoiCVs)
         : getKhoiCVNamesByIds([item?.ent_khuvuc?.ID_KhoiCVs]) || '',
@@ -343,9 +340,13 @@ export default function ChecklistCalvListView() {
       Giatridinhdanh: item?.Giatridinhdanh || '',
       Giatrinhan: item?.Giatrinhan || '',
     }));
-    setDataFormatExcel(formattedData);
-  }, [tableData, getKhoiCVNamesByIds]);
 
+
+  const handleExport = () => {
+    // Tạo dữ liệu CSV và cập nhật trạng thái trước khi tải xuống
+    const formattedData = prepareCsvData();
+    setDataFormatExcel(formattedData);
+  };
 
   return (
     <>
@@ -368,14 +369,25 @@ export default function ChecklistCalvListView() {
               mb: { xs: 3, md: 5 },
             }}
           />
-          <LoadingButton
-            loading={loading}
-            variant="contained"
-            startIcon={<Iconify icon="eva:cloud-upload-fill" />}
-            onClick={upload.onTrue}
-          >
-            Upload
-          </LoadingButton>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+              onClick={uploadData.onTrue}
+            >
+              Cập nhật
+            </LoadingButton>
+
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              startIcon={<Iconify icon="fa-cloud-download" />}
+              onClick={upload.onTrue}
+            >
+              Thêm mới
+            </LoadingButton>
+          </div>
         </Stack>
 
         <Card>
@@ -506,6 +518,7 @@ export default function ChecklistCalvListView() {
             buildingOptions={BUILDING_OPTIONS}
             canReset={canReset}
             onResetFilters={handleResetFilters}
+            handleExport={handleExport}
           />
 
           {canReset && (
@@ -640,6 +653,14 @@ export default function ChecklistCalvListView() {
         open={upload.value}
         onClose={upload.onFalse}
         setLoading={setLoading}
+        isNewFolder={upload.value}
+      />
+
+      <FileManagerNewFolderDialog
+        open={uploadData.value}
+        onClose={uploadData.onFalse}
+        setLoading={setLoading}
+        isNewFolder={false}
       />
 
       <ConfirmDialog

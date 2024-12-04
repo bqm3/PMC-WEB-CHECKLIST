@@ -101,8 +101,6 @@ export default function LocationManagementsView() {
 
   const upload = useBoolean();
 
-  const [loading, setLoading] = useState<Boolean | any>(false);
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const { location, locationLoading, locationEmpty } = useGetLocations();

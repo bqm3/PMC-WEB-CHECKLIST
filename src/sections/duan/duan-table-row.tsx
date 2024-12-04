@@ -1,20 +1,17 @@
-import { format } from 'date-fns';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import { IDuan, IKhoiCV, IKhuvuc, IToanha } from 'src/types/khuvuc';
+import { IDuan } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -29,6 +26,7 @@ type Props = {
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewDuAnRow: VoidFunction;
+  user: any
 };
 
 export default function CalvTableRow({
@@ -38,8 +36,9 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
   onViewDuAnRow,
+  user
 }: Props) {
-  const { ID_Duan, Duan, Diachi, toanhas, totalKhuvucInDuan, totalHangmucInDuan } = row;
+  const { ID_Duan, Duan, Diachi, ent_chinhanh } = row;
 
   const confirm = useBoolean();
 
@@ -49,13 +48,10 @@ export default function CalvTableRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      {/* <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell> */}
 
       <TableCell>
         <Box
-          onClick={onViewRow}
+          onClick={user.ID_Chucvu === 1 ? onViewRow : onViewDuAnRow}
           sx={{
             cursor: 'pointer',
             '&:hover': {
@@ -66,22 +62,11 @@ export default function CalvTableRow({
           {ID_Duan}
         </Box>
       </TableCell>
-
-      {/* <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <ListItemText
-          primary={Duan}
-          // secondary={ent_khoicv?.KhoiCV}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        />
-      </TableCell> */}
       <TableCell>{Duan}</TableCell>
+      <TableCell>{ent_chinhanh?.Tenchinhanh}</TableCell>
       <TableCell>{Diachi}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton
+        {/* <IconButton
           color={collapse.value ? 'inherit' : 'default'}
           onClick={collapse.onToggle}
           sx={{
@@ -91,63 +76,63 @@ export default function CalvTableRow({
           }}
         >
           <Iconify icon="eva:arrow-ios-downward-fill" />
-        </IconButton>
-
+        </IconButton> */}
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
+
       </TableCell>
     </TableRow>
   );
 
-  const renderSecondary = (
-    <TableRow>
-      <TableCell sx={{ p: 0, border: 'none' }} colSpan={12}>
-        <Collapse
-          in={collapse.value}
-          timeout="auto"
-          unmountOnExit
-          sx={{ bgcolor: 'background.neutral' }}
-        >
-          <Stack component={Paper} sx={{ m: 1 }}>
-            {toanhas?.map((item: any) => (
-              <Stack
-                key={item.ID_Khuvuc}
-                direction="row"
-                alignItems="center"
-                sx={{
-                  p: (theme) => theme.spacing(1, 1, 1, 1),
+  // const renderSecondary = (
+  //   <TableRow>
+  //     <TableCell sx={{ p: 0, border: 'none' }} colSpan={12}>
+  //       <Collapse
+  //         in={collapse.value}
+  //         timeout="auto"
+  //         unmountOnExit
+  //         sx={{ bgcolor: 'background.neutral' }}
+  //       >
+  //         <Stack component={Paper} sx={{ m: 1 }}>
+  //           {toanhas?.map((item: any) => (
+  //             <Stack
+  //               key={item.ID_Khuvuc}
+  //               direction="row"
+  //               alignItems="center"
+  //               sx={{
+  //                 p: (theme) => theme.spacing(1, 1, 1, 1),
 
-                }}
-              >
-                <ListItemText
-                  primary={item.Toanha}
-                  primaryTypographyProps={{
-                    typography: 'body2',
-                  }}
-                  secondaryTypographyProps={{
-                    component: 'span',
-                    color: 'text.disabled',
-                  }}
-                />
+  //               }}
+  //             >
+  //               <ListItemText
+  //                 primary={item.Toanha}
+  //                 primaryTypographyProps={{
+  //                   typography: 'body2',
+  //                 }}
+  //                 secondaryTypographyProps={{
+  //                   component: 'span',
+  //                   color: 'text.disabled',
+  //                 }}
+  //               />
 
-                <TableCell> {item.Sotang} tầng</TableCell>
-                <TableCell> {item.khuvucLength} Khu vực</TableCell>
-                <TableCell> {item.totalHangmucInToanha} Hạng mục</TableCell>
-                <TableCell width={300}> {item?.tenKhois?.join(", \n")}</TableCell>
-              </Stack>
-            ))}
-          </Stack>
-        </Collapse>
-      </TableCell>
-    </TableRow>
-  );
+  //               <TableCell> {item.Sotang} tầng</TableCell>
+  //               <TableCell> {item.khuvucLength} Khu vực</TableCell>
+  //               <TableCell> {item.totalHangmucInToanha} Hạng mục</TableCell>
+  //               <TableCell width={300}> {item?.tenKhois?.join(", \n")}</TableCell>
+  //             </Stack>
+  //           ))}
+  //         </Stack>
+  //       </Collapse>
+  //     </TableCell>
+  //   </TableRow>
+  // );
 
   return (
     <>
       {renderPrimary}
 
-      {renderSecondary}
+      {/* {renderSecondary} */}
 
       <CustomPopover
         open={popover.open}
@@ -155,15 +140,18 @@ export default function CalvTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
-          onClick={() => {
-            onViewRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:eye-bold" />
-          Xem
-        </MenuItem>
+        {
+          user.ID_Chucvu === 1 && <MenuItem
+            onClick={() => {
+              onViewRow();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="solar:eye-bold" />
+            Xem
+          </MenuItem>
+        }
+
         <MenuItem
           onClick={() => {
             onViewDuAnRow();
@@ -171,18 +159,22 @@ export default function CalvTableRow({
           }}
         >
           <Iconify icon="solar:eye-bold" />
-          Xem tổng quan
+          Xem dự án
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Xóa
-        </MenuItem>
+
+        {
+          user.ID_Chucvu === 1 && <MenuItem
+            onClick={() => {
+              confirm.onTrue();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:trash-bin-trash-bold" />
+            Xóa
+          </MenuItem>
+        }
+
       </CustomPopover>
 
       <ConfirmDialog

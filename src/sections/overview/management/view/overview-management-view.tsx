@@ -149,6 +149,17 @@ const top = [
   { value: '20', label: 'Top 20' },
 ];
 
+// interface ChartData {
+//   categories: string[];
+//   series: {
+//     year: string;
+//     data: {
+//       name: string;
+//       data: number[];
+//     }[];
+//   }[];
+// }
+
 export default function OverviewAnalyticsView() {
   const theme = useTheme();
 
@@ -204,6 +215,8 @@ export default function OverviewAnalyticsView() {
     setDataExternalIncidentChecklistPercentWeek,
   ] = useState<any>();
   const [dataReportPercentChecklist, setDataReportPercentChecklist] = useState<any>();
+
+  const [dataReportPercentWeekChecklist, setDataReportPercentWeekChecklist] = useState<ChartData | null | any>(null);
   const [openModal, setOpenModal] = useState(false);
   const [openModalSuCo, setOpenModalSuCo] = useState(false);
   const [selectedCode, setSelectedCode] = useState('');
@@ -394,6 +407,26 @@ export default function OverviewAnalyticsView() {
         .then((res) => {
           const dataRes = res.data.avgCompletionRatios;
           setDataReportPercentChecklist(dataRes);
+        })
+        .catch((err) => console.log('err', err));
+    };
+
+    handleDataPercent();
+  }, [accessToken]);
+
+  useEffect(() => {
+    const handleDataPercent = async () => {
+      await axios
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-a-week', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          const dataRes = res.data.data;
+          console.log('dataRes', dataRes)
+          setDataReportPercentWeekChecklist(dataRes);
         })
         .catch((err) => console.log('err', err));
     };
@@ -775,7 +808,7 @@ export default function OverviewAnalyticsView() {
               Báo cáo HSSE
             </Button>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               width: "100%",
               maxWidth: "600px",
@@ -785,7 +818,6 @@ export default function OverviewAnalyticsView() {
               gap: 2,
             }}
           >
-            {/* Hiển thị danh sách tin nhắn */}
             <List
               sx={{
                 maxHeight: "400px",
@@ -820,7 +852,6 @@ export default function OverviewAnalyticsView() {
               ))}
             </List>
 
-            {/* Nhập tin nhắn */}
             <Box sx={{ display: "flex", gap: 1 }}>
               <TextField
                 fullWidth
@@ -842,7 +873,7 @@ export default function OverviewAnalyticsView() {
                 Gửi
               </Button>
             </Box>
-          </Box>
+          </Box> */}
         </Grid>
 
         <Grid container spacing={3}>
@@ -899,6 +930,40 @@ export default function OverviewAnalyticsView() {
               }}
             />
           </Grid>
+
+          {/* <Grid container md={12} lg={12} spacing={2} sx={{ flexDirection: 'row' }}>
+            <Grid xs={4} md={2.4} sx={{ mb: 0 }}>
+              <PercentChecklistWidgetSummary
+                title="Khối kỹ thuật"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''}`}
+              />
+            </Grid>
+            <Grid xs={4} md={2.4} sx={{ mb: 0 }}>
+              <PercentChecklistWidgetSummary
+                title="Khối bảo vệ"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''}`}
+              />
+            </Grid>
+            <Grid xs={4} md={2.4} sx={{ mb: 0 }}>
+              <PercentChecklistWidgetSummary
+                title="Khối dịch vụ"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''}`}
+              />
+            </Grid>
+            <Grid xs={4} md={2.4} sx={{ mb: 0 }}>
+              <PercentChecklistWidgetSummary
+                title="Khối làm sạch"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''}`}
+              />
+            </Grid>
+            <Grid xs={4} md={2.4} sx={{ mb: 0 }}>
+              <PercentChecklistWidgetSummary
+                title="Khối F&B"
+                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối F&B'] : ''}`}
+              />
+            </Grid>
+          </Grid> */}
+
           <Grid xs={12} md={5}>
             <BankingExpensesCategories
               title="Số lượng dự án"
@@ -919,82 +984,20 @@ export default function OverviewAnalyticsView() {
               }}
             />
           </Grid>
-          {/* <Grid xs={12} md={7} lg={7}>
+          <Grid xs={12} md={7} lg={7}>
             <EcommerceYearlySales
-              title="Yearly Sales"
-              subheader="(+43%) than last year"
+              title="Tỉ lệ hoàn thành checklist"
+              subheader="7 ngày trước"
               chart={{
-                categories: [
-                  'Thứ 2',
-                  'Thứ 3',
-                  'Thứ 4',
-                  'Thứ 5',
-                  'Thứ 6',
-                  'Thứ 7',
-                  'Chủ nhật',
+                categories: dataReportPercentWeekChecklist?.categories,
+                series: dataReportPercentWeekChecklist?.series,
 
-                ],
-                series: [
-                  {
-                    year: '2024',
-                    data: [
-                      {
-                        name: 'Khối bảo vệ',
-                        data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 35, 51, 49],
-                      },
-                      {
-                        name: 'Khối làm sạch',
-                        data: [51, 35, 41, 10, 91, 69, 62, 148, 91, 69, 62, 49],
-                      },
-                      {
-                        name: 'Khối kỹ thuật',
-                        data: [56, 13, 34, 10, 77, 99, 88, 45, 77, 99, 88, 77],
-                      },
-                    ],
-                  },
-
-                ],
               }}
             />
-          </Grid> */}
-
-          <Grid container xs={12} md={7} sx={{ flexDirection: 'row', gap: 0 }} rowSpacing={0}>
-            <Grid xs={12} md={6} sx={{ mb: 0 }}>
-              <PercentChecklistWidgetSummary
-                title="Khối kỹ thuật"
-                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối kỹ thuật'] : ''
-                  }`}
-              />
-            </Grid>
-            <Grid xs={12} md={6} sx={{ mb: 0 }}>
-              <PercentChecklistWidgetSummary
-                title="Khối bảo vệ"
-                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối bảo vệ'] : ''
-                  }`}
-              />
-            </Grid>
-            <Grid xs={12} md={6} sx={{ mb: 0 }}>
-              <PercentChecklistWidgetSummary
-                title="Khối dịch vụ"
-                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối dịch vụ'] : ''
-                  }`}
-              />
-            </Grid>
-            <Grid xs={12} md={6} sx={{ mb: 0 }}>
-              <PercentChecklistWidgetSummary
-                title="Khối làm sạch"
-                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối làm sạch'] : ''
-                  }`}
-              />
-            </Grid>
-            <Grid xs={12} md={6} sx={{ mb: 0 }}>
-              <PercentChecklistWidgetSummary
-                title="Khối F&B"
-                total={`${dataReportPercentChecklist ? dataReportPercentChecklist['Khối F&B'] : ''
-                  }`}
-              />
-            </Grid>
           </Grid>
+
+
+
 
           <Grid xs={12} md={12} lg={12}>
             <ChecklistsHoanThanh

@@ -7,7 +7,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 // api
 import { useGetRoom } from 'src/api/product';
-import { useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail } from 'src/api/khuvuc'
+import {useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail} from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 

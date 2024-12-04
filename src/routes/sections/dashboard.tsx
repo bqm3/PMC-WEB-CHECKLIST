@@ -101,6 +101,12 @@ const ListEditEmployeePage = lazy(() => import('src/pages/dashboard/create-emplo
 const ListEditEmployeeError = lazy(() => import('src/pages/dashboard/create-employee/error'));
 const ListEditEmployeeResetPW = lazy(() => import('src/pages/dashboard/create-employee/reset-password'));
 
+
+const ListAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/list'));
+const ListEditAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/edit'));
+const ListEditAccountError = lazy(() => import('src/pages/dashboard/quanlytaikhoan/error'));
+const ListEditAccountResetPW = lazy(() => import('src/pages/dashboard/quanlytaikhoan/reset-password'));
+
 const EmployeeAccountPage = lazy(() => import('src/pages/dashboard/account/account'));
 
 // FICILITIES
@@ -354,16 +360,25 @@ export const dashboardRoutes = [
         children: [{ element: <EmployeeAccountPage />, index: true }],
       },
       {
-        path: 'create-user',
+        path: 'tai-khoan',
         children: [
           { element: <CreateEmployeePage />, index: true },
           { path: 'list', element: <ListEmployeePage /> },
           { path: ':id/edit', element: <ListEditEmployeePage /> },
-          { path: 'error', element: <ListEditEmployeeError /> },
-          { path: 'resetPassWord', element: <ListEditEmployeeResetPW /> },
+          // { path: 'error', element: <ListEditEmployeeError /> },
+          // { path: 'resetPassWord', element: <ListEditEmployeeResetPW /> },
         ],
       },
-
+      {
+        path: 'quan-ly-tai-khoan',
+        children: [
+          { element: <ListAccountPage />, index: true },
+          { path: 'list', element: <ListAccountPage /> },
+          { path: ':id/edit', element: <ListEditAccountPage /> },
+          { path: 'error', element: <ListEditAccountError /> },
+          { path: 'resetPassWord', element: <ListEditAccountResetPW /> },
+        ],
+      },
       {
         path: 'userMinimal',
         children: [

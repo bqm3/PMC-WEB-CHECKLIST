@@ -21,10 +21,8 @@ import Image from 'src/components/image';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetKhuVuc, useGetHangMuc, useGetKhoiCV } from 'src/api/khuvuc';
-// utils
-import { fTimestamp } from 'src/utils/format-time';
+import { _orders } from 'src/_mock';
+import { useGetHangMuc, useGetKhoiCV } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components

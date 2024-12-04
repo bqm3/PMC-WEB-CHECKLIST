@@ -23,7 +23,7 @@ type Props = {
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
-  dataFormatExcel: any;
+  // dataFormatExcel: any;
   headers: any;
 };
 
@@ -33,7 +33,7 @@ export default function OrderTableToolbar({
   //
   canReset,
   headers,
-  dataFormatExcel,
+  // dataFormatExcel,
   onResetFilters,
 }: Props) {
   const popover = usePopover();
@@ -129,7 +129,7 @@ export default function OrderTableToolbar({
         )}
       </Stack>
 
-      <CustomPopover
+      {/* <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
@@ -152,7 +152,7 @@ export default function OrderTableToolbar({
             Export
           </MenuItem>
         </CSVLink>
-      </CustomPopover>
+      </CustomPopover> */}
     </>
   );
 }

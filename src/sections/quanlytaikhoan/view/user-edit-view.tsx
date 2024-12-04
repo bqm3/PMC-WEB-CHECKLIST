@@ -7,12 +7,12 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 // api
 import { useGetRoom } from 'src/api/product';
-import { useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail } from 'src/api/khuvuc'
+import {useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail} from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 
 //
-import ResetPassForm from '../user-resetpass-form';
+import UserlistNewEditForm from '../user-new-edit-form';
 
 
 // ----------------------------------------------------------------------
@@ -21,25 +21,29 @@ type Props = {
   id: string;
 };
 
-export default function ResetPassView({ id }: Props) {
+export default function UserEditView({ id }: Props) {
   const settings = useSettingsContext();
+
+  const { user: currentUser } = useGetUserDetail(id);
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-        heading="Thiết Lập Lại Mật Khẩu"
+        heading="Cập nhật"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           {
-            name: 'Thiết lập lại mật khẩu',
+            name: 'Thông tin tài khoản',
             href: paths.dashboard.createUser.list,
           },
+          { name: currentUser?.UserName },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <ResetPassForm />
+      <UserlistNewEditForm currentUser={currentUser} />
     </Container>
   );
 }
