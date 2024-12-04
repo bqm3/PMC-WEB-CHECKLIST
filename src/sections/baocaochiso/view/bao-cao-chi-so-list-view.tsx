@@ -21,7 +21,7 @@ import Stack from '@mui/material/Stack';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { useGetLoaiChiSo, useGetLoaiChiSoByDuan, useGetSuCoNgoai } from 'src/api/khuvuc';
+import { useGetLoaiChiSo, useGetLoaiChiSoByDuan, useGetSuCoNgoai, useGetLoaiCS} from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
@@ -94,6 +94,14 @@ export default function BaoCaoListView() {
 
   const [tableData, setTableData] = useState<IHangMucChiSo[]>([]);
 
+  const {loaiCS} = useGetLoaiCS();
+
+  useEffect(()=>{
+    if(loaiCS.length >0){
+      setSelectedLoaiChiSo(loaiCS.map((item)=> item.ID_LoaiCS))
+    }
+  },[loaiCS])
+
   useEffect(() => {
     if (hmCS.length > 0) {
       setTableData(hmCS);
@@ -141,8 +149,8 @@ export default function BaoCaoListView() {
     const idsString = selectedLoaiChiSo.join(','); // Tạo chuỗi cách nhau bằng dấu phẩy
 
     await axios
-      .post(
-        'https://checklist.pmcweb.vn/be/api/v2/duan-loaics/create',
+      .put(
+        'https://checklist.pmcweb.vn/be/api/v2/duan-loaics/update',
         {
           ID_LoaiCS: idsString,
         },
@@ -320,6 +328,7 @@ export default function BaoCaoListView() {
         selectedLoaiChiSo={selectedLoaiChiSo}
         handleCheckLoaiChiSo={handleCheckLoaiChiSo}
         handleSubmit={handleSubmit}
+        loaichisoDuan = {loaiCS}
       />
     </>
   );
@@ -358,7 +367,11 @@ function ChiSoDialogAdd({
   selectedLoaiChiSo,
   handleSubmit,
   handleCheckLoaiChiSo,
+  loaichisoDuan
 }: any) {
+  // 3 (chưa check) 
+  // 2 ( đã check)
+  // setselectedLoaiChiSo (0)
   return (
     <Dialog open={open} fullWidth maxWidth="md" onClose={onClose}>
       <DialogTitle>Thêm mới</DialogTitle>

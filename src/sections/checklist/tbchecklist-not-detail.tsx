@@ -21,7 +21,7 @@ import { useGetKhoiCV } from 'src/api/khuvuc';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useTable, TableHeadCustom, TableNoData } from 'src/components/table';
+import { useTable, TableHeadCustom, TableNoData, getComparator } from 'src/components/table';
 // types
 import { TbChecklistCalv } from 'src/types/khuvuc';
 //
@@ -156,7 +156,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
               headLabel={TABLE_HEAD}
               rowCount={data?.length}
               numSelected={table.selected.length}
-              onSort={table.onSort}
+              // onSort={table.onSort}
             // onSelectAllRows={(checked) =>
             //   table.onSelectAllRows(checked, dataInPage?.map((row: any) => row.ID_Khuvuc))
             // }
