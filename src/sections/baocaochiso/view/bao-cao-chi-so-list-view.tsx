@@ -21,7 +21,7 @@ import Stack from '@mui/material/Stack';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { useGetLoaiChiSo, useGetLoaiChiSoByDuan, useGetSuCoNgoai, useGetLoaiCS} from 'src/api/khuvuc';
+import { useGetLoaiChiSo, useGetLoaiChiSoByDuan, useGetSuCoNgoai, useGetLoaiCS } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
@@ -94,13 +94,13 @@ export default function BaoCaoListView() {
 
   const [tableData, setTableData] = useState<IHangMucChiSo[]>([]);
 
-  const {loaiCS} = useGetLoaiCS();
+  const { loaiCS } = useGetLoaiCS();
 
-  useEffect(()=>{
-    if(loaiCS.length >0){
-      setSelectedLoaiChiSo(loaiCS.map((item)=> item.ID_LoaiCS))
+  useEffect(() => {
+    if (loaiCS.length > 0) {
+      setSelectedLoaiChiSo(loaiCS.map((item) => item.ID_LoaiCS))
     }
-  },[loaiCS])
+  }, [loaiCS])
 
   useEffect(() => {
     if (hmCS.length > 0) {
@@ -328,7 +328,7 @@ export default function BaoCaoListView() {
         selectedLoaiChiSo={selectedLoaiChiSo}
         handleCheckLoaiChiSo={handleCheckLoaiChiSo}
         handleSubmit={handleSubmit}
-        loaichisoDuan = {loaiCS}
+        loaichisoDuan={loaiCS}
       />
     </>
   );

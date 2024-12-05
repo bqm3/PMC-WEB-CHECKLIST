@@ -139,6 +139,16 @@ const nhoms = [
   { value: '6', label: 'Nhóm D: Nhà ở - Thực thanh thực chi' },
 ];
 
+const chiNhanhs = [
+  { value: 'all', label: 'Tất cả' },
+  { value: '1', label: 'Hà Nội' },
+  { value: '2', label: 'Quảng Ninh - Hải Phòng' },
+  { value: '3', label: 'Đà Nẵng' },
+  { value: '4', label: 'HCM - HO' },
+  { value: '5', label: 'HCM - Thủ Đức' },
+  { value: '6', label: 'HCM - Nam Sài Gòn' },
+];
+
 const tangGiam = [
   { value: 'desc', label: 'Giảm' },
   { value: 'asc', label: 'Tăng' },
@@ -193,6 +203,7 @@ export default function OverviewAnalyticsView() {
   const [selectedMonthSuco, setSelectedMonthSuco] = useState(`all`);
   const [selectedKhoiCVSuco, setSelectedKhoiCVSuco] = useState('all');
   const [selectedNhomSuco, setSelectedNhomSuco] = useState('all');
+  const [selectedChinhanh, setSelectedChinhanh] = useState('all');
   const [selectedTangGiamSuco, setSelectedTangGiamSuco] = useState('desc');
   const [selectedTopSuco, setSelectedTopSuco] = useState('10');
 
@@ -565,7 +576,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}&chinhanh=${selectedChinhanh}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -580,7 +591,7 @@ export default function OverviewAnalyticsView() {
     };
 
     handleTangGiam();
-  }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedTangGiamSuCoNgoai]);
+  }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedChinhanh]);
 
   const handleLinkHSSE = () => {
     const url =
@@ -1068,11 +1079,14 @@ export default function OverviewAnalyticsView() {
               selectedYear={selectedYearSuCoNgoai}
               selectedKhoiCV={selectedKhoiCVSuCoNgoai}
               selectedTangGiam={selectedTangGiamSuCoNgoai}
+              selectedChiNhanh={selectedChinhanh}
               onYearChange={setSelectedYearSuCoNgoai}
               onTangGiamChange={setSelectedTangGiamSuCoNgoai}
               onKhoiChange={setSelectedKhoiCVSuCoNgoai}
+              onChinhanhChange={setSelectedChinhanh}
               STATUS_OPTIONS={STATUS_OPTIONS}
               tangGiam={tangGiam}
+              chiNhanhs={chiNhanhs}
               handleOpenModal={handleOpenModal}
               handleCloseModal={handleCloseModal}
             />

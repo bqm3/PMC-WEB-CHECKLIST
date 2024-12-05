@@ -441,9 +441,9 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                   rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  //   onSelectAllRows={(checked) =>
-                  //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
-                  //   }
+                //   onSelectAllRows={(checked) =>
+                //     table.onSelectAllRows(checked, tableData?.map((row) => row.ID_Checklist))
+                //   }
                 />
 
                 <TableBody>
@@ -650,7 +650,7 @@ function applyFilter({
           .toLowerCase()
           .indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.ent_checklist.ent_tang.Tentang}`.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1 ||
+        -1 ||
         `${checklist.Gioht}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         `${checklist.Ghichu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );

@@ -19,7 +19,7 @@ interface Props extends CardProps {
   chart: {
     categories: string[];
     colors?: string[];
-    series:any;
+    series: any;
     options?: ApexOptions;
   };
   selectedYear: string;
@@ -28,10 +28,13 @@ interface Props extends CardProps {
   onYearChange: (year: string) => void;
   onKhoiChange: (khoi: string) => void;
   onTangGiamChange: (tg: string) => void;
+  onChinhanhChange: (cn: string) => void;
   STATUS_OPTIONS: any;
   tangGiam: any,
-  handleOpenModal: (name: string,key: string ) => void;
+  handleOpenModal: (name: string, key: string) => void;
   handleCloseModal: () => void;
+  chiNhanhs: any;
+  selectedChiNhanh: string;
 }
 
 export default function ChecklistYearStatistics({
@@ -44,16 +47,19 @@ export default function ChecklistYearStatistics({
   onYearChange,
   onKhoiChange,
   onTangGiamChange,
+  onChinhanhChange,
   STATUS_OPTIONS,
   tangGiam,
   handleOpenModal,
   handleCloseModal,
+  selectedChiNhanh,
+  chiNhanhs,
   ...other
 }: Props) {
   const { categories, colors, series, options } = chart;
 
   const yearPopover = usePopover();
-  const khoiPopover = usePopover();
+  const chinhanhPopover = usePopover();
   const tangGiamPopover = usePopover();
 
   const handleChartClick = (
@@ -65,7 +71,7 @@ export default function ChecklistYearStatistics({
       const projectName = categories[dataPointIndex];
       handleOpenModal(projectName, "su-co-ngoai");
     }
-    
+
   };
 
   const chartOptions = useChart({
@@ -107,7 +113,7 @@ export default function ChecklistYearStatistics({
         formatter: (val: any) => `${val}`,
       },
     },
-   
+
   });
 
   const handleChangeSeries = useCallback(
@@ -118,21 +124,15 @@ export default function ChecklistYearStatistics({
     [onYearChange, yearPopover]
   );
 
-  const handleChangeKhoi = useCallback(
+  const handleChangeChinhanh = useCallback(
     (newValue: string) => {
-      khoiPopover.onClose(); // Close the KhoiCV popover
-      onKhoiChange(newValue);
+      chinhanhPopover.onClose(); // Close the KhoiCV popover
+      onChinhanhChange(newValue);
     },
-    [khoiPopover, onKhoiChange]
+    [chinhanhPopover, onChinhanhChange]
   );
 
-  const handleChangeTangGiam = useCallback(
-    (newValue: string) => {
-      tangGiamPopover.onClose(); // Close the KhoiCV popover
-      onTangGiamChange(newValue);
-    },
-    [tangGiamPopover, onTangGiamChange]
-  );
+
 
   return (
     <>
@@ -160,7 +160,26 @@ export default function ChecklistYearStatistics({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
-            
+              <ButtonBase
+                onClick={chinhanhPopover.onOpen} // Open the KhoiCV popover
+                sx={{
+                  pl: 1,
+                  py: 0.5,
+                  pr: 0.5,
+                  borderRadius: 1,
+                  typography: 'subtitle2',
+                  bgcolor: 'background.neutral',
+                }}
+              >
+                {chiNhanhs.find((option: any) => option.value === selectedChiNhanh)?.label}
+                <Iconify
+                  width={16}
+                  icon={
+                    chinhanhPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                  }
+                  sx={{ ml: 0.5 }}
+                />
+              </ButtonBase>
             </Box>
           }
         />
@@ -180,6 +199,17 @@ export default function ChecklistYearStatistics({
         {series.map((item: any) => (
           <MenuItem key={item.name} selected={selectedYear === item.name} onClick={() => handleChangeSeries(item.name)}>
             {item.name}
+          </MenuItem>
+        ))}
+      </CustomPopover>
+
+      <CustomPopover open={chinhanhPopover.open} onClose={chinhanhPopover.onClose}>
+        {chiNhanhs?.map((item: any) => (
+          <MenuItem
+            selected={item.value === selectedChiNhanh}
+            onClick={() => handleChangeChinhanh(item.value)}
+          >
+            {item.label}
           </MenuItem>
         ))}
       </CustomPopover>

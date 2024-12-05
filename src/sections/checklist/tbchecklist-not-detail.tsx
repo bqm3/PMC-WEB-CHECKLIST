@@ -156,7 +156,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
               headLabel={TABLE_HEAD}
               rowCount={data?.length}
               numSelected={table.selected.length}
-              // onSort={table.onSort}
+            // onSort={table.onSort}
             // onSelectAllRows={(checked) =>
             //   table.onSelectAllRows(checked, dataInPage?.map((row: any) => row.ID_Khuvuc))
             // }

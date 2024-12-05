@@ -101,7 +101,7 @@ const ListEditEmployeePage = lazy(() => import('src/pages/dashboard/create-emplo
 const ListEditEmployeeError = lazy(() => import('src/pages/dashboard/create-employee/error'));
 const ListEditEmployeeResetPW = lazy(() => import('src/pages/dashboard/create-employee/reset-password'));
 
-
+const CreateAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/new'));
 const ListAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/list'));
 const ListEditAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/edit'));
 const ListEditAccountError = lazy(() => import('src/pages/dashboard/quanlytaikhoan/error'));
@@ -372,7 +372,7 @@ export const dashboardRoutes = [
       {
         path: 'quan-ly-tai-khoan',
         children: [
-          { element: <ListAccountPage />, index: true },
+          { element: <CreateAccountPage />, index: true },
           { path: 'list', element: <ListAccountPage /> },
           { path: ':id/edit', element: <ListEditAccountPage /> },
           { path: 'error', element: <ListEditAccountError /> },
