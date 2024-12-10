@@ -301,7 +301,7 @@ export default function OverviewAnalyticsView() {
       });
 
       // Thêm phản hồi của bot vào danh sách
-      const botReply = response.data.reply;
+      const botReply = response.data.answer;
       setMessages((prev: any) => [...prev, { role: 'assistant', content: botReply }]);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -310,7 +310,7 @@ export default function OverviewAnalyticsView() {
       setLoading(false);
     }
   };
-  const isCodeBlock = (content: any) => content.startsWith('```') && content.endsWith('```');
+  const isCodeBlock = (content: any) => content?.startsWith('```') && content?.endsWith('```');
 
   const renderMessageContent = (message: any) => {
     if (isCodeBlock(message.content)) {
@@ -320,7 +320,6 @@ export default function OverviewAnalyticsView() {
         <Box
           sx={{
             fontFamily: "monospace",
-            // backgroundColor: "#f4f4f4",
             color: "#333",
             border: "1px solid #ddd",
             borderRadius: "4px",
@@ -333,8 +332,6 @@ export default function OverviewAnalyticsView() {
         </Box>
       );
     }
-
-    // Nếu là nội dung HTML (từ GPT trả về), hiển thị như một webview
     return (
       <Box
         sx={{
