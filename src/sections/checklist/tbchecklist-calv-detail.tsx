@@ -621,8 +621,6 @@ function applyFilter({
   filtersTrangthai: any;
 }) {
   const { status, name } = filters;
-  console.log('filters', filters)
-
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 
   stabilizedThis.sort((a, b) => {

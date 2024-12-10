@@ -110,8 +110,6 @@ export default function AreaNewEditForm({ currentTang }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
-
       axios
         .post(`https://checklist.pmcweb.vn/be/api/v2/ent_tang/create`, data, {
           headers: {

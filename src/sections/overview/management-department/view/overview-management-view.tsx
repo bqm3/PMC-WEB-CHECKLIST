@@ -162,12 +162,9 @@ export default function OverviewAnalyticsView() {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const [dataDuan, setDataDuan] = useState<any>([]);
   const [dataPercent, setDataPercent] = useState<any>([]);
 
   const [showMax, setShowMax] = useState<any>('6');
-
-  const [dataTotalErrorWeek, setDataTotalErrorWeek] = useState<any>([]);
   const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
   const [selectedYear, setSelectedYear] = useState('2024');
   const [selectedMonth, setSelectedMonth] = useState(`all`);
@@ -270,23 +267,6 @@ export default function OverviewAnalyticsView() {
     [khoiCV]
   );
 
-  useEffect(() => {
-    const handleDataDuan = async () => {
-      await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/ent_duan/du-an-theo-nhom', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((res) => {
-          setDataDuan(res.data.data);
-        })
-        .catch((err) => console.log('err', err));
-    };
-
-    handleDataDuan();
-  }, [accessToken]);
 
   useEffect(() => {
     const handleDataPercent = async () => {
@@ -347,24 +327,6 @@ export default function OverviewAnalyticsView() {
     };
 
     handleDataPercent();
-  }, [accessToken]);
-
-  useEffect(() => {
-    const handleTotalKhuvuc = async () => {
-      await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-list-checklist-error', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((res) => {
-          setDataTotalErrorWeek(res.data.data);
-        })
-        .catch((err) => console.log('err', err));
-    };
-
-    handleTotalKhuvuc();
   }, [accessToken]);
 
   useEffect(() => {
@@ -776,7 +738,7 @@ export default function OverviewAnalyticsView() {
 
           </Grid> */}
           <Grid xs={12} md={12} lg={12}>
-            <Box sx={{ maxHeight: 450, width: '100%', my: 2 }}>
+            <Box sx={{ maxHeight: 450, width: '100%', my: 2, overflowY: 'hidden' }}>
               <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
                 Tỉ lệ hoàn thành checklist hôm qua
               </Typography>
@@ -786,6 +748,9 @@ export default function OverviewAnalyticsView() {
                 sx={{
                   maxHeight: 450,
                   overflowY: 'auto',
+                  '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
+                  '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
+                  'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
                 }}
                 disableRowSelectionOnClick
               />

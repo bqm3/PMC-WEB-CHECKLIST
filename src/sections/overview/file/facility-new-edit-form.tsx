@@ -53,8 +53,6 @@ export default function PacilityNewEditForm({ currentFacilities }: Props) {
 
   const preview = useBoolean();
 
-  console.log('currentFacilities', currentFacilities)
-
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     name: Yup.string().required('Title is required'),

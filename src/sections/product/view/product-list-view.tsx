@@ -155,8 +155,6 @@ export default function ProductListView() {
     setFilters(defaultFilters);
   }, []);
 
-  console.log('tableData',tableData)
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>

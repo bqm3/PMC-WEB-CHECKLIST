@@ -241,7 +241,6 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
             enqueueSnackbar('Tạo mới thành công!');
           })
           .catch((error) => {
-            console.log('error.response', error.response);
             if (error.response) {
               enqueueSnackbar({
                 variant: 'error',

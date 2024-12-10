@@ -151,8 +151,6 @@ export default function TourNewEditForm({ currentTour }: Props) {
     setValue('images', []);
   }, [setValue]);
 
-  console.log('TOUR_SERVICE_OPTIONS', currentTour?.services, TOUR_SERVICE_OPTIONS)
-
   const renderDetails = (
     <>
       {mdUp && (

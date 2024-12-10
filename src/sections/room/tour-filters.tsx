@@ -75,8 +75,6 @@ export default function TourFilters({
   );
 
 
-  console.log('filters.labels', filters.labels)
-
   const renderHead = (
     <Stack
       direction="row"

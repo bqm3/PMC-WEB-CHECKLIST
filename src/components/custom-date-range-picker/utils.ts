@@ -18,12 +18,6 @@ export function shortDateLabel(startDate: Date | null, endDate: Date | null) {
   const sameMonth =
     startDate && endDate ? isSameMonth(new Date(startDate), new Date(endDate)) : false;
 
-    console.log('currentYear',currentYear)
-    console.log('sameMonth',sameMonth)
-    console.log('sameDay',sameDay)
-    console.log('endDate',endDate)
-    console.log('startDate',startDate)
-
   if (currentYear) {
     if (sameMonth) {
       if (sameDay) {

@@ -336,8 +336,6 @@ export default function AreaListView() {
     }
   };
 
-  console.log('dataSelect?.MaQrCode', dataSelect?.MaQrCode)
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>

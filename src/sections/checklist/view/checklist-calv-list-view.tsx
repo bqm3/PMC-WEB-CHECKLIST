@@ -292,7 +292,6 @@ export default function ChecklistCalvListView() {
       // Remove the link from the document
       document.body.removeChild(link);
 
-      console.log('Excel file downloaded successfully.');
     } catch (error) {
       console.error('Error downloading the Excel file', error);
     }

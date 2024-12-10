@@ -69,7 +69,6 @@ export default function AccountChangePassword() {
           enqueueSnackbar('Đổi mật khẩu thành công!');
         })
         .catch((error) => {
-          console.log('error.response', error.response);
           if (error.response) {
             enqueueSnackbar({
               variant: 'error',

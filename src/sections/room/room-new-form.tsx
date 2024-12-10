@@ -145,7 +145,6 @@ export default function RoomNewEditForm({ currentRoom }: PropRoom) {
   }, [currentRoom, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data.image', data)
     const formData = new FormData();
 
     formData.append('name', data.name);

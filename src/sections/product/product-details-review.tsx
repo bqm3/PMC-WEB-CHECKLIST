@@ -41,7 +41,6 @@ export default function ProductDetailsReview({
   const review = useBoolean();
 
   const total = sumBy(ratings, (star) => star.starCount);
-  console.log('ratings', ratings)
 
   const renderSummary = (
     <Stack spacing={1} alignItems="center" justifyContent="center">

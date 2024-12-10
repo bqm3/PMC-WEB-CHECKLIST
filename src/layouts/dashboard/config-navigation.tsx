@@ -317,7 +317,7 @@ export function useNavData() {
       navigationData[0].items = [];  // Hoặc loại bỏ các mục không mong muốn
     }
 
-    if (user?.ent_chucvu?.Role === 1 && user?.arr_Duan !== null) {
+    if (user?.ent_chucvu?.Role === 1 && user?.arr_Duan !== null && user?.arr_Duan !== "") {
       navigationData[1].items.unshift(
         {
           title: t('project'),

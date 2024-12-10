@@ -27,8 +27,6 @@ export default function OrderBookingEditAddress() {
 
   const values = watch();
 
-  console.log('values', values)
-
   return (
     <>
       <Stack

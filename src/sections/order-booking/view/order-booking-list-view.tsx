@@ -222,7 +222,6 @@ export default function OrderBookingListView() {
     [handleFilters]
   );
 
-  console.log('filters', filters)
   // useEffect(() => {
   //   if (!filters.status) {
   //     // Nếu filters.status chưa được đặt, chọn giá trị mặc định là 0

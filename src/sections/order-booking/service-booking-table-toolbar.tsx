@@ -57,8 +57,6 @@ export default function OrderBookingTableToolbar({
     [onFilters]
   );
 
-  console.log('filters.customer', filters.customer)
-
   return (
     <>
       <Stack

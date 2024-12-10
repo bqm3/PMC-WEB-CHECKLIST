@@ -35,9 +35,6 @@ export default function OverviewEcommerceView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
-
-  console.log('_ecommerceSalesOverview',_ecommerceSalesOverview)
-
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>

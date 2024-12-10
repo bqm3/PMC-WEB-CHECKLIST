@@ -237,6 +237,7 @@ export default function OverviewAnalyticsView() {
   const [loadingReport, setLoadingReport] = useState<any>();
   const [openDataChecklistMonth, setOpenDataChecklistMonth] = useState<any>(false);
   const [openDataChecklistLocation, setOpenDataChecklistLocation] = useState<any>(false);
+  const [openModalAI, setOpenModalAI] = useState(false);
   const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
     month: null,
     year: null,
@@ -246,6 +247,17 @@ export default function OverviewAnalyticsView() {
   const [messages, setMessages] = useState<any>([]); // Danh sách tin nhắn
   const [inputMessage, setInputMessage] = useState(""); // Tin nhắn người dùng nhập
   const [loading, setLoading] = useState(false); // Trạng thái đang gửi API
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+  const handleCloseModalSuCo = () => {
+    setOpenModalSuCo(false);
+  };
+
+  const handleCloseModalAI = () => {
+    setOpenModalAI(false);
+  };
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -261,7 +273,7 @@ export default function OverviewAnalyticsView() {
       });
 
       // Thêm phản hồi của bot vào danh sách
-      const botReply = response.data.reply;
+      const botReply = response.data.answer;
       setMessages((prev: any) => [...prev, { role: "assistant", content: botReply }]);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -270,7 +282,7 @@ export default function OverviewAnalyticsView() {
       setLoading(false);
     }
   };
-  const isCodeBlock = (content: any) => content.startsWith("```") && content.endsWith("```");
+  const isCodeBlock = (content: any) => content?.startsWith("```") && content?.endsWith("```");
 
   const renderMessageContent = (message: any) => {
     if (isCodeBlock(message.content)) {
@@ -280,7 +292,7 @@ export default function OverviewAnalyticsView() {
         <Box
           sx={{
             fontFamily: "monospace",
-            backgroundColor: "#f4f4f4",
+            // backgroundColor: "#f4f4f4",
             color: "#333",
             border: "1px solid #ddd",
             borderRadius: "4px",
@@ -293,9 +305,23 @@ export default function OverviewAnalyticsView() {
         </Box>
       );
     }
-    // Trả về nội dung bình thường nếu không phải code block
-    return <Typography>{message.content}</Typography>;
+
+    // Nếu là nội dung HTML (từ GPT trả về), hiển thị như một webview
+    return (
+      <Box
+        sx={{
+          fontFamily: "Arial, sans-serif",
+          padding: "16px",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+          maxWidth: "100%",
+          overflowWrap: "break-word",
+        }}
+        dangerouslySetInnerHTML={{ __html: message.content }}
+      />
+    );
   };
+
 
   const handleOpenModal = async (name: string, key: string) => {
     setSelectedCode(name);
@@ -309,12 +335,7 @@ export default function OverviewAnalyticsView() {
       })
       .catch((error) => console.log('error'));
   };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-  const handleCloseModalSuCo = () => {
-    setOpenModalSuCo(false);
-  };
+
 
   const handleOpenModalSuCo = async (name: string, key: string) => {
     setSelectedCodeSuCo(name);
@@ -360,7 +381,6 @@ export default function OverviewAnalyticsView() {
         })
         .catch((err) => {
           setIsLoading(false);
-          console.log('err', err);
         });
     };
 
@@ -436,7 +456,6 @@ export default function OverviewAnalyticsView() {
         })
         .then((res) => {
           const dataRes = res.data.data;
-          console.log('dataRes', dataRes)
           setDataReportPercentWeekChecklist(dataRes);
         })
         .catch((err) => console.log('err', err));
@@ -672,6 +691,10 @@ export default function OverviewAnalyticsView() {
     setOpenDataChecklistLocation(true);
   };
 
+  const handleOpenChecklistAI = () => {
+    setOpenModalAI(true);
+  };
+
   const handleCloseChecklistLocation = () => {
     setOpenDataChecklistLocation(false);
   };
@@ -800,6 +823,10 @@ export default function OverviewAnalyticsView() {
           <Box display="flex" gap={2} alignItems="center">
             {user?.ent_chucvu?.Role === 10 && (
               <>
+                <Button variant="contained" color="warning" onClick={handleOpenChecklistAI}>
+                  Ask PMC AI
+                </Button>
+
                 <Button variant="contained" color="info" onClick={handleOpenChecklistLocation}>
                   Báo cáo vị trí
                 </Button>
@@ -819,72 +846,7 @@ export default function OverviewAnalyticsView() {
               Báo cáo HSSE
             </Button>
           </Box>
-          {/* <Box
-            sx={{
-              width: "100%",
-              maxWidth: "600px",
-              margin: "0 auto",
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            <List
-              sx={{
-                maxHeight: "400px",
-                overflowY: "auto",
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: 2,
-              }}
-            >
-              {messages.map((message: any, index: number) => (
-                <ListItem
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    justifyContent: message.role === "user" ? "flex-end" : "flex-start",
-                    textAlign: message.role === "user" ? "right" : "left",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      padding: "8px 12px",
-                      borderRadius: "12px",
-                      backgroundColor: message.role === "user" ? "#1976d2" : "#e0e0e0",
-                      color: message.role === "user" ? "#fff" : "#000",
-                      maxWidth: "70%",
-                      overflowWrap: "break-word",
-                    }}
-                  >
-                    {renderMessageContent(message)}
-                  </Box>
-                </ListItem>
-              ))}
-            </List>
 
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Nhập tin nhắn..."
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !loading) handleSendMessage();
-                }}
-                disabled={loading}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSendMessage}
-                disabled={loading || !inputMessage.trim()}
-              >
-                Gửi
-              </Button>
-            </Box>
-          </Box> */}
         </Grid>
 
         <Grid container spacing={3}>
@@ -1110,48 +1072,7 @@ export default function OverviewAnalyticsView() {
               />
             </Box>
           </Grid>
-          {/* <Grid xs={12} md={12} lg={12}>
-            <div>
-              {Object.keys(dataDuan)
-                .sort((a, b) => b.localeCompare(a))
-                .map((groupName) => (
-                  <Accordion key={groupName}>
-                    <AccordionSummary
-                      expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}
-                      aria-controls={`${groupName}-content`}
-                      id={`${groupName}-header`}
-                      sx={{ fontWeight: '700' }}
-                    >
-                      {groupName}
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <AnaLyticsDuan
-                        title={`Thông tin các dự án thuộc ${groupName}`}
-                        list={dataDuan[groupName]}
-                      />
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-            </div>
-          </Grid>
 
-          <Grid xs={12} md={12} lg={12}>
-            {dataTotalErrorWeek && (
-              <BankingRecentTransitions
-                title="Sự cố ngày hôm trước"
-                tableData={dataTotalErrorWeek}
-                handleViewRow={handleClickOpen}
-                tableLabels={[
-                  { id: 'checklistName', label: 'Tên checklist' },
-                  { id: 'Ngay', label: 'Ngày' },
-                  { id: 'note', label: 'Ghi chú' },
-                  { id: 'image', label: 'Ảnh' },
-                  { id: 'duan', label: 'Dự án' },
-                  { id: '' },
-                ]}
-              />
-            )}
-          </Grid> */}
         </Grid>
       </Container>
 
@@ -1190,6 +1111,90 @@ export default function OverviewAnalyticsView() {
         <DialogActions>
           <Button onClick={handleCloseModalSuCo}>Close</Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog open={openModalAI} onClose={handleCloseModalAI} fullWidth maxWidth="lg">
+        <DialogTitle>Tra cứu nhanh</DialogTitle>
+        <DialogContent>
+          {/* {dataTableSuCo && dataTableSuCo?.length > 0 && openModalAI === true && (
+            <SuCoListView data={dataTableSuCo} />
+          )} */}
+
+          <Box
+            sx={{
+              width: "100%",
+              maxWidth: "700px",
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              height: '500px',
+              marginBottom: 10
+            }}
+          >
+            <List
+              sx={{
+                maxHeight: "500px",
+                overflowY: "auto",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: 2,
+                '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
+                '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
+                'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
+              }}
+            >
+              {messages.map((message: any, index: number) => (
+                <ListItem
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    justifyContent: message.role === "user" ? "flex-end" : "flex-start",
+                    textAlign: message.role === "user" ? "right" : "left",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      padding: "8px 12px",
+                      borderRadius: "12px",
+                      backgroundColor: message.role === "user" ? "#1976d2" : "#e0e0e0",
+                      color: message.role === "user" ? "#fff" : "#000",
+                      maxWidth: "70%",
+                      overflowWrap: "break-word",
+                    }}
+                  >
+                    {renderMessageContent(message)}
+                  </Box>
+                </ListItem>
+              ))}
+            </List>
+
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Nhập tin nhắn..."
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !loading) handleSendMessage();
+                }}
+                disabled={loading}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSendMessage}
+                disabled={loading || !inputMessage.trim()}
+              >
+                Gửi
+              </Button>
+            </Box>
+          </Box>
+        </DialogContent>
+        {/* <DialogActions>
+          <Button onClick={handleCloseModalAI}>Close</Button>
+        </DialogActions> */}
       </Dialog>
 
       <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="lg">

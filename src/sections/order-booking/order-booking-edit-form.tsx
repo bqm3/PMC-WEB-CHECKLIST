@@ -109,7 +109,6 @@ export default function OrderBookingEditForm({ order, order_detail }: Props) {
   });
 
   const handleCreateAndSend = handleSubmit(async (data) => {
-    console.log('data', data)
     loadingSend.onTrue();
 
     try {

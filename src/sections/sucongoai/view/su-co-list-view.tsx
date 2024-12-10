@@ -289,10 +289,6 @@ export default function SuCoListView() {
     { label: 'Mã khu vực', key: 'Makhuvuc' },
     { label: 'Khối công việc', key: 'KhoiCV' },
   ];
-
-  const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
-
-  console.log('dataSelect?.Tinhtrangxuly', tinhTrangXuLy)
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
