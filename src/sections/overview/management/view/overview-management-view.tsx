@@ -9,7 +9,16 @@ import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Box, CircularProgress, Divider, TextField, List, ListItem, } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  TextField,
+  List,
+  ListItem,
+  Checkbox,
+  Chip,
+} from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -17,6 +26,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Autocomplete from '@mui/material/Autocomplete';
 // utils
 import { getImageUrls } from 'src/utils/get-image';
 // hooks
@@ -28,7 +38,7 @@ import { ISucongoai } from 'src/types/khuvuc';
 import axios from 'axios';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import Spreadsheet from 'react-spreadsheet';
-import { useGetKhoiCV } from 'src/api/khuvuc';
+import { useGetKhoiCV, useGetDuanWeb } from 'src/api/khuvuc';
 //
 import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import EcommerceYearlySales from '../ecommerce-yearly-sales';
@@ -39,7 +49,6 @@ import SuCoNgoaiListView from '../sucongoai/su-co-ngoai-list-view';
 import SuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import BankingExpensesCategories from '../banking-expenses-categories';
-
 
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
@@ -227,7 +236,9 @@ export default function OverviewAnalyticsView() {
   ] = useState<any>();
   const [dataReportPercentChecklist, setDataReportPercentChecklist] = useState<any>();
 
-  const [dataReportPercentWeekChecklist, setDataReportPercentWeekChecklist] = useState<ChartData | null | any>(null);
+  const [dataReportPercentWeekChecklist, setDataReportPercentWeekChecklist] = useState<
+    ChartData | null | any
+  >(null);
   const [openModal, setOpenModal] = useState(false);
   const [openModalSuCo, setOpenModalSuCo] = useState(false);
   const [selectedCode, setSelectedCode] = useState('');
@@ -245,7 +256,7 @@ export default function OverviewAnalyticsView() {
 
   const [spreadsheetData, setSpreadsheetData] = useState<any>([]);
   const [messages, setMessages] = useState<any>([]); // Danh sách tin nhắn
-  const [inputMessage, setInputMessage] = useState(""); // Tin nhắn người dùng nhập
+  const [inputMessage, setInputMessage] = useState(''); // Tin nhắn người dùng nhập
   const [loading, setLoading] = useState(false); // Trạng thái đang gửi API
 
   const handleCloseModal = () => {
@@ -259,11 +270,28 @@ export default function OverviewAnalyticsView() {
     setOpenModalAI(false);
   };
 
+  const { duan } = useGetDuanWeb();
+
+  const options = [{ ID_Duan: '-1', Duan: 'Tất cả' }, ...duan.filter((item) => `${item.ID_Duan}` !== `1`)];
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(['-1']);
+
+  const handleOnChange = (event: any, newValue: any) => {
+    if (newValue.some((option: any) => option.ID_Duan === '-1')) {
+      // Nếu "Tất cả" được chọn
+      if (selectedOptions.includes('-1')) {
+        setSelectedOptions([]);
+      } else {
+        setSelectedOptions(['-1']);
+      }
+    } else {
+      setSelectedOptions(newValue.map((option: any) => option.ID_Duan));
+    }
+  };
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
     // Thêm tin nhắn người dùng vào danh sách
-    setMessages((prev: any) => [...prev, { role: "user", content: inputMessage }]);
+    setMessages((prev: any) => [...prev, { role: 'user', content: inputMessage }]);
     setLoading(true);
 
     try {
@@ -273,16 +301,16 @@ export default function OverviewAnalyticsView() {
       });
 
       // Thêm phản hồi của bot vào danh sách
-      const botReply = response.data.answer;
-      setMessages((prev: any) => [...prev, { role: "assistant", content: botReply }]);
+      const botReply = response.data.reply;
+      setMessages((prev: any) => [...prev, { role: 'assistant', content: botReply }]);
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error('Error sending message:', error);
     } finally {
-      setInputMessage("");
+      setInputMessage('');
       setLoading(false);
     }
   };
-  const isCodeBlock = (content: any) => content?.startsWith("```") && content?.endsWith("```");
+  const isCodeBlock = (content: any) => content.startsWith('```') && content.endsWith('```');
 
   const renderMessageContent = (message: any) => {
     if (isCodeBlock(message.content)) {
@@ -645,23 +673,18 @@ export default function OverviewAnalyticsView() {
       // Create a link element
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute(
-        'download',
-        `Bao_cao_checklist_du_an.xlsx`
-      ); // Set the file name
+      link.setAttribute('download', `Bao_cao_checklist_du_an.xlsx`); // Set the file name
 
       // Trigger the download by clicking the link
       link.click();
 
       // Optional: Revoke the object URL after download
       window.URL.revokeObjectURL(url);
-
     } catch (error) {
       console.error('Error fetching Excel data:', error);
       setShowModal(false);
     }
   };
-
 
   const fetchExcelData = async () => {
     try {
@@ -770,7 +793,7 @@ export default function OverviewAnalyticsView() {
       setLoadingReport(true);
       const response = await axios.post(
         `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-location-times?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
-        null, // Use null as the second parameter because POST requests without a body can pass null
+        { duan: selectedOptions }, // Use null as the second parameter because POST requests without a body can pass null
         { responseType: 'blob' } // Important to specify responseType as blob
       );
 
@@ -964,13 +987,9 @@ export default function OverviewAnalyticsView() {
               chart={{
                 categories: dataReportPercentWeekChecklist?.categories,
                 series: dataReportPercentWeekChecklist?.series,
-
               }}
             />
           </Grid>
-
-
-
 
           <Grid xs={12} md={12} lg={12}>
             <ChecklistsHoanThanh
@@ -1092,7 +1111,11 @@ export default function OverviewAnalyticsView() {
         </DialogContent>
 
         <DialogActions>
-          <Button color="success" variant="contained" onClick={() => handleDownload(spreadsheetData)}>
+          <Button
+            color="success"
+            variant="contained"
+            onClick={() => handleDownload(spreadsheetData)}
+          >
             Download
           </Button>
           <Button color="inherit" variant="contained" onClick={() => setShowModal(false)}>
@@ -1299,6 +1322,47 @@ export default function OverviewAnalyticsView() {
               views={['year']}
               value={dataChecklistMonth.year ? new Date(dataChecklistMonth.year, 0) : null}
               onChange={handleYearChange}
+            />
+            <Autocomplete
+              multiple
+              id="checkbox-autocomplete-with-ids"
+              fullWidth
+              disableCloseOnSelect
+              limitTags={2}
+              options={options}
+              getOptionLabel={(option) => option.Duan}
+              value={options.filter((option) => selectedOptions.includes(option.ID_Duan))}
+              onChange={handleOnChange}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox style={{ marginRight: 8 }} checked={selected} />
+                  {option.Duan}
+                </li>
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    // key={index}
+                    label={option.Duan}
+                    {...getTagProps({ index })}
+                    sx={{
+                      border: 'none',
+                      backgroundColor: 'transparent',
+                      color: 'inherit',
+                    }}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Dự án"
+                  InputProps={{
+                    ...params.InputProps,
+                    type: 'search',
+                  }}
+                />
+              )}
             />
           </Box>
         </DialogContent>

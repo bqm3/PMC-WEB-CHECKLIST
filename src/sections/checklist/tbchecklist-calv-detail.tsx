@@ -632,9 +632,15 @@ function applyFilter({
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filtersTrangthai !== "all") {
-    inputData = inputData.filter(
-      (checklist) => `${checklist?.ent_checklist?.Tinhtrang}` === `${filtersTrangthai}`
-    );
+    if(`${filtersTrangthai}` === `2`) {
+      inputData = inputData.filter(
+        (checklist) => `${checklist?.isCheckListLai}` === `1`
+      );
+    } else {
+      inputData = inputData.filter(
+        (checklist) => `${checklist?.ent_checklist?.Tinhtrang}` === `${filtersTrangthai}`
+      );
+    }
   }
 
   if (name) {

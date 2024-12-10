@@ -51,6 +51,7 @@ export default function OrderTableToolbar({
     { value: 'all', label: 'Tất cả' },
     { value: '0', label: 'Checklist không lỗi' },
     { value: '1', label: 'Checklist Lỗi' },
+    { value: '2', label: 'Checklist Lại' },
   ];
 
   const popover = usePopover();
