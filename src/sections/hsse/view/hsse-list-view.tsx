@@ -1,34 +1,18 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import { useState, useCallback, useEffect } from 'react';
 // @mui
-import { alpha } from '@mui/material/styles';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { LoadingButton } from '@mui/lab';
 import { Stack } from '@mui/material';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
-import { useGetChinhanh, useGetDuanWeb, useGetHSSE } from 'src/api/khuvuc';
-// utils
-import { fTimestamp } from 'src/utils/format-time';
-// hooks
-import { useBoolean } from 'src/hooks/use-boolean';
-// components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
+import { _orders } from 'src/_mock';
+import { useGetHSSE } from 'src/api/khuvuc';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -38,17 +22,12 @@ import {
   TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useSnackbar } from 'src/components/snackbar';
-import { useAuthContext } from 'src/auth/hooks';
 // types
-import { IDuan, IChecklistTableFilters, IKhuvucTableFilterValue, IHSSE } from 'src/types/khuvuc';
+import { IChecklistTableFilters, IHSSE } from 'src/types/khuvuc';
 //
 import HSSETableRow from '../hsse-table-row';
-import HSSETableToolbar from '../hsse-table-toolbar';
-import HSSETableFiltersResult from '../hsse-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +48,6 @@ const defaultFilters: IChecklistTableFilters = {
   building: [],
 };
 
-const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function GiamsatListView() {
@@ -254,7 +232,6 @@ function applyFilter({
   filters: IChecklistTableFilters;
   // dateError: boolean;
 }) {
-  const { status, name, building } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 

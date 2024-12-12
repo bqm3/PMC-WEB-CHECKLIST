@@ -1,17 +1,11 @@
 import * as Yup from 'yup';
-import { useMemo, useEffect, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-// routes
-import { paths } from 'src/routes/paths';
 // hooks
 import { useRouter } from 'src/routes/hooks';
 import { useResponsive } from 'src/hooks/use-responsive';
@@ -19,20 +13,15 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { _tags, _roles, } from 'src/_mock';
 // api
 import {
-  useGetKhuVuc,
   useGetUsers,
 } from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
-// types
-import { IKhuvuc } from 'src/types/khuvuc';
-
 // components
 import { useSettingsContext } from 'src/components/settings';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
