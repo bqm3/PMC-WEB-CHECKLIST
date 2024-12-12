@@ -155,6 +155,13 @@ const DuanListsPage = lazy(() => import('src/pages/dashboard/duan/list'));
 const DuanNewPage = lazy(() => import('src/pages/dashboard/duan/new'));
 const DuanEditPage = lazy(() => import('src/pages/dashboard/duan/edit'));
 
+// HSSE
+const HSSEListsPage = lazy(() => import('src/pages/dashboard/hsse/list'));
+const HSSEPhanQuyenPage = lazy(() => import('src/pages/dashboard/hsse/phanquyen'));
+const HSSENewPage = lazy(() => import('src/pages/dashboard/hsse/new'));
+const HSSEEditPage = lazy(() => import('src/pages/dashboard/hsse/edit'));
+
+
 // Tòa nhà
 const ToanhaListsPage = lazy(() => import('src/pages/dashboard/toanha/list'));
 const ToanhaNewPage = lazy(() => import('src/pages/dashboard/toanha/new'));
@@ -342,7 +349,16 @@ export const dashboardRoutes = [
           { path: 'new', element: <BaoCaoChiSoNewPage /> },
         ],
       },
-
+      {
+        path: 'hsse',
+        children: [
+          { element: <HSSEListsPage />, index: true },
+          { path: 'list', element: <HSSEListsPage /> },
+          { path: 'phanquyen', element: <HSSEPhanQuyenPage /> },
+          { path: ':id/edit', element: <HSSEEditPage /> },
+          { path: 'new', element: <HSSENewPage /> },
+        ],
+      },
       {
         path: 'order-booking',
         children: [

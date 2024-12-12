@@ -107,7 +107,6 @@ export function useNavData() {
               },
             ];
           }
-
           return [];
         })(),
       },
@@ -343,6 +342,32 @@ export function useNavData() {
         },
 
       );
+    }
+    if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ent_chucvu?.Role === 3) {
+      if (user?.ent_chucvu?.Role === 1) {
+        navigationData[0].items.push({
+          title: t('hsse'),
+          path: paths.dashboard.hsse.root,
+          icon: ICONS.tour,
+          children: [
+
+            { title: t('phanquyen'), path: paths.dashboard.hsse.phanquyen },
+            { title: t('list'), path: paths.dashboard.hsse.root },
+            { title: t('create'), path: paths.dashboard.hsse.new },
+          ]
+        });
+      } else {
+        // If Role is not 1, create the HSE section without 'phanquyen'
+        navigationData[0].items.push({
+          title: t('hsse'),
+          path: paths.dashboard.hsse.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('list'), path: paths.dashboard.hsse.root },
+            { title: t('create'), path: paths.dashboard.hsse.new }
+          ]
+        });
+      }
     }
     // {
     //   title: t('project'),

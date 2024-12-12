@@ -632,7 +632,7 @@ function applyFilter({
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filtersTrangthai !== "all") {
-    if(`${filtersTrangthai}` === `2`) {
+    if (`${filtersTrangthai}` === `2`) {
       inputData = inputData.filter(
         (checklist) => `${checklist?.isCheckListLai}` === `1`
       );

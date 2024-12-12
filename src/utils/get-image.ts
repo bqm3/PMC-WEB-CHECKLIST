@@ -1,4 +1,4 @@
-const BASE_URL_IMAGE="https://checklist.pmcweb.vn/be/upload"
+const BASE_URL_IMAGE = "https://checklist.pmcweb.vn/be/upload"
 
 export default function funcBaseUri_Image(key: any, image: any) {
   let uri = '';
@@ -16,17 +16,17 @@ export default function funcBaseUri_Image(key: any, image: any) {
       uri = `${BASE_URL_IMAGE}/sucongoai/${image}`;
       break;
     default:
-      uri ="";
+      uri = "";
       break;
   }
   return uri;
 }
 
-export function getImageUrls( key: any,item: any) {
+export function getImageUrls(key: any, item: any) {
   if (!item) return null;
-  const image = item.endsWith('.jpg') || item.endsWith('.jpeg') || item.endsWith('.png') 
-             || item.endsWith('.JPG') || item.endsWith('.JPEG') || item.endsWith('.PNG')
-  ? funcBaseUri_Image(key, item.trim())
-  : `https://lh3.googleusercontent.com/d/${item.trim()}=s1000?authuser=0$`;
+  const image = item.endsWith('.jpg') || item.endsWith('.jpeg') || item.endsWith('.png')
+    || item.endsWith('.JPG') || item.endsWith('.JPEG') || item.endsWith('.PNG')
+    ? funcBaseUri_Image(key, item.trim())
+    : `https://lh3.googleusercontent.com/d/${item.trim()}=s1000?authuser=0$`;
   return image;
 }

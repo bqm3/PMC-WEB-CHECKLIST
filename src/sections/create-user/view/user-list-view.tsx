@@ -101,15 +101,15 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { user, userLoading, userEmpty } = useGetUsers();
+  const { users, userLoading, userEmpty } = useGetUsers();
 
   const [tableData, setTableData] = useState<IUser[]>([]);
 
   useEffect(() => {
-    if (user?.length > 0) {
-      setTableData(user);
+    if (users?.length > 0) {
+      setTableData(users);
     }
-  }, [user]);
+  }, [users]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -269,12 +269,12 @@ export default function GiamsatListView() {
                     'default'
                   }
                 >
-                  {tab.value === 'all' && user?.length}
+                  {tab.value === 'all' && users?.length}
                   {tab.value === '2' &&
-                    user?.filter((order) => `${order.ID_Chucvu}` === '2').length}
+                    users?.filter((order) => `${order.ID_Chucvu}` === '2').length}
 
                   {tab.value === '3' &&
-                    user?.filter((order) => `${order.ID_Chucvu}` === '3').length}
+                    users?.filter((order) => `${order.ID_Chucvu}` === '3').length}
 
                 </Label>
               }

@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh, IHSSE } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -417,6 +417,33 @@ export function useGetDuanWeb() {
   return memoizedValue;
 }
 
+export function useGetHSSE() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/hsse/all';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      hsse: (data?.data as IHSSE[]) || [],
+      hsseLoading: isLoading,
+      hsseError: error,
+      hsseValidating: isValidating,
+      hsseEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetGiamsat() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_giamsat/';
@@ -491,6 +518,33 @@ export function useGetDuanDetail(id: string) {
       duanError: error,
       duanValidating: isValidating,
       duanEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetHSSEDetail(id: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/v2/hsse/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      hsse: (data?.data as IHSSE) || [],
+      hsseLoading: isLoading,
+      hsseError: error,
+      hsseValidating: isValidating,
+      hsseEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -594,7 +648,7 @@ export function useGetUsers() {
 
   const memoizedValue = useMemo(
     () => ({
-      user: (data?.data as IUser[]) || [],
+      users: (data?.data as IUser[]) || [],
       userLoading: isLoading,
       userError: error,
       userValidating: isValidating,

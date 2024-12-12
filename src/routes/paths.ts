@@ -228,6 +228,13 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/duan/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/duan/${id}/edit`,
     },
+    hsse: {
+      root: `${ROOTS.DASHBOARD}/hsse`,
+      new: `${ROOTS.DASHBOARD}/hsse/new`,
+      phanquyen: `${ROOTS.DASHBOARD}/hsse/phanquyen`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/hsse/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/hsse/${id}/edit`,
+    },
     toanha: {
       root: `${ROOTS.DASHBOARD}/toanha`,
       new: `${ROOTS.DASHBOARD}/toanha/new`,

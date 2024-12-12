@@ -324,7 +324,7 @@ export default function CalvListView() {
 
                 <TableBody>
                   {dataFiltered
-                    .slice(
+                    ?.slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )

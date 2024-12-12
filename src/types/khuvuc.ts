@@ -123,6 +123,54 @@ export type IDuan = {
   ent_duan_khoicv: IDuanKhoiCV[];
 };
 
+export type IHSSE = {
+  ID: number;
+  Ten_du_an?: string;
+  Ngay_ghi_nhan?: string;
+  Nguoi_tao?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  Dien_cu_dan?: number;
+  Dien_cdt?: number;
+  Nuoc_cu_dan?: number;
+  Nuoc_cdt?: number;
+  Xa_thai?: number;
+  Rac_sh?: number;
+  Muoi_dp?: number;
+  PAC?: number;
+  NaHSO3?: number;
+  NaOH?: number;
+  Mat_rd?: number;
+  Polymer_Anion?: number;
+  Chlorine_bot?: number;
+  Chlorine_vien?: number;
+  Methanol?: number;
+  Dau_may?: number;
+  Tui_rac240?: number;
+  Tui_rac120?: number;
+  Tui_rac20?: number;
+  Tui_rac10?: number;
+  Tui_rac5?: number;
+  giayvs_235?: number;
+  giaivs_120?: number;
+  giay_lau_tay?: number;
+  hoa_chat?: number;
+  nuoc_rua_tay?: number;
+  nhiet_do?: number;
+  nuoc_bu?: number;
+  clo?: number;
+  PH?: number;
+  Poolblock?: number;
+  trat_thai?: number;
+  Email?: string;
+  pHMINUS?: number;
+  axit?: number;
+  PN180?: number;
+  modifiedBy?: string;
+  chiSoCO2?: number;
+};
+
+ 
 export type IGiamsat = {
   ID_Giamsat: string;
   ID_Duan: string;

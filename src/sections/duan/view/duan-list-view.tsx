@@ -210,13 +210,14 @@ export default function GiamsatListView() {
         UserName: user?.UserName,
         Password: user?.PasswordPrivate,
       };
-      localStorage.removeItem('accessToken');
+
       // Gọi API đăng nhập
       const urlHttp = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/login';
       const res = await axios.post(urlHttp, data);
 
       // Kiểm tra nếu đăng nhập thành công
       if (res.status === 200) {
+        localStorage.removeItem('accessToken');
         const { token } = res.data;
 
         localStorage.setItem('accessToken', token); // Lưu token vào sessionStorage
@@ -248,7 +249,7 @@ export default function GiamsatListView() {
         });
 
         // Lưu ID_Duan vào localStorage
-        localStorage.setItem('ID_Duan', id);
+        // localStorage.setItem('ID_Duan', id);
 
         // Gọi handleUpdateSuccess để đăng nhập lại
         await handleUpdateSuccess();
