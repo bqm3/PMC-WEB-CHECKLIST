@@ -123,7 +123,7 @@ export function useNavData() {
                 path: paths.dashboard.khuvuc.root,
                 icon: ICONS.tour,
                 children: [
-                  { title: t('list'), path: paths.dashboard.khuvuc.root },
+                  { title: t('Danh sách khu vưc'), path: paths.dashboard.khuvuc.root },
                   { title: t('create'), path: paths.dashboard.khuvuc.new },
                 ],
               },
@@ -132,7 +132,7 @@ export function useNavData() {
                 path: paths.dashboard.hangmuc.root,
                 icon: ICONS.kanban,
                 children: [
-                  { title: t('list'), path: paths.dashboard.hangmuc.root },
+                  { title: t('Danh sách hạng mục'), path: paths.dashboard.hangmuc.root },
                   { title: t('create'), path: paths.dashboard.hangmuc.new },
                 ],
               },
@@ -141,7 +141,7 @@ export function useNavData() {
                 path: paths.dashboard.calv.root,
                 icon: ICONS.job,
                 children: [
-                  { title: t('list'), path: paths.dashboard.calv.root },
+                  { title: t('Danh sách ca'), path: paths.dashboard.calv.root },
                   { title: t('create'), path: paths.dashboard.calv.new },
                 ],
               },
@@ -150,7 +150,7 @@ export function useNavData() {
                 path: paths.dashboard.chukyduan.root,
                 icon: ICONS.analytics,
                 children: [
-                  { title: t('list'), path: paths.dashboard.chukyduan.root },
+                  { title: t('Danh sách chu kỳ'), path: paths.dashboard.chukyduan.root },
                   { title: t('create'), path: paths.dashboard.chukyduan.new },
                 ],
               },
@@ -159,7 +159,7 @@ export function useNavData() {
                 path: paths.dashboard.phanquyenchecklist.root,
                 icon: ICONS.external,
                 children: [
-                  { title: t('list'), path: paths.dashboard.phanquyenchecklist.root },
+                  { title: t('Danh sách phân ca'), path: paths.dashboard.phanquyenchecklist.root },
                   { title: t('create'), path: paths.dashboard.phanquyenchecklist.new },
                 ],
               },
@@ -168,7 +168,7 @@ export function useNavData() {
                 path: paths.dashboard.checklist.root,
                 icon: ICONS.lock,
                 children: [
-                  { title: t('list'), path: paths.dashboard.checklist.root },
+                  { title: t('Danh sách Checklist'), path: paths.dashboard.checklist.root },
                   { title: t('create'), path: paths.dashboard.checklist.new },
                   { title: t('calamviec'), path: paths.dashboard.checklist.lists },
                 ],
@@ -178,7 +178,7 @@ export function useNavData() {
                 path: paths.dashboard.sucongoai.root,
                 icon: ICONS.disabled,
                 children: [
-                  { title: t('list'), path: paths.dashboard.sucongoai.root },
+                  { title: t('Danh sách sự cố'), path: paths.dashboard.sucongoai.root },
                 ],
               },
               {
@@ -186,7 +186,7 @@ export function useNavData() {
                 path: paths.dashboard.baocaochiso.root,
                 icon: ICONS.blog,
                 children: [
-                  { title: t('list'), path: paths.dashboard.baocaochiso.root },
+                  { title: t('Danh sách chỉ số'), path: paths.dashboard.baocaochiso.root },
                   { title: t('create'), path: paths.dashboard.baocaochiso.new },
                   { title: t('thông tin'), path: paths.dashboard.baocaochiso.thongTin },
                 ],
@@ -217,7 +217,7 @@ export function useNavData() {
           icon: ICONS.banking,
           children: [
             { title: t('create'), path: paths.dashboard.toanha.new },
-            { title: t('list'), path: paths.dashboard.toanha.root },
+            { title: t('Danh sách tòa nhà'), path: paths.dashboard.toanha.root },
           ],
         },
         {
@@ -226,7 +226,7 @@ export function useNavData() {
           icon: ICONS.tour,
           children: [
             { title: t('create'), path: paths.dashboard.tang.new },
-            { title: t('list'), path: paths.dashboard.tang.root },
+            { title: t('Danh sách tầng'), path: paths.dashboard.tang.root },
           ],
         },
         {
@@ -235,7 +235,7 @@ export function useNavData() {
           icon: ICONS.user,
           children: [
             { title: t('create'), path: paths.dashboard.createUser.root },
-            { title: t('list'), path: paths.dashboard.createUser.list },
+            { title: t('Danh sách tài khoản'), path: paths.dashboard.createUser.list },
           ],
         }
       );
@@ -249,7 +249,7 @@ export function useNavData() {
           icon: ICONS.tour,
           children: [
             { title: t('create'), path: paths.dashboard.duan.new },
-            { title: t('list'), path: paths.dashboard.duan.root },
+            { title: t('Danh sách dự án'), path: paths.dashboard.duan.root },
           ],
         },
         {
@@ -257,7 +257,7 @@ export function useNavData() {
           path: paths.dashboard.general.location,
           icon: ICONS.analytics,
           children: [
-            { title: t('list'), path: paths.dashboard.general.location },
+            { title: t('Danh sách vị trí'), path: paths.dashboard.general.location },
           ]
         },
         {
@@ -266,7 +266,7 @@ export function useNavData() {
           icon: ICONS.user,
           children: [
             { title: t('create'), path: paths.dashboard.quanlytaikhoan.root },
-            { title: t('list'), path: paths.dashboard.quanlytaikhoan.list },
+            { title: t('Danh sách tài khoản'), path: paths.dashboard.quanlytaikhoan.list },
             { title: t('user_error'), path: paths.dashboard.quanlytaikhoan.error },
             { title: t('resetPassWord'), path: paths.dashboard.quanlytaikhoan.resetPassWord },
           ],
@@ -282,7 +282,7 @@ export function useNavData() {
           icon: ICONS.tour,
           children: [
             { title: t('create'), path: paths.dashboard.duan.new },
-            { title: t('list'), path: paths.dashboard.duan.root },
+            { title: t('Danh sách dự án'), path: paths.dashboard.duan.root },
           ],
         },
         {
@@ -304,7 +304,7 @@ export function useNavData() {
           path: paths.dashboard.duan.root,
           icon: ICONS.tour,
           children: [
-            { title: t('list'), path: paths.dashboard.duan.root },
+            { title: t('Danh sách dự án'), path: paths.dashboard.duan.root },
           ],
         },
 
@@ -323,7 +323,7 @@ export function useNavData() {
           path: paths.dashboard.duan.root,
           icon: ICONS.tour,
           children: [
-            { title: t('list'), path: paths.dashboard.duan.root },
+            { title: t('Danh sách dự án'), path: paths.dashboard.duan.root },
           ],
         },
 
@@ -337,7 +337,7 @@ export function useNavData() {
           path: paths.dashboard.duan.root,
           icon: ICONS.tour,
           children: [
-            { title: t('list'), path: paths.dashboard.duan.root },
+            { title: t('Danh sách dự án'), path: paths.dashboard.duan.root },
           ],
         },
 
@@ -352,7 +352,7 @@ export function useNavData() {
           children: [
 
             { title: t('phanquyen'), path: paths.dashboard.hsse.phanquyen },
-            { title: t('list'), path: paths.dashboard.hsse.root },
+            { title: t('Dữ liệu'), path: paths.dashboard.hsse.root },
             { title: t('create'), path: paths.dashboard.hsse.new },
           ]
         });
@@ -363,7 +363,7 @@ export function useNavData() {
           path: paths.dashboard.hsse.root,
           icon: ICONS.tour,
           children: [
-            { title: t('list'), path: paths.dashboard.hsse.root },
+            { title: t('Dữ liệu'), path: paths.dashboard.hsse.root },
             { title: t('create'), path: paths.dashboard.hsse.new }
           ]
         });

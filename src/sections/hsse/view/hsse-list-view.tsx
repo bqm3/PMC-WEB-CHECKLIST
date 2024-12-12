@@ -32,11 +32,14 @@ import HSSETableRow from '../hsse-table-row';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'ID', label: 'Mã HSSE', width: 150 },
-  { id: 'Ten_du_an', label: 'Tên dự án', width: 300 },
-  { id: 'Ngay_ghi_nhan', label: 'Ngày gửi', width: 200 },
-  { id: 'Nguoi_tao', label: 'Người gửi', width: 200 },
-  { id: 'Email', label: 'Email', width: 200 },
+  { id: 'Ngay_ghi_nhan', label: 'Ngày gửi', width: 100 },
+  { id: 'Nguoi_tao', label: 'Người gửi', width: 150 },
+  { id: 'Dien_cu_dan', label: 'Điện cư dân', width: 100 },
+  { id: 'Dien_cdt', label: 'Điện CĐT', width: 100 },
+  { id: 'Nuoc_cu_dan', label: 'Nước cư dân', width: 100 },
+  { id: 'Nuoc_cdt', label: 'Nước CĐT', width: 100 },
+  { id: 'Xa_thai', label: 'Xả thải', width: 100 },
+  { id: 'Rac_sh', label: 'Rác', width: 100 },
   { id: '', width: 10 },
 ];
 
@@ -51,7 +54,7 @@ const defaultFilters: IChecklistTableFilters = {
 // ----------------------------------------------------------------------
 
 export default function GiamsatListView() {
-  const table = useTable({ defaultOrderBy: 'ID' });
+  const table = useTable({ defaultOrderBy: 'Ngay_ghi_nhan' });
 
   const settings = useSettingsContext();
   const router = useRouter();
@@ -236,7 +239,7 @@ function applyFilter({
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 
   stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
+    const order = comparator(b[0], a[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });

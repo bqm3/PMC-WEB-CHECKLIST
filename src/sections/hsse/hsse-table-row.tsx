@@ -38,34 +38,22 @@ export default function CalvTableRow({
   // onViewDuAnRow,
   // user
 }: Props) {
-  const { ID, Ten_du_an, Ngay_ghi_nhan, Nguoi_tao, Email } = row;
+  const { ID, Ten_du_an, Ngay_ghi_nhan, Nguoi_tao, Dien_cu_dan, Dien_cdt, Nuoc_cdt, Nuoc_cu_dan, Xa_thai, Rac_sh } = row;
 
-  const confirm = useBoolean();
-
-  const collapse = useBoolean();
 
   const popover = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
 
-      <TableCell>
-        <Box
-          // onClick={user.ID_Chucvu === 1 ? onViewRow : onViewDuAnRow}
-          sx={{
-            cursor: 'pointer',
-            '&:hover': {
-              textDecoration: 'underline',
-            },
-          }}
-        >
-          {ID}
-        </Box>
-      </TableCell>
-      <TableCell>{Ten_du_an}</TableCell>
       <TableCell>{Ngay_ghi_nhan}</TableCell>
       <TableCell>{Nguoi_tao}</TableCell>
-      <TableCell>{Email}</TableCell>
+      <TableCell>{Dien_cu_dan}</TableCell>
+      <TableCell>{Dien_cdt}</TableCell>
+      <TableCell>{Nuoc_cu_dan}</TableCell>
+      <TableCell>{Nuoc_cdt}</TableCell>
+      <TableCell>{Xa_thai}</TableCell>
+      <TableCell>{Rac_sh}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

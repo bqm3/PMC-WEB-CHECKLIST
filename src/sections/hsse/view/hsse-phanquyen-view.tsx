@@ -193,7 +193,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
             return (
               <FormControlLabel
                 key={item.ID_User}
-                label={`${item?.UserName} - ${item?.Hoten} - ${item?.ent_chucvu?.Chucvu}`}
+                label={`${item?.UserName} - ${item?.Hoten} (${item?.ent_chucvu?.Chucvu})`}
                 control={
                   <Checkbox
                     size="medium"

@@ -49,7 +49,7 @@ export default function CalvTableRow({
   const renderPrimary = (
     <TableRow hover selected={selected}>
 
-      {/* <TableCell>
+      <TableCell>
         <Box
           onClick={user?.ID_Chucvu === 1 ? onViewRow : onViewDuAnRow}
           sx={{
@@ -61,7 +61,7 @@ export default function CalvTableRow({
         >
           {ID_Duan}
         </Box>
-      </TableCell> */}
+      </TableCell>
       <TableCell>{Duan}</TableCell>
       <TableCell>{ent_chinhanh?.Tenchinhanh}</TableCell>
       <TableCell>{Diachi}</TableCell>
@@ -141,7 +141,7 @@ export default function CalvTableRow({
         sx={{ width: 140 }}
       >
         {
-          user.ID_Chucvu === 1 && <MenuItem
+          user?.ID_Chucvu === 1 && <MenuItem
             onClick={() => {
               onViewRow();
               popover.onClose();
@@ -163,7 +163,7 @@ export default function CalvTableRow({
         </MenuItem>
 
         {
-          user.ID_Chucvu === 1 && <MenuItem
+          user?.ID_Chucvu === 1 && <MenuItem
             onClick={() => {
               confirm.onTrue();
               popover.onClose();
