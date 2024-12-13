@@ -57,7 +57,7 @@ export default function ResetPassForm() {
     try {
       setIsSubmitting(true);
       axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/reset-password`, data, {
+        .put(`http://localhost:6868/api/v2/ent_user/reset-password`, data, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

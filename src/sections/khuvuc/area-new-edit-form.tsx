@@ -133,7 +133,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     try {
       if (currentArea !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
+          .put(`http://localhost:6868/api/v2/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -173,7 +173,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/create`, data, {
+          .post(`http://localhost:6868/api/v2/ent_khuvuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

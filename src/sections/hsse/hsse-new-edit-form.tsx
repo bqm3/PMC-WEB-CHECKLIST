@@ -165,7 +165,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
 
   useEffect(() => {
     const handleCheck = async () => {
-      await axios.post(`https://checklist.pmcweb.vn/be/api/v2/hsse/check`, [], {
+      await axios.post(`http://localhost:6868/api/v2/hsse/check`, [], {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -185,7 +185,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true)
     await axios
-      .post(`https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data, {
+      .post(`http://localhost:6868/api/v2/hsse/create`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

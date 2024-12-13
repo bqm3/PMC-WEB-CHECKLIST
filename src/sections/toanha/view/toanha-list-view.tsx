@@ -1,9 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 // @mui
-import { alpha } from '@mui/material/styles';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -16,20 +13,13 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { _orders, ORDER_STATUS_OPTIONS, KHUVUC_STATUS_OPTIONS } from 'src/_mock';
+import { _orders } from 'src/_mock';
 import {
-  useGetKhuVuc,
-  useGetHangMuc,
-  useGetCalv,
-  useGetGiamsat,
   useGetToanha,
 } from 'src/api/khuvuc';
-// utils
-import { fTimestamp } from 'src/utils/format-time';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -48,10 +38,6 @@ import {
 import { useSnackbar } from 'src/components/snackbar';
 // types
 import {
-  ICalv,
-  IGiamsat,
-  IHangMuc,
-  IKhuvuc,
   IKhuvucTableFilters,
   IKhuvucTableFilterValue,
   IToanha,
@@ -137,7 +123,7 @@ export default function ToanhaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_toanha/delete/${id}`, [], {
+        .put(`http://localhost:6868/api/v2/ent_toanha/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

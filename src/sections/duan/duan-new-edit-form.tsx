@@ -62,6 +62,10 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     Duan: Yup.string().required('Phải có tên dự án'),
     ID_Loaihinh: Yup.string().required('Phải loại hình dự án'),
     ID_Nhom: Yup.mixed<any>().nullable().required('Khong'),
+    Percent: Yup.number()
+      .typeError("Giá trị phải là một số") // Thông báo lỗi nếu không phải số
+      .min(0, "Giá trị phải lớn hơn hoặc bằng 0")
+      .max(100, "Giá trị phải nhỏ hơn hoặc bằng 100"),
     Diachi: Yup.mixed<any>().nullable().required('Khong'),
     Vido: Yup.mixed<any>().nullable().required('Khong'),
     Kinhdo: Yup.mixed<any>().nullable().required('Khong'),
@@ -80,6 +84,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       ID_Linhvuc: currentDuan?.ID_Linhvuc || '',
       ID_Loaihinh: currentDuan?.ID_Loaihinh || '',
       ID_Phanloai: currentDuan?.ID_Phanloai || '',
+      Percent: currentDuan?.Percent || 0,
       Ngaybatdau: currentDuan?.Ngaybatdau || new Date(),
       Diachi: currentDuan?.Diachi || '',
       Vido: currentDuan?.Vido || '',
@@ -91,27 +96,27 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
 
   useEffect(() => {
     const resPhanloai = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_phanloai/all').then((res) => {
+      await axios.get('http://localhost:6868/api/v2/ent_phanloai/all').then((res) => {
         setPhanloai(res.data.data)
       })
     }
     const resChinhanh = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_chinhanh/all').then((res) => {
+      await axios.get('http://localhost:6868/api/v2/ent_chinhanh/all').then((res) => {
         setChinhanh(res.data.data)
       })
     }
     const resLinhvuc = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_linhvuc/all').then((res) => {
+      await axios.get('http://localhost:6868/api/v2/ent_linhvuc/all').then((res) => {
         setLinhvuc(res.data.data)
       })
     }
     const resLoaihinh = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_loaihinh/all').then((res) => {
+      await axios.get('http://localhost:6868/api/v2/ent_loaihinh/all').then((res) => {
         setLoaihinh(res.data.data)
       })
     }
     const resNhom = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_nhom/all').then((res) => {
+      await axios.get('http://localhost:6868/api/v2/ent_nhom/all').then((res) => {
         setNhom(res.data.data)
       })
     }
@@ -162,6 +167,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     formData.append('ID_Chinhanh', data?.ID_Chinhanh);
     formData.append('ID_Phanloai', data?.ID_Phanloai);
     formData.append('Duan', data?.Duan);
+    formData.append('Percent', `${data?.Percent}`);
     formData.append('Ngaybatdau', data?.Ngaybatdau);
     formData.append('Diachi', data?.Diachi);
     formData.append('Vido', data?.Vido);
@@ -172,7 +178,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       if (currentDuan !== undefined) {
         // Sending a PUT request with FormData
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, formData, {
+          .put(`http://localhost:6868/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, formData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -212,7 +218,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       } else {
         // Sending a POST request with FormData
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/create`, formData, {
+          .post(`http://localhost:6868/api/v2/ent_duan/create`, formData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -297,7 +303,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             Chi tiết
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Tên dự án
+            Tên dự án, thông tin
           </Typography>
         </Grid>
       )}
@@ -416,6 +422,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             />
             <RHFTextField name="Vido" label="Vĩ độ" />
             <RHFTextField name="Kinhdo" label="Kinh độ" />
+            <RHFTextField type='number' name="Percent" label="Tỉ lệ thông báo" />
             <RHFTextField name="Logo" label="Đường dẫn logo dự án" />
             {renderPlaceholder}
 

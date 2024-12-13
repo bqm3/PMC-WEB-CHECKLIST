@@ -112,6 +112,7 @@ export type IDuan = {
   Ngaybatdau: string;
   ID_Loaihinh: string;
   ID_Phanloai: string;
+  Percent: number;
   totalKhuvucInDuan: string;
   totalHangmucInDuan: string;
   toanhas: IToanha[];

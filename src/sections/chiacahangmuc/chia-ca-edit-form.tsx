@@ -1,42 +1,35 @@
-import * as Yup from 'yup';
-import { useMemo, useEffect, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
+
+import { useEffect, useState } from 'react';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-// routes
-import { paths } from 'src/routes/paths';
 // hooks
 import { useRouter } from 'src/routes/hooks';
 import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
-import { _tags, _roles, USER_GENDER_OPTIONS } from 'src/_mock';
+import { _tags, _roles } from 'src/_mock';
 // api
 import {
   useGetCalv,
   useGetDetailPhanCaByDuan,
   useGetKhoiCV,
   useGetKhuVuc,
-  useGetProfile,
   useGetToanha,
 } from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 // types
-import { IToanha, IKhuvucTableFilters, IUser, IKhoiCV, ICalv, IKhuvuc } from 'src/types/khuvuc';
+import { ICalv, IKhuvuc } from 'src/types/khuvuc';
 
 // components
 import { useSettingsContext } from 'src/components/settings';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -247,7 +240,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       Sochecklist: 100,
     };
     await axios
-      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_thietlapca/update/${id}`, data, {
+      .put(`http://localhost:6868/api/v2/ent_thietlapca/update/${id}`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

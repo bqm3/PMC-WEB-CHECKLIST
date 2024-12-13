@@ -1,4 +1,4 @@
-const BASE_URL_IMAGE = "https://checklist.pmcweb.vn/be/upload"
+const BASE_URL_IMAGE = "http://localhost:6868/upload"
 
 export default function funcBaseUri_Image(key: any, image: any) {
   let uri = '';

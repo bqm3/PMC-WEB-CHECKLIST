@@ -86,7 +86,7 @@ export default function BaoCaoHangThangListView() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/ent_baocaochiso`, {
+        const response = await axios.get(`http://localhost:6868/api/v2/ent_baocaochiso`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,

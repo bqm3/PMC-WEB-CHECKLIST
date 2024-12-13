@@ -168,7 +168,7 @@ export default function SuCoListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/delete/${id}`, [], {
+        .put(`http://localhost:6868/api/v2/tb_sucongoai/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -212,7 +212,7 @@ export default function SuCoListView() {
   const handleUpdate = async (id: string) => {
     await axios
       .put(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
+        `http://localhost:6868/api/v2/tb_sucongoai/status/${id}`,
         { Tinhtrangxuly: tinhTrangXuLy, ngayXuLy },
         {
           headers: {
