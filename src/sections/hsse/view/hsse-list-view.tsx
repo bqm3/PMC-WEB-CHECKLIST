@@ -59,10 +59,9 @@ export default function GiamsatListView() {
   const settings = useSettingsContext();
   const router = useRouter();
 
-
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { hsse } = useGetHSSE()
+  const { hsse } = useGetHSSE();
 
   const [tableData, setTableData] = useState<IHSSE[]>([]);
 
@@ -78,13 +77,11 @@ export default function GiamsatListView() {
     filters,
   });
 
-
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
-
 
   const handleViewRow = useCallback(
     (id: string) => {
@@ -92,8 +89,6 @@ export default function GiamsatListView() {
     },
     [router]
   );
-
-
 
   return (
     <>
@@ -116,7 +111,6 @@ export default function GiamsatListView() {
               mb: { xs: 3, md: 5 },
             }}
           />
-
         </Stack>
 
         <Card>
@@ -142,8 +136,6 @@ export default function GiamsatListView() {
           )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
                 <TableHeadCustom
@@ -235,7 +227,6 @@ function applyFilter({
   filters: IChecklistTableFilters;
   // dateError: boolean;
 }) {
-
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 
   stabilizedThis.sort((a, b) => {
@@ -253,7 +244,6 @@ function applyFilter({
   //       order.Diachi.toLowerCase().indexOf(name.toLowerCase()) !== -1
   //   );
   // }
-
 
   // if (building.length) {
   //   inputData = inputData.filter((item) => building.includes(String(item?.ID_Chinhanh)));

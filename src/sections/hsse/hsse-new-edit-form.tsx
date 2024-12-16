@@ -9,12 +9,16 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import {
-  Button, Dialog,
+  Button,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from '@mui/material';
+import Alert from '@mui/material/Alert';
+// import CheckIcon from '@mui/icons-material/Check';
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
@@ -165,27 +169,27 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
 
   useEffect(() => {
     const handleCheck = async () => {
-      await axios.post(`http://localhost:6868/api/v2/hsse/check`, [], {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      await axios
+        .post(`https://checklist.pmcweb.vn/be/api/v2/hsse/check`, [], {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((res) => {
-          setCheckSubmit(res.data.data)
+          setCheckSubmit(res.data.data);
         })
         .catch((error) => {
-          setCheckSubmit(false)
+          setCheckSubmit(false);
         });
-    }
-    handleCheck()
-  }, [accessToken])
-
+    };
+    handleCheck();
+  }, [accessToken]);
 
   const onSubmit = handleSubmit(async (data) => {
-    setLoading(true)
+    setLoading(true);
     await axios
-      .post(`http://localhost:6868/api/v2/hsse/create`, data, {
+      .post(`https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -197,10 +201,10 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           autoHideDuration: 4000,
           message: 'Tạo mới thành công!',
         });
-        setLoading(false)
+        setLoading(false);
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         if (error.response) {
           enqueueSnackbar({
             variant: 'error',
@@ -221,11 +225,23 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           });
         }
       });
-  })
+  });
 
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Stack spacing={3}>
+        <Box>
+          <Alert severity="warning">
+            <Typography>
+              Nên sử dụng trình duyệt Google Chrome để nhập các chỉ số để tránh gặp lỗi khi
+              khai báo
+            </Typography>
+            <Typography>
+              Đối với các chỉ số không có dữ liệu thì sẽ không cần phải nhập (Mặc định là 0)
+            </Typography>
+          </Alert>
+
+        </Box>
         <Box
           rowGap={3}
           columnGap={2}
@@ -236,182 +252,217 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           }}
         >
           <RHFTextField
-            value={watch('Dien_cu_dan') ?? 0}
+            value={watch('Dien_cu_dan') === 0 ? '' : watch('Dien_cu_dan') ?? ''}
             name="Dien_cu_dan"
             label="Điện cư dân"
             type="number"
           />
           <RHFTextField
-            value={watch('Dien_cdt') ?? 0}
+            value={watch('Dien_cdt') === 0 ? '' : watch('Dien_cdt') ?? ''}
             name="Dien_cdt"
             label="Điện chủ đầu tư"
             type="number"
           />
           <RHFTextField
-            value={watch('Nuoc_cu_dan') ?? 0}
+            value={watch('Nuoc_cu_dan') === 0 ? '' : watch('Nuoc_cu_dan') ?? ''}
             name="Nuoc_cu_dan"
             label="Nước cư dân"
             type="number"
           />
           <RHFTextField
-            value={watch('Nuoc_cdt') ?? 0}
+            value={watch('Nuoc_cdt') === 0 ? '' : watch('Nuoc_cdt') ?? ''}
             name="Nuoc_cdt"
             label="Nước chủ đầu tư"
             type="number"
           />
           <RHFTextField
-            value={watch('Xa_thai') ?? 0}
+            value={watch('Xa_thai') === 0 ? '' : watch('Xa_thai') ?? ''}
             name="Xa_thai"
             label="Nước xả thải"
             type="number"
           />
           <RHFTextField
-            value={watch('Rac_sh') ?? 0}
+            value={watch('Rac_sh') === 0 ? '' : watch('Rac_sh') ?? ''}
             name="Rac_sh"
             label="Rác sinh hoạt"
             type="number"
           />
           <RHFTextField
-            value={watch('Muoi_dp') ?? 0}
+            value={watch('Muoi_dp') === 0 ? '' : watch('Muoi_dp') ?? ''}
             name="Muoi_dp"
             label="Muối điện phân"
             type="number"
           />
-          <RHFTextField value={watch('PAC') ?? 0} name="PAC" label="PAC" type="number" />
-          <RHFTextField value={watch('NaHSO3') ?? 0} name="NaHSO3" label="NaHSO3" type="number" />
-          <RHFTextField value={watch('NaOH') ?? 0} name="NaOH" label="NaOH" type="number" />
           <RHFTextField
-            value={watch('Mat_rd') ?? 0}
+            value={watch('PAC') === 0 ? '' : watch('PAC') ?? ''}
+            name="PAC"
+            label="PAC"
+            type="number"
+          />
+          <RHFTextField
+            value={watch('NaHSO3') === 0 ? '' : watch('NaHSO3') ?? ''}
+            name="NaHSO3"
+            label="NaHSO3"
+            type="number"
+          />
+          <RHFTextField
+            value={watch('NaOH') === 0 ? '' : watch('NaOH') ?? ''}
+            name="NaOH"
+            label="NaOH"
+            type="number"
+          />
+          <RHFTextField
+            value={watch('Mat_rd') === 0 ? '' : watch('Mat_rd') ?? ''}
             name="Mat_rd"
             label="Mật rỉ đường"
             type="number"
           />
           <RHFTextField
-            value={watch('Polymer_Anion') ?? 0}
+            value={watch('Polymer_Anion') === 0 ? '' : watch('Polymer_Anion') ?? ''}
             name="Polymer_Anion"
             label="Polymer Anion"
             type="number"
           />
           <RHFTextField
-            value={watch('Chlorine_bot') ?? 0}
+            value={watch('Chlorine_bot') === 0 ? '' : watch('Chlorine_bot') ?? ''}
             name="Chlorine_bot"
             label="Chlorine bột"
             type="number"
           />
           <RHFTextField
-            value={watch('Chlorine_vien') ?? 0}
+            value={watch('Chlorine_vien') === 0 ? '' : watch('Chlorine_vien') ?? ''}
             name="Chlorine_vien"
             label="Chlorine viên"
             type="number"
           />
           <RHFTextField
-            value={watch('Methanol') ?? 0}
+            value={watch('Methanol') === 0 ? '' : watch('Methanol') ?? ''}
             name="Methanol"
             label="Methanol"
             type="number"
           />
           <RHFTextField
-            value={watch('Dau_may') ?? 0}
+            value={watch('Dau_may') === 0 ? '' : watch('Dau_may') ?? ''}
             name="Dau_may"
             label="Dầu máy phát"
             type="number"
           />
           <RHFTextField
-            value={watch('Tui_rac240') ?? 0}
+            value={watch('Tui_rac240') === 0 ? '' : watch('Tui_rac240') ?? ''}
             name="Tui_rac240"
             label="Túi rác 240L"
             type="number"
           />
           <RHFTextField
-            value={watch('Tui_rac120') ?? 0}
+            value={watch('Tui_rac120') === 0 ? '' : watch('Tui_rac120') ?? ''}
             name="Tui_rac120"
             label="Túi rác 120L"
             type="number"
           />
           <RHFTextField
-            value={watch('Tui_rac20') ?? 0}
+            value={watch('Tui_rac20') === 0 ? '' : watch('Tui_rac20') ?? ''}
             name="Tui_rac20"
             label="Túi rác 20L"
             type="number"
           />
           <RHFTextField
-            value={watch('Tui_rac10') ?? 0}
+            value={watch('Tui_rac10') === 0 ? '' : watch('Tui_rac10') ?? ''}
             name="Tui_rac10"
             label="Túi rác 10L"
             type="number"
           />
           <RHFTextField
-            value={watch('Tui_rac5') ?? 0}
+            value={watch('Tui_rac5') === 0 ? '' : watch('Tui_rac5') ?? ''}
             name="Tui_rac5"
             label="Túi rác 5L"
             type="number"
           />
           <RHFTextField
-            value={watch('giayvs_235') ?? 0}
+            value={watch('giayvs_235') === 0 ? '' : watch('giayvs_235') ?? ''}
             name="giayvs_235"
             label="Giấy vệ sinh 235mm"
             type="number"
           />
           <RHFTextField
-            value={watch('giaivs_120') ?? 0}
+            value={watch('giaivs_120') === 0 ? '' : watch('giaivs_120') ?? ''}
             name="giaivs_120"
             label="Giấy vệ sinh 120mm"
             type="number"
           />
           <RHFTextField
-            value={watch('giay_lau_tay') ?? 0}
+            value={watch('giay_lau_tay') === 0 ? '' : watch('giay_lau_tay') ?? ''}
             name="giay_lau_tay"
             label="Giấy lau tay"
             type="number"
           />
           <RHFTextField
-            value={watch('hoa_chat') ?? 0}
+            value={watch('hoa_chat') === 0 ? '' : watch('hoa_chat') ?? ''}
             name="hoa_chat"
             label="Hóa chất làm sạch"
             type="number"
           />
           <RHFTextField
-            value={watch('nuoc_rua_tay') ?? 0}
+            value={watch('nuoc_rua_tay') === 0 ? '' : watch('nuoc_rua_tay') ?? ''}
             name="nuoc_rua_tay"
             label="Nước rửa tay"
             type="number"
           />
           <RHFTextField
-            value={watch('nhiet_do') ?? 0}
+            value={watch('nhiet_do') === 0 ? '' : watch('nhiet_do') ?? ''}
             name="nhiet_do"
             label="Nhiệt độ"
             type="number"
           />
           <RHFTextField
-            value={watch('nuoc_bu') ?? 0}
+            value={watch('nuoc_bu') === 0 ? '' : watch('nuoc_bu') ?? ''}
             name="nuoc_bu"
             label="Nước bù bể"
             type="number"
           />
-          <RHFTextField value={watch('clo') ?? 0} name="clo" label="Clo" type="number" />
-          <RHFTextField value={watch('PH') ?? 0} name="PH" label="Nồng độ PH" type="number" />
           <RHFTextField
-            value={watch('Poolblock') ?? 0}
+            value={watch('clo') === 0 ? '' : watch('clo') ?? ''}
+            name="clo"
+            label="Clo"
+            type="number"
+          />
+          <RHFTextField
+            value={watch('PH') === 0 ? '' : watch('PH') ?? ''}
+            name="PH"
+            label="Nồng độ PH"
+            type="number"
+          />
+          <RHFTextField
+            value={watch('Poolblock') === 0 ? '' : watch('Poolblock') ?? ''}
             name="Poolblock"
             label="Poolblock"
             type="number"
           />
           <RHFTextField
-            value={watch('trat_thai') ?? 0}
+            value={watch('trat_thai') === 0 ? '' : watch('trat_thai') ?? ''}
             name="trat_thai"
             label="Chất thải"
             type="number"
           />
           <RHFTextField
-            value={watch('pHMINUS') ?? 0}
+            value={watch('pHMINUS') === 0 ? '' : watch('pHMINUS') ?? ''}
             name="pHMINUS"
             label="pH Minus"
             type="number"
           />
-          <RHFTextField value={watch('axit') ?? 0} name="axit" label="Axit" type="number" />
-          <RHFTextField value={watch('PN180') ?? 0} name="PN180" label="PN180" type="number" />
           <RHFTextField
-            value={watch('chiSoCO2') ?? 0}
+            value={watch('axit') === 0 ? '' : watch('axit') ?? ''}
+            name="axit"
+            label="Axit"
+            type="number"
+          />
+          <RHFTextField
+            value={watch('PN180') === 0 ? '' : watch('PN180') ?? ''}
+            name="PN180"
+            label="PN180"
+            type="number"
+          />
+          <RHFTextField
+            value={watch('chiSoCO2') === 0 ? '' : watch('chiSoCO2') ?? ''}
             name="chiSoCO2"
             label="Chỉ số CO2"
             type="number"
@@ -429,16 +480,16 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         md={8}
         sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
       >
-        {
-          checkSubmit === true && !currentHSSE &&
+        {checkSubmit === true && !currentHSSE && (
           <Button
             disabled={loading}
-            variant="contained" size="large"
+            variant="contained"
+            size="large"
             onClick={methods.handleSubmit(handleOpenDialog)}
           >
             Tạo mới
           </Button>
-        }
+        )}
       </Grid>
     </>
   );
@@ -459,16 +510,13 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
       >
         <DialogTitle id="confirm-dialog-title">Xác nhận</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Bạn có chắc chắn muốn gửi không?
-          </DialogContentText>
+          <DialogContentText>Bạn có chắc chắn muốn gửi không?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleCloseDialog(true)} color="primary" variant="contained">
             Đồng ý
           </Button>
           <Button onClick={() => handleCloseDialog(false)}>Hủy</Button>
-
         </DialogActions>
       </Dialog>
     </FormProvider>

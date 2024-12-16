@@ -102,7 +102,7 @@ export default function GiamsatNewEditForm({ currentToanha }: Props) {
       if (currentToanha !== undefined) {
         await axios
           .put(
-            `http://localhost:6868/api/v2/ent_toanha/update/${currentToanha.ID_Toanha}`,
+            `https://checklist.pmcweb.vn/be/api/v2/ent_toanha/update/${currentToanha.ID_Toanha}`,
             data,
             {
               headers: {
@@ -145,7 +145,7 @@ export default function GiamsatNewEditForm({ currentToanha }: Props) {
           });
       } else {
         axios
-          .post(`http://localhost:6868/api/v2/ent_toanha/create`, data, {
+          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_toanha/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

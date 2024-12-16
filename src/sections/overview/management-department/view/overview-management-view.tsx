@@ -217,7 +217,7 @@ export default function OverviewAnalyticsView() {
     setSelectedCode(name);
     await axios
       .get(
-        `http://localhost:6868/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ export default function OverviewAnalyticsView() {
   const handleOpenModalSuCo = async (name: string, key: string) => {
     setSelectedCodeSuCo(name);
     await axios
-      .get(`http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-${key}?name=${name}`, {
+      .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-${key}?name=${name}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -271,7 +271,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-percent-checklist-project', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-percent-checklist-project', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -311,7 +311,7 @@ export default function OverviewAnalyticsView() {
     const handleDataPercent = async () => {
       await axios
         .get(
-          'http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-report-checklist-percent-yesterday',
+          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-report-checklist-percent-yesterday',
           {
             headers: {
               'Content-Type': 'application/json',
@@ -333,7 +333,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-ti-le-hoan-thanh?
+          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-ti-le-hoan-thanh?
           year=${selectedYear}&khoi=${selectedKhoiCV}&month=${selectedMonth}&nhom=${selectedNhom}&tangGiam=${selectedTangGiam}&top=${selectedTop}`,
           {
             headers: {
@@ -362,7 +362,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-report-checklist-percent-week`, {
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-report-checklist-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -380,7 +380,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-report-problem-percent-week`, {
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-report-problem-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -399,7 +399,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_sucongoai/chi-nhanh-report-external-incident-percent-week`,
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/chi-nhanh-report-external-incident-percent-week`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -420,7 +420,7 @@ export default function OverviewAnalyticsView() {
     const handleTotalKhoiCV = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-ti-le-su-co?
+          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-ti-le-su-co?
           year=${selectedYearSuco}&khoi=${selectedKhoiCVSuco}&month=${selectedMonthSuco}&nhom=${selectedNhomSuco}&tangGiam=${selectedTangGiamSuco}&top=${selectedTopSuco}`,
           {
             headers: {
@@ -451,7 +451,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_sucongoai/chi-nhanh-dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/chi-nhanh-dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -489,7 +489,7 @@ export default function OverviewAnalyticsView() {
   const fetchExcelData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6868/api/v2/tb_checklistc/chi-nhanh-report-checklist-project-excel`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/chi-nhanh-report-checklist-project-excel`,
         {
           headers: {
             'Content-Type': 'application/json',

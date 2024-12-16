@@ -168,7 +168,7 @@ export default function SuCoListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_sucongoai/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -212,7 +212,7 @@ export default function SuCoListView() {
   const handleUpdate = async (id: string) => {
     await axios
       .put(
-        `http://localhost:6868/api/v2/tb_sucongoai/status/${id}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
         { Tinhtrangxuly: tinhTrangXuLy, ngayXuLy },
         {
           headers: {
@@ -502,8 +502,8 @@ function applyFilter({
   if (name) {
     inputData = inputData.filter(
       (order) =>
-        `${order.ent_hangmuc.Hangmuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${order.Noidungsuco}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order?.ent_hangmuc?.Hangmuc}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.Noidungsuco}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
