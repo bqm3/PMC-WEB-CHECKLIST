@@ -79,45 +79,76 @@ type ValidField =
   | 'NaOCL';
 
 const fieldLabels: any = {
-  'Dien_cu_dan': 'Điện Cư Dân',
-  'Dien_cdt': 'Điện CĐT',
-  'Nuoc_cu_dan': 'Nước Cư Dân',
-  'Nuoc_cdt': 'Nước CĐT',
-  'Xa_thai': 'Xả Thải',
-  'Rac_sh': 'Rác Sinh Hoạt',
-  'Muoi_dp': 'Muối Điện Phân',
-  'PAC': 'PAC',
-  'NaHSO3': 'NaHSO3',
-  'NaOH': 'NaOH',
-  'Mat_rd': 'Mật Rỉ Đường',
-  'Polymer_Anion': 'Polymer Anion',
-  'Chlorine_bot': 'Chlorine Bột',
-  'Chlorine_vien': 'Chlorine Viên',
-  'Methanol': 'Methanol',
-  'Dau_may': 'Dầu Máy',
-  'Tui_rac240': 'Túi Rác 240L',
-  'Tui_rac120': 'Túi Rác 120L',
-  'Tui_rac20': 'Túi Rác 20L',
-  'Tui_rac10': 'Túi Rác 10L',
-  'Tui_rac5': 'Túi Rác 5L',
-  'giayvs_235': 'Giấy vệ sinh 235',
-  'giaivs_120': 'Giấy vệ sinh 120',
-  'giay_lau_tay': 'Giấy Lau Tay',
-  'hoa_chat': 'Hóa Chất',
-  'nuoc_rua_tay': 'Nước Rửa Tay',
-  'nhiet_do': 'Nhiệt Độ',
-  'nuoc_bu': 'Nước Bù',
-  'clo': 'Clo',
-  'PH': 'PH',
-  'Poolblock': 'Poolblock',
-  'trat_thai': 'Trạt Thải (Xà bần)',
-  'pHMINUS': 'pH Minus',
-  'axit': 'Axit',
-  'PN180': 'PN180',
-  'chiSoCO2': 'Chỉ Số CO2',
-  'clorin': 'Clorin',
-  'NaOCL': "NaOCL"
-}
+  Dien_cu_dan: 'Điện Cư Dân',
+  Dien_cdt: 'Điện CĐT',
+  Nuoc_cu_dan: 'Nước Cư Dân',
+  Nuoc_cdt: 'Nước CĐT',
+  Xa_thai: 'Xả Thải',
+  Rac_sh: 'Rác sinh hoạt',
+  Muoi_dp: 'Muối điện phân (NaCl)',
+  PAC: 'PAC',
+  NaHSO3: 'NaHSO3',
+  NaOH: 'NaOH',
+  Mat_rd: 'Mật rỉ đường',
+  Polymer_Anion: 'Polymer Anion',
+  Chlorine_bot: 'Chlorine Bột',
+  Chlorine_vien: 'Chlorine Viên',
+  Methanol: 'Methanol',
+  Dau_may: 'Dầu máy phát (đầu DO)',
+  Tui_rac240: 'Túi rác 240L',
+  Tui_rac120: 'Túi rác 120L',
+  Tui_rac20: 'Túi rác 20L',
+  Tui_rac10: 'Túi rác 10L',
+  Tui_rac5: 'Túi rác 5L',
+  giayvs_235: 'Giấy vệ sinh 235mm',
+  giaivs_120: 'Giấy vệ sinh 120mm',
+  giay_lau_tay: 'Giấy lau tay',
+  hoa_chat: 'Hóa chất làm sạch',
+  nuoc_rua_tay: 'Nước rửa tay',
+  nhiet_do: 'Nhiệt Độ',
+  nuoc_bu: 'Nước bù bể bơi',
+  clo: 'Chỉ số Clo dư (mg/lít)',
+  PH: 'Độ PH bể',
+  Poolblock: 'Pool block Hóa chất',
+  trat_thai: 'Trạt thải xây dựng (Xà bần)',
+  pHMINUS: 'pH MINUS Hóa chất',
+  axit: 'Axit HCL',
+  PN180: 'PN180 chất trợ lắng',
+  chiSoCO2: 'Chỉ Số CO2',
+  clorin: 'Clorin 90%',
+  NaOCL: 'NaOCL',
+};
+
+const fieldCategories: any = {
+  'Hóa chất': [
+    'PAC',
+    'NaHSO3',
+    'NaOH',
+    'Mat_rd',
+    'Polymer_Anion',
+    'clorin',
+    'Chlorine_bot',
+    'Chlorine_vien',
+    'axit',
+    'pHMINUS',
+    'Poolblock',
+    'PN180',
+    'Muoi_dp',
+    'clo',
+    'PH',
+    'Methanol',
+    'NaOCL',
+  ],
+  'Năng lượng': ['Dien_cu_dan', 'Dien_cdt', 'Dau_may'],
+  Nước: ['Nuoc_cu_dan', 'Nuoc_cdt', 'Xa_thai', 'nuoc_bu'],
+
+  'Chỉ số CO2 tại tầng hầm': ['chiSoCO2'],
+
+  'Hóa chất dùng cho làm sạch': ['hoa_chat', 'nuoc_rua_tay'],
+  'Rác thải': ['Rac_sh', 'trat_thai'],
+  'Túi đựng rác': ['Tui_rac240', 'Tui_rac120', 'Tui_rac20', 'Tui_rac10', 'Tui_rac5'],
+  Giấy: ['giayvs_235', 'giaivs_120', 'giay_lau_tay'],
+};
 
 const STORAGE_KEY = 'accessToken';
 
@@ -401,7 +432,6 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         String(originalValue).trim() === '' ? null : parseFloat(originalValue)
       )
       .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
-
   });
 
   const defaultValues = useMemo(
@@ -547,16 +577,60 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         <Box>
           <Alert severity="warning">
             <Typography>
-              Nên sử dụng trình duyệt Google Chrome để nhập các chỉ số để tránh gặp lỗi khi
-              khai báo
+              Nên sử dụng trình duyệt Google Chrome để nhập các chỉ số để tránh gặp lỗi khi khai báo
             </Typography>
             <Typography>
               Đối với các chỉ số không có dữ liệu thì sẽ không cần phải nhập (Mặc định là 0)
             </Typography>
           </Alert>
-
         </Box>
         <Box
+          rowGap={3}
+          columnGap={2}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(2, 1fr)',
+            sm: 'repeat(4, 1fr)',
+          }}
+        >
+          {Object.keys(fieldCategories).map((category: any) => (
+            <div key={category}>
+              <Typography typography="h4" sx={{ pb: 2 }}>
+                {category}
+              </Typography>{' '}
+              {/* Display category name */}
+              <Box display="grid" gridTemplateRows="repeat(4, 1fr)" gap={2}>
+                {fieldCategories[category]?.map((field: any) => (
+                  <RHFTextField
+                    key={field}
+                    value={watch(field) === 0 ? '' : watch(field) ?? ''}
+                    InputLabelProps={{
+                      style: { fontWeight: 'normal', color: 'black' },
+                    }}
+                    name={field}
+                    label={
+                      fieldLabels[field] ||
+                      field.replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())
+                    }
+                    inputProps={{
+                      inputMode: 'decimal', // Cho phép nhập số thập phân
+                      pattern: '[0-9]*[.,]?[0-9]+', // Hỗ trợ số nguyên và số thập phân
+                      step: 0.01, // Chuyển step vào inputProps
+                    }}
+                    onChange={(e) => {
+                      const value = e?.target?.value?.replace(',', '.'); // Chuyển dấu phẩy thành dấu chấm
+                      if (value === '' || /^[0-9]*[.,]?[0-9]*$/.test(value)) {
+                        setValue(field, value); // Lưu chuỗi thô vào state
+                      }
+                    }}
+                  />
+                ))}
+              </Box>
+            </div>
+          ))}
+        </Box>
+
+        {/* <Box
           rowGap={3}
           columnGap={2}
           display="grid"
@@ -605,10 +679,13 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             'clorin',
             'NaOCL'
           ].map((field: any) => (
+
             <RHFTextField
               key={field}
               value={watch(field as ValidField) === 0 ? '' : watch(field as ValidField) ?? ''}
-
+              InputLabelProps={{
+                style: { fontWeight: 'bold', color: 'black' }
+              }}
               name={field}
               label={fieldLabels[field] || field.replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())}
               inputProps={{
@@ -624,8 +701,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
               }}
             />
           ))}
-        </Box>
-
+        </Box> */}
       </Stack>
     </Grid>
   );
