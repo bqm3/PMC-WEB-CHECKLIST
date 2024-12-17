@@ -85,7 +85,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     () => ({
       UserName: currentUser?.UserName || '',
       Email: currentUser?.Email || '',
-      Password: '',
+      Password: currentUser?.Password || '',
       ID_Chucvu: currentUser?.ID_Chucvu || null || '',
       Hoten: currentUser?.Hoten || '',
       Sodienthoai: currentUser?.Sodienthoai || '',
@@ -485,6 +485,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           />
 
           {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />}
+          {`${user?.ent_chucvu?.Role}` === '10' && <RHFTextField name="Password" label="Mật khẩu" />}
 
           {(`${currentUser?.ent_chucvu?.Role}` === '2' ||
             `${currentUser?.ent_chucvu?.Role}` === '3') && (
