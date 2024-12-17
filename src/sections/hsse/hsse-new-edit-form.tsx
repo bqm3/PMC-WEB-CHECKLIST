@@ -38,6 +38,43 @@ type Props = {
   currentHSSE?: IHSSE;
 };
 
+type ValidField =
+  | 'Dien_cdt'
+  | 'Nuoc_cu_dan'
+  | 'Nuoc_cdt'
+  | 'Xa_thai'
+  | 'Rac_sh'
+  | 'Muoi_dp'
+  | 'PAC'
+  | 'NaHSO3'
+  | 'NaOH'
+  | 'Mat_rd'
+  | 'Polymer_Anion'
+  | 'Chlorine_bot'
+  | 'Chlorine_vien'
+  | 'Methanol'
+  | 'Dau_may'
+  | 'Tui_rac240'
+  | 'Tui_rac120'
+  | 'Tui_rac20'
+  | 'Tui_rac10'
+  | 'Tui_rac5'
+  | 'giayvs_235'
+  | 'giaivs_120'
+  | 'giay_lau_tay'
+  | 'hoa_chat'
+  | 'nuoc_rua_tay'
+  | 'nhiet_do'
+  | 'nuoc_bu'
+  | 'clo'
+  | 'PH'
+  | 'Poolblock'
+  | 'trat_thai'
+  | 'pHMINUS'
+  | 'axit'
+  | 'PN180'
+  | 'chiSoCO2';
+
 const STORAGE_KEY = 'accessToken';
 
 export default function HSSENewEditForm({ currentHSSE }: Props) {
@@ -54,82 +91,298 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   const [loading, setLoading] = useState(false);
 
   const NewProductSchema = Yup.object().shape({
-    Dien_cu_dan: Yup.number(),
-    Dien_cdt: Yup.number(),
-    Nuoc_cu_dan: Yup.number(),
-    Nuoc_cdt: Yup.number(),
-    Xa_thai: Yup.number(),
-    Rac_sh: Yup.number(),
-    Muoi_dp: Yup.number(),
-    PAC: Yup.number(),
-    NaHSO3: Yup.number(),
-    NaOH: Yup.number(),
-    Mat_rd: Yup.number(),
-    Polymer_Anion: Yup.number(),
-    Chlorine_bot: Yup.number(),
-    Chlorine_vien: Yup.number(),
-    Methanol: Yup.number(),
-    Dau_may: Yup.number(),
-    Tui_rac240: Yup.number(),
-    Tui_rac120: Yup.number(),
-    Tui_rac20: Yup.number(),
-    Tui_rac10: Yup.number(),
-    Tui_rac5: Yup.number(),
-    giayvs_235: Yup.number(),
-    giaivs_120: Yup.number(),
-    giay_lau_tay: Yup.number(),
-    hoa_chat: Yup.number(),
-    nuoc_rua_tay: Yup.number(),
-    nhiet_do: Yup.number(),
-    nuoc_bu: Yup.number(),
-    clo: Yup.number(),
-    PH: Yup.number(),
-    Poolblock: Yup.number(),
-    trat_thai: Yup.number(),
-    pHMINUS: Yup.number(),
-    axit: Yup.number(),
-    PN180: Yup.number(),
-    chiSoCO2: Yup.number(),
+    Dien_cu_dan: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Dien_cdt: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Nuoc_cu_dan: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Nuoc_cdt: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Xa_thai: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Rac_sh: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Muoi_dp: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    PAC: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    NaHSO3: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    NaOH: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Mat_rd: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Polymer_Anion: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Chlorine_bot: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Chlorine_vien: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Methanol: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Dau_may: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Tui_rac240: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Tui_rac120: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Tui_rac20: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Tui_rac10: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Tui_rac5: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    giayvs_235: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    giaivs_120: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    giay_lau_tay: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    hoa_chat: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    nuoc_rua_tay: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    nhiet_do: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    nuoc_bu: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    clo: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    PH: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    Poolblock: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    trat_thai: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    pHMINUS: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    axit: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    PN180: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    chiSoCO2: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      Dien_cu_dan: currentHSSE?.Dien_cu_dan || 0,
-      Dien_cdt: currentHSSE?.Dien_cdt || 0,
-      Nuoc_cu_dan: currentHSSE?.Nuoc_cu_dan || 0,
-      Nuoc_cdt: currentHSSE?.Nuoc_cdt || 0,
-      Xa_thai: currentHSSE?.Xa_thai || 0,
-      Rac_sh: currentHSSE?.Rac_sh || 0,
-      Muoi_dp: currentHSSE?.Muoi_dp || 0,
-      PAC: currentHSSE?.PAC || 0,
-      NaHSO3: currentHSSE?.NaHSO3 || 0,
-      NaOH: currentHSSE?.NaOH || 0,
-      Mat_rd: currentHSSE?.Mat_rd || 0,
-      Polymer_Anion: currentHSSE?.Polymer_Anion || 0,
-      Chlorine_bot: currentHSSE?.Chlorine_bot || 0,
-      Chlorine_vien: currentHSSE?.Chlorine_vien || 0,
-      Methanol: currentHSSE?.Methanol || 0,
-      Dau_may: currentHSSE?.Dau_may || 0,
-      Tui_rac240: currentHSSE?.Tui_rac240 || 0,
-      Tui_rac120: currentHSSE?.Tui_rac120 || 0,
-      Tui_rac20: currentHSSE?.Tui_rac20 || 0,
-      Tui_rac10: currentHSSE?.Tui_rac10 || 0,
-      Tui_rac5: currentHSSE?.Tui_rac5 || 0,
-      giayvs_235: currentHSSE?.giayvs_235 || 0,
-      giaivs_120: currentHSSE?.giaivs_120 || 0,
-      giay_lau_tay: currentHSSE?.giay_lau_tay || 0,
-      hoa_chat: currentHSSE?.hoa_chat || 0,
-      nuoc_rua_tay: currentHSSE?.nuoc_rua_tay || 0,
-      nhiet_do: currentHSSE?.nhiet_do || 0,
-      nuoc_bu: currentHSSE?.nuoc_bu || 0,
-      clo: currentHSSE?.clo || 0,
-      PH: currentHSSE?.PH || 0,
-      Poolblock: currentHSSE?.Poolblock || 0,
-      trat_thai: currentHSSE?.trat_thai || 0,
-      pHMINUS: currentHSSE?.pHMINUS || 0,
-      axit: currentHSSE?.axit || 0,
-      PN180: currentHSSE?.PN180 || 0,
-      chiSoCO2: currentHSSE?.chiSoCO2 || 0,
+      Dien_cu_dan: currentHSSE?.Dien_cu_dan ?? 0,
+      Dien_cdt: currentHSSE?.Dien_cdt ?? 0,
+      Nuoc_cu_dan: currentHSSE?.Nuoc_cu_dan ?? 0,
+      Nuoc_cdt: currentHSSE?.Nuoc_cdt ?? 0,
+      Xa_thai: currentHSSE?.Xa_thai ?? 0,
+      Rac_sh: currentHSSE?.Rac_sh ?? 0,
+      Muoi_dp: currentHSSE?.Muoi_dp ?? 0,
+      PAC: currentHSSE?.PAC ?? 0,
+      NaHSO3: currentHSSE?.NaHSO3 ?? 0,
+      NaOH: currentHSSE?.NaOH ?? 0,
+      Mat_rd: currentHSSE?.Mat_rd ?? 0,
+      Polymer_Anion: currentHSSE?.Polymer_Anion ?? 0,
+      Chlorine_bot: currentHSSE?.Chlorine_bot ?? 0,
+      Chlorine_vien: currentHSSE?.Chlorine_vien ?? 0,
+      Methanol: currentHSSE?.Methanol ?? 0,
+      Dau_may: currentHSSE?.Dau_may ?? 0,
+      Tui_rac240: currentHSSE?.Tui_rac240 ?? 0,
+      Tui_rac120: currentHSSE?.Tui_rac120 ?? 0,
+      Tui_rac20: currentHSSE?.Tui_rac20 ?? 0,
+      Tui_rac10: currentHSSE?.Tui_rac10 ?? 0,
+      Tui_rac5: currentHSSE?.Tui_rac5 ?? 0,
+      giayvs_235: currentHSSE?.giayvs_235 ?? 0,
+      giaivs_120: currentHSSE?.giaivs_120 ?? 0,
+      giay_lau_tay: currentHSSE?.giay_lau_tay ?? 0,
+      hoa_chat: currentHSSE?.hoa_chat ?? 0,
+      nuoc_rua_tay: currentHSSE?.nuoc_rua_tay ?? 0,
+      nhiet_do: currentHSSE?.nhiet_do ?? 0,
+      nuoc_bu: currentHSSE?.nuoc_bu ?? 0,
+      clo: currentHSSE?.clo ?? 0,
+      PH: currentHSSE?.PH ?? 0,
+      Poolblock: currentHSSE?.Poolblock ?? 0,
+      trat_thai: currentHSSE?.trat_thai ?? 0,
+      pHMINUS: currentHSSE?.pHMINUS ?? 0,
+      axit: currentHSSE?.axit ?? 0,
+      PN180: currentHSSE?.PN180 ?? 0,
+      chiSoCO2: currentHSSE?.chiSoCO2 ?? 0,
     }),
     [currentHSSE]
   );
@@ -251,223 +504,64 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             sm: 'repeat(4, 1fr)',
           }}
         >
-          <RHFTextField
-            value={watch('Dien_cu_dan') === 0 ? '' : watch('Dien_cu_dan') ?? ''}
-            name="Dien_cu_dan"
-            label="Điện cư dân"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Dien_cdt') === 0 ? '' : watch('Dien_cdt') ?? ''}
-            name="Dien_cdt"
-            label="Điện chủ đầu tư"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Nuoc_cu_dan') === 0 ? '' : watch('Nuoc_cu_dan') ?? ''}
-            name="Nuoc_cu_dan"
-            label="Nước cư dân"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Nuoc_cdt') === 0 ? '' : watch('Nuoc_cdt') ?? ''}
-            name="Nuoc_cdt"
-            label="Nước chủ đầu tư"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Xa_thai') === 0 ? '' : watch('Xa_thai') ?? ''}
-            name="Xa_thai"
-            label="Nước xả thải"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Rac_sh') === 0 ? '' : watch('Rac_sh') ?? ''}
-            name="Rac_sh"
-            label="Rác sinh hoạt"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Muoi_dp') === 0 ? '' : watch('Muoi_dp') ?? ''}
-            name="Muoi_dp"
-            label="Muối điện phân"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('PAC') === 0 ? '' : watch('PAC') ?? ''}
-            name="PAC"
-            label="PAC"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('NaHSO3') === 0 ? '' : watch('NaHSO3') ?? ''}
-            name="NaHSO3"
-            label="NaHSO3"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('NaOH') === 0 ? '' : watch('NaOH') ?? ''}
-            name="NaOH"
-            label="NaOH"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Mat_rd') === 0 ? '' : watch('Mat_rd') ?? ''}
-            name="Mat_rd"
-            label="Mật rỉ đường"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Polymer_Anion') === 0 ? '' : watch('Polymer_Anion') ?? ''}
-            name="Polymer_Anion"
-            label="Polymer Anion"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Chlorine_bot') === 0 ? '' : watch('Chlorine_bot') ?? ''}
-            name="Chlorine_bot"
-            label="Chlorine bột"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Chlorine_vien') === 0 ? '' : watch('Chlorine_vien') ?? ''}
-            name="Chlorine_vien"
-            label="Chlorine viên"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Methanol') === 0 ? '' : watch('Methanol') ?? ''}
-            name="Methanol"
-            label="Methanol"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Dau_may') === 0 ? '' : watch('Dau_may') ?? ''}
-            name="Dau_may"
-            label="Dầu máy phát"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Tui_rac240') === 0 ? '' : watch('Tui_rac240') ?? ''}
-            name="Tui_rac240"
-            label="Túi rác 240L"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Tui_rac120') === 0 ? '' : watch('Tui_rac120') ?? ''}
-            name="Tui_rac120"
-            label="Túi rác 120L"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Tui_rac20') === 0 ? '' : watch('Tui_rac20') ?? ''}
-            name="Tui_rac20"
-            label="Túi rác 20L"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Tui_rac10') === 0 ? '' : watch('Tui_rac10') ?? ''}
-            name="Tui_rac10"
-            label="Túi rác 10L"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Tui_rac5') === 0 ? '' : watch('Tui_rac5') ?? ''}
-            name="Tui_rac5"
-            label="Túi rác 5L"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('giayvs_235') === 0 ? '' : watch('giayvs_235') ?? ''}
-            name="giayvs_235"
-            label="Giấy vệ sinh 235mm"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('giaivs_120') === 0 ? '' : watch('giaivs_120') ?? ''}
-            name="giaivs_120"
-            label="Giấy vệ sinh 120mm"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('giay_lau_tay') === 0 ? '' : watch('giay_lau_tay') ?? ''}
-            name="giay_lau_tay"
-            label="Giấy lau tay"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('hoa_chat') === 0 ? '' : watch('hoa_chat') ?? ''}
-            name="hoa_chat"
-            label="Hóa chất làm sạch"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('nuoc_rua_tay') === 0 ? '' : watch('nuoc_rua_tay') ?? ''}
-            name="nuoc_rua_tay"
-            label="Nước rửa tay"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('nhiet_do') === 0 ? '' : watch('nhiet_do') ?? ''}
-            name="nhiet_do"
-            label="Nhiệt độ"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('nuoc_bu') === 0 ? '' : watch('nuoc_bu') ?? ''}
-            name="nuoc_bu"
-            label="Nước bù bể"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('clo') === 0 ? '' : watch('clo') ?? ''}
-            name="clo"
-            label="Clo"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('PH') === 0 ? '' : watch('PH') ?? ''}
-            name="PH"
-            label="Nồng độ PH"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('Poolblock') === 0 ? '' : watch('Poolblock') ?? ''}
-            name="Poolblock"
-            label="Poolblock"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('trat_thai') === 0 ? '' : watch('trat_thai') ?? ''}
-            name="trat_thai"
-            label="Chất thải"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('pHMINUS') === 0 ? '' : watch('pHMINUS') ?? ''}
-            name="pHMINUS"
-            label="pH Minus"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('axit') === 0 ? '' : watch('axit') ?? ''}
-            name="axit"
-            label="Axit"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('PN180') === 0 ? '' : watch('PN180') ?? ''}
-            name="PN180"
-            label="PN180"
-            type="number"
-          />
-          <RHFTextField
-            value={watch('chiSoCO2') === 0 ? '' : watch('chiSoCO2') ?? ''}
-            name="chiSoCO2"
-            label="Chỉ số CO2"
-            type="number"
-          />
+          {[
+            'Dien_cdt',
+            'Nuoc_cu_dan',
+            'Nuoc_cdt',
+            'Xa_thai',
+            'Rac_sh',
+            'Muoi_dp',
+            'PAC',
+            'NaHSO3',
+            'NaOH',
+            'Mat_rd',
+            'Polymer_Anion',
+            'Chlorine_bot',
+            'Chlorine_vien',
+            'Methanol',
+            'Dau_may',
+            'Tui_rac240',
+            'Tui_rac120',
+            'Tui_rac20',
+            'Tui_rac10',
+            'Tui_rac5',
+            'giayvs_235',
+            'giaivs_120',
+            'giay_lau_tay',
+            'hoa_chat',
+            'nuoc_rua_tay',
+            'nhiet_do',
+            'nuoc_bu',
+            'clo',
+            'PH',
+            'Poolblock',
+            'trat_thai',
+            'pHMINUS',
+            'axit',
+            'PN180',
+            'chiSoCO2',
+          ].map((field: any) => (
+            <RHFTextField
+              key={field}
+              value={watch(field as ValidField) === 0 ? '' : watch(field as ValidField) ?? ''}
+
+              name={field}
+              label={field.replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())} // Label formatting
+              inputProps={{
+                inputMode: 'decimal', // Cho phép nhập số thập phân
+                pattern: '[0-9]*[.,]?[0-9]+', // Hỗ trợ số nguyên và số thập phân
+                step: 0.01, // Chuyển step vào inputProps
+              }}
+              onChange={(e: any) => {
+                const value = e?.target?.value?.replace(',', '.'); // Chuyển dấu phẩy thành dấu chấm
+                if (value === '' || /^[0-9]*[.,]?[0-9]*$/.test(value)) {
+                  setValue(field, value); // Lưu chuỗi thô vào state
+                }
+              }}
+            />
+          ))}
         </Box>
+
       </Stack>
     </Grid>
   );

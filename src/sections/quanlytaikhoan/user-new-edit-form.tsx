@@ -11,6 +11,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { Autocomplete, TextField, Chip } from '@mui/material';
 import { useAuthContext } from 'src/auth/hooks';
 // routes
 import { useRouter } from 'src/routes/hooks';
@@ -50,10 +51,16 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const [Chucvu, setChucvu] = useState<IChucvu[]>([]);
 
   const { khoiCV } = useGetKhoiCV();
-  const { chucVu, chucVuLoading, chucVuEmpty } = useGetChucvu();
-  const { duan, duanLoading, duanEmpty } = useGetDuan();
+  const { chucVu } = useGetChucvu();
+  const { duan } = useGetDuan();
 
   const { nhomduan } = useGetNhomDuAn();
+
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+
+  const handleSelectChange = (event: any, newValue: any) => {
+    setSelectedProject(newValue);
+  };
 
   useEffect(() => {
     if (khoiCV?.length > 0) {
@@ -91,10 +98,10 @@ export default function UserNewEditForm({ currentUser }: Props) {
       Sodienthoai: currentUser?.Sodienthoai || '',
       Gioitinh: currentUser?.Gioitinh || '',
       Ngaysinh: currentUser?.Ngaysinh || new Date() || null || undefined,
-      ID_Duan: currentUser?.ID_Duan || null || '',
+      ID_Duan: currentUser?.ID_Duan || null || selectedProject?.ID_Duan || '',
       ID_KhoiCV: currentUser?.ID_KhoiCV || null || '',
     }),
-    [currentUser]
+    [currentUser, selectedProject]
   );
 
   const methods = useForm({
@@ -424,24 +431,26 @@ export default function UserNewEditForm({ currentUser }: Props) {
               ))}
             </RHFSelect>
           )}
-          {Duan?.length > 0 && (
-            <RHFSelect
-              fullWidth
-              name="ID_Duan"
-              label="Dự án"
-              InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {Duan?.map((option) => (
-                <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
-                  {option.Duan}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-          )}
+          <Autocomplete
+            options={Duan}
+            getOptionLabel={(option) => option.Duan} // Hiển thị tên dự án
+            value={selectedProject} // Giá trị hiện tại
+            onChange={handleSelectChange} // Xử lý khi chọn
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                placeholder="Tìm kiếm dự án..."
+                fullWidth
+              />
+            )}
+            renderOption={(props, option) => (
+              <li {...props} key={option.ID_Duan}>
+                {option.Duan}
+              </li>
+            )}
+          />
+
 
           {Chucvu?.length > 0 && (
             <RHFSelect
