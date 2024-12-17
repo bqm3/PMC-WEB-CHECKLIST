@@ -77,6 +77,46 @@ type ValidField =
   | 'chiSoCO2'
   | 'clorin';
 
+const fieldLabels: any = {
+  'Dien_cu_dan': 'Điện Cư Dân',
+  'Dien_cdt': 'Điện CĐT',
+  'Nuoc_cu_dan': 'Nước Cư Dân',
+  'Nuoc_cdt': 'Nước CĐT',
+  'Xa_thai': 'Xả Thải',
+  'Rac_sh': 'Rác Sinh Hoạt',
+  'Muoi_dp': 'Muối Điện Phân',
+  'PAC': 'PAC',
+  'NaHSO3': 'NaHSO3',
+  'NaOH': 'NaOH',
+  'Mat_rd': 'Mật Rỉ Đường',
+  'Polymer_Anion': 'Polymer Anion',
+  'Chlorine_bot': 'Chlorine Bột',
+  'Chlorine_vien': 'Chlorine Viên',
+  'Methanol': 'Methanol',
+  'Dau_may': 'Dầu Máy',
+  'Tui_rac240': 'Túi Rác 240L',
+  'Tui_rac120': 'Túi Rác 120L',
+  'Tui_rac20': 'Túi Rác 20L',
+  'Tui_rac10': 'Túi Rác 10L',
+  'Tui_rac5': 'Túi Rác 5L',
+  'giayvs_235': 'Giấy vệ sinh 235',
+  'giaivs_120': 'Giấy vệ sinh 120',
+  'giay_lau_tay': 'Giấy Lau Tay',
+  'hoa_chat': 'Hóa Chất',
+  'nuoc_rua_tay': 'Nước Rửa Tay',
+  'nhiet_do': 'Nhiệt Độ',
+  'nuoc_bu': 'Nước Bù',
+  'clo': 'Clo',
+  'PH': 'PH',
+  'Poolblock': 'Poolblock',
+  'trat_thai': 'Trạt Thải (Xà bần)',
+  'pHMINUS': 'pH Minus',
+  'axit': 'Axit',
+  'PN180': 'PN180',
+  'chiSoCO2': 'Chỉ Số CO2',
+  'clorin': 'Clorin'
+}
+
 const STORAGE_KEY = 'accessToken';
 
 export default function HSSENewEditForm({ currentHSSE }: Props) {
@@ -559,7 +599,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
               value={watch(field as ValidField) === 0 ? '' : watch(field as ValidField) ?? ''}
 
               name={field}
-              label={field.replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())} // Label formatting
+              label={fieldLabels[field] || field.replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())}
               inputProps={{
                 inputMode: 'decimal', // Cho phép nhập số thập phân
                 pattern: '[0-9]*[.,]?[0-9]+', // Hỗ trợ số nguyên và số thập phân
