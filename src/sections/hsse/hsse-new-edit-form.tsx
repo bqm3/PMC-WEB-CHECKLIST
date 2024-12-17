@@ -39,6 +39,7 @@ type Props = {
 };
 
 type ValidField =
+  | 'Dien_cu_dan'
   | 'Dien_cdt'
   | 'Nuoc_cu_dan'
   | 'Nuoc_cdt'
