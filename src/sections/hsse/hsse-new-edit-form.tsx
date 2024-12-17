@@ -75,7 +75,8 @@ type ValidField =
   | 'axit'
   | 'PN180'
   | 'chiSoCO2'
-  | 'clorin';
+  | 'clorin'
+  | 'NaOCL';
 
 const fieldLabels: any = {
   'Dien_cu_dan': 'Điện Cư Dân',
@@ -114,7 +115,8 @@ const fieldLabels: any = {
   'axit': 'Axit',
   'PN180': 'PN180',
   'chiSoCO2': 'Chỉ Số CO2',
-  'clorin': 'Clorin'
+  'clorin': 'Clorin',
+  'NaOCL': "NaOCL"
 }
 
 const STORAGE_KEY = 'accessToken';
@@ -392,6 +394,13 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         String(originalValue).trim() === '' ? null : parseFloat(originalValue)
       )
       .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+    NaOCL: Yup.number()
+      .typeError('Giá trị phải là số hợp lệ')
+      .nullable()
+      .transform((value, originalValue) =>
+        String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+      )
+      .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
 
   });
 
@@ -433,7 +442,8 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
       axit: currentHSSE?.axit ?? 0,
       PN180: currentHSSE?.PN180 ?? 0,
       chiSoCO2: currentHSSE?.chiSoCO2 ?? 0,
-      clorin: currentHSSE?.clorin ?? 0
+      clorin: currentHSSE?.clorin ?? 0,
+      NaOCL: currentHSSE?.NaOCL ?? 0,
     }),
     [currentHSSE]
   );
@@ -592,7 +602,8 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             'axit',
             'PN180',
             'chiSoCO2',
-            'clorin'
+            'clorin',
+            'NaOCL'
           ].map((field: any) => (
             <RHFTextField
               key={field}

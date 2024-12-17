@@ -170,6 +170,7 @@ export type IHSSE = {
   modifiedBy?: string;
   chiSoCO2?: number;
   clorin?: number;
+  NaOCL?: number;
 };
 
  
