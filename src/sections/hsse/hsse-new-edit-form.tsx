@@ -544,7 +544,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-      });      
+      });
       enqueueSnackbar({
         variant: 'success',
         autoHideDuration: 4000,
@@ -553,7 +553,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
     } catch (error) {
       setLoading(false);
       let errorMessage = 'Lỗi gửi yêu cầu';
-      console.log("error",error.message)
+      console.log("error", error.message)
       if (error.response) {
         errorMessage = error.response.data.message || errorMessage;
       } else if (error.request) {
@@ -568,7 +568,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
       setLoading(false);
     }
   };
-  
+
   const onSubmit = handleSubmit(async (data) => {
     if (currentHSSE) {
       const dataReq = {
@@ -580,7 +580,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
       await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data);
     }
   });
-  
+
 
   const renderDetails = (
     <Grid xs={12} md={12}>

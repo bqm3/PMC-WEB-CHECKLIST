@@ -359,7 +359,6 @@ export function useNavData() {
           ]
         });
       } else {
-        // If Role is not 1, create the HSE section without 'phanquyen'
         navigationData[0].items.push({
           title: t('hsse'),
           path: paths.dashboard.hsse.root,
@@ -371,15 +370,21 @@ export function useNavData() {
         });
       }
     }
-    // {
-    //   title: t('project'),
-    //   path: paths.dashboard.duan.root,
-    //   icon: ICONS.tour,
-    //   children: [
-    //     { title: t('create'), path: paths.dashboard.duan.new },
-    //     { title: t('list'), path: paths.dashboard.duan.root },
-    //   ],
-    // },
+
+    if (user?.ent_chucvu?.Role === 10 && user?.ID_Duan !== null) {
+      navigationData[0].items.push({
+        title: t('hsse'),
+        path: paths.dashboard.hsse.root,
+        icon: ICONS.tour,
+        children: [
+
+          { title: t('phanquyen'), path: paths.dashboard.hsse.phanquyen },
+          { title: t('Dữ liệu'), path: paths.dashboard.hsse.root },
+          { title: t('create'), path: paths.dashboard.hsse.new },
+        ]
+      });
+    }
+
     return navigationData;
   }, [t, user]);
 
