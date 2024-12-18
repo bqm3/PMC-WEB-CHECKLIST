@@ -31,6 +31,7 @@ import { useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFSelect, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
 // types
 import { IHSSE } from 'src/types/khuvuc';
+import moment from 'moment';
 
 // ----------------------------------------------------------------------
 
@@ -164,6 +165,8 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   const [open, setOpen] = useState(false);
   const [checkSubmit, setCheckSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const isToday = moment(currentHSSE?.Ngay_ghi_nhan).isSame(moment(), 'day');
 
   const NewProductSchema = Yup.object().shape({
     Dien_cu_dan: Yup.number()
@@ -530,46 +533,54 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
     handleCheck();
   }, [accessToken]);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const handleApiRequest = async (method: any, url: any, data: any) => {
     setLoading(true);
-    await axios
-      .post(`https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data, {
+    try {
+      const res = await axios({
+        method,
+        url,
+        data,
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-      })
-      .then((res) => {
-        enqueueSnackbar({
-          variant: 'success',
-          autoHideDuration: 4000,
-          message: 'Tạo mới thành công!',
-        });
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        if (error.response) {
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: `${error.response.data.message}`,
-          });
-        } else if (error.request) {
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: `Không nhận được phản hồi từ máy chủ`,
-          });
-        } else {
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: `Lỗi gửi yêu cầu`,
-          });
-        }
+      });      
+      enqueueSnackbar({
+        variant: 'success',
+        autoHideDuration: 4000,
+        message: method === 'put' ? 'Cập nhật thành công!' : 'Tạo mới thành công!',
       });
+    } catch (error) {
+      setLoading(false);
+      let errorMessage = 'Lỗi gửi yêu cầu';
+      console.log("error",error.message)
+      if (error.response) {
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        errorMessage = 'Không nhận được phản hồi từ máy chủ';
+      }
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 4000,
+        message: errorMessage,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const onSubmit = handleSubmit(async (data) => {
+    if (currentHSSE) {
+      const dataReq = {
+        data,
+        Ngay: currentHSSE?.Ngay_ghi_nhan,
+      }
+      await handleApiRequest('put', `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
+    } else {
+      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data);
+    }
   });
+  
 
   const renderDetails = (
     <Grid xs={12} md={12}>
@@ -629,79 +640,6 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             </div>
           ))}
         </Box>
-
-        {/* <Box
-          rowGap={3}
-          columnGap={2}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(2, 1fr)',
-            sm: 'repeat(4, 1fr)',
-          }}
-        >
-          {[
-            'Dien_cu_dan',
-            'Dien_cdt',
-            'Nuoc_cu_dan',
-            'Nuoc_cdt',
-            'Xa_thai',
-            'Rac_sh',
-            'Muoi_dp',
-            'PAC',
-            'NaHSO3',
-            'NaOH',
-            'Mat_rd',
-            'Polymer_Anion',
-            'Chlorine_bot',
-            'Chlorine_vien',
-            'Methanol',
-            'Dau_may',
-            'Tui_rac240',
-            'Tui_rac120',
-            'Tui_rac20',
-            'Tui_rac10',
-            'Tui_rac5',
-            'giayvs_235',
-            'giaivs_120',
-            'giay_lau_tay',
-            'hoa_chat',
-            'nuoc_rua_tay',
-            'nhiet_do',
-            'nuoc_bu',
-            'clo',
-            'PH',
-            'Poolblock',
-            'trat_thai',
-            'pHMINUS',
-            'axit',
-            'PN180',
-            'chiSoCO2',
-            'clorin',
-            'NaOCL'
-          ].map((field: any) => (
-
-            <RHFTextField
-              key={field}
-              value={watch(field as ValidField) === 0 ? '' : watch(field as ValidField) ?? ''}
-              InputLabelProps={{
-                style: { fontWeight: 'bold', color: 'black' }
-              }}
-              name={field}
-              label={fieldLabels[field] || field.replace(/_/g, ' ').replace(/\b\w/g, (l: any) => l.toUpperCase())}
-              inputProps={{
-                inputMode: 'decimal', // Cho phép nhập số thập phân
-                pattern: '[0-9]*[.,]?[0-9]+', // Hỗ trợ số nguyên và số thập phân
-                step: 0.01, // Chuyển step vào inputProps
-              }}
-              onChange={(e: any) => {
-                const value = e?.target?.value?.replace(',', '.'); // Chuyển dấu phẩy thành dấu chấm
-                if (value === '' || /^[0-9]*[.,]?[0-9]*$/.test(value)) {
-                  setValue(field, value); // Lưu chuỗi thô vào state
-                }
-              }}
-            />
-          ))}
-        </Box> */}
       </Stack>
     </Grid>
   );
@@ -722,6 +660,16 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             onClick={methods.handleSubmit(handleOpenDialog)}
           >
             Tạo mới
+          </Button>
+        )}
+        {isToday && currentHSSE && (
+          <Button
+            disabled={loading}
+            variant="contained"
+            size="large"
+            onClick={methods.handleSubmit(handleOpenDialog)}
+          >
+            Update
           </Button>
         )}
       </Grid>
