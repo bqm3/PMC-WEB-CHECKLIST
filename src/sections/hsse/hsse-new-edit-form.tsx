@@ -588,22 +588,18 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           rowGap={3}
           columnGap={2}
           display="grid"
-        // gridTemplateColumns={{
-        //   xs: 'repeat(2, 1fr)',
-        //   sm: 'repeat(4, 1fr)',
-        // }}
         >
           {Object.keys(fieldCategories).map((category: any) => (
             <div key={category}>
-              <Typography typography="h5" sx={{ pb: 0, color: '#21409A' }}>
+              <Typography typography="h4" sx={{ pb: 0, color: '#21409A' }}>
                 {category}
               </Typography>{' '}
               {/* Display category name */}
               <Box
                 display="grid"
                 gridTemplateColumns="repeat(4, 1fr)" // Chia thành 4 cột
-                columnGap={2} // Khoảng cách giữa các cột
-                rowGap={3} // Khoảng cách giữa các dòng
+                columnGap={2}
+                rowGap={3}
               >
                 {fieldCategories[category]?.map((field: any) => (
                   <RHFTextField
