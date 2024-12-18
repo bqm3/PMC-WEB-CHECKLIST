@@ -1,6 +1,6 @@
 
 import Container from '@mui/material/Container';
-import {useGetTb_ChecklistDetail} from 'src/api/khuvuc'
+import { useGetTb_ChecklistDetail } from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 
@@ -24,8 +24,8 @@ export default function ChecklistCalvDetailView({ id }: Props) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-    
-      <TbNotChecklistCalvView currentChecklist={currentChecklist}  dataChecklistC={dataChecklistC}/>
+
+      <TbNotChecklistCalvView currentChecklist={currentChecklist} dataChecklistC={dataChecklistC} />
     </Container>
   );
 }

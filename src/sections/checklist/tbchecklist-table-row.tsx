@@ -166,7 +166,7 @@ export default function AreaTableRow({
             popover.onClose();
           }}
         >
-         <Iconify icon="eva:close-circle-fill" />
+          <Iconify icon="eva:close-circle-fill" />
           Chưa checklist
         </MenuItem>
         {`${Tinhtrang}` === '1' && (

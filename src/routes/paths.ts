@@ -205,7 +205,9 @@ export const paths = {
       detail: (id: string) => `${ROOTS.DASHBOARD}/checklist/lists/${id}`,
       not: (id: string) => `${ROOTS.DASHBOARD}/checklist/lists-not/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/checklist/${id}/edit`,
-      lists :`${ROOTS.DASHBOARD}/checklist/lists`,
+      lists : `${ROOTS.DASHBOARD}/checklist/lists`,
+      catrongngay: `${ROOTS.DASHBOARD}/checklist/catrongngay`,
+      catrongngaydetail:  (Ngay: string, ID_Calv: string) => `${ROOTS.DASHBOARD}/checklist/catrongngay/${Ngay}/${ID_Calv}`,
     },
     quanlytaikhoan: {
       root: `${ROOTS.DASHBOARD}/quan-ly-tai-khoan`,

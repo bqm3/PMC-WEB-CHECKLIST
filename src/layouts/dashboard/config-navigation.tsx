@@ -171,6 +171,7 @@ export function useNavData() {
                   { title: t('Danh sách Checklist'), path: paths.dashboard.checklist.root },
                   { title: t('create'), path: paths.dashboard.checklist.new },
                   { title: t('calamviec'), path: paths.dashboard.checklist.lists },
+                  { title: t('catrongngay'), path: paths.dashboard.checklist.catrongngay },
                 ],
               },
               {

@@ -170,6 +170,8 @@ const ToanhaEditPage = lazy(() => import('src/pages/dashboard/toanha/edit'));
 // Checklist
 const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list'));
 const TCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/tlist'));
+const DayCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/catrongngay'));
+const DayNotCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/catrongngay-not'));
 const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
 const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'));
 const CaChecklistDetailPage = lazy(() => import('src/pages/dashboard/checklist/detail'));
@@ -297,6 +299,8 @@ export const dashboardRoutes = [
           { path: 'lists-not/:id', element: <NotCaChecklistDetailPage /> },
           { path: 'new', element: <CheckListNewPage /> },
           { path: 'lists', element: <TCheckListListsPage /> },
+          { path: 'catrongngay', element: <DayCheckListListsPage /> },
+          { path: 'catrongngay/:ngay/:idc', element: <DayNotCheckListListsPage /> },
         ],
       },
       {

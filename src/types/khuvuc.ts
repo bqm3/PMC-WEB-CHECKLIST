@@ -173,7 +173,6 @@ export type IHSSE = {
   NaOCL?: number;
 };
 
- 
 export type IGiamsat = {
   ID_Giamsat: string;
   ID_Duan: string;
@@ -245,7 +244,7 @@ export type ILoaiChiSo = {
   ID_Duan_Loai: string;
   TenLoaiCS: string;
   isDelete: string;
-}
+};
 
 export type IHangMucChiSo = {
   ID_Hangmuc_Chiso: string;
@@ -256,7 +255,7 @@ export type IHangMucChiSo = {
   Donvi: string;
   ent_loai_chiso: ILoaiChiSo;
   isDelete: string;
-}
+};
 
 export type IBaocaochiso = {
   ID_Baocaochiso: string;
@@ -267,13 +266,13 @@ export type IBaocaochiso = {
   Year: string;
   Chiso: string;
   Image: string;
-  Chiso_Before: string
+  Chiso_Before: string;
   Chiso_Read_Img: string;
   Ghichu: string;
   isDelete: string;
   // ent_hangmuc_chiso: IHangMucChiSo;
   ent_user: IUser;
-}
+};
 
 export type IChucvu = {
   ID_Chucvu: string;
@@ -421,6 +420,18 @@ export type ITbChecklist = {
   ent_calv: ICalv;
   ent_user: IUser;
   ent_thietlapca: IThietLapCa;
+};
+
+export type IDayChecklistC = {
+  Key: string;
+  Ngay: string;
+  Ca: string;
+  Tong: string;
+  TongC: string;
+  KhoiCV: string;
+  ID_Calv: string;
+  ID_Duan: string;
+  ID_KhoiCV: string;
 };
 
 export type IChecklist = {

@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh, IHSSE } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh, IHSSE, IDayChecklistC } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -775,6 +775,37 @@ export function useGetTb_Checklist(pag: any) {
   return memoizedValue;
 }
 
+export function useGetDayTb_Checklist(pag: any) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/day?page=0&limit=300`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      tb_day_checkList: (data?.data as IDayChecklistC[]) || [],
+      tb_day_checkListLoading: isLoading,
+      tb_day_checkListError: error,
+      tb_day_checkListValidating: isValidating,
+      tb_day_checkListEmpty: !isLoading && !data?.length,
+      tb_day_checkListTotalPages: data?.totalPages,
+      tb_day_checklistPage: data?.page,
+      tb_day_checklistTotalCount: data?.totalCount,
+      mutateTb_Checklist: mutate
+    }),
+    [data, error, isLoading, isValidating, mutate]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetTb_ChecklistDetail(id:any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/ca/${id}`;
@@ -792,6 +823,33 @@ export function useGetTb_ChecklistDetail(id:any) {
     () => ({
       checkList: (data?.data as TbChecklistCalv[]) || [],
       dataChecklistC: (data?.dataChecklistC as any) || null,
+      checkListLoading: isLoading,
+      checkListError: error,
+      checkListValidating: isValidating,
+      checkListEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetDayTb_ChecklistDetail(Ngay:string, ID_Calv: string) {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/filter-mul-day/${Ngay}/${ID_Calv}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      checkList: (data?.data as any) || [],
       checkListLoading: isLoading,
       checkListError: error,
       checkListValidating: isValidating,

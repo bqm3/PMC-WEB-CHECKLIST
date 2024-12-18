@@ -455,18 +455,18 @@ export default function ChecklistCalvListView() {
                     'default'
                   }
                 >
-                  {tab.value === 'all' && dataFiltered?.length}
+                  {tab.value === 'all' && tb_checkList?.length}
                   {tab.value === '1' &&
-                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
 
                   {tab.value === '2' &&
-                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
                   {tab.value === '3' &&
-                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
                   {tab.value === '4' &&
-                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
                   {tab.value === '5' &&
-                    dataFiltered?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
+                    tb_checkList?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
                 </Label>
               }
             />
