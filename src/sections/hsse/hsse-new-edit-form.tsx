@@ -149,6 +149,7 @@ const fieldCategories: any = {
   'Rác thải': ['Rac_sh', 'trat_thai'],
   'Túi đựng rác': ['Tui_rac240', 'Tui_rac120', 'Tui_rac20', 'Tui_rac10', 'Tui_rac5'],
   Giấy: ['giayvs_235', 'giaivs_120', 'giay_lau_tay'],
+  "Nhiệt độ": ["nhiet_do"]
 };
 
 const STORAGE_KEY = 'accessToken';
@@ -435,6 +436,8 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         String(originalValue).trim() === '' ? null : parseFloat(originalValue)
       )
       .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
+
+
   });
 
   const defaultValues = useMemo(
@@ -602,7 +605,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         >
           {Object.keys(fieldCategories).map((category: any) => (
             <div key={category}>
-              <Typography typography="h4" sx={{ pb: 0, color: '#21409A' }}>
+              <Typography typography="h4" sx={{ pb: 2, color: '#21409A' }}>
                 {category}
               </Typography>{' '}
               {/* Display category name */}

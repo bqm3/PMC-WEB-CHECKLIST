@@ -255,6 +255,14 @@ export function useNavData() {
           ],
         },
         {
+          title: t('hsse'),
+          path: paths.dashboard.hsse.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('Tổng hợp'), path: paths.dashboard.hsse.admin },
+          ],
+        },
+        {
           title: t('baocaovitri'),
           path: paths.dashboard.general.location,
           icon: ICONS.analytics,
@@ -276,6 +284,7 @@ export function useNavData() {
       );
     }
 
+    // Role PSH và đang trong trạng thái vào 1 dự án thì loại bỏ báo cáo vị trí, danh sách
     if (user?.ent_chucvu?.Role === 10 && user?.ID_Duan !== null) {
       navigationData[1].items.unshift(
         {

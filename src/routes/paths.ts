@@ -232,6 +232,7 @@ export const paths = {
     },
     hsse: {
       root: `${ROOTS.DASHBOARD}/hsse`,
+      admin: `${ROOTS.DASHBOARD}/hsse/admin`,
       new: `${ROOTS.DASHBOARD}/hsse/new`,
       phanquyen: `${ROOTS.DASHBOARD}/hsse/phanquyen`,
       details: (id: string) => `${ROOTS.DASHBOARD}/hsse/${id}`,

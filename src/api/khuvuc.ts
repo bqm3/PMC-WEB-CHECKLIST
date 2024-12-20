@@ -443,6 +443,32 @@ export function useGetHSSE() {
 
   return memoizedValue;
 }
+export function useGetHSSEAll() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/hsse/admin';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      hsse: (data?.data as IHSSE[]) || [],
+      hsseLoading: isLoading,
+      hsseError: error,
+      hsseValidating: isValidating,
+      hsseEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
 
 export function useGetGiamsat() {
   const accessToken = localStorage.getItem(STORAGE_KEY);

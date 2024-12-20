@@ -1134,7 +1134,7 @@ export default function OverviewAnalyticsView() {
       </Dialog>
 
       <Dialog open={openModalAI} onClose={handleCloseModalAI} fullWidth maxWidth="lg">
-        <DialogTitle>Tra cứu nhanh</DialogTitle>
+        <DialogTitle>Tra cứu nhanh về HSSE</DialogTitle>
         <DialogContent>
           {/* {dataTableSuCo && dataTableSuCo?.length > 0 && openModalAI === true && (
             <SuCoListView data={dataTableSuCo} />

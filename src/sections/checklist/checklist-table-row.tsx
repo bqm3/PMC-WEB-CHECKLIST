@@ -1,11 +1,6 @@
-import { format } from 'date-fns';
 // @mui
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -14,16 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-// utils
-import { fCurrency } from 'src/utils/format-number';
-// types
-import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IHangMuc, IChecklist, ICalv, IKhoiCV } from 'src/types/khuvuc';
+import { IChecklist, ICalv, IKhoiCV } from 'src/types/khuvuc';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -50,30 +42,13 @@ export default function AreaTableRow({
 }: Props) {
   const {
     ID_Checklist,
-    ID_Khuvuc,
-    ID_Hangmuc,
     Checklist,
-    Giatridinhdanh,
-    Giatrinhan,
-    Tieuchuan,
-    MaQrCode,
     ent_hangmuc,
-    ent_tang,
-    Sothutu,
-    Maso,
-    sCalv,
-    calv_1,
-    calv_2,
-    calv_3,
-    calv_4,
-    ent_calv,
     Tinhtrang,
     ent_khuvuc,
   } = row;
 
   const confirm = useBoolean();
-
-  const collapse = useBoolean();
 
   const popover = usePopover();
 
@@ -92,11 +67,14 @@ export default function AreaTableRow({
         (`${name}` === 'Khối làm sạch' && 'success') ||
         (`${name}` === 'Khối kỹ thuật' && 'warning') ||
         (`${name}` === 'Khối bảo vệ' && 'error') ||
+        (`${name}` === 'Khối dịch vụ' && 'info') ||
         'default'
       }
       style={{ margin: 2 }}
     >
-      {name}
+      <Typography sx={{ fontSize: 10 }}>
+        {name}
+      </Typography>
     </Label>
   ));
   let backgroundColorStyle;

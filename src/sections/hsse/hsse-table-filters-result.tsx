@@ -15,7 +15,7 @@ import { shortDateLabel } from 'src/components/custom-date-range-picker';
 
 type Props = StackProps & {
   filters: IKhuvucTableFilters;
-  onFilters: (name: string, value: IKhuvucTableFilterValue) => void;
+  onFilters: (name: string, value: any) => void;
   //
   onResetFilters: VoidFunction;
   //
@@ -37,10 +37,6 @@ export default function OrderTableFiltersResult({
     onFilters('status', 'all');
   };
 
-  const handleRemoveDate = () => {
-    onFilters('startDate', null);
-    onFilters('endDate', null);
-  };
 
   return (
     <Stack spacing={1.5} {...other}>

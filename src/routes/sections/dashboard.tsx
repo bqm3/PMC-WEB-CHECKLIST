@@ -157,6 +157,7 @@ const DuanEditPage = lazy(() => import('src/pages/dashboard/duan/edit'));
 
 // HSSE
 const HSSEListsPage = lazy(() => import('src/pages/dashboard/hsse/list'));
+const AdminHsseListPage = lazy(() => import('src/pages/dashboard/hsse/admin'));
 const HSSEPhanQuyenPage = lazy(() => import('src/pages/dashboard/hsse/phanquyen'));
 const HSSENewPage = lazy(() => import('src/pages/dashboard/hsse/new'));
 const HSSEEditPage = lazy(() => import('src/pages/dashboard/hsse/edit'));
@@ -358,6 +359,7 @@ export const dashboardRoutes = [
         children: [
           { element: <HSSEListsPage />, index: true },
           { path: 'list', element: <HSSEListsPage /> },
+          { path: 'admin', element: <AdminHsseListPage /> },
           { path: 'phanquyen', element: <HSSEPhanQuyenPage /> },
           { path: ':id/edit', element: <HSSEEditPage /> },
           { path: 'new', element: <HSSENewPage /> },
