@@ -48,7 +48,8 @@ const fieldLabels: any = {
   Slscxedapdien: 'Sự cố xe đạp điện',
   Slscxedap: 'Sự cố xe đạp thường',
   Slcongto: 'Công tơ điện',
-  Doanhthu: 'Doanh thu từ 6 đến 18h',
+  Doanhthu: 'Doanh thu từ 6h đến 18h',
+  Ghichu: 'Ghi chú',
 };
 
 const fieldCategories: any = {
@@ -70,6 +71,7 @@ const fieldCategories: any = {
     'Slscxedapdien',
   ],
   'Thông tin khác': ['Slcongto', 'Doanhthu'],
+  'Ghi chú': ['Ghichu'],
 };
 
 const STORAGE_KEY = 'accessToken';
@@ -86,16 +88,24 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const isToday = moment(currentP0?.Ngaybc).isSame(moment(), 'day');
 
   const NewProductSchema = Yup.object().shape(
-    Object.keys(fieldLabels).reduce((acc, field) => ({
-      ...acc,
-      [field]: Yup.number()
-        .typeError('Giá trị phải là số hợp lệ')
-        .nullable()
-        .transform((value, originalValue) =>
-          String(originalValue).trim() === '' ? null : parseFloat(originalValue)
-        )
-        .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
-    }), {})
+    Object.keys(fieldLabels).reduce((acc: any, field) => {
+      if (field === 'Ghichu') {
+        // 'Ghichu' is a text field
+        acc[field] = Yup.string()
+          .nullable()
+          .max(255, 'Ghi chú không được vượt quá 255 ký tự');
+      } else {
+        // Other fields are numbers
+        acc[field] = Yup.number()
+          .typeError('Giá trị phải là số hợp lệ')
+          .nullable()
+          .transform((value, originalValue) =>
+            String(originalValue).trim() === '' ? null : parseFloat(originalValue)
+          )
+          .min(0, 'Giá trị phải lớn hơn hoặc bằng 0');
+      }
+      return acc;
+    }, {})
   );
 
   const defaultValues = useMemo(
@@ -116,11 +126,12 @@ export default function P0NewEditForm({ currentP0 }: Props) {
       Slscxedapdien: currentP0?.Slscxedapdien ?? 0,
       Slcongto: currentP0?.Slcongto ?? 0,
       Doanhthu: currentP0?.Doanhthu ?? 0,
+      Ghichu: currentP0?.Ghichu ?? ""
     }),
     [currentP0]
   );
 
-  const methods = useForm({
+  const methods = useForm<any>({
     resolver: yupResolver(NewProductSchema),
     defaultValues,
   });
@@ -152,9 +163,8 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   useEffect(() => {
     const handleCheck = async () => {
       try {
-        const res = await axios.post(
-          `https://checklist.pmcweb.vn/be/api/v2/p0/check`,
-          [],
+        const res = await axios.get(
+          `http://localhost:6868/api/v2/p0/check`,
           {
             headers: {
               Accept: 'application/json',
@@ -213,11 +223,11 @@ export default function P0NewEditForm({ currentP0 }: Props) {
       };
       await handleApiRequest(
         'put',
-        `https://checklist.pmcweb.vn/be/api/v2/p0/update/${currentP0?.ID_P0}`,
+        `http://localhost:6868/api/v2/p0/update/${currentP0?.ID_P0}`,
         dataReq
       );
     } else {
-      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/p0/create`, data);
+      await handleApiRequest('post', `http://localhost:6868/api/v2/p0/create`, data);
     }
   });
 
@@ -246,35 +256,63 @@ export default function P0NewEditForm({ currentP0 }: Props) {
                 columnGap={2}
                 rowGap={3}
               >
-                {fieldCategories[category]?.map((field:any) => (
-                  <RHFTextField
-                    key={field}
-                    value={`${watch(field)}` === '0' ? '' : watch(field) ?? ''}
-                    InputLabelProps={{
-                      style: { fontWeight: 'normal', color: 'black' },
-                    }}
-                    name={field}
-                    label={fieldLabels[field]}
-                    inputProps={{
-                      inputMode: 'decimal',
-                      pattern: '[0-9]*[.,]?[0-9]+',
-                      step: 0.01,
-                    }}
-                    onChange={(e:any) => {
-                      const value = e?.target?.value?.replace(',', '.');
-                      if (value === '' || /^[0-9]*[.,]?[0-9]*$/.test(value)) {
-                        // setValue(field, value);
+                {fieldCategories[category]?.map((field: any) => (
+                  field === 'Ghichu' ? (
+                    // Render text field for 'Ghichu'
+                    <RHFTextField
+                      key={field}
+                      value={watch(field) ?? ''}
+                      InputLabelProps={{
+                        style: { fontWeight: 'normal', color: 'black' },
+                      }}
+                      name={field}
+                      label={
+                        fieldLabels[field] ||
+                        field.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())
                       }
-                    }}
-                  />
+                      inputProps={{
+                        inputMode: 'text',
+                      }}
+                      onChange={(e) => setValue(field, e.target.value)}
+                    />
+                  ) : (
+                    // Render number fields for other fields
+                    <RHFTextField
+                      key={field}
+                      value={`${watch(field)}` === '0' ? '' : watch(field) ?? ''}
+                      InputLabelProps={{
+                        style: { fontWeight: 'normal', color: 'black' },
+                      }}
+                      name={field}
+                      label={
+                        fieldLabels[field] ||
+                        field.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())
+                      }
+                      inputProps={{
+                        inputMode: 'decimal',
+                        pattern: '[0-9]*[.,]?[0-9]+',
+                        step: 0.01,
+                      }}
+                      onChange={(e) => {
+                        const value = e?.target?.value?.replace(',', '.');
+                        if (value === '' || /^[0-9]*[.,]?[0-9]*$/.test(value)) {
+                          setValue(field, value);
+                        }
+                      }}
+                    />
+                  )
                 ))}
               </Box>
             </div>
           ))}
+
+
+
         </Box>
       </Stack>
     </Grid>
   );
+
 
   const renderActions = (
     <>

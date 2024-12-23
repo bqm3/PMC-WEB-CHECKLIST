@@ -55,8 +55,8 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   const { users } = useGetUsers();
 
-  const usersFilter = users.filter(i => 
-    (i.ID_KhoiCV === null || `${i.ID_KhoiCV}` === `3` || `${i.ID_KhoiCV}` === `4`) && (`${i.ent_chucvu?.Role}` !== `10` && `${i.ent_chucvu?.Role}` !== `0` )
+  const usersFilter = users.filter(i =>
+    (i.ID_KhoiCV === null || `${i.ID_KhoiCV}` === `3` || `${i.ID_KhoiCV}` === `4`) && (`${i.ent_chucvu?.Role}` !== `10` && `${i.ent_chucvu?.Role}` !== `0`)
   );
 
 
@@ -65,10 +65,10 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   //       return `Khối bảo vệ`
   //     }
   // }
-  
+
   useEffect(() => {
     const handleGet = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/p0', {
+      await axios.get('http://localhost:6868/api/v2/p0', {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -134,7 +134,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       ID_Users
     };
     await axios
-      .post(`https://checklist.pmcweb.vn/be/api/v2/p0/create-role`, data, {
+      .post(`http://localhost:6868/api/v2/p0/create-role`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

@@ -95,16 +95,13 @@ export default function GiamsatListView() {
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <CustomBreadcrumbs
-            heading="Danh sách dự án"
+            heading="Danh sách HSSE"
             links={[
               {
                 name: 'Dashboard',
                 href: paths.dashboard.root,
               },
-              {
-                name: 'Dự án',
-                href: paths.dashboard.duan.root,
-              },
+
               { name: 'Danh sách' },
             ]}
             sx={{

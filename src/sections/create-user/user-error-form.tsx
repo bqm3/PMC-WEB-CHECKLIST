@@ -68,7 +68,7 @@ export default function UserErrorForm() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/error`, data, {
+        .put(`http://localhost:6868/api/v2/ent_user/error`, data, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

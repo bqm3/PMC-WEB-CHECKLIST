@@ -520,7 +520,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   useEffect(() => {
     const handleCheck = async () => {
       await axios
-        .post(`https://checklist.pmcweb.vn/be/api/v2/hsse/check`, [], {
+        .post(`http://localhost:6868/api/v2/hsse/check`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -578,9 +578,9 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         data,
         Ngay: currentHSSE?.Ngay_ghi_nhan,
       }
-      await handleApiRequest('put', `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
+      await handleApiRequest('put', `http://localhost:6868/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
     } else {
-      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data);
+      await handleApiRequest('post', `http://localhost:6868/api/v2/hsse/create`, data);
     }
   });
 

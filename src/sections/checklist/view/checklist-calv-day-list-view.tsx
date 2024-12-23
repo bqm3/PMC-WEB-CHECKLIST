@@ -185,7 +185,7 @@ export default function DayChecklistCalvListView() {
 
     const handleFilterSubmit = async () => {
         await axios
-            .post(`https://checklist.pmcweb.vn/be/api/v2/tb_day_checkListc/date`, dateFilter, {
+            .post(`http://localhost:6868/api/v2/tb_day_checkListc/date`, dateFilter, {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${accessToken}`,
@@ -256,7 +256,7 @@ export default function DayChecklistCalvListView() {
                 endDate: filters.endDate,
                 tenBoPhan: khoiText,
             };
-            const response = await axios.post('https://checklist.pmcweb.vn/be/api/v2/tb_day_checkListc/baocao', data, {
+            const response = await axios.post('http://localhost:6868/api/v2/tb_day_checkListc/baocao', data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
