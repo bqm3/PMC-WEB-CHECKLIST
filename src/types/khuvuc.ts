@@ -173,6 +173,35 @@ export type IHSSE = {
   NaOCL?: number;
 };
 
+export type IP0 = {
+  ID_P0: number;
+  ID_Duan?: number;
+  ID_User_AN?: number;
+  Ngaybc?: string;
+  Slxeoto?: number;
+  Slxeotodien?: number;
+  Slxemay?: number;
+  Slxemaydien?: number;
+  Slxedap?: number;
+  Slxedapdien?: number;
+  Sltheoto?: number;
+  Slthexemay?: number;
+  Slscoto?: number;
+  Slscotodien?: number;
+  Slscxemay?: number;
+  Slscxemaydien?: number;
+  Slscxedap?: number;
+  Slscxedapdien?: number;
+  Slcongto?: number;
+  Doanhthu?: number;
+  iTrangthai?: number;
+  Ghichu?: string;
+  ID_User_KT?: number;
+  isDelete?: number;
+  ent_user_AN: IUser;
+  ent_user_KT: IUser;
+};
+
 export type IGiamsat = {
   ID_Giamsat: string;
   ID_Duan: string;

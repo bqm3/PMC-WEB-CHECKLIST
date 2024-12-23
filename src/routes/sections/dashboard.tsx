@@ -162,6 +162,13 @@ const HSSEPhanQuyenPage = lazy(() => import('src/pages/dashboard/hsse/phanquyen'
 const HSSENewPage = lazy(() => import('src/pages/dashboard/hsse/new'));
 const HSSEEditPage = lazy(() => import('src/pages/dashboard/hsse/edit'));
 
+// P0
+const P0ListsPage = lazy(() => import('src/pages/dashboard/p0/list'));
+const AdminP0ListPage = lazy(() => import('src/pages/dashboard/p0/admin'));
+const P0PhanQuyenPage = lazy(() => import('src/pages/dashboard/p0/phanquyen'));
+const P0NewPage = lazy(() => import('src/pages/dashboard/p0/new'));
+const P0EditPage = lazy(() => import('src/pages/dashboard/p0/edit'));
+
 
 // Tòa nhà
 const ToanhaListsPage = lazy(() => import('src/pages/dashboard/toanha/list'));
@@ -363,6 +370,17 @@ export const dashboardRoutes = [
           { path: 'phanquyen', element: <HSSEPhanQuyenPage /> },
           { path: ':id/edit', element: <HSSEEditPage /> },
           { path: 'new', element: <HSSENewPage /> },
+        ],
+      },
+      {
+        path: 'p0',
+        children: [
+          { element: <P0ListsPage />, index: true },
+          { path: 'list', element: <P0ListsPage /> },
+          { path: 'admin', element: <AdminP0ListPage /> },
+          { path: 'phanquyen', element: <P0PhanQuyenPage /> },
+          { path: ':id/edit', element: <P0EditPage /> },
+          { path: 'new', element: <P0NewPage /> },
         ],
       },
       {

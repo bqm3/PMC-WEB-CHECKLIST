@@ -238,6 +238,14 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/hsse/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/hsse/${id}/edit`,
     },
+    p0: {
+      root: `${ROOTS.DASHBOARD}/p0`,
+      admin: `${ROOTS.DASHBOARD}/p0/admin`,
+      new: `${ROOTS.DASHBOARD}/p0/new`,
+      phanquyen: `${ROOTS.DASHBOARD}/p0/phanquyen`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/p0/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/p0/${id}/edit`,
+    },
     toanha: {
       root: `${ROOTS.DASHBOARD}/toanha`,
       new: `${ROOTS.DASHBOARD}/toanha/new`,
