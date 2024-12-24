@@ -177,8 +177,8 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   const renderDetails = (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <FormControlLabel
-        title="Chọn tất cả "
-        label="Chọn tất cả 11111111"
+        title="Chọn tất cả"
+        label="Chọn tất cả"
         control={
           <Checkbox
             size="medium"

@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-import { IDuan, IHSSE } from 'src/types/khuvuc';
+import { IDuan, IP0 } from 'src/types/khuvuc';
 // components
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -20,7 +20,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IHSSE;
+  row: IP0;
   selected: boolean;
   onViewRow: VoidFunction;
   // onSelectRow: VoidFunction;
@@ -38,7 +38,7 @@ export default function CalvTableRow({
   // onViewDuAnRow,
   // user
 }: Props) {
-  const { ID, Ten_du_an, Ngay_ghi_nhan, Nguoi_tao, Dien_cu_dan, Dien_cdt, Nuoc_cdt, Nuoc_cu_dan, Xa_thai, Rac_sh } = row;
+  const { ID_P0 , Ngaybc , ent_duan , ent_user_AN, ent_user_KT, Doanhthu, Ghichu } = row;
 
 
   const popover = usePopover();
@@ -46,14 +46,12 @@ export default function CalvTableRow({
   const renderPrimary = (
     <TableRow hover selected={selected}>
 
-      <TableCell>{Ngay_ghi_nhan}</TableCell>
-      <TableCell>{Nguoi_tao}</TableCell>
-      <TableCell>{Dien_cu_dan}</TableCell>
-      <TableCell>{Dien_cdt}</TableCell>
-      <TableCell>{Nuoc_cu_dan}</TableCell>
-      <TableCell>{Nuoc_cdt}</TableCell>
-      <TableCell>{Xa_thai}</TableCell>
-      <TableCell>{Rac_sh}</TableCell>
+      <TableCell>{Ngaybc}</TableCell>
+      <TableCell>{ent_duan?.Duan}</TableCell>
+      <TableCell>{ent_user_AN?.Hoten}</TableCell>
+      <TableCell>{ent_user_KT?.Hoten}</TableCell>
+      <TableCell>{Doanhthu}</TableCell>
+      <TableCell>{Ghichu}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
