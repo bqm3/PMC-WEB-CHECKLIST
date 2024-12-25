@@ -86,7 +86,7 @@ export default function FileManagerNewFolderDialog({
 
     if (isNewFolder) {
       await axios
-        .post('http://localhost:6868/api/v2/ent_checklist/uploads', formData, {
+        .post('https://checklist.pmcweb.vn/be/api/v2/ent_checklist/uploads', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${accessToken}`,
@@ -110,7 +110,7 @@ export default function FileManagerNewFolderDialog({
         });
     } else {
       await axios
-        .post('http://localhost:6868/api/v2/ent_checklist/fix-uploads', formData, {
+        .post('https://checklist.pmcweb.vn/be/api/v2/ent_checklist/fix-uploads', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${accessToken}`,

@@ -62,13 +62,13 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   // const textKhoiCV = (ID_KhoiCV: any) => {
   //     if(`${ID_KhoiCV}` === `3`){
-  //       return `Khối bảo vệ`
+  //       return `Khối an ninh`
   //     }
   // }
 
   useEffect(() => {
     const handleGet = async () => {
-      await axios.get('http://localhost:6868/api/v2/p0', {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/p0', {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -134,7 +134,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       ID_Users
     };
     await axios
-      .post(`http://localhost:6868/api/v2/p0/create-role`, data, {
+      .post(`https://checklist.pmcweb.vn/be/api/v2/p0/create-role`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

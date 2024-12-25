@@ -111,7 +111,7 @@ export default function AreaNewEditForm({ currentTang }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       axios
-        .post(`http://localhost:6868/api/v2/ent_tang/create`, data, {
+        .post(`https://checklist.pmcweb.vn/be/api/v2/ent_tang/create`, data, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

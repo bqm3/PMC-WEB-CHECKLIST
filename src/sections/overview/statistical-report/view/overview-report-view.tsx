@@ -111,7 +111,7 @@ export const OverviewReportView = () => {
   const handleExportReport = async () => {
     setLoading(true);
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/reports/${indexBaoCao}`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/reports/${indexBaoCao}`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -154,7 +154,7 @@ export const OverviewReportView = () => {
   const fetchExcelData = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:6868/api/v2/tb_checklistc/preview-reports/${indexBaoCao}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/preview-reports/${indexBaoCao}`,
         {
           startDate: filters.startDate,
           endDate: filters.endDate,
@@ -179,7 +179,7 @@ export const OverviewReportView = () => {
   const handleExportStatistical = async () => {
     setLoading(true);
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/thong-ke`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/thong-ke`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -217,7 +217,7 @@ export const OverviewReportView = () => {
   const handleExportAllArticleImportant = async () => {
     setLoading(true);
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/report-article-important`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-article-important`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -255,7 +255,7 @@ export const OverviewReportView = () => {
 
   const handlePreviewExportAllArticleImportant = async () => {
     const response = await axios.post(
-      `http://localhost:6868/api/v2/tb_checklistc/preview-report-article-important`,
+      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/preview-report-article-important`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,

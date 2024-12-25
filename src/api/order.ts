@@ -68,7 +68,7 @@ export function useGetOrderBookingServiceDetail(id: string) {
 
 
 export function useGetOrderDetail(id: string) {
-  const URL = id ? [`http://localhost:6868/api/v2/orders/${id}` ] : null;
+  const URL = id ? [`https://checklist.pmcweb.vn/be/api/v2/orders/${id}` ] : null;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({

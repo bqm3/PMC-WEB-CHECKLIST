@@ -112,7 +112,7 @@ export default function AreaTableRow({
       color={
         (`${name}` === 'Khối làm sạch' && 'success') ||
         (`${name}` === 'Khối kỹ thuật' && 'warning') ||
-        (`${name}` === 'Khối bảo vệ' && 'error') ||
+        (`${name}` === 'Khối an ninh' && 'error') ||
         'default'
       }
       style={{ marginTop: 4, marginLeft: 4 }}
@@ -206,11 +206,11 @@ export default function AreaTableRow({
                   primaryTypographyProps={{
                     typography: 'body2',
                   }}
-                  // secondaryTypographyProps={{
-                  //   component: 'span',
-                  //   color: 'text.disabled',
-                  //   mt: 0.5,
-                  // }}
+                // secondaryTypographyProps={{
+                //   component: 'span',
+                //   color: 'text.disabled',
+                //   mt: 0.5,
+                // }}
                 />
                 <TableCell>{item?.MaQrCode}</TableCell>
                 {/* <TableCell>

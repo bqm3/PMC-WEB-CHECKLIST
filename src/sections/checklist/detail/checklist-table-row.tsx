@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
+import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -16,6 +17,7 @@ import { ICalv, TbChecklistCalv } from 'src/types/khuvuc';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import './style.css';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +28,8 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
-  handleClickOpen: VoidFunction;
+  setDetailChecklist: any;
+  handleClickOpen: any;
 };
 
 export default function AreaTableRow({
@@ -37,6 +40,7 @@ export default function AreaTableRow({
   onDeleteRow,
   calv,
   handleClickOpen,
+  setDetailChecklist
 }: Props) {
   const {
     isCheckListLai,
@@ -50,19 +54,36 @@ export default function AreaTableRow({
   const confirm = useBoolean();
 
   const popover = usePopover();
-  const newViewImage = (item: any) => {
-    if (!item || !Array.isArray(item)) return null; // Kiểm tra `item` có phải mảng không
+  const newViewImage = (items: any[]) => {
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return null; // Không render gì nếu `items` không hợp lệ
+    }
 
-    return item.map((i: any, index: number) => (
+    return items.map((url: string, index: number) => (
       <Avatar
-        key={index} // Thêm key để React tránh cảnh báo
-        onClick={() => handleClickOpen()}
-        src={i} // Hiển thị URL hình ảnh từ `i`
-        variant="rounded"
-        sx={{ width: 80, height: 80, cursor: 'pointer' }}
+        key={`${url}_${index}`} // Đảm bảo key duy nhất
+        onClick={() => {
+          setDetailChecklist(url)
+          handleClickOpen()
+        }} // Hành động khi click vào ảnh
+        src={url} // Đường dẫn URL ảnh
+        alt={url} // Alt text fallback khi ảnh lỗi
+        variant="rounded" // Kiểu avatar bo góc
+        sx={{
+          width: 70,
+          height: 70,
+          cursor: 'pointer', // Con trỏ hiển thị dạng tay khi hover
+          border: '1px solid #ddd', // Thêm viền nhẹ
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Thêm bóng
+          transition: 'transform 0.2s ease-in-out', // Hiệu ứng hover
+          '&:hover': {
+            transform: 'scale(1.1)', // Phóng to nhẹ khi hover
+          },
+        }}
       />
     ));
   };
+
 
   const renderPrimary = (
     <TableRow
@@ -92,25 +113,35 @@ export default function AreaTableRow({
       </TableCell>
 
       <TableCell> {Gioht} </TableCell>
-      <TableCell sx={{ flexDirection: 'row' }}>
+      <TableCell sx={{ width: 120, padding: 0 }}>
         {Anh ? (
-
-          <div style={{ display: 'flex', overflow: 'auto', gap: 4 }}>
+          <div
+            style={{
+              display: 'flex',
+              overflowX: 'auto', // Cho phép cuộn ngang
+              gap: 4,
+              width: 120, // Đặt chiều rộng cố định
+              whiteSpace: 'nowrap', // Ngăn hình ảnh xuống dòng
+              padding: 4,
+            }}
+            // CSS cho thanh cuộn nhỏ
+            className="custom-scrollbar"
+          >
             {newViewImage(Anh?.split(',').map((item: any) => getImageUrls(1, item)))}
           </div>
-
         ) : (
           <></>
         )}
       </TableCell>
 
+
       <TableCell> {Ghichu} </TableCell>
 
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      {/* <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 
@@ -126,7 +157,6 @@ export default function AreaTableRow({
       >
         <MenuItem
           onClick={() => {
-            handleClickOpen();
             popover.onClose();
           }}
         >

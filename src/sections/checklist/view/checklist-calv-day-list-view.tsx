@@ -185,7 +185,7 @@ export default function DayChecklistCalvListView() {
 
     const handleFilterSubmit = async () => {
         await axios
-            .post(`http://localhost:6868/api/v2/tb_day_checkListc/date`, dateFilter, {
+            .post(`https://checklist.pmcweb.vn/be/api/v2/tb_day_checkListc/date`, dateFilter, {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${accessToken}`,
@@ -234,13 +234,13 @@ export default function DayChecklistCalvListView() {
             case '2':
                 return 'Khối kỹ thuật';
             case '3':
-                return 'Khối bảo vệ';
+                return 'Khối an ninh';
             case '4':
                 return 'Khối dự án';
             case '5':
                 return 'Khối F&B';
             case 'all':
-                return 'Khối Bảo vệ, Làm sạch, Kỹ thuật, Dự án, F&B';
+                return 'Khối an ninh, Làm sạch, Kỹ thuật, Dự án, F&B';
             default:
                 return '';
         }
@@ -256,7 +256,7 @@ export default function DayChecklistCalvListView() {
                 endDate: filters.endDate,
                 tenBoPhan: khoiText,
             };
-            const response = await axios.post('http://localhost:6868/api/v2/tb_day_checkListc/baocao', data, {
+            const response = await axios.post('https://checklist.pmcweb.vn/be/api/v2/tb_day_checkListc/baocao', data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },

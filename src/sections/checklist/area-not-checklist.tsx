@@ -71,7 +71,7 @@ export default function AreaTableRow({
       color={
         (`${name}` === 'Khối làm sạch' && 'success') ||
         (`${name}` === 'Khối kỹ thuật' && 'warning') ||
-        (`${name}` === 'Khối bảo vệ' && 'error') ||
+        (`${name}` === 'Khối an ninh' && 'error') ||
         'default'
       }
       style={{ marginTop: 4, marginLeft: 4 }}

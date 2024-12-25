@@ -193,7 +193,7 @@ export default function ChecklistCalvListView() {
 
   const handleFilterSubmit = async () => {
     await axios
-      .post(`http://localhost:6868/api/v2/tb_checklistc/date`, dateFilter, {
+      .post(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/date`, dateFilter, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -242,13 +242,13 @@ export default function ChecklistCalvListView() {
       case '2':
         return 'Khối kỹ thuật';
       case '3':
-        return 'Khối bảo vệ';
+        return 'Khối an ninh';
       case '4':
         return 'Khối dự án';
       case '5':
         return 'Khối F&B';
       case 'all':
-        return 'Khối Bảo vệ, Làm sạch, Kỹ thuật, Dự án, F&B';
+        return 'Khối an ninh, Làm sạch, Kỹ thuật, Dự án, F&B';
       default:
         return '';
     }
@@ -264,7 +264,7 @@ export default function ChecklistCalvListView() {
         endDate: filters.endDate,
         tenBoPhan: khoiText,
       };
-      const response = await axios.post('http://localhost:6868/api/v2/tb_checklistc/baocao', data, {
+      const response = await axios.post('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/baocao', data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -314,7 +314,7 @@ export default function ChecklistCalvListView() {
   const handleOpenChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_checklistc/open/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/open/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -359,7 +359,7 @@ export default function ChecklistCalvListView() {
   const handleRemoveChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/tb_checklistc/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
