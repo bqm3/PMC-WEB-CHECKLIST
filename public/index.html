@@ -25,11 +25,94 @@
   <meta name="description"
     content="Center quản lý checklist PMC" />
   <meta name="keywords" content="react,material,kit,application,dashboard,admin,template" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Public Sans', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Tuyết rơi */
+    .snowflake {
+      position: fixed; /* Đảm bảo tuyết rơi luôn nằm trên màn hình */
+      top: -30px;
+      background-color: #2F61AC;
+      width: 15px;
+      height: 15px;
+      opacity: 0.6;
+      animation: snow-fall linear infinite;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      z-index: 9999;
+    }
+
+    @keyframes snow-fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+
+    /* Chạy chữ "Giáng sinh an lành" */
+    .scrolling-text {
+      position: fixed;
+      top: 10px;
+      left: 100%;
+      font-size: 24px;
+      font-weight: bold;
+      color: #2F61AC;
+      white-space: nowrap;
+      animation: scroll-text 20s linear infinite;
+      z-index: 10000 !important;
+    }
+
+    @keyframes scroll-text {
+      0% {
+        left: 120%;
+      }
+      100% {
+        left: -120%;
+      }
+    }
+
+  </style>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+
+  <!-- Chữ chạy -->
+  <div class="scrolling-text">Chúc bạn và gia đình giáng sinh vui vẻ và năm mới an lành!</div>
+
+  <script>
+    // Tạo hiệu ứng tuyết rơi
+    function createSnowflakes() {
+      const numberOfSnowflakes = 20; // Giảm số lượng bông tuyết
+      for (let i = 0; i < numberOfSnowflakes; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        
+        // Xác định kích thước và vị trí của mỗi bông tuyết
+        const size = Math.random() * 20 + 5; // Kích thước bông tuyết (từ 5px đến 15px)
+        snowflake.style.width = `${size}px`;
+        snowflake.style.height = `${size}px`;
+        snowflake.style.left = `${Math.random() * 95}vw`; // Vị trí ngang (0 đến 100% của màn hình)
+        snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`; // Thời gian rơi (từ 5s đến 15s)
+        snowflake.style.animationDelay = `${Math.random() * 10}s`; // Thời gian trễ (0 đến 10s)
+
+        // Thêm bông tuyết vào body
+        document.body.appendChild(snowflake);
+      }
+    }
+
+    // Gọi hàm tạo tuyết rơi
+    createSnowflakes();
+  </script>
 </body>
 
 </html>
