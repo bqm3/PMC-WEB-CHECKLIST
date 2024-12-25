@@ -11,7 +11,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders } from 'src/_mock';
-import { useGetHSSE } from 'src/api/khuvuc';
+import { useGetHSSE, useGetP0_ByDuan } from 'src/api/khuvuc';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -25,21 +25,19 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 // types
-import { IChecklistTableFilters, IHSSE } from 'src/types/khuvuc';
+import { IChecklistTableFilters , IP0} from 'src/types/khuvuc';
 //
 import HSSETableRow from '../p0-table-row';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'Ngay_ghi_nhan', label: 'Ngày gửi', width: 100 },
-  { id: 'Nguoi_tao', label: 'Người gửi', width: 150 },
-  { id: 'Dien_cu_dan', label: 'Điện cư dân', width: 100 },
-  { id: 'Dien_cdt', label: 'Điện CĐT', width: 100 },
-  { id: 'Nuoc_cu_dan', label: 'Nước cư dân', width: 100 },
-  { id: 'Nuoc_cdt', label: 'Nước CĐT', width: 100 },
-  { id: 'Xa_thai', label: 'Xả thải', width: 100 },
-  { id: 'Rac_sh', label: 'Rác', width: 100 },
+  { id: 'Ngaybc', label: 'Ngày gửi', width: 100 },
+  { id: 'Duan', label: 'Dự án', width: 150 },
+  { id: 'ent_user_AN', label: 'Người nhập (An ninh)', width: 100 },
+  { id: 'ent_user_KT', label: 'Người nhập (Kế toán)', width: 100 },
+  { id: 'Doanhthu', label: 'Doanh thu', width: 100 },
+  { id: 'Ghichu', label: 'Ghi chú', width: 100 },
   { id: '', width: 10 },
 ];
 
@@ -61,15 +59,15 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { hsse } = useGetHSSE();
+  const { p0 } = useGetP0_ByDuan();
 
-  const [tableData, setTableData] = useState<IHSSE[]>([]);
+  const [tableData, setTableData] = useState<IP0[]>([]);
 
   useEffect(() => {
-    if (hsse?.length > 0) {
-      setTableData(hsse);
+    if (p0?.length > 0) {
+      setTableData(p0);
     }
-  }, [hsse]);
+  }, [p0]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -85,7 +83,7 @@ export default function GiamsatListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.hsse.edit(id));
+      router.push(paths.dashboard.p0.edit(id));
     },
     [router]
   );
@@ -154,10 +152,10 @@ export default function GiamsatListView() {
                     )
                     .map((row) => (
                       <HSSETableRow
-                        key={row.ID}
+                        key={row.ID_P0}
                         row={row}
-                        selected={table.selected.includes(`${row.ID}`)}
-                        onViewRow={() => handleViewRow(`${row.ID}`)}
+                        selected={table.selected.includes(`${row.ID_P0}`)}
+                        onViewRow={() => handleViewRow(`${row.ID_P0}`)}
                       />
                     ))}
 
@@ -218,7 +216,7 @@ function applyFilter({
   comparator,
   filters, // dateError,
 }: {
-  inputData: IHSSE[];
+  inputData: IP0[];
   comparator: (a: any, b: any) => number;
   filters: IChecklistTableFilters;
   // dateError: boolean;

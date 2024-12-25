@@ -3,11 +3,13 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuthContext } from 'src/auth/hooks';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import TextField from '@mui/material/TextField';
 import {
   Button,
   Dialog,
@@ -47,20 +49,38 @@ const fieldLabels: any = {
   Slscxemay: 'Sự cố xe máy thường',
   Slscxedapdien: 'Sự cố xe đạp điện',
   Slscxedap: 'Sự cố xe đạp thường',
+  Slsucokhac: 'Sự cố khác',
   Slcongto: 'Công tơ điện',
+  QuansoTT: 'Quân số thực tế',
+  QuansoDB: 'Quân số định biên',
   Doanhthu: 'Doanh thu từ 6h đến 18h',
   Ghichu: 'Ghi chú',
 };
 
+const fieldIds: { [key: string]: number } = {
+  Slxeoto: 0,
+  Slxeotodien: 1,
+  Slxemaydien: 2,
+  Slxemay: 3,
+  Slxedapdien: 4,
+  Slxedap: 5,
+  Sltheoto: 6,
+  Slthexemay: 7,
+  Slscoto: 8,
+  Slscotodien: 9,
+  Slscxemaydien: 10,
+  Slscxemay: 11,
+  Slscxedapdien: 12,
+  Slscxedap: 13,
+  Slsucokhac: 14,
+  Slcongto: 15,
+  QuansoTT: 16,
+  QuansoDB: 17,
+  Doanhthu: 18,
+};
+
 const fieldCategories: any = {
-  'Thông tin xe': [
-    'Slxeoto',
-    'Slxeotodien',
-    'Slxemay',
-    'Slxemaydien',
-    'Slxedap',
-    'Slxedapdien',
-  ],
+  'Thông tin xe': ['Slxeoto', 'Slxeotodien', 'Slxemay', 'Slxemaydien', 'Slxedap', 'Slxedapdien'],
   'Thông tin thẻ': ['Sltheoto', 'Slthexemay'],
   'Sự cố': [
     'Slscoto',
@@ -69,8 +89,10 @@ const fieldCategories: any = {
     'Slscxemaydien',
     'Slscxedap',
     'Slscxedapdien',
+    'Slsucokhac',
   ],
-  'Thông tin khác': ['Slcongto', 'Doanhthu'],
+  'Thông tin khác': ['QuansoTT', 'QuansoDB', 'Slcongto'],
+  'Doanh thu': ['Doanhthu'],
   'Ghi chú': ['Ghichu'],
 };
 
@@ -80,6 +102,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const mdUp = useResponsive('up', 'md');
   const { enqueueSnackbar } = useSnackbar();
   const accessToken = localStorage.getItem(STORAGE_KEY);
+  const { user } = useAuthContext();
 
   const [open, setOpen] = useState(false);
   const [checkSubmit, setCheckSubmit] = useState(false);
@@ -87,13 +110,27 @@ export default function P0NewEditForm({ currentP0 }: Props) {
 
   const isToday = moment(currentP0?.Ngaybc).isSame(moment(), 'day');
 
+  const isFieldEditable = (fieldName: string) => {
+    if (fieldName === 'Ghichu') return true;
+    console.log('fieldName', fieldName);
+    console.log('user?.ID_KhoiCV', user?.ID_KhoiCV);
+
+    let check = false;
+    if (`${user?.ID_KhoiCV}` === `4` && fieldName === 'Doanhthu') {
+      check = true;
+    } else if (`${user?.ID_KhoiCV}` === `3` && fieldName !== 'Doanhthu') {
+      check = true;
+    } else if (`${user?.ID_KhoiCV}` === `null`) {
+      check = true;
+    }
+    return check;
+  };
+
   const NewProductSchema = Yup.object().shape(
     Object.keys(fieldLabels).reduce((acc: any, field) => {
       if (field === 'Ghichu') {
         // 'Ghichu' is a text field
-        acc[field] = Yup.string()
-          .nullable()
-          .max(255, 'Ghi chú không được vượt quá 255 ký tự');
+        acc[field] = Yup.string().nullable().max(255, 'Ghi chú không được vượt quá 255 ký tự');
       } else {
         // Other fields are numbers
         acc[field] = Yup.number()
@@ -125,8 +162,11 @@ export default function P0NewEditForm({ currentP0 }: Props) {
       Slscxedap: currentP0?.Slscxedap ?? 0,
       Slscxedapdien: currentP0?.Slscxedapdien ?? 0,
       Slcongto: currentP0?.Slcongto ?? 0,
+      Slsucokhac: currentP0?.Slsucokhac ?? 0,
+      QuansoTT: currentP0?.QuansoTT ?? 0,
+      QuansoDB: currentP0?.QuansoDB ?? 0,
       Doanhthu: currentP0?.Doanhthu ?? 0,
-      Ghichu: currentP0?.Ghichu ?? ""
+      Ghichu: currentP0?.Ghichu ?? '',
     }),
     [currentP0]
   );
@@ -136,12 +176,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
     defaultValues,
   });
 
-  const {
-    reset,
-    watch,
-    setValue,
-    handleSubmit,
-  } = methods;
+  const { reset, watch, setValue, handleSubmit } = methods;
 
   useEffect(() => {
     if (currentP0) {
@@ -250,15 +285,9 @@ export default function P0NewEditForm({ currentP0 }: Props) {
               <Typography typography="h4" sx={{ pb: 2, color: '#21409A' }}>
                 {category}
               </Typography>
-              <Box
-                display="grid"
-                gridTemplateColumns="repeat(4, 1fr)"
-                columnGap={2}
-                rowGap={3}
-              >
-                {fieldCategories[category]?.map((field: any) => (
+              <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" columnGap={2} rowGap={3}>
+                {fieldCategories[category]?.map((field: any) =>
                   field === 'Ghichu' ? (
-                    // Render text field for 'Ghichu'
                     <RHFTextField
                       key={field}
                       value={watch(field) ?? ''}
@@ -272,16 +301,29 @@ export default function P0NewEditForm({ currentP0 }: Props) {
                       }
                       inputProps={{
                         inputMode: 'text',
+                        style: {
+                          fontSize: '16px',
+                          paddingTop: '10px',
+                          paddingBottom: '10px',
+                          paddingLeft: '8px',
+                          paddingRight: '8px',
+                          textAlign: 'left',
+                        },
                       }}
                       onChange={(e) => setValue(field, e.target.value)}
+                      multiline
+                      maxRows={6}
                     />
                   ) : (
                     // Render number fields for other fields
                     <RHFTextField
                       key={field}
-                      value={`${watch(field)}` === '0' ? '' : watch(field) ?? ''}
+                      value={watch(field) ?? ''}
                       InputLabelProps={{
-                        style: { fontWeight: 'normal', color: 'black' },
+                        style: {
+                          fontWeight: 'normal',
+                          color: isFieldEditable(field) ? 'black' : 'red',
+                        },
                       }}
                       name={field}
                       label={
@@ -299,20 +341,17 @@ export default function P0NewEditForm({ currentP0 }: Props) {
                           setValue(field, value);
                         }
                       }}
+                      disabled={!isFieldEditable(field)}
                     />
                   )
-                ))}
+                )}
               </Box>
             </div>
           ))}
-
-
-
         </Box>
       </Stack>
     </Grid>
   );
-
 
   const renderActions = (
     <>
@@ -336,7 +375,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
             Tạo mới
           </Button>
         )}
-        {isToday && currentP0 && (
+        {isToday && currentP0 && checkSubmit === true && (
           <Button
             disabled={loading}
             variant="contained"

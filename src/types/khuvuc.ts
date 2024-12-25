@@ -193,6 +193,9 @@ export type IP0 = {
   Slscxedap?: number;
   Slscxedapdien?: number;
   Slcongto?: number;
+  Slsucokhac?: number;
+  QuansoTT?: number;
+  QuansoDB?: number;
   Doanhthu?: number;
   iTrangthai?: number;
   Ghichu?: string;
@@ -200,6 +203,7 @@ export type IP0 = {
   isDelete?: number;
   ent_user_AN: IUser;
   ent_user_KT: IUser;
+  ent_duan: IDuan;
 };
 
 export type IGiamsat = {

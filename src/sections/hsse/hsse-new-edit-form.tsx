@@ -666,7 +666,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             Tạo mới
           </Button>
         )}
-        {isToday && currentHSSE && (
+        {isToday && currentHSSE && checkSubmit === true && (
           <Button
             disabled={loading}
             variant="contained"
