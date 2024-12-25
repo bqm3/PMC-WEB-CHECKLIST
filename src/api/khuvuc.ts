@@ -470,9 +470,9 @@ export function useGetHSSEAll() {
   return memoizedValue;
 }
 
-export function useGetP0_ByDuan() {
+export function useGetP0_ByDuan(page: any, limit: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = 'http://localhost:6868/api/v2/p0/all-duan';
+  const URL = `http://localhost:6868/api/v2/p0/all-duan?page=${page}&limit=${limit}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
@@ -490,6 +490,7 @@ export function useGetP0_ByDuan() {
       p0Error: error,
       p0Validating: isValidating,
       p0Empty: !isLoading && !data?.length,
+      p0Count: data?.count,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -607,7 +608,7 @@ export function useGetHSSEDetail(id: string) {
 
 export function useGetP0Detail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `https://checklist.pmcweb.vn/be/api/v2/hsse/${id}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/v2/p0/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',

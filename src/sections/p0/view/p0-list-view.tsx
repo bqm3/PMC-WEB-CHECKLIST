@@ -27,7 +27,7 @@ import {
 // types
 import { IChecklistTableFilters, IP0 } from 'src/types/khuvuc';
 //
-import HSSETableRow from '../p0-table-row';
+import P0TableRow from '../p0-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +58,8 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { p0 } = useGetP0_ByDuan();
+  const { page, rowsPerPage } = table;
+  const { p0, p0Loading, p0Error, p0Empty, p0Count } = useGetP0_ByDuan(page, rowsPerPage);
 
   const [tableData, setTableData] = useState<IP0[]>([]);
 
@@ -66,7 +67,9 @@ export default function GiamsatListView() {
     if (p0?.length > 0) {
       setTableData(p0);
     }
-  }, [p0]);
+  }, [p0, page, rowsPerPage]);
+
+  
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -86,6 +89,7 @@ export default function GiamsatListView() {
     },
     [router]
   );
+  console.log('p0Count',p0Count)
 
   return (
     <>
@@ -107,26 +111,6 @@ export default function GiamsatListView() {
         </Stack>
 
         <Card>
-          {/* <DuanTableToolbar
-            filters={filters}
-            onFilters={handleFilters}
-            departmentOptions={DEPARTMENT_OPTIONS}
-            //
-            canReset={canReset}
-            onResetFilters={handleResetFilters}
-          />
-
-          {canReset && (
-            <DuanTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered?.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <Scrollbar>
@@ -135,22 +119,19 @@ export default function GiamsatListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData?.length}
+                  rowCount={dataFiltered?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(checked, tableData?.map((row) => row.ID))
-                // }
                 />
 
                 <TableBody>
                   {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
+                    // .slice(
+                    //   table.page * table.rowsPerPage,
+                    //   table.page * table.rowsPerPage + table.rowsPerPage
+                    // )
                     .map((row) => (
-                      <HSSETableRow
+                      <P0TableRow
                         key={row.ID_P0}
                         row={row}
                         selected={table.selected.includes(`${row.ID_P0}`)}
@@ -160,7 +141,7 @@ export default function GiamsatListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData?.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered?.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -170,40 +151,16 @@ export default function GiamsatListView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered?.length}
+            count={p0Count}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
             onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
             dense={table.dense}
             onChangeDense={table.onChangeDense}
           />
         </Card>
       </Container>
-
-      {/* <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      /> */}
     </>
   );
 }
