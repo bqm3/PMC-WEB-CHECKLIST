@@ -470,6 +470,33 @@ export function useGetHSSEAll() {
   return memoizedValue;
 }
 
+export function useGetP0_ByDuan() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'http://localhost:6868/api/v2/p0/all-duan';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      p0: (data?.data as IP0[]) || [],
+      p0Loading: isLoading,
+      p0Error: error,
+      p0Validating: isValidating,
+      p0Empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
 export function useGetGiamsat() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const URL = 'http://localhost:6868/api/v2/ent_giamsat/';
@@ -580,7 +607,7 @@ export function useGetHSSEDetail(id: string) {
 
 export function useGetP0Detail(id: string) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `http://localhost:6868/api/v2/hsse/${id}`;
+  const URL = `http://localhost:6868/api/v2/p0/${id}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',
