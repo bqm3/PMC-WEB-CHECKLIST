@@ -25,17 +25,16 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 // types
-import { IChecklistTableFilters , IP0} from 'src/types/khuvuc';
+import { IChecklistTableFilters, IP0 } from 'src/types/khuvuc';
 //
 import HSSETableRow from '../p0-table-row';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'Ngaybc', label: 'Ngày gửi', width: 100 },
-  { id: 'Duan', label: 'Dự án', width: 150 },
-  { id: 'ent_user_AN', label: 'Người nhập (An ninh)', width: 100 },
-  { id: 'ent_user_KT', label: 'Người nhập (Kế toán)', width: 100 },
+  { id: 'Ngaybc', label: 'Ngày gửi', width: 80 },
+  { id: 'ent_user_AN', label: 'Người nhập (An ninh)', width: 150 },
+  { id: 'ent_user_KT', label: 'Người nhập (Kế toán)', width: 150 },
   { id: 'Doanhthu', label: 'Doanh thu', width: 100 },
   { id: 'Ghichu', label: 'Ghi chú', width: 100 },
   { id: '', width: 10 },
@@ -221,6 +220,7 @@ function applyFilter({
   filters: IChecklistTableFilters;
   // dateError: boolean;
 }) {
+  const { name } = filters
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 
   stabilizedThis.sort((a, b) => {
@@ -231,13 +231,14 @@ function applyFilter({
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  // if (name) {
-  //   inputData = inputData?.filter(
-  //     (order) =>
-  //       order.Duan.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-  //       order.Diachi.toLowerCase().indexOf(name.toLowerCase()) !== -1
-  //   );
-  // }
+  if (name) {
+    inputData = inputData?.filter(
+      (order) =>
+        `${order.Doanhthu}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.ID_User_KT}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order.ID_User_AN}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
+    );
+  }
 
   // if (building.length) {
   //   inputData = inputData.filter((item) => building.includes(String(item?.ID_Chinhanh)));

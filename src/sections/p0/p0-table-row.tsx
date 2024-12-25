@@ -23,31 +23,16 @@ type Props = {
   row: IP0;
   selected: boolean;
   onViewRow: VoidFunction;
-  // onSelectRow: VoidFunction;
-  // onDeleteRow: VoidFunction;
-  // onViewDuAnRow: VoidFunction;
-  // user: any
 };
 
-export default function CalvTableRow({
-  row,
-  selected,
-  onViewRow,
-  // onSelectRow,
-  // onDeleteRow,
-  // onViewDuAnRow,
-  // user
-}: Props) {
-  const { ID_P0 , Ngaybc , ent_duan , ent_user_AN, ent_user_KT, Doanhthu, Ghichu } = row;
-
+export default function CalvTableRow({ row, selected, onViewRow }: Props) {
+  const { ID_P0, Ngaybc, ent_duan, ent_user_AN, ent_user_KT, Doanhthu, Ghichu } = row;
 
   const popover = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-
       <TableCell>{Ngaybc}</TableCell>
-      <TableCell>{ent_duan?.Duan}</TableCell>
       <TableCell>{ent_user_AN?.Hoten}</TableCell>
       <TableCell>{ent_user_KT?.Hoten}</TableCell>
       <TableCell>{Doanhthu}</TableCell>
@@ -64,7 +49,6 @@ export default function CalvTableRow({
     <>
       {renderPrimary}
 
-
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
@@ -80,7 +64,6 @@ export default function CalvTableRow({
           <Iconify icon="solar:eye-bold" />
           Xem
         </MenuItem>
-
       </CustomPopover>
     </>
   );
