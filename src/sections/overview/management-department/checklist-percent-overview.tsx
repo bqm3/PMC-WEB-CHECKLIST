@@ -62,7 +62,7 @@ function ProgressItem({ progress }: ProgressItemProps) {
         color={
           (progress.label === 'Khối làm sạch' && 'info') ||
           (progress.label === 'Khối kỹ thuật' && 'warning') ||
-          (progress.label === 'Khối bảo vệ' && 'error') ||
+          (progress.label === 'Khối an ninh' && 'error') ||
           'primary'
         }
       />

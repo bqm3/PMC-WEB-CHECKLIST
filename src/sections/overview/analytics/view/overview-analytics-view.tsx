@@ -72,8 +72,8 @@ const columns: GridColDef<[number]>[] = [
     // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
   },
   {
-    field: 'Khối bảo vệ',
-    headerName: 'Khối bảo vệ',
+    field: 'Khối an ninh',
+    headerName: 'Khối an ninh',
     // description: 'This column has a value getter and is not sortable.',
     // sortable: false,
     width: 150,
@@ -192,7 +192,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/percent-checklist-days', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/percent-checklist-days', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -212,8 +212,8 @@ export default function OverviewAnalyticsView() {
             'Khối dịch vụ': project.createdKhois['Khối dịch vụ']?.completionRatio
               ? `${project.createdKhois['Khối dịch vụ']?.completionRatio} %`
               : null,
-            'Khối bảo vệ': project.createdKhois['Khối bảo vệ']?.completionRatio
-              ? `${project.createdKhois['Khối bảo vệ']?.completionRatio} %`
+            'Khối an ninh': project.createdKhois['Khối an ninh']?.completionRatio
+              ? `${project.createdKhois['Khối an ninh']?.completionRatio} %`
               : null,
             'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio
               ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
@@ -231,7 +231,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/ent_checklist/total', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/ent_checklist/total', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -249,7 +249,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/ent_khuvuc/total', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/total', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -267,7 +267,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/list-checklist-error-project', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/list-checklist-error-project', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -285,7 +285,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/list-checklist', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/list-checklist', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -303,7 +303,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalHangmuc = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/ent_hangmuc/total', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/ent_hangmuc/total', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -321,7 +321,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handlePercent = async () => {
       await axios
-        .get('http://localhost:6868/api/v2/tb_checklistc/percent', {
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/percent', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -340,7 +340,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_checklistc/year?year=${selectedYear}&khoi=${selectedKhoiCV}&tangGiam=${selectedTangGiam}`,
+          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/year?year=${selectedYear}&khoi=${selectedKhoiCV}&tangGiam=${selectedTangGiam}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -362,7 +362,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_checklistc/year-su-co?year=${selectedYearSuCo}&khoi=${selectedKhoiCVSuCo}`,
+          `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/year-su-co?year=${selectedYearSuCo}&khoi=${selectedKhoiCVSuCo}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -384,7 +384,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `http://localhost:6868/api/v2/tb_sucongoai/dashboard-by-duan?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/dashboard-by-duan?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
           {
             headers: {
               'Content-Type': 'application/json',

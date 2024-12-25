@@ -164,7 +164,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
     const handleCheck = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:6868/api/v2/p0/check`,
+          `https://checklist.pmcweb.vn/be/api/v2/p0/check`,
           {
             headers: {
               Accept: 'application/json',
@@ -223,11 +223,11 @@ export default function P0NewEditForm({ currentP0 }: Props) {
       };
       await handleApiRequest(
         'put',
-        `http://localhost:6868/api/v2/p0/update/${currentP0?.ID_P0}`,
+        `https://checklist.pmcweb.vn/be/api/v2/p0/update/${currentP0?.ID_P0}`,
         dataReq
       );
     } else {
-      await handleApiRequest('post', `http://localhost:6868/api/v2/p0/create`, data);
+      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/p0/create`, data);
     }
   });
 

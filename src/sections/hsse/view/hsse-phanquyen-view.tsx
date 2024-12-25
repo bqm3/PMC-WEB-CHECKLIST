@@ -56,7 +56,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   useEffect(() => {
     const handleGet = async () => {
-      await axios.get('http://localhost:6868/api/v2/hsse', {
+      await axios.get('https://checklist.pmcweb.vn/be/api/v2/hsse', {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -122,7 +122,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       ID_Users
     };
     await axios
-      .post(`http://localhost:6868/api/v2/hsse/create-role`, data, {
+      .post(`https://checklist.pmcweb.vn/be/api/v2/hsse/create-role`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

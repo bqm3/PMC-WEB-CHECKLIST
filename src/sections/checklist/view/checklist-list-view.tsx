@@ -179,7 +179,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -222,7 +222,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Checklist));
     await axios
-      .put(`http://localhost:6868/api/v2/ent_checklist/delete-mul`, deleteRows, {
+      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -304,7 +304,7 @@ export default function ChecklistCalvListView() {
   const khoiCVNames: { [key: string]: string } = {
     '1': 'Khối làm sạch',
     '2': 'Khối kỹ thuật',
-    '3': 'Khối bảo vệ',
+    '3': 'Khối an ninh',
     '4': 'Khối dịch vụ',
     '5': 'Khối F&B',
     // Add other mappings here

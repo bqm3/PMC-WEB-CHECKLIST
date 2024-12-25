@@ -68,9 +68,9 @@ const TABLE_HEAD = [
   { id: 'ID_Checklist', label: 'Tên checklist' },
   { id: 'ID_Hangmuc', label: 'Hạng mục (Khu vực- Tòa)', width: 250 },
   { id: 'ID_Tang', label: 'Tầng', width: 100 },
-  { id: 'Ketqua', label: 'Kết quả', width: 120 },
+  { id: 'Ketqua', label: 'Kết quả', width: 100 },
   { id: 'Gioht', label: 'Giờ', width: 80 },
-  { id: 'Anh', label: 'Hình ảnh', width: 100 },
+  { id: 'Anh', label: 'Hình ảnh', width: 200 },
   { id: 'Ghichu', label: 'Ghi chú', width: 100 },
   { id: '', width: 10 },
 ];
@@ -123,7 +123,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
 
   const [open, setOpen] = useState(false);
-  const [detailChecklist, setDetailChecklist] = useState<TbChecklistCalv>();
+  const [detailChecklist, setDetailChecklist] = useState<any>();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -189,7 +189,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`http://localhost:6868/api/v2/ent_checklist/delete/${id}`, [], {
+        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -244,9 +244,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     setFilters(defaultFilters);
   }, []);
 
-  const handleClickOpen = (data: TbChecklistCalv) => {
+  const handleClickOpen = () => {
     setOpen(true);
-    setDetailChecklist(data);
   };
   const handleClose = () => {
     setOpen(false);
@@ -461,7 +460,8 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
                         onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
                         onDeleteRow={() => handleDeleteRow(row.ID_Checklist)}
                         onViewRow={() => handleViewRow(row.ID_Checklist)}
-                        handleClickOpen={() => handleClickOpen(row)}
+                        setDetailChecklist={setDetailChecklist}
+                        handleClickOpen={() => handleClickOpen()}
                       />
                     ))}
 
@@ -545,11 +545,11 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
         </IconButton>
         <DialogContent dividers>
           <Image
-            minWidth={500}
-            minHeight={500}
-            alt={detailChecklist?.ent_checklist?.Checklist}
+            minWidth={400}
+            minHeight={400}
+            alt={detailChecklist}
             // src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
-            src={`${getImageUrls(1, detailChecklist?.Anh)}`}
+            src={detailChecklist}
             ratio="1/1"
           />
         </DialogContent>

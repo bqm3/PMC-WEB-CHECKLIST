@@ -20,7 +20,7 @@ export const ORDER_STATUS_OPTIONS = [
 export const KHUVUC_STATUS_OPTIONS = [
   { value: '1', label: 'Khối làm sạch' },
   { value: '2', label: 'Khối kỹ thuật' },
-  { value: '3', label: 'Khối bảo vệ' },
+  { value: '3', label: 'Khối an ninh' },
   { value: '4', label: 'Khối dịch vụ' },
   { value: '5', label: 'Khối F&B' },
   // { value: 'refunded', label: 'Refunded' },

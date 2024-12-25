@@ -59,7 +59,7 @@ export default function OrderTableFiltersResult({
               label={
                 (`${filters.status}` === '1' && 'Khối làm sạch') ||
                 (`${filters.status}` === '2' && 'Khối kỹ thuật') ||
-                (`${filters.status}` === '3' && 'Khối bảo vệ')
+                (`${filters.status}` === '3' && 'Khối an ninh')
               }
               onDelete={handleRemoveStatus}
             />

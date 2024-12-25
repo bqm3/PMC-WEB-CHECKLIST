@@ -1,0 +1,20 @@
+.custom-scrollbar {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1); /* Firefox */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px; /* Chiều rộng thanh cuộn */
+    height: 2px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  
