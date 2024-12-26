@@ -80,7 +80,7 @@ type Props = {
 
 // ----------------------------------------------------------------------
 
-export default function SuCoListView({ data }: Props) {
+export default function SuCoNgoaiListView({ data }: Props) {
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -151,7 +151,7 @@ export default function SuCoListView({ data }: Props) {
   );
 
   return (
-    <Container sx={{my: 2}}>
+    <Container sx={{ my: 2 }}>
       <Card>
         <Tabs
           value={filters?.status}
@@ -193,11 +193,11 @@ export default function SuCoListView({ data }: Props) {
         </Tabs>
 
         <SuCoTableToolbar
-            filters={filters}
-            onFilters={handleFilters}
-            canReset={canReset}
-            onResetFilters={handleResetFilters}
-          />
+          filters={filters}
+          onFilters={handleFilters}
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
+        />
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <Scrollbar>

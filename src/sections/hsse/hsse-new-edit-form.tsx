@@ -164,10 +164,12 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [open, setOpen] = useState(false);
+  const [openWarn, setOpenWarn] = useState(false);
   const [checkSubmit, setCheckSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const isToday = moment(currentHSSE?.Ngay_ghi_nhan).isSame(moment(), 'day');
+  const [htmlRes, setHtmlRes] = useState("");
 
   const NewProductSchema = Yup.object().shape({
     Dien_cu_dan: Yup.number()
@@ -548,15 +550,20 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      enqueueSnackbar({
-        variant: 'success',
-        autoHideDuration: 4000,
-        message: method === 'put' ? 'Cập nhật thành công!' : 'Tạo mới thành công!',
-      });
+      setHtmlRes(res?.data?.htmlResponse);
+      if (res.data.htmlResponse !== null && res.data.htmlResponse !== "") {
+        setOpenWarn(true)
+      } else {
+        enqueueSnackbar({
+          variant: 'success',
+          autoHideDuration: 4000,
+          message: method === 'put' ? 'Cập nhật thành công!' : 'Tạo mới thành công!',
+        });
+      }
+
     } catch (error) {
       setLoading(false);
       let errorMessage = 'Lỗi gửi yêu cầu';
-      console.log("error", error.message)
       if (error.response) {
         errorMessage = error.response.data.message || errorMessage;
       } else if (error.request) {
@@ -703,6 +710,23 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             Đồng ý
           </Button>
           <Button onClick={() => handleCloseDialog(false)}>Hủy</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openWarn}
+        onClose={() => setOpenWarn(false)}
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText
+            id="confirm-dialog-description"
+            dangerouslySetInnerHTML={{ __html: htmlRes }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenWarn(false)}>Xác nhận</Button>
         </DialogActions>
       </Dialog>
     </FormProvider>

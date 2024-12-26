@@ -74,7 +74,7 @@ type Props = {
 
 // ----------------------------------------------------------------------
 
-export default function SuCoListView({ data }: Props) {
+export default function ManagementSuCoListView({ data }: Props) {
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -232,7 +232,7 @@ export default function SuCoListView({ data }: Props) {
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
-            src= {`${getImageUrls(3,detailChecklist?.Anh)}`}
+            src={`${getImageUrls(3, detailChecklist?.Anh)}`}
             ratio="1/1"
           />
         </DialogContent>

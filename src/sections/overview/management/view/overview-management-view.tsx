@@ -46,7 +46,7 @@ import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
 import SuCoNgoaiListView from '../sucongoai/su-co-ngoai-list-view';
-import SuCoListView from '../suco/su-co-list-view';
+import ManagementSuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import BankingExpensesCategories from '../banking-expenses-categories';
 
@@ -1125,7 +1125,7 @@ export default function OverviewAnalyticsView() {
         <DialogTitle>Dự án: {selectedCodeSuCo}</DialogTitle>
         <DialogContent>
           {dataTableSuCo && dataTableSuCo?.length > 0 && openModalSuCo === true && (
-            <SuCoListView data={dataTableSuCo} />
+            <ManagementSuCoListView data={dataTableSuCo} />
           )}
         </DialogContent>
         <DialogActions>
@@ -1136,9 +1136,7 @@ export default function OverviewAnalyticsView() {
       <Dialog open={openModalAI} onClose={handleCloseModalAI} fullWidth maxWidth="lg">
         <DialogTitle>Tra cứu nhanh về HSSE</DialogTitle>
         <DialogContent>
-          {/* {dataTableSuCo && dataTableSuCo?.length > 0 && openModalAI === true && (
-            <SuCoListView data={dataTableSuCo} />
-          )} */}
+
 
           <Box
             sx={{

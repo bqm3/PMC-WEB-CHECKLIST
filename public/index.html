@@ -55,27 +55,28 @@
           }
     }
 
-    /* Chạy chữ "Giáng sinh an lành" */
     .scrolling-text {
-      position: fixed;
-      top: 10px;
-      left: 100%;
-      font-size: 24px;
-      font-weight: bold;
-      color: #2F61AC;
-      white-space: nowrap;
-      animation: scroll-text 20s linear infinite;
-      z-index: 10000 !important;
-    }
+    position: fixed;
+    top: -50px; /* Ẩn ban đầu */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e61b0c; /* Màu nền nổi bật */
+    padding: 8px 12px;
+    font-size: 20px;
+    color: #fff;;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Bắt đầu ẩn */
+    transition: top 2s, opacity 2s; /* Hiệu ứng chuyển động mượt */
+  }
 
-    @keyframes scroll-text {
-      0% {
-        left: 120%;
-      }
-      100% {
-        left: -120%;
-      }
-    }
+  /* Hiệu ứng xuất hiện */
+  .scrolling-text.show {
+    top: 20px; /* Vị trí hiện tại */
+    opacity: 1; /* Hiện chữ */
+    z-index: 100000!important;
+  }
 
   </style>
 </head>
@@ -85,34 +86,58 @@
   <div id="root"></div>
 
   <!-- Chữ chạy -->
-  <div class="scrolling-text">Chúc bạn và gia đình giáng sinh vui vẻ và năm mới an lành!</div>
+  <div class="scrolling-text">CHÚC MỪNG NĂM MỚI 2025!</div>
 
-  <script>
-    // Tạo hiệu ứng tuyết rơi
-    function createSnowflakes() {
-      const numberOfSnowflakes = 20; // Giảm số lượng bông tuyết
-      for (let i = 0; i < numberOfSnowflakes; i++) {
-        const snowflake = document.createElement('img');
-        snowflake.classList.add('snowflake');
-        snowflake.src = '/logo/ic_snowflake.svg';
-        snowflake.alt = 'Snowflake';
-        
-        // Xác định kích thước và vị trí của mỗi bông tuyết
-        const size = Math.random() * 20 + 5; // Kích thước bông tuyết (từ 5px đến 15px)
-        snowflake.style.width = `${size}px`;
-        snowflake.style.height = `${size}px`;
-        snowflake.style.left = `${Math.random() * 95}vw`; // Vị trí ngang (0 đến 100% của màn hình)
-        snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`; // Thời gian rơi (từ 5s đến 15s)
-        snowflake.style.animationDelay = `${Math.random() * 10}s`; // Thời gian trễ (0 đến 10s)
+<script>
+  function createSnowflakes() {
+    const numberOfSnowflakes = 20; // Số lượng hoa
+    const images = ['🏵️', '🌸']; // Emoji hoa
 
-        // Thêm bông tuyết vào body
-        document.body.appendChild(snowflake);
-      }
+    for (let i = 0; i < numberOfSnowflakes; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+
+      // Chọn emoji ngẫu nhiên
+      snowflake.textContent = images[Math.floor(Math.random() * images.length)];
+
+      // Xác định kích thước và vị trí của mỗi hoa
+      const size = Math.random() * 10 + 5; // Kích thước hoa (10px đến 30px)
+      snowflake.style.fontSize = `${size}px`;
+      snowflake.style.left = `${Math.random() * 95}vw`; // Vị trí ngang
+      snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`; // Thời gian rơi
+      snowflake.style.animationDelay = `${Math.random() * 10}s`; // Thời gian trễ
+
+      // Thêm hoa vào body
+      document.body.appendChild(snowflake);
+
+      // Xóa hoa sau khi rơi hết
+      snowflake.addEventListener('animationend', () => {
+        snowflake.remove();
+      });
     }
+  }
 
-    // Gọi hàm tạo tuyết rơi
-    createSnowflakes();
-  </script>
+  // Gọi hàm tạo hoa rơi mỗi 2 giây
+  // setInterval(createSnowflakes, 2000);
+  createSnowflakes(); // Gọi ngay khi tải trang
+
+  function triggerScrollingText() {
+    const scrollingText = document.querySelector('.scrolling-text');
+
+    // Thêm lớp 'show' để hiện chữ
+    scrollingText.classList.add('show');
+
+    // Xóa lớp 'show' sau 5 giây (ẩn chữ)
+    setTimeout(() => {
+      scrollingText.classList.remove('show');
+    }, 5000); // Thời gian chữ xuất hiện (5 giây)
+  }
+
+  // Kích hoạt lần đầu và lặp lại mỗi 15 giây
+  setInterval(triggerScrollingText, 60000);
+  triggerScrollingText(); // Gọi ngay khi tải trang
+</script>
+
 </body>
 
 </html>

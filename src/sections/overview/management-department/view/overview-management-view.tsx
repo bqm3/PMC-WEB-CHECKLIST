@@ -33,7 +33,7 @@ import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
 import SuCoNgoaiListView from '../sucongoai/su-co-ngoai-list-view';
-import SuCoListView from '../suco/su-co-list-view';
+import ManagementSuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
 // ----------------------------------------------------------------------
@@ -827,7 +827,7 @@ export default function OverviewAnalyticsView() {
         <DialogTitle>Dự án: {selectedCodeSuCo}</DialogTitle>
         <DialogContent>
           {dataTableSuCo && dataTableSuCo?.length > 0 && openModalSuCo === true && (
-            <SuCoListView data={dataTableSuCo} />
+            <ManagementSuCoListView data={dataTableSuCo} />
           )}
         </DialogContent>
         <DialogActions>

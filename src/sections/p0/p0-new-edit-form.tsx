@@ -198,8 +198,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   useEffect(() => {
     const handleCheck = async () => {
       try {
-        const res = await axios.get(
-          `https://checklist.pmcweb.vn/be/api/v2/p0/check`,
+        const res = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/check`,
           {
             headers: {
               Accept: 'application/json',
