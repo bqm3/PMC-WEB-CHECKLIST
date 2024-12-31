@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useTheme } from '@mui/material/styles';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -41,10 +42,10 @@ export default function DataTableRow({
   row,
   index,
 } // selected,
-// onViewRow,
-// onSelectRow,
-// onDeleteRow,
-: Props) {
+  // onViewRow,
+  // onSelectRow,
+  // onDeleteRow,
+  : Props) {
   const {
     ID_Suco,
     ID_KV_CV,
@@ -61,15 +62,17 @@ export default function DataTableRow({
     ent_user,
   } = row;
 
+  const theme = useTheme()
   const confirm = useBoolean();
 
   const collapse = useBoolean();
 
   const popover = usePopover();
 
-  const formattedTime = Giosuco.slice(0, 5);
+  const formattedTime = Giosuco?.slice(0, 5);
 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
 
   const renderPrimary = (
     <TableRow hover>

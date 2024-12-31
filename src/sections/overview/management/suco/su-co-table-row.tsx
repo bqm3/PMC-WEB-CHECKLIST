@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useTheme } from '@mui/material/styles';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -44,6 +45,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
     ID_Checklist, Gioht, Ghichu, Anh, ent_checklist, Ngay, Ketqua
 
   } = row;
+  const theme = useTheme();
 
   const confirm = useBoolean();
   const collapse = useBoolean();
@@ -52,7 +54,8 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
 
   const formattedTime = Gioht.slice(0, 5);
 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
@@ -80,8 +83,8 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
       <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
         {(Anh !== null && Anh !== undefined && Anh !== '') && (
           <Avatar
-           // src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
-            src = {`${getImageUrls(3,Anh)}`}
+            // src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
+            src={`${getImageUrls(3, Anh)}`}
             variant="rounded"
             sx={{ width: 80, height: 80 }}
           />

@@ -1,4 +1,6 @@
 import { format } from 'date-fns';
+
+import { useTheme } from '@mui/material/styles';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -52,16 +54,20 @@ export default function AreaTableRow({ row, selected, onSelectRow, index }: Prop
     isDelete,
     ent_hangmuc,
     ent_user,
+    TenHangmuc,
+    Bienphapxuly
   } = row;
+  const theme = useTheme();
 
   const confirm = useBoolean();
   const collapse = useBoolean();
 
   const popover = usePopover();
 
-  const formattedTime = Giosuco.slice(0, 5);
+  const formattedTime = Giosuco?.slice(0, 5);
 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
@@ -70,9 +76,9 @@ export default function AreaTableRow({ row, selected, onSelectRow, index }: Prop
       </TableCell> */}
 
       <TableCell>
-          SC{ID_Suco}
+        SC{ID_Suco}
       </TableCell>
-      <TableCell>{ent_hangmuc?.Hangmuc}</TableCell>
+      <TableCell>{ent_hangmuc?.Hangmuc ? ent_hangmuc?.Hangmuc : TenHangmuc}</TableCell>
       <TableCell>
         <ListItemText
           primary={moment(Ngaysuco).format('DD-MM-YYYY')}
@@ -84,8 +90,9 @@ export default function AreaTableRow({ row, selected, onSelectRow, index }: Prop
           }}
         />{' '}
       </TableCell>
-      <TableCell> {Ngayxuly ? moment(Ngayxuly).format('DD-MM-YYYY') :''} </TableCell>
+      <TableCell> {Ngayxuly ? moment(Ngayxuly).format('DD-MM-YYYY') : ''} </TableCell>
       <TableCell> {Noidungsuco} </TableCell>
+      <TableCell> {Bienphapxuly} </TableCell>
       <TableCell>
         <Label
           variant="soft"

@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useTheme } from '@mui/material/styles';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -51,6 +52,7 @@ export default function AreaTableRow({
   const { ID_Khuvuc, ID_Hangmuc, Hangmuc, Tieuchuankt, Important, MaQrCode, ent_khuvuc } = row;
 
   const confirm = useBoolean();
+  const theme = useTheme()
 
   const collapse = useBoolean();
 
@@ -98,7 +100,8 @@ export default function AreaTableRow({
     </Label>
   ));
 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
       <TableCell padding="checkbox">

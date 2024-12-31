@@ -50,8 +50,8 @@
       0% {
             transform: translateY(0) rotate(0deg);
           }
-          20% {
-            transform: translateY(20vh) rotate(360deg);
+          100% {
+            transform: translateY(100vh) rotate(360deg);
           }
     }
 
@@ -64,7 +64,7 @@
 
 <script>
   function createSnowflakes() {
-    const numberOfSnowflakes = 20; // Số lượng hoa
+    const numberOfSnowflakes = 30; // Số lượng hoa
     const images = ['🏵️', '🌸']; // Emoji hoa
 
     for (let i = 0; i < numberOfSnowflakes; i++) {
@@ -75,11 +75,11 @@
       snowflake.textContent = images[Math.floor(Math.random() * images.length)];
 
       // Xác định kích thước và vị trí của mỗi hoa
-      const size = Math.random() * 10 + 5; // Kích thước hoa (10px đến 30px)
+      const size = Math.random() * 15 + 5; // Kích thước hoa (10px đến 30px)
       snowflake.style.fontSize = `${size}px`;
       snowflake.style.left = `${Math.random() * 95}vw`; // Vị trí ngang
-      snowflake.style.animationDuration = `${Math.random() * 6 + 5}s`; // Thời gian rơi
-      snowflake.style.animationDelay = `${Math.random() * 6}s`; // Thời gian trễ
+      snowflake.style.animationDuration = `${Math.random() * 20 + 5}s`; // Thời gian rơi
+      snowflake.style.animationDelay = `${Math.random() * 15}s`; // Thời gian trễ
 
       // Thêm hoa vào body
       document.body.appendChild(snowflake);

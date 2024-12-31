@@ -46,6 +46,7 @@ import {
   TableEmptyRows,
   TablePaginationCustom,
 } from 'src/components/table';
+import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { varTranHover } from 'src/components/animate';
@@ -61,16 +62,16 @@ import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 import TableSelectedAction from '../table-selected-action';
 import TableHeadCustom from '../table-head-custom';
 
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'ID_Suco', label: 'Mã', width: 50 },
-  { id: 'ID_Hangmuc', label: 'Hạng mục' },
-  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 150 },
-  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 150 },
-  { id: 'Noidungsuco', label: 'Thông tin', width: 200 },
-  { id: 'Tinhtrangxuly', label: 'Tình trạng xử lý', width: 150 },
+  { id: 'ID_Hangmuc', label: 'Hạng mục', width: 200 },
+  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 120 },
+  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 120 },
+  { id: 'Noidungsuco', label: 'Thông tin', width: 300 },
+  { id: 'Bienphapxuly', label: 'Biện pháp', width: 200 },
+  { id: 'Tinhtrangxuly', label: 'Tình trạng', width: 100 },
   { id: '', width: 50 },
 ];
 
@@ -112,6 +113,7 @@ export default function SuCoListView() {
   const [dataSelect, setDataSelect] = useState<ISucongoai>();
 
   const [tinhTrangXuLy, setTinhTrangXuLy] = useState(null);
+  const [bienphapxuly, setBienphapxuly] = useState(null);
   const [ngayXuLy, setNgayXuLy] = useState(new Date());
 
   useEffect(() => {
@@ -129,7 +131,6 @@ export default function SuCoListView() {
     ],
     []
   );
-
 
   const dateError =
     filters.startDate && filters.endDate
@@ -213,7 +214,7 @@ export default function SuCoListView() {
     await axios
       .put(
         `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
-        { Tinhtrangxuly: tinhTrangXuLy, ngayXuLy },
+        { Tinhtrangxuly: tinhTrangXuLy, ngayXuLy, Bienphapxuly: bienphapxuly },
         {
           headers: {
             Accept: 'application/json',
@@ -306,14 +307,14 @@ export default function SuCoListView() {
               mb: { xs: 3, md: 5 },
             }}
           />
-          {/* <LoadingButton
+          <LoadingButton
             loading={loading}
             variant="contained"
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
             onClick={upload.onTrue}
           >
             Upload
-          </LoadingButton> */}
+          </LoadingButton>
         </Stack>
 
         <Card>
@@ -465,11 +466,11 @@ export default function SuCoListView() {
           setNgayXuLy={setNgayXuLy}
           ngayXuLy={ngayXuLy}
           setTinhTrangXuLy={setTinhTrangXuLy}
+          setBienphapxuly={setBienphapxuly}
           tinhTrangXuLy={tinhTrangXuLy}
           handleUpdate={() => handleUpdate(dataSelect?.ID_Suco)}
         />
       )}
-
     </>
   );
 }
@@ -503,7 +504,10 @@ function applyFilter({
     inputData = inputData.filter(
       (order) =>
         `${order?.ent_hangmuc?.Hangmuc}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${order?.Noidungsuco}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order?.Noidungsuco}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.Bienphapxuly}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.TenHangmuc}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${order?.Ghichu}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
@@ -536,6 +540,7 @@ interface ConfirmTransferDialogProps {
   onClose: VoidFunction;
   setNgayXuLy: any;
   setTinhTrangXuLy: any;
+  setBienphapxuly: any;
   ngayXuLy: any;
   tinhTrangXuLy: any;
   handleUpdate: VoidFunction;
@@ -546,13 +551,15 @@ function NhomTSDialog({
   dataSelect,
   setNgayXuLy,
   setTinhTrangXuLy,
+  setBienphapxuly,
   ngayXuLy,
   tinhTrangXuLy,
   onClose,
   handleUpdate,
 }: ConfirmTransferDialogProps) {
-  const arr: any = dataSelect?.Duongdancacanh?.split(',').map((slide: any) =>
-    `${getImageUrls(3, slide)}`);
+  const arr: any = dataSelect?.Duongdancacanh?.split(',').map(
+    (slide: any) => `${getImageUrls(3, slide)}`
+  );
 
   const {
     selected: selectedImage,
@@ -567,7 +574,11 @@ function NhomTSDialog({
 
       <DialogContent>
         <Stack spacing={3} sx={{ p: 2 }}>
-          <TextField value={dataSelect?.ent_hangmuc?.Hangmuc} label="Hạng mục" disabled />
+          <TextField
+            value={dataSelect?.TenHangmuc || dataSelect?.ent_hangmuc?.Hangmuc}
+            label="Hạng mục"
+            disabled
+          />
           <TextField
             value={`${dataSelect?.Giosuco} ${moment(dataSelect?.Ngaysuco).format('DD-MM-YYYY')}`}
             label="Ngày sự cố"
@@ -579,6 +590,12 @@ function NhomTSDialog({
             disabled
             multiline
             rows={4}
+          />
+          <TextField
+            value={dataSelect?.Bienphapxuly}
+            label="Biện pháp xử lý"
+            onChange={(val) => setBienphapxuly(val.target.value)}
+            disabled={`${dataSelect?.Tinhtrangxuly}` === '2' && true}
           />
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Tình trạng xử lý</InputLabel>
@@ -634,14 +651,14 @@ function NhomTSDialog({
         <Button onClick={onClose}>Hủy</Button>
       </DialogActions>
 
-      {arr &&
+      {arr && (
         <Lightbox
           index={selectedImage}
           slides={arr}
           open={openLightbox}
           close={handleCloseLightbox}
         />
-      }
+      )}
     </Dialog>
   );
 }

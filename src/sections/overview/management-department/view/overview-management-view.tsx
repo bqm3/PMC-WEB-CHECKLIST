@@ -213,24 +213,7 @@ export default function OverviewAnalyticsView() {
 
   const [spreadsheetData, setSpreadsheetData] = useState([]);
 
-  const handleOpenModal = async (name: string, key: string) => {
-    setSelectedCode(name);
-    await axios
-      .get(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/${key}?name=${name}&year=${dataTotalYearSuCoNgoai}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .then((data) => {
-        setDataTable(data?.data?.data);
-        setOpenModal(true);
-      })
-      .catch((error) => console.log('error'));
-  };
+
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -477,10 +460,7 @@ export default function OverviewAnalyticsView() {
   const [open, setOpen] = useState(false);
   const [detailChecklist, setDetailChecklist] = useState<any>();
 
-  const handleClickOpen = (data: any) => {
-    setOpen(true);
-    setDetailChecklist(data);
-  };
+
   const handleClose = () => {
     setOpen(false);
     setDetailChecklist(null);

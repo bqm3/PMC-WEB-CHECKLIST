@@ -59,7 +59,7 @@ export default function GiamsatListView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const { page, rowsPerPage } = table;
-  const { p0, p0Loading, p0Error, p0Empty, p0Count } = useGetP0_ByDuan(page, rowsPerPage);
+  const { p0, p0Count } = useGetP0_ByDuan(page, rowsPerPage);
 
   const [tableData, setTableData] = useState<IP0[]>([]);
 

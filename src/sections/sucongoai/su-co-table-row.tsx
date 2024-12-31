@@ -1,32 +1,21 @@
-import { format } from 'date-fns';
+import moment from 'moment';
+import { useTheme } from '@mui/material/styles';
 // @mui
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-// utils
-import { fCurrency } from 'src/utils/format-number';
-// types
-import { IOrderItem } from 'src/types/order';
-import { IKhuvuc, IKhoiCV, ISucongoai } from 'src/types/khuvuc';
-import { useGetKhoiCV, useGetKhuVuc } from 'src/api/khuvuc';
+import { ISucongoai } from 'src/types/khuvuc';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useState } from 'react';
-import moment from 'moment';
+
 
 // ----------------------------------------------------------------------
 
@@ -49,49 +38,37 @@ export default function AreaTableRow({
 }: Props) {
   const {
     ID_Suco,
-    ID_KV_CV,
-    ID_Hangmuc,
     Ngaysuco,
     Giosuco,
     Noidungsuco,
-    Duongdancacanh,
-    ID_User,
     Tinhtrangxuly,
     Ngayxuly,
-    isDelete,
     ent_hangmuc,
-    ent_user,
+    Bienphapxuly,
+    TenHangmuc
   } = row;
 
+  const theme = useTheme();
   const confirm = useBoolean();
-  const collapse = useBoolean();
 
   const popover = usePopover();
 
-  const formattedTime = Giosuco.slice(0, 5);
+  const formattedTime = Giosuco?.slice(0, 5);
 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
+
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
-      <TableCell padding="checkbox">
+      {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+      </TableCell> */}
 
       <TableCell>
-        <Box
-          onClick={onViewRow}
-          sx={{
-            cursor: 'pointer',
-            '&:hover': {
-              textDecoration: 'underline',
-            },
-          }}
-        >
-          SC{ID_Suco}
-        </Box>
+        SC{ID_Suco}
       </TableCell>
-      <TableCell>{ent_hangmuc?.Hangmuc}</TableCell>
+      <TableCell>{TenHangmuc || ent_hangmuc?.Hangmuc}</TableCell>
       <TableCell>
         <ListItemText
           primary={moment(Ngaysuco).format('DD-MM-YYYY')}
@@ -103,8 +80,9 @@ export default function AreaTableRow({
           }}
         />{' '}
       </TableCell>
-      <TableCell> {moment(Ngayxuly).format('DD-MM-YYYY')} </TableCell>
+      <TableCell> {Ngayxuly ? moment(Ngayxuly).format('DD-MM-YYYY') : ''} </TableCell>
       <TableCell> {Noidungsuco} </TableCell>
+      <TableCell> {Bienphapxuly} </TableCell>
       <TableCell>
         <Label
           variant="soft"
@@ -120,9 +98,8 @@ export default function AreaTableRow({
           {`${Tinhtrangxuly}` === '2' && 'Đã xử lý'}
         </Label>
       </TableCell>
-
-      <TableCell>
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
       </TableCell>
@@ -147,16 +124,7 @@ export default function AreaTableRow({
           <Iconify icon="solar:eye-bold" />
           Cập nhật
         </MenuItem>
-        {/* <MenuItem
-          onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Xóa
-        </MenuItem> */}
+
       </CustomPopover>
 
       <ConfirmDialog

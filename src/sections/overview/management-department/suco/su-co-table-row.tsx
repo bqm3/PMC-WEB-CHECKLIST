@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useTheme } from '@mui/material/styles';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -41,6 +42,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
   const {
     ID_Checklist, Gioht, Ghichu, Anh, ent_checklist, Ngay, Ketqua
   } = row;
+  const theme = useTheme()
 
   const confirm = useBoolean();
   const collapse = useBoolean();
@@ -49,7 +51,8 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
 
   const formattedTime = Gioht.slice(0, 5);
 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
 
   const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null;
 

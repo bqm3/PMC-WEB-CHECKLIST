@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useTheme } from '@mui/material/styles';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -33,7 +34,7 @@ type Props = {
   row: ILocation;
   selected: boolean;
   // khoiCV: IKhoiCV[];
-  
+
   // onViewRow: VoidFunction;
   // onSelectRow: VoidFunction;
   // onDeleteRow: VoidFunction;
@@ -64,12 +65,14 @@ export default function AreaTableRow({
     detailedCoordinates
   } = row;
 
+  const theme = useTheme()
   const collapse = useBoolean();
 
   const popover = usePopover();
 
- 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
 
@@ -89,7 +92,7 @@ export default function AreaTableRow({
       <TableCell>{project}</TableCell>
       <TableCell> {ca} </TableCell>
 
-      <TableCell sx={{color: 'black', fontWeight: '700'}}> {nguoi} </TableCell>
+      <TableCell sx={{ color: 'black', fontWeight: '700' }}> {nguoi} </TableCell>
 
       <TableCell>{cv}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
@@ -126,31 +129,31 @@ export default function AreaTableRow({
               <Stack
                 key={item?.coordinates}
                 direction="row"
-                sx={{ mt: 1, borderWidth: 2, borderColor: 'black', borderTop: 1}}
+                sx={{ mt: 1, borderWidth: 2, borderColor: 'black', borderTop: 1 }}
               >
-                <TableCell sx={{color: 'black', fontSize: 15}}>
-                {item.coordinates}
+                <TableCell sx={{ color: 'black', fontSize: 15 }}>
+                  {item.coordinates}
                 </TableCell>
 
                 <TableCell>
-                {item?.detailedItems?.map((it: any) => (
-              <Stack
-                key={it?.Gioht}
-                direction="row"
-                alignItems="center"
-               
-              >
-                <TableCell>
-                  <Box>{it.Gioht}</Box>
+                  {item?.detailedItems?.map((it: any) => (
+                    <Stack
+                      key={it?.Gioht}
+                      direction="row"
+                      alignItems="center"
+
+                    >
+                      <TableCell>
+                        <Box>{it.Gioht}</Box>
+                      </TableCell>
+
+                      <TableCell>{it?.relatedHangmuc}</TableCell>
+
+                    </Stack>
+                  ))}
                 </TableCell>
 
-                <TableCell>{it?.relatedHangmuc}</TableCell>
-               
-              </Stack>
-            ))}
-                </TableCell>
-               
-               
+
               </Stack>
             ))}
           </Stack>
@@ -162,9 +165,9 @@ export default function AreaTableRow({
     <>
       {renderPrimary}
       {renderSecondary}
-    
 
-     
+
+
     </>
   );
 }

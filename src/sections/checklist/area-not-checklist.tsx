@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useTheme } from '@mui/material/styles';
 // @mui
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -33,6 +34,7 @@ export default function AreaTableRow({
 }: Props) {
   const { ent_khuvuc, hangmucs } = row;
 
+  const theme = useTheme()
   const collapse = useBoolean();
   const collapse1 = useBoolean();
 
@@ -80,7 +82,8 @@ export default function AreaTableRow({
     </Label>
   ));
 
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
       <TableCell>
@@ -126,7 +129,7 @@ export default function AreaTableRow({
           unmountOnExit
           sx={{
             bgcolor: 'background.default',
-            borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+            borderTop: () => `1px solid ${theme.palette.divider}`,
           }}
         >
           <Stack component={Paper} sx={{ m: 1.5, p: 2, borderRadius: 1 }}>
@@ -143,7 +146,7 @@ export default function AreaTableRow({
                     p: 2,
                     mb: 2,
                     borderRadius: 1,
-                    boxShadow: (theme) => theme.shadows[1],
+                    boxShadow: () => theme.shadows[1],
                     '&:last-of-type': {
                       mb: 2,
                     },

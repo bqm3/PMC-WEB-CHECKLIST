@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { format } from 'date-fns';
 // @mui
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -58,7 +58,10 @@ export default function AreaTableRow({
   index,
 }: Props) {
   const collapse = useBoolean();
-  const backgroundColorStyle = index % 2 !== 0 ? '#f3f6f4' : '';
+  const theme = useTheme()
+
+  const backgroundColorStyle =
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -123,7 +126,7 @@ export default function AreaTableRow({
               direction="row"
               alignItems="center"
               sx={{
-                p: (theme) => theme.spacing(1.5, 2),
+                p: () => theme.spacing(1.5, 2),
                 // borderBottom: (theme) => `solid 2px ${theme.palette.divider}`,
                 bgcolor: 'background.paper',
                 fontWeight: 'bold',
@@ -227,7 +230,7 @@ export default function AreaTableRow({
             position: 'absolute',
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: () => theme.palette.grey[500],
           }}
         />
 

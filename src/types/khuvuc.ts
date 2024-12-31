@@ -261,11 +261,14 @@ export type ISucongoai = {
   ID_KV_CV: string;
   ID_Hangmuc: string;
   Ngaysuco: string;
+  TenHangmuc: string;
   Giosuco: string;
   Noidungsuco: string;
   Duongdancacanh: string;
   ID_User: string;
+  Bienphapxuly: string;
   Tinhtrangxuly: string;
+  Ghichu: string;
   Ngayxuly: string;
   isDelete: string;
   ent_hangmuc: IHangMuc;

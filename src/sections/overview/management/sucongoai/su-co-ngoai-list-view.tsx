@@ -61,10 +61,11 @@ import TableHeadCustom from './table-head-custom';
 const TABLE_HEAD = [
   { id: 'ID_Suco', label: 'Mã', width: 50 },
   { id: 'ID_Hangmuc', label: 'Hạng mục' },
-  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 150 },
-  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 150 },
-  { id: 'Noidungsuco', label: 'Thông tin', width: 200 },
-  { id: 'Tinhtrangxuly', label: 'Tình trạng xử lý', width: 150 },
+  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 120 },
+  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 120 },
+  { id: 'Noidungsuco', label: 'Thông tin', width: 250 },
+  { id: 'Bienphapxuly', label: 'Biện pháp', width: 150 },
+  { id: 'Tinhtrangxuly', label: 'Tình trạng', width: 100 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -151,108 +152,108 @@ export default function SuCoNgoaiListView({ data }: Props) {
   );
 
   return (
-    <Container sx={{ my: 2 }}>
-      <Card>
-        <Tabs
-          value={filters?.status}
-          onChange={handleFilterStatus}
-          sx={{
-            px: 2.5,
-            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-          }}
-        >
-          {STATUS_OPTIONS?.map((tab) => (
-            <Tab
-              key={tab.value}
-              iconPosition="end"
-              value={tab.value}
-              label={tab.label}
-              icon={
-                <Label
-                  variant={
-                    ((tab.value === 'all' || tab.value === filters?.status) && 'filled') || 'soft'
-                  }
-                  color={
-                    (tab.value === '2' && 'success') ||
-                    (tab.value === '1' && 'warning') ||
-                    (tab.value === '0' && 'error') ||
-                    'default'
-                  }
-                >
-                  {tab.value === 'all' && data?.length}
-                  {tab.value === '0' &&
-                    data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '0').length}
-                  {tab.value === '1' &&
-                    data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '1').length}
-                  {tab.value === '2' &&
-                    data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '2').length}
-                </Label>
+    // <Container sx={{ my: 2 }}>
+    <Card sx={{ my: 2 }}>
+      <Tabs
+        value={filters?.status}
+        onChange={handleFilterStatus}
+        sx={{
+          px: 2.5,
+          boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+        }}
+      >
+        {STATUS_OPTIONS?.map((tab) => (
+          <Tab
+            key={tab.value}
+            iconPosition="end"
+            value={tab.value}
+            label={tab.label}
+            icon={
+              <Label
+                variant={
+                  ((tab.value === 'all' || tab.value === filters?.status) && 'filled') || 'soft'
+                }
+                color={
+                  (tab.value === '2' && 'success') ||
+                  (tab.value === '1' && 'warning') ||
+                  (tab.value === '0' && 'error') ||
+                  'default'
+                }
+              >
+                {tab.value === 'all' && data?.length}
+                {tab.value === '0' &&
+                  data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '0').length}
+                {tab.value === '1' &&
+                  data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '1').length}
+                {tab.value === '2' &&
+                  data?.filter((item: any) => `${item?.Tinhtrangxuly}` === '2').length}
+              </Label>
+            }
+          />
+        ))}
+      </Tabs>
+
+      <SuCoTableToolbar
+        filters={filters}
+        onFilters={handleFilters}
+        canReset={canReset}
+        onResetFilters={handleResetFilters}
+      />
+
+      <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+        <Scrollbar>
+          <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+            <TableHeadCustom
+              order={table.order}
+              orderBy={table.orderBy}
+              headLabel={TABLE_HEAD}
+              rowCount={data?.length}
+              numSelected={table.selected.length}
+              onSort={table.onSort}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(checked, dataInPage?.map((row) => row.ID_Suco))
               }
             />
-          ))}
-        </Tabs>
 
-        <SuCoTableToolbar
-          filters={filters}
-          onFilters={handleFilters}
-          canReset={canReset}
-          onResetFilters={handleResetFilters}
-        />
+            <TableBody>
+              {dataFiltered
+                ?.slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
+                )
+                .map((row, index) => (
+                  <AreaTableRow
+                    key={row.ID_Suco}
+                    row={row}
+                    selected={table.selected.includes(row.ID_Suco)}
+                    onSelectRow={() => table.onSelectRow(row.ID_Suco)}
+                    index={index}
+                  />
+                ))}
 
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={data?.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(checked, dataInPage?.map((row) => row.ID_Suco))
-                }
+              <TableEmptyRows
+                height={denseHeight}
+                emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
               />
 
-              <TableBody>
-                {dataFiltered
-                  ?.slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row, index) => (
-                    <AreaTableRow
-                      key={row.ID_Suco}
-                      row={row}
-                      selected={table.selected.includes(row.ID_Suco)}
-                      onSelectRow={() => table.onSelectRow(row.ID_Suco)}
-                      index={index}
-                    />
-                  ))}
+              <TableNoData notFound={notFound} />
+            </TableBody>
+          </Table>
+        </Scrollbar>
+      </TableContainer>
 
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                />
-
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-
-        <TablePaginationCustom
-          count={dataFiltered.length}
-          page={table.page}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-          //
-          dense={table.dense}
-          onChangeDense={table.onChangeDense}
-        />
-      </Card>
-    </Container>
+      <TablePaginationCustom
+        count={dataFiltered.length}
+        page={table.page}
+        rowsPerPage={table.rowsPerPage}
+        onPageChange={table.onChangePage}
+        onRowsPerPageChange={table.onChangeRowsPerPage}
+        //
+        dense={table.dense}
+        onChangeDense={table.onChangeDense}
+      />
+    </Card>
+    // </Container>
   );
 }
 
