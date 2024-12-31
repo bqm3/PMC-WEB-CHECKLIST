@@ -50,33 +50,10 @@
       0% {
             transform: translateY(0) rotate(0deg);
           }
-          100% {
-            transform: translateY(100vh) rotate(360deg);
+          20% {
+            transform: translateY(20vh) rotate(360deg);
           }
     }
-
-    .scrolling-text {
-    position: fixed;
-    top: -50px; /* Ẩn ban đầu */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #e61b0c; /* Màu nền nổi bật */
-    padding: 8px 12px;
-    font-size: 20px;
-    color: #fff;;
-    font-weight: bold;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    opacity: 0; /* Bắt đầu ẩn */
-    transition: top 2s, opacity 2s; /* Hiệu ứng chuyển động mượt */
-  }
-
-  /* Hiệu ứng xuất hiện */
-  .scrolling-text.show {
-    top: 20px; /* Vị trí hiện tại */
-    opacity: 1; /* Hiện chữ */
-    z-index: 100000!important;
-  }
 
   </style>
 </head>
@@ -84,9 +61,6 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-
-  <!-- Chữ chạy -->
-  <div class="scrolling-text">CHÚC MỪNG NĂM MỚI 2025!</div>
 
 <script>
   function createSnowflakes() {
@@ -104,8 +78,8 @@
       const size = Math.random() * 10 + 5; // Kích thước hoa (10px đến 30px)
       snowflake.style.fontSize = `${size}px`;
       snowflake.style.left = `${Math.random() * 95}vw`; // Vị trí ngang
-      snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`; // Thời gian rơi
-      snowflake.style.animationDelay = `${Math.random() * 10}s`; // Thời gian trễ
+      snowflake.style.animationDuration = `${Math.random() * 6 + 5}s`; // Thời gian rơi
+      snowflake.style.animationDelay = `${Math.random() * 6}s`; // Thời gian trễ
 
       // Thêm hoa vào body
       document.body.appendChild(snowflake);
@@ -121,21 +95,7 @@
   // setInterval(createSnowflakes, 2000);
   createSnowflakes(); // Gọi ngay khi tải trang
 
-  function triggerScrollingText() {
-    const scrollingText = document.querySelector('.scrolling-text');
-
-    // Thêm lớp 'show' để hiện chữ
-    scrollingText.classList.add('show');
-
-    // Xóa lớp 'show' sau 5 giây (ẩn chữ)
-    setTimeout(() => {
-      scrollingText.classList.remove('show');
-    }, 5000); // Thời gian chữ xuất hiện (5 giây)
-  }
-
-  // Kích hoạt lần đầu và lặp lại mỗi 15 giây
-  setInterval(triggerScrollingText, 60000);
-  triggerScrollingText(); // Gọi ngay khi tải trang
+ 
 </script>
 
 </body>

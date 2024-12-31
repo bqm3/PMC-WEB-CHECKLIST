@@ -263,18 +263,20 @@ export default function GiamsatListView() {
                     ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                   }
                   color={
-                    (tab.value === '2' && 'success') ||
-                    (tab.value === '3' && 'warning') ||
-                    (tab.value === '4' && 'error') ||
+                    (tab.value === '1' && 'success') ||
+                    (tab.value === '2' && 'warning') ||
+                    (tab.value === '3' && 'error') ||
                     'default'
                   }
                 >
                   {tab.value === 'all' && users?.length}
-                  {tab.value === '2' &&
-                    users?.filter((order) => `${order.ID_Chucvu}` === '2').length}
+                  {tab.value === '1' &&
+                    users?.filter((order) => `${order?.ent_chucvu?.Role}` === '1').length}
 
+                  {tab.value === '2' &&
+                    users?.filter((order) => `${order?.ent_chucvu?.Role}` === '2').length}
                   {tab.value === '3' &&
-                    users?.filter((order) => `${order.ID_Chucvu}` === '3').length}
+                    users?.filter((order) => `${order?.ent_chucvu?.Role}` === '3').length}
 
                 </Label>
               }

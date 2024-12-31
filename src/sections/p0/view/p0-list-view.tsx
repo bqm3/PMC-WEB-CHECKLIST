@@ -69,7 +69,7 @@ export default function GiamsatListView() {
     }
   }, [p0, page, rowsPerPage]);
 
-  
+
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -89,79 +89,76 @@ export default function GiamsatListView() {
     },
     [router]
   );
-  console.log('p0Count',p0Count)
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <CustomBreadcrumbs
-            heading="Danh sách P0"
-            links={[
-              {
-                name: 'Dashboard',
-                href: paths.dashboard.root,
-              },
-              { name: 'Danh sách' },
-            ]}
-            sx={{
-              mb: { xs: 3, md: 5 },
-            }}
-          />
-        </Stack>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <CustomBreadcrumbs
+          heading="Danh sách P0"
+          links={[
+            {
+              name: 'Dashboard',
+              href: paths.dashboard.root,
+            },
+            { name: 'Danh sách' },
+          ]}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
+      </Stack>
 
-        <Card>
+      <Card>
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered?.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <Scrollbar>
+            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={dataFiltered?.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+              />
+
+              <TableBody>
+                {dataFiltered
+                  // .slice(
+                  //   table.page * table.rowsPerPage,
+                  //   table.page * table.rowsPerPage + table.rowsPerPage
+                  // )
+                  .map((row) => (
+                    <P0TableRow
+                      key={row.ID_P0}
+                      row={row}
+                      selected={table.selected.includes(`${row.ID_P0}`)}
+                      onViewRow={() => handleViewRow(`${row.ID_P0}`)}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, dataFiltered?.length, dataFiltered?.length)}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    // .slice(
-                    //   table.page * table.rowsPerPage,
-                    //   table.page * table.rowsPerPage + table.rowsPerPage
-                    // )
-                    .map((row) => (
-                      <P0TableRow
-                        key={row.ID_P0}
-                        row={row}
-                        selected={table.selected.includes(`${row.ID_P0}`)}
-                        onViewRow={() => handleViewRow(`${row.ID_P0}`)}
-                      />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered?.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={p0Count}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
-    </>
+        <TablePaginationCustom
+          count={p0Count}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

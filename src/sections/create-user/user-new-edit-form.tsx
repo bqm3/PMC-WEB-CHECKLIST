@@ -484,7 +484,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
             onChange={(newValue: any) => setValue('Ngaysinh', newValue)}
           />
 
-          {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />}
+          {/* {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />} */}
           {`${user?.ent_chucvu?.Role}` === '10' && <RHFTextField name="Password" label="Mật khẩu" />}
 
           {(`${currentUser?.ent_chucvu?.Role}` === '2' ||

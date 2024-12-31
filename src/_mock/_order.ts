@@ -33,11 +33,12 @@ export const PERMISSION_STATUS_OPTIONS = [
 ];
 
 export const ROLE_STATUS_OPTIONS = [
-  { value: '2', label: 'Giám đốc dự án' },
-  { value: '5', label: 'Ban giám đốc' },
-  { value: '7', label: 'Ban quản trị' },
-  { value: '11', label: 'Ban quản trị khối' },
-  { value: '6', label: 'Trung tâm ứng phó sự cố' },
+  { value: '1', label: 'Giám đốc dự án' },
+  { value: '0', label: 'Ban giám đốc' },
+  { value: '4', label: 'Ban quản trị' },
+  { value: '5', label: 'Ban quản trị khối' },
+  { value: '2', label: 'Kỹ sư trưởng' },
+  { value: '3', label: 'Giám sát' },
 ];
 
 const ITEMS = [...Array(3)].map((_, index) => ({

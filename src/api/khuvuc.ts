@@ -472,7 +472,7 @@ export function useGetHSSEAll() {
 
 export function useGetP0_ByDuan(page: any, limit: any) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
-  const URL = `http://localhost:6868/api/v2/p0/all-duan?page=${page}&limit=${limit}`;
+  const URL = `https://checklist.pmcweb.vn/be/api/v2/p0/all-duan?page=${page}&limit=${limit}`;
   const fetCher = (url: string) =>
     fetch(url, {
       method: 'get',

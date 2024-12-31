@@ -274,7 +274,7 @@ export default function OverviewAnalyticsView() {
           },
         })
         .then((res) => {
-          setDataTotalErrorWeek(res.data.data[0].errorDetails);
+          setDataTotalErrorWeek(res.data.data[0]?.errorDetails);
         })
         .catch((err) => console.log('err', err));
     };

@@ -8,7 +8,7 @@ export default function DuanListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Báo cáo HSSE</title>
+        <title> Dashboard: Báo cáo P0</title>
       </Helmet>
 
       <P0ListView />

@@ -97,7 +97,7 @@ export default function FileManagerNewFolderDialog({
       enqueueSnackbar({
         variant: 'error',
         autoHideDuration: 4000,
-        
+
         message: errorMessage,
       });
     }

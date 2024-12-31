@@ -263,25 +263,28 @@ export default function GiamsatListView() {
                     ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                   }
                   color={
-                    (tab.value === '2' && 'success') ||
-                    (tab.value === '5' && 'warning') ||
-                    (tab.value === '6' && 'error') ||
-                    (tab.value === '7' && 'info') ||
+                    (tab.value === '0' && 'success') ||
+                    (tab.value === '1' && 'warning') ||
+                    (tab.value === '2' && 'error') ||
+                    (tab.value === '3' && 'info') ||
+                    (tab.value === '4' && 'secondary') ||
                     'default'
                   }
                 >
                   {tab.value === 'all' && user?.length}
-                  {tab.value === '2' &&
-                    user?.filter((it) => `${it.ID_Chucvu}` === '2').length}
+                  {tab.value === '0' &&
+                    user?.filter((it) => `${it?.ent_chucvu?.Role}` === '0').length}
 
+                  {tab.value === '1' &&
+                    user?.filter((it) => `${it?.ent_chucvu?.Role}` === '1').length}
+                  {tab.value === '2' &&
+                    user?.filter((it) => `${it?.ent_chucvu?.Role}` === '2').length}
+                  {tab.value === '3' &&
+                    user?.filter((it) => `${it?.ent_chucvu?.Role}` === '3').length}
+                  {tab.value === '4' &&
+                    user?.filter((it) => `${it?.ent_chucvu?.Role}` === '4').length}
                   {tab.value === '5' &&
-                    user?.filter((it) => `${it.ID_Chucvu}` === '5').length}
-                  {tab.value === '6' &&
-                    user?.filter((it) => `${it.ID_Chucvu}` === '6').length}
-                  {tab.value === '7' &&
-                    user?.filter((it) => `${it.ID_Chucvu}` === '7').length}
-                  {tab.value === '11' &&
-                    user?.filter((it) => `${it.ID_Chucvu}` === '11').length}
+                    user?.filter((it) => `${it?.ent_chucvu?.Role}` === '5').length}
 
                 </Label>
               }
@@ -450,7 +453,7 @@ function applyFilter({
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.ID_Chucvu}` === status);
+    inputData = inputData?.filter((order) => `${order?.ent_chucvu?.Role}` === status);
   }
 
   return inputData;

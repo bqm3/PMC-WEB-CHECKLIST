@@ -112,8 +112,6 @@ export default function P0NewEditForm({ currentP0 }: Props) {
 
   const isFieldEditable = (fieldName: string) => {
     if (fieldName === 'Ghichu') return true;
-    console.log('fieldName', fieldName);
-    console.log('user?.ID_KhoiCV', user?.ID_KhoiCV);
 
     let check = false;
     if (`${user?.ID_KhoiCV}` === `4` && fieldName === 'Doanhthu') {
