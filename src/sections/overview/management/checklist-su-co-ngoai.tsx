@@ -34,6 +34,7 @@ interface Props extends CardProps {
   handleOpenModal: (name: string, key: string) => void;
   handleCloseModal: () => void;
   chiNhanhs: any;
+  years: any;
   selectedChiNhanh: string;
 }
 
@@ -54,6 +55,7 @@ export default function ChecklistYearStatistics({
   handleCloseModal,
   selectedChiNhanh,
   chiNhanhs,
+  years,
   ...other
 }: Props) {
   const { categories, colors, series, options } = chart;
@@ -196,9 +198,9 @@ export default function ChecklistYearStatistics({
 
       {/* Popover for selecting year */}
       <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose} sx={{ width: 140 }}>
-        {series.map((item: any) => (
-          <MenuItem key={item.name} selected={selectedYear === item.name} onClick={() => handleChangeSeries(item.name)}>
-            {item.name}
+        {years.map((item: any) => (
+          <MenuItem key={item.value} selected={selectedYear === item.value} onClick={() => handleChangeSeries(item.value)}>
+            {item.label}
           </MenuItem>
         ))}
       </CustomPopover>

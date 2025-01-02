@@ -168,6 +168,11 @@ const top = [
   { value: '20', label: 'Top 20' },
 ];
 
+const years = [
+  { value: '2024', label: '2024' },
+  { value: '2025', label: '2025' },
+]
+
 // interface ChartData {
 //   categories: string[];
 //   series: {
@@ -196,7 +201,7 @@ export default function OverviewAnalyticsView() {
 
   const [dataTotalErrorWeek, setDataTotalErrorWeek] = useState<any>([]);
   const [dataTotalYear, setDataTotalYear] = useState<ChartData>({ categories: [], series: [] });
-  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedYear, setSelectedYear] = useState('2025');
   const [selectedMonth, setSelectedMonth] = useState(`all`);
   const [selectedKhoiCV, setSelectedKhoiCV] = useState('all');
   const [selectedNhom, setSelectedNhom] = useState('all');
@@ -208,7 +213,7 @@ export default function OverviewAnalyticsView() {
     categories: [],
     series: [],
   });
-  const [selectedYearSuco, setSelectedYearSuco] = useState('2024');
+  const [selectedYearSuco, setSelectedYearSuco] = useState('2025');
   const [selectedMonthSuco, setSelectedMonthSuco] = useState(`all`);
   const [selectedKhoiCVSuco, setSelectedKhoiCVSuco] = useState('all');
   const [selectedNhomSuco, setSelectedNhomSuco] = useState('all');
@@ -1065,6 +1070,7 @@ export default function OverviewAnalyticsView() {
               STATUS_OPTIONS={STATUS_OPTIONS}
               tangGiam={tangGiam}
               chiNhanhs={chiNhanhs}
+              years={years}
               handleOpenModal={handleOpenModal}
               handleCloseModal={handleCloseModal}
             />
@@ -1309,7 +1315,7 @@ export default function OverviewAnalyticsView() {
               label="Tháng" // Corrected
               openTo="month"
               views={['month']}
-              value={dataChecklistMonth.month ? new Date(2024, dataChecklistMonth.month - 1) : null}
+              value={dataChecklistMonth.month ? new Date(2025, dataChecklistMonth.month - 1) : null}
               onChange={handleMonthChange}
             />
             <DatePicker

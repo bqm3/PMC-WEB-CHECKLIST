@@ -394,6 +394,8 @@ export function useNavData() {
       });
     }
 
+
+
     if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ent_chucvu?.Role === 3) {
       if (user?.ent_chucvu?.Role === 1) {
         navigationData[0].items.push({
@@ -421,6 +423,20 @@ export function useNavData() {
     }
 
     if (user?.ent_chucvu?.Role === 10 && user?.ID_Duan !== null) {
+      navigationData[0].items.push({
+        title: t('p0'),
+        path: paths.dashboard.p0.root,
+        icon: ICONS.tour,
+        children: [
+
+          { title: t('phanquyen'), path: paths.dashboard.p0.phanquyen },
+          { title: t('Dữ liệu'), path: paths.dashboard.p0.root },
+          { title: t('create'), path: paths.dashboard.p0.new },
+        ]
+      });
+    }
+
+    if (user?.ent_chucvu?.Role === 5 && user?.ID_Duan !== null) {
       navigationData[0].items.push({
         title: t('p0'),
         path: paths.dashboard.p0.root,
