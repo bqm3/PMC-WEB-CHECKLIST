@@ -486,6 +486,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
           {/* {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />} */}
           {`${user?.ent_chucvu?.Role}` === '10' && <RHFTextField name="Password" label="Mật khẩu" />}
+          {`${user?.ent_chucvu?.Role}` === '1' && <RHFTextField name="Password" label="Mật khẩu" />}
 
           {(`${currentUser?.ent_chucvu?.Role}` === '2' ||
             `${currentUser?.ent_chucvu?.Role}` === '3') && (
