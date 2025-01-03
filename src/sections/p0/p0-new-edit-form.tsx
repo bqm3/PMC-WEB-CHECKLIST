@@ -53,7 +53,7 @@ const fieldLabels: any = {
   Slcongto: 'Công tơ điện',
   QuansoTT: 'Quân số thực tế',
   QuansoDB: 'Quân số định biên',
-  Doanhthu: 'Doanh thu từ 6h đến 18h',
+  Doanhthu: 'Doanh thu từ 16h hôm trước đến 16h hôm nay',
   Ghichu: 'Ghi chú',
 };
 
