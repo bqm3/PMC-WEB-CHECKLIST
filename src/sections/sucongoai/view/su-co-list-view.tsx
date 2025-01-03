@@ -568,6 +568,10 @@ function NhomTSDialog({
     onClose: handleCloseLightbox,
   } = useLightBox(arr);
 
+  const ngayXulySuco = dataSelect?.Ngayxuly && typeof dataSelect.Ngayxuly === 'string' 
+  ? new Date(dataSelect.Ngayxuly) 
+  : null;
+
   return (
     <Dialog open={open} fullWidth maxWidth="md" onClose={onClose}>
       <DialogTitle>Cập nhật trạng thái</DialogTitle>
@@ -580,7 +584,7 @@ function NhomTSDialog({
             disabled
           />
           <TextField
-            value={`${dataSelect?.Giosuco} ${moment(dataSelect?.Ngaysuco).format('DD-MM-YYYY')}`}
+            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''}`}
             label="Ngày sự cố"
             disabled
           />
@@ -615,7 +619,7 @@ function NhomTSDialog({
           <DatePicker
             label="Ngày xử lý"
             onChange={(val: unknown) => setNgayXuLy(val)}
-            value={ngayXuLy || dataSelect?.Ngayxuly}
+            value={ngayXulySuco || ngayXuLy}
             disabled={`${dataSelect?.Tinhtrangxuly}` === '2' && true}
           />
 

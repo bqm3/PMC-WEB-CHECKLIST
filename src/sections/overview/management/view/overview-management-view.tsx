@@ -171,7 +171,7 @@ const top = [
 const years = [
   { value: '2024', label: '2024' },
   { value: '2025', label: '2025' },
-]
+];
 
 // interface ChartData {
 //   categories: string[];
@@ -183,6 +183,21 @@ const years = [
 //     }[];
 //   }[];
 // }
+
+const columnsDuanUploadSCN = [
+  {
+    title: 'STT',
+    dataIndex: 'stt',
+    key: 'stt',
+    width: 70,
+    align: 'center',
+  },
+  {
+    title: 'Tên Dự Án',
+    dataIndex: 'duan',
+    key: 'duan',
+  },
+];
 
 export default function OverviewAnalyticsView() {
   const theme = useTheme();
@@ -232,6 +247,11 @@ export default function OverviewAnalyticsView() {
   const [selectedTangGiamSuCoNgoai, setSelectedTangGiamSuCoNgoai] = useState('desc');
 
   // ===============
+  const [dataSCN, setDataSCN] = useState([]);
+  const [loadingSCN, setLoadingSCN] = useState(false);
+  const [showModalSCN, setShowModalSCN] = useState(false);
+
+  // ===============
   const [dataReportChecklistPercentWeek, setDataReportChecklistPercentWeek] = useState<any>();
   const [dataReportProblemChecklistPercentWeek, setDataProblemChecklistPercentWeek] =
     useState<any>();
@@ -277,7 +297,10 @@ export default function OverviewAnalyticsView() {
 
   const { duan } = useGetDuanWeb();
 
-  const options = [{ ID_Duan: '-1', Duan: 'Tất cả' }, ...duan.filter((item) => `${item.ID_Duan}` !== `1`)];
+  const options = [
+    { ID_Duan: '-1', Duan: 'Tất cả' },
+    ...duan.filter((item) => `${item.ID_Duan}` !== `1`),
+  ];
   const [selectedOptions, setSelectedOptions] = useState<string[]>(['-1']);
 
   const handleOnChange = (event: any, newValue: any) => {
@@ -301,7 +324,7 @@ export default function OverviewAnalyticsView() {
 
     try {
       // Gửi tin nhắn đến API
-      const response = await axios.post("https://checklist.pmcweb.vn/be/api/v2/chat", {
+      const response = await axios.post('https://checklist.pmcweb.vn/be/api/v2/chat', {
         message: inputMessage,
       });
 
@@ -324,13 +347,13 @@ export default function OverviewAnalyticsView() {
       return (
         <Box
           sx={{
-            fontFamily: "monospace",
-            color: "#333",
-            border: "1px solid #ddd",
-            borderRadius: "4px",
-            padding: "8px",
-            whiteSpace: "pre-wrap",
-            overflowX: "auto",
+            fontFamily: 'monospace',
+            color: '#333',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            padding: '8px',
+            whiteSpace: 'pre-wrap',
+            overflowX: 'auto',
           }}
         >
           {codeContent}
@@ -340,18 +363,17 @@ export default function OverviewAnalyticsView() {
     return (
       <Box
         sx={{
-          fontFamily: "Arial, sans-serif",
-          padding: "16px",
-          borderRadius: "8px",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-          maxWidth: "100%",
-          overflowWrap: "break-word",
+          fontFamily: 'Arial, sans-serif',
+          padding: '16px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+          maxWidth: '100%',
+          overflowWrap: 'break-word',
         }}
         dangerouslySetInnerHTML={{ __html: message.content }}
       />
     );
   };
-
 
   const handleOpenModal = async (name: string, key: string) => {
     setSelectedCode(name);
@@ -365,7 +387,6 @@ export default function OverviewAnalyticsView() {
       })
       .catch((error) => console.log('error'));
   };
-
 
   const handleOpenModalSuCo = async (name: string, key: string) => {
     setSelectedCodeSuCo(name);
@@ -459,12 +480,15 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+        .get(
+          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
         .then((res) => {
           const dataRes = res.data.avgCompletionRatios;
           setDataReportPercentChecklist(dataRes);
@@ -478,12 +502,15 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-a-week', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+        .get(
+          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-a-week',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
         .then((res) => {
           const dataRes = res.data.data;
           setDataReportPercentWeekChecklist(dataRes);
@@ -830,6 +857,52 @@ export default function OverviewAnalyticsView() {
     }
   };
 
+  const fetchListDuanUploadSCN = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload');
+
+      if (response.data) {
+        const formattedData = response.data.map((item: any, index: any) => [
+          { value: index + 1 },     
+          { value: item.Duan },     
+        ]);
+        setDataSCN(formattedData);
+        setShowModalSCN(true);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const DownloadListDuanUploadSCN = async () => {
+    try {
+      const response = await axios.get(
+        'https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload?format=excel',
+        { responseType: 'blob' } // Chỉ định phản hồi là blob (nhị phân)
+      );
+  
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+  
+      // Tạo một liên kết giả để tải tệp
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'DuanUploadSCN.xlsx'); // Tên tệp khi tải về
+      document.body.appendChild(link);
+      link.click(); // Bắt đầu tải về
+      document.body.removeChild(link); // Loại bỏ liên kết sau khi tải về
+  
+      // Giải phóng URL blob
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+  
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -858,6 +931,9 @@ export default function OverviewAnalyticsView() {
                 <Button variant="contained" color="info" onClick={handleOpenChecklistMonth}>
                   Báo cáo checklist
                 </Button>
+                <Button variant="contained" color="info" onClick={fetchListDuanUploadSCN}>
+                  Danh sách dự án upload SCN
+                </Button>
               </>
             )}
             <Button variant="contained" color="success" onClick={fetchExcelData}>
@@ -871,7 +947,6 @@ export default function OverviewAnalyticsView() {
               Báo cáo HSSE
             </Button>
           </Box>
-
         </Grid>
 
         <Grid container spacing={3}>
@@ -1049,7 +1124,7 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-            //
+              //
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
@@ -1094,9 +1169,33 @@ export default function OverviewAnalyticsView() {
               />
             </Box>
           </Grid>
-
         </Grid>
       </Container>
+
+      <Dialog open={showModalSCN} onClose={() => setShowModalSCN(false)} fullWidth maxWidth="lg">
+        <DialogContent
+          sx={{
+            m: 2,
+            scrollBehavior: 'auto',
+            overflow: 'auto',
+          }}
+        >
+          {dataSCN.length > 0 ? (
+            <Spreadsheet data={dataSCN} />
+          ) : (
+            <div>Không có dữ liệu để hiển thị</div>
+          )}
+        </DialogContent>
+
+        <DialogActions>
+          <Button color="success" variant="contained" onClick={() => DownloadListDuanUploadSCN()}>
+            Download
+          </Button>
+          <Button color="inherit" variant="contained" onClick={() => setShowModalSCN(false)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={showModal} onClose={() => setShowModal(false)} fullWidth maxWidth="lg">
         <DialogContent
@@ -1142,26 +1241,24 @@ export default function OverviewAnalyticsView() {
       <Dialog open={openModalAI} onClose={handleCloseModalAI} fullWidth maxWidth="lg">
         <DialogTitle>Tra cứu nhanh về HSSE</DialogTitle>
         <DialogContent>
-
-
           <Box
             sx={{
-              width: "100%",
-              maxWidth: "700px",
-              margin: "0 auto",
-              display: "flex",
-              flexDirection: "column",
+              width: '100%',
+              maxWidth: '700px',
+              margin: '0 auto',
+              display: 'flex',
+              flexDirection: 'column',
               gap: 2,
               height: '500px',
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             <List
               sx={{
-                maxHeight: "500px",
-                overflowY: "auto",
-                border: "1px solid #ccc",
-                borderRadius: "8px",
+                maxHeight: '500px',
+                overflowY: 'auto',
+                border: '1px solid #ccc',
+                borderRadius: '8px',
                 padding: 2,
                 '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
                 '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
@@ -1172,19 +1269,19 @@ export default function OverviewAnalyticsView() {
                 <ListItem
                   key={index}
                   sx={{
-                    display: "flex",
-                    justifyContent: message.role === "user" ? "flex-end" : "flex-start",
-                    textAlign: message.role === "user" ? "right" : "left",
+                    display: 'flex',
+                    justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
+                    textAlign: message.role === 'user' ? 'right' : 'left',
                   }}
                 >
                   <Box
                     sx={{
-                      padding: "8px 12px",
-                      borderRadius: "12px",
-                      backgroundColor: message.role === "user" ? "#1976d2" : "#e0e0e0",
-                      color: message.role === "user" ? "#fff" : "#000",
-                      maxWidth: "70%",
-                      overflowWrap: "break-word",
+                      padding: '8px 12px',
+                      borderRadius: '12px',
+                      backgroundColor: message.role === 'user' ? '#1976d2' : '#e0e0e0',
+                      color: message.role === 'user' ? '#fff' : '#000',
+                      maxWidth: '70%',
+                      overflowWrap: 'break-word',
                     }}
                   >
                     {renderMessageContent(message)}
@@ -1193,7 +1290,7 @@ export default function OverviewAnalyticsView() {
               ))}
             </List>
 
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -1201,7 +1298,7 @@ export default function OverviewAnalyticsView() {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && !loading) handleSendMessage();
+                  if (e.key === 'Enter' && !loading) handleSendMessage();
                 }}
                 disabled={loading}
               />
