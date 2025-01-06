@@ -3,7 +3,8 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 // @mui
 import Grid from '@mui/material/Unstable_Grid2';
 import Stack from '@mui/material/Stack';
-import { Box, TextField } from '@mui/material';
+import { Box, CircularProgress, MenuItem, Select, TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { LoadingButton } from '@mui/lab';
@@ -144,6 +145,9 @@ export default function OverviewAnalyticsView() {
   const [dataTotalKhoiCV, setDataTotalKhoiCV] = useState<SeriesData[]>([]);
   const [dataTotalKhuvuc, setDataTotalKhuvuc] = useState<SeriesData[]>([]);
   const [dataTotalHangmuc, setDataTotalHangmuc] = useState<SeriesData[]>([]);
+
+  const [openDataChecklistReports, setOpenDataChecklistReports] = useState<any>(false);
+  const [loadingReport, setLoadingReport] = useState<any>(false);
   const [dataTotalErrorWeek, setDataTotalErrorWeek] = useState<any>([]);
   const [dataChecklistsError, setDataChecklistsError] = useState<any>([]);
   const [dataPercent, setDataPercent] = useState<any>([]);
@@ -172,6 +176,14 @@ export default function OverviewAnalyticsView() {
 
   const { khoiCV } = useGetKhoiCV();
   const [STATUS_OPTIONS, set_STATUS_OPTIONS] = useState([{ value: 'all', label: 'Tất cả' }]);
+
+  const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
+    month: null,
+    year: null,
+    khoicv: null
+  });
+
+
 
   useEffect(() => {
     // Assuming khoiCV is set elsewhere in your component
@@ -427,6 +439,83 @@ export default function OverviewAnalyticsView() {
     setDetailChecklist(null);
   };
 
+  const handleOpenChecklistReport = () => {
+    setOpenDataChecklistReports(true);
+  };
+
+  const handleCloseChecklistReport = () => {
+    setOpenDataChecklistReports(false);
+  };
+
+  const handleYearChange = (value: Date | null) => {
+    // Check if the selected date is valid and update the year
+    if (value) {
+      setDataChecklistMonth((prev: any) => ({
+        ...prev,
+        year: value.getFullYear(), // Get the year from the date
+      }));
+    }
+  };
+
+  const handleSelectChange = (value: any | null) => {
+    // Check if the selected date is valid and update the year
+    if (value) {
+      setDataChecklistMonth((prev: any) => ({
+        ...prev,
+        khoicv: value, // Get the year from the date
+      }));
+    }
+  };
+
+  const handleMonthChange = (value: Date | null) => {
+    if (value) {
+      setDataChecklistMonth((prev: any) => ({
+        ...prev,
+        month: value.getMonth() + 1, // Months are 0-indexed in JavaScript
+      }));
+    }
+  };
+
+  const fetchChecklistMonth = async () => {
+    try {
+      // setLoadingReport(true);
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-month?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}&khoicv=${dataChecklistMonth.khoicv}&id=${user?.ID_Duan}`,
+        null, // Use null as the second parameter because POST requests without a body can pass null
+        { responseType: 'blob' } // Important to specify responseType as blob
+      );
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // Create a link element
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute(
+        'download',
+        `Bao_cao_checklist_${dataChecklistMonth.month}_${dataChecklistMonth.year}.xlsx`
+      ); // Set the file name
+
+      // Append to body and trigger the download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      link.remove(); // Prefer link.remove() over parentNode to directly remove the element
+
+      // Release the blob URL after downloading
+      window.URL.revokeObjectURL(url);
+
+      // Close the modal or perform any other UI updates
+      setOpenDataChecklistReports(false);
+      // setLoadingReport(false);
+    } catch (error) {
+      console.error('Error downloading the file:', error);
+      setOpenDataChecklistReports(false);
+      setLoadingReport(false);
+    }
+  };
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -440,14 +529,32 @@ export default function OverviewAnalyticsView() {
           }}
         >
           <Typography variant="h4">Hi, {user?.ent_duan?.Duan}</Typography>
-          <LoadingButton
-            loading={loading}
-            variant="contained"
-            startIcon={<Iconify icon="eva:link-2-fill" />}
-            onClick={handleLinkHSSE}
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{
+              mb: { xs: 3, md: 5 },
+              gap: 2
+            }}
           >
-            Báo cáo HSSE
-          </LoadingButton>
+            <Button variant="contained" color="info" onClick={handleOpenChecklistReport}>
+              Báo cáo checklist
+            </Button>
+
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              startIcon={<Iconify icon="eva:link-2-fill" />}
+              onClick={handleLinkHSSE}
+            >
+              Báo cáo HSSE
+            </LoadingButton>
+
+
+          </Grid>
+
         </Grid>
         {user?.ent_chucvu?.Role !== 3 && (
           <Grid container spacing={3}>
@@ -640,6 +747,65 @@ export default function OverviewAnalyticsView() {
           </Button>
         </DialogActions>
       </BootstrapDialog>
+
+
+      <Dialog
+        open={openDataChecklistReports}
+        onClose={handleCloseChecklistReport}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Báo cáo checklist</DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="space-between" alignItems="center" gap={1} m={1}>
+            <Stack spacing={1.5}>
+              {khoiCV?.length > 0 && (
+                <Select
+                  name="ID_KhoiCV"
+                  label="Khối công việc"
+                  value={dataChecklistMonth.khoicv || ""} // Đảm bảo giá trị là string hoặc ""
+                  onChange={(event) => handleSelectChange(event.target.value)} // Chỉ truyền giá trị
+                  autoWidth
+                  sx={{ width: 150 }}
+                >
+                  {khoiCV?.map((item) => (
+                    <MenuItem key={`${item?.ID_KhoiCV}`} value={`${item?.ID_KhoiCV}`}>
+                      {item?.KhoiCV}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            </Stack>
+
+
+
+            <DatePicker
+              label="Tháng" // Corrected
+              openTo="month"
+              views={['month']}
+              value={dataChecklistMonth.month ? new Date(2024, dataChecklistMonth.month - 1) : null}
+              onChange={handleMonthChange}
+            />
+            <DatePicker
+              label="Năm" // Corrected
+              views={['year']}
+              value={dataChecklistMonth.year ? new Date(dataChecklistMonth.year, 0) : null}
+              onChange={handleYearChange}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseChecklistReport}>Close</Button>
+          <Button
+            color="success"
+            variant="contained"
+            disabled={loadingReport}
+            onClick={fetchChecklistMonth}
+          >
+            {loadingReport ? <CircularProgress size={24} color="inherit" /> : 'Xuất file'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

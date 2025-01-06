@@ -568,9 +568,9 @@ function NhomTSDialog({
     onClose: handleCloseLightbox,
   } = useLightBox(arr);
 
-  const ngayXulySuco = dataSelect?.Ngayxuly && typeof dataSelect.Ngayxuly === 'string' 
-  ? new Date(dataSelect.Ngayxuly) 
-  : null;
+  const ngayXulySuco = dataSelect?.Ngayxuly && typeof dataSelect.Ngayxuly === 'string'
+    ? new Date(dataSelect.Ngayxuly)
+    : null;
 
   return (
     <Dialog open={open} fullWidth maxWidth="md" onClose={onClose}>

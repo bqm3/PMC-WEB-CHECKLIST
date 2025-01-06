@@ -604,11 +604,14 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+        .get(
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
         .then((res) => {
           setDataExternalIncidentChecklistPercentWeek(res.data.data);
         })
@@ -817,6 +820,7 @@ export default function OverviewAnalyticsView() {
       setLoadingReport(false);
     }
   };
+
   const fetchChecklistLocation = async () => {
     try {
       setLoadingReport(true);
@@ -860,12 +864,14 @@ export default function OverviewAnalyticsView() {
   const fetchListDuanUploadSCN = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload');
+      const response = await axios.get(
+        'https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload'
+      );
 
       if (response.data) {
         const formattedData = response.data.map((item: any, index: any) => [
-          { value: index + 1 },     
-          { value: item.Duan },     
+          { value: index + 1 },
+          { value: item.Duan },
         ]);
         setDataSCN(formattedData);
         setShowModalSCN(true);
@@ -883,10 +889,12 @@ export default function OverviewAnalyticsView() {
         'https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload?format=excel',
         { responseType: 'blob' } // Chỉ định phản hồi là blob (nhị phân)
       );
-  
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
       const url = window.URL.createObjectURL(blob);
-  
+
       // Tạo một liên kết giả để tải tệp
       const link = document.createElement('a');
       link.href = url;
@@ -894,14 +902,13 @@ export default function OverviewAnalyticsView() {
       document.body.appendChild(link);
       link.click(); // Bắt đầu tải về
       document.body.removeChild(link); // Loại bỏ liên kết sau khi tải về
-  
+
       // Giải phóng URL blob
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error downloading file:', error);
     }
   };
-  
 
   return (
     <>
@@ -921,9 +928,9 @@ export default function OverviewAnalyticsView() {
           <Box display="flex" gap={2} alignItems="center">
             {user?.ent_chucvu?.Role === 10 && (
               <>
-                <Button variant="contained" color="warning" onClick={handleOpenChecklistAI}>
+                {/* <Button variant="contained" color="warning" onClick={handleOpenChecklistAI}>
                   Ask PMC AI
-                </Button>
+                </Button> */}
 
                 <Button variant="contained" color="info" onClick={handleOpenChecklistLocation}>
                   Báo cáo vị trí
@@ -932,20 +939,20 @@ export default function OverviewAnalyticsView() {
                   Báo cáo checklist
                 </Button>
                 <Button variant="contained" color="info" onClick={fetchListDuanUploadSCN}>
-                  Danh sách dự án upload SCN
+                  Danh sách SCN
                 </Button>
               </>
             )}
             <Button variant="contained" color="success" onClick={fetchExcelData}>
               Danh sách dự án
             </Button>
-            <Button
+            {/* <Button
               variant="contained"
               startIcon={<Iconify icon="eva:link-2-fill" />}
               onClick={handleLinkHSSE}
             >
               Báo cáo HSSE
-            </Button>
+            </Button> */}
           </Box>
         </Grid>
 
@@ -1124,7 +1131,7 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-              //
+            //
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
