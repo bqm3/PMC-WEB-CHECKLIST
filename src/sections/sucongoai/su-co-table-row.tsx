@@ -60,7 +60,7 @@ export default function AreaTableRow({
 
 
   const renderPrimary = (
-    <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>
+    <TableRow hover selected={selected} style={{ backgroundColor: "white" }}>
       {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell> */}

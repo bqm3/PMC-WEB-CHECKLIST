@@ -39,6 +39,7 @@ import axios from 'axios';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import Spreadsheet from 'react-spreadsheet';
 import { useGetKhoiCV, useGetDuanWeb } from 'src/api/khuvuc';
+import moment from 'moment';
 //
 import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import EcommerceYearlySales from '../ecommerce-yearly-sales';
@@ -184,20 +185,6 @@ const years = [
 //   }[];
 // }
 
-const columnsDuanUploadSCN = [
-  {
-    title: 'STT',
-    dataIndex: 'stt',
-    key: 'stt',
-    width: 70,
-    align: 'center',
-  },
-  {
-    title: 'Tên Dự Án',
-    dataIndex: 'duan',
-    key: 'duan',
-  },
-];
 
 export default function OverviewAnalyticsView() {
   const theme = useTheme();
@@ -250,6 +237,10 @@ export default function OverviewAnalyticsView() {
   const [dataSCN, setDataSCN] = useState([]);
   const [loadingSCN, setLoadingSCN] = useState(false);
   const [showModalSCN, setShowModalSCN] = useState(false);
+  const [showModalDateSCN, setShowModalDateSCN] = useState(false);
+  const [fromDateSCN, setFromDateSCN] = useState<string | null>(null);
+  const [toDateSCN, setToDateSCN] = useState<string>(moment().format('YYYY-MM-DD'));
+  const [selectedTopSCN, setSelectedTopSucoSCN] = useState('10');
 
   // ===============
   const [dataReportChecklistPercentWeek, setDataReportChecklistPercentWeek] = useState<any>();
@@ -480,15 +471,12 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get(
-          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        )
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((res) => {
           const dataRes = res.data.avgCompletionRatios;
           setDataReportPercentChecklist(dataRes);
@@ -502,15 +490,12 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get(
-          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-a-week',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        )
+        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-a-week', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((res) => {
           const dataRes = res.data.data;
           setDataReportPercentWeekChecklist(dataRes);
@@ -667,7 +652,7 @@ export default function OverviewAnalyticsView() {
     };
 
     handleTangGiam();
-  }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedChinhanh]);
+  }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedChinhanh, selectedTopSCN]);
 
   const handleLinkHSSE = () => {
     const url =
@@ -757,6 +742,22 @@ export default function OverviewAnalyticsView() {
 
   const handleCloseChecklistMonth = () => {
     setOpenDataChecklistMonth(false);
+  };
+
+  const handleShowDuanSCN = () => {
+    setShowModalDateSCN(true);
+  };
+
+  const handleCloseShowDuanSCN = () => {
+    setShowModalDateSCN(false);
+  };
+
+  const handleFromDateChange = (newValue: any) => {
+    setFromDateSCN(moment(newValue).format('YYYY-MM-DD'));
+  };
+
+  const handleToDateChange = (newValue: any) => {
+    setToDateSCN(moment(newValue).format('YYYY-MM-DD'));
   };
 
   const handleYearChange = (value: Date | null) => {
@@ -858,35 +859,46 @@ export default function OverviewAnalyticsView() {
   };
 
   const fetchListDuanUploadSCN = async () => {
-    setLoading(true);
+    setLoadingReport(true);
     try {
-      const response = await axios.get('https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload');
-
+      const response = await axios.get(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload?fromDate=${fromDateSCN}&toDate=${toDateSCN}`
+      );
       if (response.data) {
-        const formattedData = response.data.map((item: any, index: any) => [
-          { value: index + 1 },     
-          { value: item.Duan },     
-        ]);
+        let index = 1; // Initialize index before iterating
+        const formattedData = response.data.flatMap((item: any) => 
+          item.duans.map((project: any) => {
+            const row = [
+              { value: (index).toString() },  // Use the current index
+              { value: item.chinhanh },        
+              { value: project.Duan },            
+            ];
+            index += 1;
+            return row;
+          })
+        );
         setDataSCN(formattedData);
         setShowModalSCN(true);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
-      setLoading(false);
+      setLoadingReport(false);
     }
   };
 
   const DownloadListDuanUploadSCN = async () => {
     try {
       const response = await axios.get(
-        'https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload?format=excel',
+        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/duan-upload?format=excel&fromDate=${fromDateSCN}&toDate=${toDateSCN}`,
         { responseType: 'blob' } // Chỉ định phản hồi là blob (nhị phân)
       );
-  
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
       const url = window.URL.createObjectURL(blob);
-  
+
       // Tạo một liên kết giả để tải tệp
       const link = document.createElement('a');
       link.href = url;
@@ -894,7 +906,7 @@ export default function OverviewAnalyticsView() {
       document.body.appendChild(link);
       link.click(); // Bắt đầu tải về
       document.body.removeChild(link); // Loại bỏ liên kết sau khi tải về
-  
+
       // Giải phóng URL blob
       window.URL.revokeObjectURL(url);
     } catch (error) {
@@ -902,7 +914,6 @@ export default function OverviewAnalyticsView() {
     }
   };
   
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -931,7 +942,7 @@ export default function OverviewAnalyticsView() {
                 <Button variant="contained" color="info" onClick={handleOpenChecklistMonth}>
                   Báo cáo checklist
                 </Button>
-                <Button variant="contained" color="info" onClick={fetchListDuanUploadSCN}>
+                <Button variant="contained" color="info" onClick={handleShowDuanSCN}>
                   Danh sách dự án upload SCN
                 </Button>
               </>
@@ -939,13 +950,13 @@ export default function OverviewAnalyticsView() {
             <Button variant="contained" color="success" onClick={fetchExcelData}>
               Danh sách dự án
             </Button>
-            <Button
+            {/* <Button
               variant="contained"
               startIcon={<Iconify icon="eva:link-2-fill" />}
               onClick={handleLinkHSSE}
             >
               Báo cáo HSSE
-            </Button>
+            </Button> */}
           </Box>
         </Grid>
 
@@ -1148,6 +1159,9 @@ export default function OverviewAnalyticsView() {
               years={years}
               handleOpenModal={handleOpenModal}
               handleCloseModal={handleCloseModal}
+              onTopChange={setSelectedTopSucoSCN}
+              selectedTop={selectedTopSCN}
+              top={top}
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
@@ -1471,6 +1485,41 @@ export default function OverviewAnalyticsView() {
             variant="contained"
             disabled={loadingReport}
             onClick={fetchChecklistLocation}
+          >
+            {loadingReport ? <CircularProgress size={24} color="inherit" /> : 'Xuất file'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={showModalDateSCN} onClose={handleShowDuanSCN} fullWidth maxWidth="sm">
+        <DialogTitle>Báo cáo dự án upload sự cố ngoài</DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="space-between" alignItems="center" gap={1} m={1}>
+            <DatePicker
+              label="Từ ngày"
+              value={fromDateSCN ? new Date(fromDateSCN) : null} 
+              onChange={(newValue) => handleFromDateChange(newValue)}
+              format="yyyy/MM/dd"
+              minDate={new Date('2020-01-01')} 
+              maxDate={new Date()}
+            />
+            <DatePicker
+              label="Đến ngày"
+              value={toDateSCN ? new Date(toDateSCN) : null} 
+              onChange={(newValue) => handleToDateChange(newValue)}
+              format="yyyy/MM/dd"
+              minDate={fromDateSCN ? new Date(fromDateSCN) : new Date('2020-01-01')}
+              maxDate={new Date()}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseShowDuanSCN}>Close</Button>
+          <Button
+            color="success"
+            variant="contained"
+            disabled={loadingReport}
+            onClick={fetchListDuanUploadSCN}
           >
             {loadingReport ? <CircularProgress size={24} color="inherit" /> : 'Xuất file'}
           </Button>

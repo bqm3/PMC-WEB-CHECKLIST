@@ -30,12 +30,15 @@ interface Props extends CardProps {
   onTangGiamChange: (tg: string) => void;
   onChinhanhChange: (cn: string) => void;
   STATUS_OPTIONS: any;
-  tangGiam: any,
+  tangGiam: any;
   handleOpenModal: (name: string, key: string) => void;
   handleCloseModal: () => void;
   chiNhanhs: any;
   years: any;
   selectedChiNhanh: string;
+  top: any;
+  selectedTop: string;
+  onTopChange: (top: string) => void;
 }
 
 export default function ChecklistYearStatistics({
@@ -56,6 +59,9 @@ export default function ChecklistYearStatistics({
   selectedChiNhanh,
   chiNhanhs,
   years,
+  top,
+  selectedTop,
+  onTopChange,
   ...other
 }: Props) {
   const { categories, colors, series, options } = chart;
@@ -63,6 +69,7 @@ export default function ChecklistYearStatistics({
   const yearPopover = usePopover();
   const chinhanhPopover = usePopover();
   const tangGiamPopover = usePopover();
+  const topPopover = usePopover();
 
   const handleChartClick = (
     event: any,
@@ -71,9 +78,8 @@ export default function ChecklistYearStatistics({
   ) => {
     if (dataPointIndex !== -1 && categories.length > 0) {
       const projectName = categories[dataPointIndex];
-      handleOpenModal(projectName, "su-co-ngoai");
+      handleOpenModal(projectName, 'su-co-ngoai');
     }
-
   };
 
   const chartOptions = useChart({
@@ -91,7 +97,7 @@ export default function ChecklistYearStatistics({
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: '30%',  // Adjust height of bars for better visibility
+        barHeight: '30%', // Adjust height of bars for better visibility
       },
     },
     colors: ['#026e4e', '#e0e7ea'], // Darker for primary, lighter for comparison
@@ -115,7 +121,6 @@ export default function ChecklistYearStatistics({
         formatter: (val: any) => `${val}`,
       },
     },
-
   });
 
   const handleChangeSeries = useCallback(
@@ -134,7 +139,13 @@ export default function ChecklistYearStatistics({
     [chinhanhPopover, onChinhanhChange]
   );
 
-
+  const handleChangeTop = useCallback(
+    (newValue: string) => {
+      topPopover.onClose(); // Close the KhoiCV popover
+      onTopChange(newValue);
+    },
+    [topPopover, onTopChange]
+  );
 
   return (
     <>
@@ -144,6 +155,26 @@ export default function ChecklistYearStatistics({
           subheader={subheader}
           action={
             <Box sx={{ gap: 1, display: 'flex' }}>
+              <ButtonBase
+                onClick={topPopover.onOpen} 
+                sx={{
+                  pl: 1,
+                  py: 0.5,
+                  pr: 0.5,
+                  borderRadius: 1,
+                  typography: 'subtitle2',
+                  bgcolor: 'background.neutral',
+                }}
+              >
+                {top.find((option: any) => option.value === selectedTop)?.label}
+                <Iconify
+                  width={16}
+                  icon={
+                    topPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                  }
+                  sx={{ ml: 0.5 }}
+                />
+              </ButtonBase>
               <ButtonBase
                 onClick={yearPopover.onOpen} // Open the year popover
                 sx={{
@@ -158,7 +189,9 @@ export default function ChecklistYearStatistics({
                 {selectedYear}
                 <Iconify
                   width={16}
-                  icon={yearPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'}
+                  icon={
+                    yearPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                  }
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
@@ -177,7 +210,9 @@ export default function ChecklistYearStatistics({
                 <Iconify
                   width={16}
                   icon={
-                    chinhanhPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                    chinhanhPopover.open
+                      ? 'eva:arrow-ios-upward-fill'
+                      : 'eva:arrow-ios-downward-fill'
                   }
                   sx={{ ml: 0.5 }}
                 />
@@ -190,16 +225,37 @@ export default function ChecklistYearStatistics({
         {series.map((item: any) => (
           <Box key={item.name} sx={{ mt: 3, mx: 3 }}>
             {item.name === selectedYear && (
-              <Chart dir="ltr" type="bar" series={[{ name: item.name, data: item.data }]} options={chartOptions} height={364} />
+              <Chart
+                dir="ltr"
+                type="bar"
+                series={[{ name: item.name, data: item.data }]}
+                options={chartOptions}
+                height={364}
+              />
             )}
           </Box>
         ))}
       </Card>
 
       {/* Popover for selecting year */}
+      <CustomPopover open={topPopover.open} onClose={topPopover.onClose}>
+        {top?.map((item: any) => (
+          <MenuItem
+            selected={item.value === selectedTop}
+            onClick={() => handleChangeTop(item.value)}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+      </CustomPopover>
+
       <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose} sx={{ width: 140 }}>
         {years.map((item: any) => (
-          <MenuItem key={item.value} selected={selectedYear === item.value} onClick={() => handleChangeSeries(item.value)}>
+          <MenuItem
+            key={item.value}
+            selected={selectedYear === item.value}
+            onClick={() => handleChangeSeries(item.value)}
+          >
             {item.label}
           </MenuItem>
         ))}
@@ -218,6 +274,3 @@ export default function ChecklistYearStatistics({
     </>
   );
 }
-
-
-
