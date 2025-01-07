@@ -22,7 +22,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
 import { _orders } from 'src/_mock';
-import { useGetHangMuc, useGetKhoiCV } from 'src/api/khuvuc';
+import { useGetHangMuc, useGetKhoiCV, useGetToanha } from 'src/api/khuvuc';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -73,6 +73,7 @@ const defaultFilters: IKhuvucTableFilters = {
   status: 'all',
   startDate: null,
   endDate: null,
+  building: [],
 };
 
 const STORAGE_KEY = 'accessToken';
@@ -108,6 +109,18 @@ export default function AreaListView() {
   const [tableData, setTableData] = useState<IHangMuc[]>([]);
 
   const [dataSelect, setDataSelect] = useState<IHangMuc>();
+
+  const { toanha } = useGetToanha();
+  
+    const BUILDING_OPTIONS = useMemo(
+      () => [
+        ...toanha.map((khoi) => ({
+          value: khoi.ID_Toanha.toString(),
+          label: khoi.Toanha,
+        })),
+      ],
+      [toanha]
+    );
 
   const STATUS_OPTIONS = useMemo(
     () => [
@@ -495,6 +508,7 @@ export default function AreaListView() {
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
+            buildingOptions={BUILDING_OPTIONS}
           />
 
           {canReset && (
@@ -662,7 +676,7 @@ function applyFilter({
   filters: IKhuvucTableFilters;
   // dateError: boolean;
 }) {
-  const { status, name } = filters;
+  const { status, name, building } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index] as const);
 
@@ -682,6 +696,10 @@ function applyFilter({
         order?.MaQrCode?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.ent_khuvuc.ent_toanha.Toanha.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
+  }
+
+  if (building.length) {
+    inputData = inputData.filter((item) => building.includes(String(item?.ent_khuvuc.ent_toanha?.ID_Toanha)));
   }
 
   if (status !== 'all') {

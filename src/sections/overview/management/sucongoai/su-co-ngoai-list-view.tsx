@@ -73,6 +73,7 @@ const defaultFilters: IKhuvucTableFilters = {
   status: 'all',
   startDate: null,
   endDate: null,
+  building: [],
 };
 
 type Props = {

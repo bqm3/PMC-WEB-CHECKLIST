@@ -68,6 +68,7 @@ const defaultFilters: IKhuvucTableFilters = {
   status: 'all',
   startDate: null,
   endDate: null,
+  building: [],
 };
 
 const STORAGE_KEY = 'accessToken';

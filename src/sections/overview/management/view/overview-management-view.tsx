@@ -185,6 +185,21 @@ const years = [
 //   }[];
 // }
 
+const headerRow = [
+  'STT',
+  'Dự án',
+  'Chi nhánh',
+  'Loại hình',
+  'Phân loại dự án',
+  'Lĩnh vực',
+  'Tình trạng',
+  'Ngày bắt đầu',
+  'Khối kỹ thuật',
+  'Khối an ninh',
+  'Khối làm sạch',
+  'Khối dịch vụ',
+  'Khối F&B',
+];
 
 export default function OverviewAnalyticsView() {
   const theme = useTheme();
@@ -241,6 +256,10 @@ export default function OverviewAnalyticsView() {
   const [fromDateSCN, setFromDateSCN] = useState<string | null>(null);
   const [toDateSCN, setToDateSCN] = useState<string>(moment().format('YYYY-MM-DD'));
   const [selectedTopSCN, setSelectedTopSucoSCN] = useState('10');
+
+  // ==============
+  const [dataDuanChecklist, setDataDuanChecklist] = useState<any>();
+  const [showDuanChecklist, setShowDuanChecklist] = useState(false);
 
   // ===============
   const [dataReportChecklistPercentWeek, setDataReportChecklistPercentWeek] = useState<any>();
@@ -589,14 +608,11 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(
-          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        )
+        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         .then((res) => {
           setDataExternalIncidentChecklistPercentWeek(res.data.data);
         })
@@ -655,7 +671,13 @@ export default function OverviewAnalyticsView() {
     };
 
     handleTangGiam();
-  }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedChinhanh, selectedTopSCN]);
+  }, [
+    accessToken,
+    selectedYearSuCoNgoai,
+    selectedKhoiCVSuCoNgoai,
+    selectedChinhanh,
+    selectedTopSCN,
+  ]);
 
   const handleLinkHSSE = () => {
     const url =
@@ -873,7 +895,7 @@ export default function OverviewAnalyticsView() {
         const formattedData = response.data.flatMap((item: any) =>
           item.duans.map((project: any) => {
             const row = [
-              { value: (index).toString() },  // Use the current index
+              { value: index.toString() }, // Use the current index
               { value: item.chinhanh },
               { value: project.Duan },
             ];
@@ -918,6 +940,78 @@ export default function OverviewAnalyticsView() {
     }
   };
 
+  const fetchListDSduan = async () => {
+    setLoadingReport(true);
+    try {
+      const response = await axios.get(
+        'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/first-checklist'
+      );
+      if (response.data) {
+        let index = 1;
+        const formattedData = [
+          ...response.data.map((item: any) => {
+            const row = [
+              { value: index },
+              { value: item.Du_an },
+              { value: item.Chi_Nhanh },
+              { value: item.Loai_Hinh },
+              { value: item.Phan_loai_du_an },
+              { value: item.Linh_vuc },
+              {
+                value: item.Tinh_trang,
+                style: {
+                  backgroundColor: item.Tinh_trang.trim() === 'Chưa tiến hành' ? 'yellow' : 'transparent',
+                },
+              },
+              { value: item.Ngay_bat_dau },
+              { value: item.Khoi_ky_thuat },
+              { value: item.Khoi_an_ninh },
+              { value: item.Khoi_lam_sach },
+              { value: item.Khoi_dich_vu },
+              { value: item.Khoi_F_B },
+            ];
+            index += 1;
+            return row;
+          }),
+        ];
+
+        setDataDuanChecklist(formattedData);
+        setShowDuanChecklist(true);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoadingReport(false);
+    }
+  };
+
+  const DownloadListDSduan = async () => {
+    try {
+      const response = await axios.get(
+        'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/first-checklist?format=excel',
+        { responseType: 'blob' } // Chỉ định phản hồi là blob (nhị phân)
+      );
+
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+
+      // Tạo một liên kết giả để tải tệp
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'duandanghoatdong.xlsx'); // Tên tệp khi tải về
+      document.body.appendChild(link);
+      link.click(); // Bắt đầu tải về
+      document.body.removeChild(link); // Loại bỏ liên kết sau khi tải về
+
+      // Giải phóng URL blob
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -939,6 +1033,9 @@ export default function OverviewAnalyticsView() {
                 {/* <Button variant="contained" color="warning" onClick={handleOpenChecklistAI}>
                   Ask PMC AI
                 </Button> */}
+                <Button variant="contained" color="info" onClick={fetchListDSduan}>
+                  Danh sách dự án đang triển khai
+                </Button>
 
                 <Button variant="contained" color="info" onClick={handleOpenChecklistLocation}>
                   Báo cáo vị trí
@@ -1139,7 +1236,7 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-            //
+              //
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
@@ -1189,6 +1286,36 @@ export default function OverviewAnalyticsView() {
           </Grid>
         </Grid>
       </Container>
+
+      <Dialog
+        open={showDuanChecklist}
+        onClose={() => setShowDuanChecklist(false)}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogContent
+          sx={{
+            m: 2,
+            scrollBehavior: 'auto',
+            overflow: 'auto',
+          }}
+        >
+          {dataDuanChecklist ? (
+            <Spreadsheet data={dataDuanChecklist} columnLabels={headerRow}/>
+          ) : (
+            <div>Không có dữ liệu để hiển thị</div>
+          )}
+        </DialogContent>
+
+        <DialogActions>
+          <Button color="success" variant="contained" onClick={() => DownloadListDSduan()}>
+            Download
+          </Button>
+          <Button color="inherit" variant="contained" onClick={() => setShowDuanChecklist(false)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={showModalSCN} onClose={() => setShowModalSCN(false)} fullWidth maxWidth="lg">
         <DialogContent

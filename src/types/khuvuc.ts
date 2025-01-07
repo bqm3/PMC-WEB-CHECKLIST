@@ -12,6 +12,7 @@ export type IKhuvucTableFilters = {
   status: string;
   startDate: Date | null;
   endDate: Date | null;
+  building: string[];
 };
 
 export type IChecklistTableFilters = {
