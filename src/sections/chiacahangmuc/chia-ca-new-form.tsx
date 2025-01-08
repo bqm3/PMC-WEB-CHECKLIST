@@ -235,6 +235,8 @@ export default function ChiaCaNewEditForm() {
           autoHideDuration: 4000,
           message: 'Cập nhật thành công',
         });
+        const href = paths.dashboard.phanquyenchecklist.root;
+        router.replace(href);
       })
       .catch((error) => {
         setLoading(false);

@@ -6,6 +6,8 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
+
+import { paths } from 'src/routes/paths';
 // hooks
 import { useRouter } from 'src/routes/hooks';
 import { useResponsive } from 'src/hooks/use-responsive';
@@ -253,6 +255,8 @@ export default function ChiaCaNewEditForm({ id }: Props) {
           autoHideDuration: 4000,
           message: 'Cập nhật thành công',
         });
+        const href = paths.dashboard.phanquyenchecklist.root;
+        router.replace(href);
       })
       .catch((error) => {
         setLoading(false);
