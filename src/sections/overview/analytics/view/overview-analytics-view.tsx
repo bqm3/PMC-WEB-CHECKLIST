@@ -480,7 +480,7 @@ export default function OverviewAnalyticsView() {
     try {
       // setLoadingReport(true);
       const response = await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-month?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}&khoicv=${dataChecklistMonth.khoicv}&id=${user?.ID_Duan}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-month?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}&ID_KhoiCV=${dataChecklistMonth.khoicv}&ID_Duan=${user?.ID_Duan}`,
         null, // Use null as the second parameter because POST requests without a body can pass null
         { responseType: 'blob' } // Important to specify responseType as blob
       );

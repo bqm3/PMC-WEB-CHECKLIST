@@ -266,6 +266,7 @@ export type ISucongoai = {
   Giosuco: string;
   Noidungsuco: string;
   Duongdancacanh: string;
+  Anhkiemtra: string;
   ID_User: string;
   Bienphapxuly: string;
   Tinhtrangxuly: string;

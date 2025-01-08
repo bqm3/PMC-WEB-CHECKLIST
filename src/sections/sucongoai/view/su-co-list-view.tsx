@@ -14,17 +14,24 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box, FormControl, InputLabel, Menu, MenuItem, Select, TextField } from '@mui/material';
+import { Box, FormControl, InputLabel, Menu, MenuItem, Select, TextField, Grid } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import Image from 'src/components/image';
 import Stack from '@mui/material/Stack';
+import FormLabel from '@mui/material/FormLabel';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 // _mock
-import { useGetKhoiCV, useGetKhuVuc, useGetSuCoNgoai } from 'src/api/khuvuc';
+import {
+  useGetKhoiCV,
+  useGetKhuVuc,
+  useGetSuCoNgoai,
+  useGetToanha,
+  useGetHangMuc,
+} from 'src/api/khuvuc';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 import { getImageUrls } from 'src/utils/get-image';
@@ -113,6 +120,7 @@ export default function SuCoListView() {
 
   const [dataSelect, setDataSelect] = useState<ISucongoai>();
 
+  const [selectedHangMuc, setSelectedHangMuc] = useState<any>();
   const [tinhTrangXuLy, setTinhTrangXuLy] = useState(null);
   const [bienphapxuly, setBienphapxuly] = useState(null);
   const [ngayXuLy, setNgayXuLy] = useState(new Date());
@@ -215,7 +223,7 @@ export default function SuCoListView() {
     await axios
       .put(
         `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
-        { Tinhtrangxuly: tinhTrangXuLy, ngayXuLy, Bienphapxuly: bienphapxuly },
+        {ID_Hangmuc: selectedHangMuc, Tinhtrangxuly: tinhTrangXuLy, ngayXuLy, Bienphapxuly: bienphapxuly },
         {
           headers: {
             Accept: 'application/json',
@@ -470,6 +478,8 @@ export default function SuCoListView() {
           setBienphapxuly={setBienphapxuly}
           tinhTrangXuLy={tinhTrangXuLy}
           handleUpdate={() => handleUpdate(dataSelect?.ID_Suco)}
+          selectedHangMuc={selectedHangMuc}
+          setSelectedHangMuc={setSelectedHangMuc}
         />
       )}
     </>
@@ -544,6 +554,8 @@ interface ConfirmTransferDialogProps {
   setBienphapxuly: any;
   ngayXuLy: any;
   tinhTrangXuLy: any;
+  selectedHangMuc: any;
+  setSelectedHangMuc: any;
   handleUpdate: VoidFunction;
 }
 
@@ -555,10 +567,16 @@ function NhomTSDialog({
   setBienphapxuly,
   ngayXuLy,
   tinhTrangXuLy,
+  selectedHangMuc,
+  setSelectedHangMuc,
   onClose,
   handleUpdate,
 }: ConfirmTransferDialogProps) {
   const arr: any = dataSelect?.Duongdancacanh?.split(',').map(
+    (slide: any) => `${getImageUrls(3, slide)}`
+  );
+
+  const arrAnhkiemtra: any = dataSelect?.Anhkiemtra?.split(',').map(
     (slide: any) => `${getImageUrls(3, slide)}`
   );
 
@@ -569,9 +587,57 @@ function NhomTSDialog({
     onClose: handleCloseLightbox,
   } = useLightBox(arr);
 
-  const ngayXulySuco = dataSelect?.Ngayxuly && typeof dataSelect.Ngayxuly === 'string'
-    ? new Date(dataSelect.Ngayxuly)
-    : null;
+  const { khuvuc } = useGetKhuVuc();
+  const { toanha } = useGetToanha();
+  const { hangMuc } = useGetHangMuc();
+
+  const [selectedToaNha, setSelectedToaNha] = useState<any>();
+
+  const [filteredKhuVuc, setFilteredKhuVuc] = useState<any[]>([]);
+  const [selectedKhuVuc, setSelectedKhuVuc] = useState<any>();
+
+  const [filteredHangMuc, setFilteredHangMuc] = useState<any[]>([]);
+
+  const ngayXulySuco =
+    dataSelect?.Ngayxuly && typeof dataSelect.Ngayxuly === 'string'
+      ? new Date(dataSelect.Ngayxuly)
+      : null;
+
+  const handleChangeText = (key: string, value: string) => {
+    switch (key) {
+      case 'ID_Toanha':
+        setSelectedToaNha(value);
+        if (value) {
+          const khuVucTheoToaNha = khuvuc.filter((item) => item.ID_Toanha === value);
+          setFilteredKhuVuc(khuVucTheoToaNha);
+          setSelectedKhuVuc('');
+        } else {
+          setFilteredKhuVuc([]);
+          setSelectedKhuVuc('');
+        }
+        break;
+
+      case 'ID_Khuvuc':
+        setSelectedKhuVuc(value);
+        if (value) {
+          const hangMucTheoKhuVuc = hangMuc.filter((item) => item.ID_Khuvuc === value);
+          setFilteredHangMuc(hangMucTheoKhuVuc);
+          setSelectedHangMuc('');
+        } else {
+          setFilteredHangMuc([]);
+          setSelectedHangMuc('');
+        }
+        break;
+
+      case 'ID_Hangmuc':
+        setSelectedHangMuc(value);
+        break;
+
+      default:
+        console.warn(`Unknown key: ${key}`);
+    }
+  };
+
 
   return (
     <Dialog open={open} fullWidth maxWidth="md" onClose={onClose}>
@@ -579,13 +645,99 @@ function NhomTSDialog({
 
       <DialogContent>
         <Stack spacing={3} sx={{ p: 2 }}>
+          {dataSelect?.TenHangmuc === null && dataSelect?.ent_hangmuc?.Hangmuc === undefined ? (
+    <>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel id="toanha-label">Tòa nhà</InputLabel>
+          <Select
+            labelId="toanha-label"
+            value={selectedToaNha}
+            onChange={(event) => handleChangeText('ID_Toanha', event.target.value)}
+            MenuProps={{
+              PaperProps: {
+                style: { maxHeight: 400 },
+              },
+            }}
+          >
+            <MenuItem value="">
+              <em>Chọn tòa nhà</em>
+            </MenuItem>
+            {toanha?.map((item) => (
+              <MenuItem key={item.ID_Toanha} value={item.ID_Toanha}>
+                {item.Toanha}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel id="khuvuc-label">Khu vực</InputLabel>
+          <Select
+            labelId="khuvuc-label"
+            value={selectedKhuVuc}
+            onChange={(event) => handleChangeText('ID_Khuvuc', event.target.value)}
+            disabled={!selectedToaNha}
+            MenuProps={{
+              PaperProps: {
+                style: { maxHeight: 400 },
+              },
+            }}
+          >
+            <MenuItem value="">
+              <em>Chọn khu vực</em>
+            </MenuItem>
+            {filteredKhuVuc.map((item) => (
+              <MenuItem key={item.ID_Khuvuc} value={item.ID_Khuvuc}>
+                {item.Tenkhuvuc}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel id="hangmuc-label">Hạng mục</InputLabel>
+          <Select
+            labelId="hangmuc-label"
+            value={selectedHangMuc || ''}
+            onChange={(event) => handleChangeText('ID_Hangmuc', event.target.value)}
+            disabled={!selectedKhuVuc}
+            MenuProps={{
+              PaperProps: {
+                style: { maxHeight: 400 },
+              },
+            }}
+          >
+            <MenuItem value="">
+              <em>Chọn hạng mục</em>
+            </MenuItem>
+            {filteredHangMuc?.map((item) => (
+              <MenuItem key={item.ID_Hangmuc} value={item.ID_Hangmuc}>
+                {item.Hangmuc}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    </Grid>
+  </>
+          ) : (
+            <TextField
+              value={dataSelect?.TenHangmuc || dataSelect?.ent_hangmuc?.Hangmuc}
+              label="Hạng mục"
+              disabled
+            />
+          )}
+
           <TextField
-            value={dataSelect?.TenHangmuc || dataSelect?.ent_hangmuc?.Hangmuc}
-            label="Hạng mục"
-            disabled
-          />
-          <TextField
-            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''}`}
+            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${
+              dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
+            }`}
             label="Ngày sự cố"
             disabled
           />
@@ -603,14 +755,12 @@ function NhomTSDialog({
             disabled={`${dataSelect?.Tinhtrangxuly}` === '2' && true}
           />
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Tình trạng xử lý</InputLabel>
+            <InputLabel>Tình trạng xử lý</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
               value={tinhTrangXuLy || dataSelect?.Tinhtrangxuly}
-              label="Age"
-              disabled={`${dataSelect?.Tinhtrangxuly}` === '2' && true}
-              onChange={(val) => setTinhTrangXuLy(val.target.value)}
+              label="Tình trạng xử lý"
+              disabled={`${dataSelect?.Tinhtrangxuly}` === '2'}
+              onChange={(event) => setTinhTrangXuLy(event.target.value)}
             >
               <MenuItem value="0">Chưa xử lý</MenuItem>
               <MenuItem value="1">Đang xử lý</MenuItem>
@@ -623,7 +773,7 @@ function NhomTSDialog({
             value={ngayXulySuco || ngayXuLy}
             disabled={`${dataSelect?.Tinhtrangxuly}` === '2' && true}
           />
-
+          {arr?.length > 0 && <FormLabel sx={{ marginLeft: '2px' }}>Hình ảnh sự cố</FormLabel>}
           <Scrollbar>
             <Stack sx={{ flexDirection: 'row', width: '100%', gap: 2 }}>
               {arr?.map((slide: any) => (
@@ -646,6 +796,33 @@ function NhomTSDialog({
               ))}
             </Stack>
           </Scrollbar>
+          {arrAnhkiemtra?.length > 0 && (
+            <FormLabel sx={{ marginLeft: '2px' }}>Hình ảnh xử lý</FormLabel>
+          )}
+          <Scrollbar>
+            <Stack sx={{ flexDirection: 'row', width: '100%', gap: 2 }}>
+              {arrAnhkiemtra?.map((slide: any) => (
+                <m.div
+                  key={slide}
+                  whileHover="hover"
+                  variants={{
+                    hover: { opacity: 0.8 },
+                  }}
+                  transition={varTranHover()}
+                  style={{ position: 'relative' }} // Để điều chỉnh vị trí của text
+                >
+                  {/* Hình ảnh */}
+                  <Image
+                    alt={slide}
+                    src={slide}
+                    ratio="1/1"
+                    onClick={() => handleOpenLightbox(slide)}
+                    sx={{ borderRadius: 1, cursor: 'pointer', width: 150, height: 150 }}
+                  />
+                </m.div>
+              ))}
+            </Stack>
+          </Scrollbar>
         </Stack>
       </DialogContent>
 
@@ -655,7 +832,6 @@ function NhomTSDialog({
         </Button>
         <Button onClick={onClose}>Hủy</Button>
       </DialogActions>
-
       {arr && (
         <Lightbox
           index={selectedImage}
