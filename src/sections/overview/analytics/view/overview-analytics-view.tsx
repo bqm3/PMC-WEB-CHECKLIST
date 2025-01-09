@@ -41,7 +41,6 @@ import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
 
-
 // ==========================================================
 
 const columns: GridColDef<[number]>[] = [
@@ -180,10 +179,9 @@ export default function OverviewAnalyticsView() {
   const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
     month: null,
     year: null,
-    khoicv: null
+    khoicv: null,
+    tenkhoicv: null,
   });
-
-
 
   useEffect(() => {
     // Assuming khoiCV is set elsewhere in your component
@@ -467,6 +465,16 @@ export default function OverviewAnalyticsView() {
     }
   };
 
+  const handleSelectChangeTenKhoiCV = (value: any | null) => {
+    // Check if the selected date is valid and update the year
+    if (value) {
+      setDataChecklistMonth((prev: any) => ({
+        ...prev,
+        tenkhoicv: value, // Get the year from the date
+      }));
+    }
+  };
+
   const handleMonthChange = (value: Date | null) => {
     if (value) {
       setDataChecklistMonth((prev: any) => ({
@@ -478,9 +486,9 @@ export default function OverviewAnalyticsView() {
 
   const fetchChecklistMonth = async () => {
     try {
-      // setLoadingReport(true);
+      setLoadingReport(true);
       const response = await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-month?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}&ID_KhoiCV=${dataChecklistMonth.khoicv}&ID_Duan=${user?.ID_Duan}`,
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-month?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}&ID_KhoiCV=${dataChecklistMonth.khoicv}&ID_Duan=${user?.ID_Duan}&TenKhoiCV=${dataChecklistMonth.tenkhoicv}`,
         null, // Use null as the second parameter because POST requests without a body can pass null
         { responseType: 'blob' } // Important to specify responseType as blob
       );
@@ -508,7 +516,7 @@ export default function OverviewAnalyticsView() {
 
       // Close the modal or perform any other UI updates
       setOpenDataChecklistReports(false);
-      // setLoadingReport(false);
+      setLoadingReport(false);
     } catch (error) {
       console.error('Error downloading the file:', error);
       setOpenDataChecklistReports(false);
@@ -536,7 +544,7 @@ export default function OverviewAnalyticsView() {
             justifyContent="space-between"
             sx={{
               mb: { xs: 3, md: 5 },
-              gap: 2
+              gap: 2,
             }}
           >
             <Button variant="contained" color="info" onClick={handleOpenChecklistReport}>
@@ -551,10 +559,7 @@ export default function OverviewAnalyticsView() {
             >
               Báo cáo HSSE
             </LoadingButton>
-
-
           </Grid>
-
         </Grid>
         {user?.ent_chucvu?.Role !== 3 && (
           <Grid container spacing={3}>
@@ -748,7 +753,6 @@ export default function OverviewAnalyticsView() {
         </DialogActions>
       </BootstrapDialog>
 
-
       <Dialog
         open={openDataChecklistReports}
         onClose={handleCloseChecklistReport}
@@ -763,8 +767,13 @@ export default function OverviewAnalyticsView() {
                 <Select
                   name="ID_KhoiCV"
                   label="Khối công việc"
-                  value={dataChecklistMonth.khoicv || ""} // Đảm bảo giá trị là string hoặc ""
-                  onChange={(event) => handleSelectChange(event.target.value)} // Chỉ truyền giá trị
+                  value={dataChecklistMonth.khoicv || ''} // Đảm bảo giá trị là string hoặc ""
+                  onChange={(event) => {
+                    const selectedValue = event.target.value;
+                    handleSelectChange(selectedValue);
+                    const selectedItem = khoiCV.find((item) => `${item.ID_KhoiCV}` === selectedValue);
+                    handleSelectChangeTenKhoiCV(selectedItem?.KhoiCV || '');
+                  }}
                   autoWidth
                   sx={{ width: 150 }}
                 >
@@ -776,8 +785,6 @@ export default function OverviewAnalyticsView() {
                 </Select>
               )}
             </Stack>
-
-
 
             <DatePicker
               label="Tháng" // Corrected
