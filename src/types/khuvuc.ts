@@ -128,6 +128,7 @@ export type IDuan = {
 export type IHSSE = {
   ID: number;
   Ten_du_an?: string;
+  Ghichu?: string;
   Ngay_ghi_nhan?: string;
   Nguoi_tao?: string;
   createdAt?: Date;

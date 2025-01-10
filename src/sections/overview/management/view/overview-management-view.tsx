@@ -1236,7 +1236,7 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-              //
+            //
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
@@ -1301,7 +1301,7 @@ export default function OverviewAnalyticsView() {
           }}
         >
           {dataDuanChecklist ? (
-            <Spreadsheet data={dataDuanChecklist} columnLabels={headerRow}/>
+            <Spreadsheet data={dataDuanChecklist} columnLabels={headerRow} />
           ) : (
             <div>Không có dữ liệu để hiển thị</div>
           )}

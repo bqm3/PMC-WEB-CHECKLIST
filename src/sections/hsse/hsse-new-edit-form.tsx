@@ -32,52 +32,14 @@ import FormProvider, { RHFSelect, RHFTextField, RHFRadioGroup } from 'src/compon
 // types
 import { IHSSE } from 'src/types/khuvuc';
 import moment from 'moment';
+import { useAuthContext } from 'src/auth/hooks';
+import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   currentHSSE?: IHSSE;
 };
-
-type ValidField =
-  | 'Dien_cu_dan'
-  | 'Dien_cdt'
-  | 'Nuoc_cu_dan'
-  | 'Nuoc_cdt'
-  | 'Xa_thai'
-  | 'Rac_sh'
-  | 'Muoi_dp'
-  | 'PAC'
-  | 'NaHSO3'
-  | 'NaOH'
-  | 'Mat_rd'
-  | 'Polymer_Anion'
-  | 'Chlorine_bot'
-  | 'Chlorine_vien'
-  | 'Methanol'
-  | 'Dau_may'
-  | 'Tui_rac240'
-  | 'Tui_rac120'
-  | 'Tui_rac20'
-  | 'Tui_rac10'
-  | 'Tui_rac5'
-  | 'giayvs_235'
-  | 'giaivs_120'
-  | 'giay_lau_tay'
-  | 'hoa_chat'
-  | 'nuoc_rua_tay'
-  | 'nhiet_do'
-  | 'nuoc_bu'
-  | 'clo'
-  | 'PH'
-  | 'Poolblock'
-  | 'trat_thai'
-  | 'pHMINUS'
-  | 'axit'
-  | 'PN180'
-  | 'chiSoCO2'
-  | 'clorin'
-  | 'NaOCL';
 
 const fieldLabels: any = {
   Dien_cu_dan: 'Điện Cư Dân',
@@ -157,6 +119,8 @@ const STORAGE_KEY = 'accessToken';
 export default function HSSENewEditForm({ currentHSSE }: Props) {
   const router = useRouter();
 
+  const { user } = useAuthContext()
+
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
@@ -172,6 +136,8 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   const [htmlRes, setHtmlRes] = useState("");
 
   const NewProductSchema = Yup.object().shape({
+    Ngay_ghi_nhan: Yup.string().nullable(),
+    Ghichu: Yup.string().nullable(),
     Dien_cu_dan: Yup.number()
       .typeError('Giá trị phải là số hợp lệ')
       .nullable()
@@ -444,6 +410,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
 
   const defaultValues = useMemo(
     () => ({
+      Ngay_ghi_nhan: currentHSSE?.Ngay_ghi_nhan ?? `${new Date()}`,
       Dien_cu_dan: currentHSSE?.Dien_cu_dan ?? 0,
       Dien_cdt: currentHSSE?.Dien_cdt ?? 0,
       Nuoc_cu_dan: currentHSSE?.Nuoc_cu_dan ?? 0,
@@ -482,6 +449,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
       chiSoCO2: currentHSSE?.chiSoCO2 ?? 0,
       clorin: currentHSSE?.clorin ?? 0,
       NaOCL: currentHSSE?.NaOCL ?? 0,
+      Ghichu: currentHSSE?.Ghichu ?? '',
     }),
     [currentHSSE]
   );
@@ -580,16 +548,31 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    if (currentHSSE) {
-      const dataReq = {
-        data,
-        Ngay: currentHSSE?.Ngay_ghi_nhan,
+    const dataReq = {
+      data,
+      Ngay: currentHSSE?.Ngay_ghi_nhan,
+    } as { data: typeof data; Ngay: string | undefined; isRole?: number };
+
+    if (user?.ent_chucvu?.Role === 10) {
+      dataReq.isRole = 10;
+      if (data.Ghichu) {
+        if (currentHSSE) {
+          await handleApiRequest('put', `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
+        } else {
+          await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, dataReq);
+        }
+      } else {
+        alert("Bắt buộc phải có ghi chú nhé =)))")
       }
+
+
+    } else if (currentHSSE) {
       await handleApiRequest('put', `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
     } else {
       await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data);
     }
   });
+
 
 
   const renderDetails = (
@@ -610,6 +593,24 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           columnGap={2}
           display="grid"
         >
+          {
+            user?.ent_chucvu?.Role === 10 && <>
+              <RHFTextField name="Ghichu" label="Ghi chu" />
+
+              <Controller
+                name="Ngay_ghi_nhan"
+                control={control}
+                render={({ field }) => (
+                  <RHFTextField
+                    {...field}
+                    type="date"
+                    label="Ngày ghi nhận"
+                  />
+                )}
+              />
+            </>
+          }
+
           {Object.keys(fieldCategories).map((category: any) => (
             <div key={category}>
               <Typography typography="h4" sx={{ pb: 2, color: '#21409A' }}>
@@ -687,12 +688,45 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
     </>
   );
 
+  const renderPSHActions = (
+    <>
+      {mdUp && <Grid md={4} />}
+      <Grid
+        xs={12}
+        md={8}
+        sx={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column-reverse' }}
+      >
+        {user?.ent_chucvu.Role === 10 && !currentHSSE && (
+          <Button
+            disabled={loading}
+            variant="contained"
+            size="large"
+            onClick={methods.handleSubmit(handleOpenDialog)}
+          >
+            Tạo mới
+          </Button>
+        )}
+        {user?.ent_chucvu.Role === 10 && currentHSSE && (
+          <Button
+            disabled={loading}
+            variant="contained"
+            size="large"
+            onClick={methods.handleSubmit(handleOpenDialog)}
+          >
+            Update
+          </Button>
+        )}
+      </Grid>
+    </>
+  );
+
   return (
     <FormProvider methods={methods}>
       <Grid container spacing={3}>
         {renderDetails}
 
         {renderActions}
+        {renderPSHActions}
       </Grid>
 
       <Dialog

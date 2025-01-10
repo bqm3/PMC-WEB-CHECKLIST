@@ -223,7 +223,7 @@ export default function SuCoListView() {
     await axios
       .put(
         `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
-        {ID_Hangmuc: selectedHangMuc, Tinhtrangxuly: tinhTrangXuLy, ngayXuLy, Bienphapxuly: bienphapxuly },
+        { ID_Hangmuc: selectedHangMuc, Tinhtrangxuly: tinhTrangXuLy, ngayXuLy, Bienphapxuly: bienphapxuly },
         {
           headers: {
             Accept: 'application/json',
@@ -646,86 +646,86 @@ function NhomTSDialog({
       <DialogContent>
         <Stack spacing={3} sx={{ p: 2 }}>
           {dataSelect?.TenHangmuc === null && dataSelect?.ent_hangmuc?.Hangmuc === undefined ? (
-    <>
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth>
-          <InputLabel id="toanha-label">Tòa nhà</InputLabel>
-          <Select
-            labelId="toanha-label"
-            value={selectedToaNha}
-            onChange={(event) => handleChangeText('ID_Toanha', event.target.value)}
-            MenuProps={{
-              PaperProps: {
-                style: { maxHeight: 400 },
-              },
-            }}
-          >
-            <MenuItem value="">
-              <em>Chọn tòa nhà</em>
-            </MenuItem>
-            {toanha?.map((item) => (
-              <MenuItem key={item.ID_Toanha} value={item.ID_Toanha}>
-                {item.Toanha}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+            <>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="toanha-label">Tòa nhà</InputLabel>
+                    <Select
+                      labelId="toanha-label"
+                      value={selectedToaNha}
+                      onChange={(event) => handleChangeText('ID_Toanha', event.target.value)}
+                      MenuProps={{
+                        PaperProps: {
+                          style: { maxHeight: 400 },
+                        },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Chọn tòa nhà</em>
+                      </MenuItem>
+                      {toanha?.map((item) => (
+                        <MenuItem key={item.ID_Toanha} value={item.ID_Toanha}>
+                          {item.Toanha}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth>
-          <InputLabel id="khuvuc-label">Khu vực</InputLabel>
-          <Select
-            labelId="khuvuc-label"
-            value={selectedKhuVuc}
-            onChange={(event) => handleChangeText('ID_Khuvuc', event.target.value)}
-            disabled={!selectedToaNha}
-            MenuProps={{
-              PaperProps: {
-                style: { maxHeight: 400 },
-              },
-            }}
-          >
-            <MenuItem value="">
-              <em>Chọn khu vực</em>
-            </MenuItem>
-            {filteredKhuVuc.map((item) => (
-              <MenuItem key={item.ID_Khuvuc} value={item.ID_Khuvuc}>
-                {item.Tenkhuvuc}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="khuvuc-label">Khu vực</InputLabel>
+                    <Select
+                      labelId="khuvuc-label"
+                      value={selectedKhuVuc}
+                      onChange={(event) => handleChangeText('ID_Khuvuc', event.target.value)}
+                      disabled={!selectedToaNha}
+                      MenuProps={{
+                        PaperProps: {
+                          style: { maxHeight: 400 },
+                        },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Chọn khu vực</em>
+                      </MenuItem>
+                      {filteredKhuVuc.map((item) => (
+                        <MenuItem key={item.ID_Khuvuc} value={item.ID_Khuvuc}>
+                          {item.Tenkhuvuc}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-      <Grid item xs={12}>
-        <FormControl fullWidth>
-          <InputLabel id="hangmuc-label">Hạng mục</InputLabel>
-          <Select
-            labelId="hangmuc-label"
-            value={selectedHangMuc || ''}
-            onChange={(event) => handleChangeText('ID_Hangmuc', event.target.value)}
-            disabled={!selectedKhuVuc}
-            MenuProps={{
-              PaperProps: {
-                style: { maxHeight: 400 },
-              },
-            }}
-          >
-            <MenuItem value="">
-              <em>Chọn hạng mục</em>
-            </MenuItem>
-            {filteredHangMuc?.map((item) => (
-              <MenuItem key={item.ID_Hangmuc} value={item.ID_Hangmuc}>
-                {item.Hangmuc}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-    </Grid>
-  </>
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="hangmuc-label">Hạng mục</InputLabel>
+                    <Select
+                      labelId="hangmuc-label"
+                      value={selectedHangMuc || ''}
+                      onChange={(event) => handleChangeText('ID_Hangmuc', event.target.value)}
+                      disabled={!selectedKhuVuc}
+                      MenuProps={{
+                        PaperProps: {
+                          style: { maxHeight: 400 },
+                        },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Chọn hạng mục</em>
+                      </MenuItem>
+                      {filteredHangMuc?.map((item) => (
+                        <MenuItem key={item.ID_Hangmuc} value={item.ID_Hangmuc}>
+                          {item.Hangmuc}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </>
           ) : (
             <TextField
               value={dataSelect?.TenHangmuc || dataSelect?.ent_hangmuc?.Hangmuc}
@@ -735,9 +735,8 @@ function NhomTSDialog({
           )}
 
           <TextField
-            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${
-              dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
-            }`}
+            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
+              }`}
             label="Ngày sự cố"
             disabled
           />

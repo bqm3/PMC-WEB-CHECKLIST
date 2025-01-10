@@ -111,16 +111,16 @@ export default function AreaListView() {
   const [dataSelect, setDataSelect] = useState<IHangMuc>();
 
   const { toanha } = useGetToanha();
-  
-    const BUILDING_OPTIONS = useMemo(
-      () => [
-        ...toanha.map((khoi) => ({
-          value: khoi.ID_Toanha.toString(),
-          label: khoi.Toanha,
-        })),
-      ],
-      [toanha]
-    );
+
+  const BUILDING_OPTIONS = useMemo(
+    () => [
+      ...toanha.map((khoi) => ({
+        value: khoi.ID_Toanha.toString(),
+        label: khoi.Toanha,
+      })),
+    ],
+    [toanha]
+  );
 
   const STATUS_OPTIONS = useMemo(
     () => [
