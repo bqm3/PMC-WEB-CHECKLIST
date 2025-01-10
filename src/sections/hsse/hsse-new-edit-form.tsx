@@ -569,7 +569,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
     } else if (currentHSSE) {
       await handleApiRequest('put', `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
     } else {
-      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data);
+      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, dataReq);
     }
   });
 
