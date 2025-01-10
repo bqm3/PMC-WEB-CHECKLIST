@@ -111,7 +111,7 @@ const fieldCategories: any = {
   'Rác thải': ['Rac_sh', 'trat_thai'],
   'Túi đựng rác': ['Tui_rac240', 'Tui_rac120', 'Tui_rac20', 'Tui_rac10', 'Tui_rac5'],
   Giấy: ['giayvs_235', 'giaivs_120', 'giay_lau_tay'],
-  "Nhiệt độ": ["nhiet_do"]
+  'Nhiệt độ': ['nhiet_do'],
 };
 
 const STORAGE_KEY = 'accessToken';
@@ -119,7 +119,7 @@ const STORAGE_KEY = 'accessToken';
 export default function HSSENewEditForm({ currentHSSE }: Props) {
   const router = useRouter();
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const mdUp = useResponsive('up', 'md');
 
@@ -133,7 +133,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   const [loading, setLoading] = useState(false);
 
   const isToday = moment(currentHSSE?.Ngay_ghi_nhan).isSame(moment(), 'day');
-  const [htmlRes, setHtmlRes] = useState("");
+  const [htmlRes, setHtmlRes] = useState('');
 
   const NewProductSchema = Yup.object().shape({
     Ngay_ghi_nhan: Yup.string().nullable(),
@@ -404,8 +404,6 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         String(originalValue).trim() === '' ? null : parseFloat(originalValue)
       )
       .min(0, 'Giá trị phải lớn hơn hoặc bằng 0'),
-
-
   });
 
   const defaultValues = useMemo(
@@ -519,8 +517,8 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         },
       });
       setHtmlRes(res?.data?.htmlResponse);
-      if (res.data.htmlResponse !== null && res.data.htmlResponse !== "") {
-        setOpenWarn(true)
+      if (res.data.htmlResponse !== null && res.data.htmlResponse !== '') {
+        setOpenWarn(true);
       } else {
         enqueueSnackbar({
           variant: 'success',
@@ -528,7 +526,6 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
           message: method === 'put' ? 'Cập nhật thành công!' : 'Tạo mới thành công!',
         });
       }
-
     } catch (error) {
       setLoading(false);
       let errorMessage = 'Lỗi gửi yêu cầu';
@@ -551,29 +548,27 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
     const dataReq = {
       data,
       Ngay: currentHSSE?.Ngay_ghi_nhan,
-    } as { data: typeof data; Ngay: string | undefined; isRole?: number };
-
-    if (user?.ent_chucvu?.Role === 10) {
-      dataReq.isRole = 10;
-      if (data.Ghichu) {
-        if (currentHSSE) {
-          await handleApiRequest('put', `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
-        } else {
-          await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, dataReq);
-        }
+    };
+    if (user?.ent_chucvu.Role === 10) {
+      if (currentHSSE) {
+        await handleApiRequest(
+          'put',
+          `https://checklist.pmcweb.vn/be/api/v2/hsse/update/psh/${currentHSSE?.ID}`,
+          dataReq
+        );
       } else {
-        alert("Bắt buộc phải có ghi chú nhé =)))")
+        await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create/psh`, data);
       }
-
-
     } else if (currentHSSE) {
-      await handleApiRequest('put', `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`, dataReq);
+      await handleApiRequest(
+        'put',
+        `https://checklist.pmcweb.vn/be/api/v2/hsse/update/${currentHSSE?.ID}`,
+        dataReq
+      );
     } else {
-      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, dataReq);
+      await handleApiRequest('post', `https://checklist.pmcweb.vn/be/api/v2/hsse/create`, data);
     }
   });
-
-
 
   const renderDetails = (
     <Grid xs={12} md={12}>
@@ -588,28 +583,20 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
             </Typography>
           </Alert>
         </Box>
-        <Box
-          rowGap={3}
-          columnGap={2}
-          display="grid"
-        >
-          {
-            user?.ent_chucvu?.Role === 10 && <>
+        <Box rowGap={3} columnGap={2} display="grid">
+          {user?.ent_chucvu?.Role === 10 && (
+            <>
               <RHFTextField name="Ghichu" label="Ghi chu" />
 
               <Controller
                 name="Ngay_ghi_nhan"
                 control={control}
                 render={({ field }) => (
-                  <RHFTextField
-                    {...field}
-                    type="date"
-                    label="Ngày ghi nhận"
-                  />
+                  <RHFTextField {...field} type="date" label="Ngày ghi nhận" />
                 )}
               />
             </>
-          }
+          )}
 
           {Object.keys(fieldCategories).map((category: any) => (
             <div key={category}>
