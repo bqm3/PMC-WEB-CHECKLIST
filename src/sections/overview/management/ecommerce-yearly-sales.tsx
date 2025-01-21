@@ -67,27 +67,27 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
         <CardHeader
           title={title}
           subheader={subheader}
-          action={
-            <ButtonBase
-              onClick={popover.onOpen}
-              sx={{
-                pl: 1,
-                py: 0.5,
-                pr: 0.5,
-                borderRadius: 1,
-                typography: 'subtitle2',
-                bgcolor: 'background.neutral',
-              }}
-            >
-              {seriesData}
+          // action={
+          //   <ButtonBase
+          //     onClick={popover.onOpen}
+          //     sx={{
+          //       pl: 1,
+          //       py: 0.5,
+          //       pr: 0.5,
+          //       borderRadius: 1,
+          //       typography: 'subtitle2',
+          //       bgcolor: 'background.neutral',
+          //     }}
+          //   >
+          //     {seriesData}
 
-              <Iconify
-                width={16}
-                icon={popover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'}
-                sx={{ ml: 0.5 }}
-              />
-            </ButtonBase>
-          }
+          //     <Iconify
+          //       width={16}
+          //       icon={popover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'}
+          //       sx={{ ml: 0.5 }}
+          //     />
+          //   </ButtonBase>
+          // }
         />
 
         {series?.map((item: any) => (
