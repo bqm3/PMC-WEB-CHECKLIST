@@ -110,11 +110,22 @@ export const OverviewReportView = () => {
   // xuat file words
   const handleExportReport = async () => {
     setLoading(true);
+    // Chuyển đổi ngày tháng sang định dạng ISO mà không thay đổi giá trị
+    const startDate = new Date(filters.startDate ? filters.startDate : '');
+    const endDate = new Date(filters.endDate ? filters.endDate : '');
+
+    // Lấy giá trị ngày tháng mà không thay đổi
+    const startDateString = `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}T00:00:00.000Z`;
+    const endDateString = `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}T23:59:59.999Z`;
     const response = await axios.post(
       `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/reports/${indexBaoCao}`,
       {
-        startDate: filters.startDate,
-        endDate: filters.endDate,
+        startDate: startDateString,
+        endDate: endDateString,
         ID_KhoiCVs: filters.publish,
       },
       {
@@ -153,11 +164,22 @@ export const OverviewReportView = () => {
   // xuat file excel
   const fetchExcelData = async () => {
     try {
+      // Chuyển đổi ngày tháng sang định dạng ISO mà không thay đổi giá trị
+      const startDate = new Date(filters.startDate ? filters.startDate : '');
+      const endDate = new Date(filters.endDate ? filters.endDate : '');
+
+      // Lấy giá trị ngày tháng mà không thay đổi
+      const startDateString = `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}T00:00:00.000Z`;
+      const endDateString = `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}T23:59:59.999Z`;
       const response = await axios.post(
         `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/preview-reports/${indexBaoCao}`,
         {
-          startDate: filters.startDate,
-          endDate: filters.endDate,
+          startDate: startDateString,
+          endDate: endDateString,
           ID_KhoiCVs: filters.publish,
         },
         {
@@ -445,8 +467,6 @@ export const OverviewReportView = () => {
             Preview
           </Button>
         </Card>
-
-
       </Container>
       <Dialog open={showModal} onClose={() => setShowModal(false)} fullWidth maxWidth="lg">
         <DialogContent sx={{ mt: 2.5, mr: 2.5 }}>
