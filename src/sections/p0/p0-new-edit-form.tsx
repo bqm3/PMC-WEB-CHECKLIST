@@ -41,8 +41,10 @@ const fieldLabels: any = {
   Slxemay: 'Xe máy thường',
   Slxedapdien: 'Xe đạp điện',
   Slxedap: 'Xe đạp thường',
-  Sltheoto: 'Thẻ xe ô tô',
-  Slthexemay: 'Thẻ xe máy',
+  Sotheotodk: 'Thẻ xe ô tô phát hành',
+  Sothexemaydk: 'Thẻ xe máy phát hành',
+  Sltheoto: 'Thẻ xe ô tô còn lại',
+  Slthexemay: 'Thẻ xe máy còn lại',
   Slscoto: 'Sự cố xe ô tô thường',
   Slscotodien: 'Sự cố xe ô tô điện',
   Slscxemaydien: 'Sự cố xe máy điện',
@@ -57,31 +59,9 @@ const fieldLabels: any = {
   Ghichu: 'Ghi chú',
 };
 
-const fieldIds: { [key: string]: number } = {
-  Slxeoto: 0,
-  Slxeotodien: 1,
-  Slxemaydien: 2,
-  Slxemay: 3,
-  Slxedapdien: 4,
-  Slxedap: 5,
-  Sltheoto: 6,
-  Slthexemay: 7,
-  Slscoto: 8,
-  Slscotodien: 9,
-  Slscxemaydien: 10,
-  Slscxemay: 11,
-  Slscxedapdien: 12,
-  Slscxedap: 13,
-  Slsucokhac: 14,
-  Slcongto: 15,
-  QuansoTT: 16,
-  QuansoDB: 17,
-  Doanhthu: 18,
-};
-
 const fieldCategories: any = {
+  'Thông tin thẻ': ['Sotheotodk', 'Sothexemaydk', 'Sltheoto', 'Slthexemay'],
   'Thông tin xe': ['Slxeoto', 'Slxeotodien', 'Slxemay', 'Slxemaydien', 'Slxedap', 'Slxedapdien'],
-  'Thông tin thẻ': ['Sltheoto', 'Slthexemay'],
   'Sự cố': [
     'Slscoto',
     'Slscotodien',
@@ -151,6 +131,8 @@ export default function P0NewEditForm({ currentP0 }: Props) {
       Slxemaydien: currentP0?.Slxemaydien ?? 0,
       Slxedap: currentP0?.Slxedap ?? 0,
       Slxedapdien: currentP0?.Slxedapdien ?? 0,
+      Sotheotodk: currentP0?.Sotheotodk ?? 0,
+      Sothexemaydk: currentP0?.Sothexemaydk ?? 0,
       Sltheoto: currentP0?.Sltheoto ?? 0,
       Slthexemay: currentP0?.Slthexemay ?? 0,
       Slscoto: currentP0?.Slscoto ?? 0,
@@ -196,14 +178,12 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   useEffect(() => {
     const handleCheck = async () => {
       try {
-        const res = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/check`,
-          {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const res = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/check`, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         setCheckSubmit(res.data.data);
       } catch (error) {
         setCheckSubmit(false);
@@ -211,6 +191,37 @@ export default function P0NewEditForm({ currentP0 }: Props) {
     };
     handleCheck();
   }, [accessToken]);
+
+  useEffect(() => {
+    const getSoThe = async () => {
+      if (
+        !currentP0 ||
+        (currentP0 && (Number(currentP0.Sotheotodk) <= 0 || Number(currentP0.Sothexemaydk) <= 0))
+      ) {
+        try {
+          const res = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/so-the-phat-hanh`, {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          if (res.data.data) {
+            setValue('Sotheotodk', res.data.data.Sotheotodk || 0);
+            setValue('Sothexemaydk', res.data.data.Sothexemaydk || 0);
+          }
+        } catch (error) {
+          enqueueSnackbar({
+            variant: 'error',
+            autoHideDuration: 4000,
+            message: 'Có lỗi xảy ra',
+          });
+        }
+      }
+    };
+
+    getSoThe();
+  }, [accessToken, enqueueSnackbar, setValue, currentP0]);
 
   const handleApiRequest = async (method: string, url: string, data: any) => {
     setLoading(true);

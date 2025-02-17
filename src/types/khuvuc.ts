@@ -186,6 +186,8 @@ export type IP0 = {
   Slxemaydien?: number;
   Slxedap?: number;
   Slxedapdien?: number;
+  Sotheotodk?: number;
+  Sothexemaydk?: number;
   Sltheoto?: number;
   Slthexemay?: number;
   Slscoto?: number;
