@@ -3,6 +3,8 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
+
+import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
@@ -135,13 +137,16 @@ export default function AreaTableRow({
       </TableCell>
 
 
-      <TableCell> {Ghichu} </TableCell>
 
-      {/* <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
-      </TableCell> */}
+      <TableCell>
+        <Tooltip title={Ghichu || ""}>
+          <span>
+            {Ghichu && Ghichu.length > 50 ? `${Ghichu.substring(0, 50)}...` : Ghichu}
+          </span>
+        </Tooltip>
+      </TableCell>
+
+
     </TableRow>
   );
 

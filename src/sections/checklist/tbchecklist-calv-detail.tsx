@@ -70,9 +70,8 @@ const TABLE_HEAD = [
   { id: 'ID_Tang', label: 'Tầng', width: 100 },
   { id: 'Ketqua', label: 'Kết quả', width: 100 },
   { id: 'Gioht', label: 'Giờ', width: 80 },
-  { id: 'Anh', label: 'Hình ảnh', width: 200 },
-  { id: 'Ghichu', label: 'Ghi chú', width: 100 },
-  { id: '', width: 10 },
+  { id: 'Anh', label: 'Hình ảnh', width: 180 },
+  { id: 'Ghichu', label: 'Ghi chú', width: 140 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -259,25 +258,6 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
     [router]
   );
 
-  // useEffect(() => {
-  //   const formattedData = tableData?.map((item, index) => ({
-  //     stt: index + 1,
-  //     hangMuc: item.ent_checklist.ent_hangmuc.Hangmuc || '',
-  //     tenChecklist: item.ent_checklist.Checklist || '',
-  //     gioKt: item.Gioht || '',
-  //     kq: item.Ketqua,
-  //     ghichu: item.Ghichu || '',
-  //     anh:
-  //       // const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null
-  //       item.Anh !== undefined && item.Anh !== null
-  //         ? getImageUrls(1, item.Anh)
-  //         : '',
-  //   }));
-  //   setDataFormatExcel(formattedData);
-  // }, [tableData]);
-
-  // const [dataFormatExcel, setDataFormatExcel] = useState<any>([]);
-
   const prepareCsvData = () =>
     tableData?.map((item, index) => ({
       stt: index + 1,
@@ -286,9 +266,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       gioKt: item.Gioht || '',
       kq: item.Ketqua,
       ghichu: item.Ghichu || '',
-      anh:
-        // const arrImage: any = typeof Anh === 'string' && Anh.trim().length > 0 ? Anh.split(',') : null
-        item.Anh !== undefined && item.Anh !== null ? getImageUrls(1, item.Anh) : '',
+      anh: item.Anh !== undefined && item.Anh !== null ? getImageUrls(1, item.Anh) : '',
     }));
 
 
@@ -309,7 +287,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <CustomBreadcrumbs
             heading="Checklist trong ca"
@@ -526,7 +504,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             </Stack>
           </Stack>
         </Card>
-      </Container>
+      </Stack>
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         {/* <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
