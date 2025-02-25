@@ -10,32 +10,42 @@ import Card, { CardProps } from '@mui/material/Card';
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 interface Props extends CardProps {
   title?: string;
   subheader?: string;
-  chart: {
-    categories?: string[];
-    colors?: string[];
-    series: {
-      year: string;
-      data: {
-        name: string;
-        data: number[];
-      }[];
-    }[];
-    options?: ApexOptions;
-  } | any;
+  chart:
+    | {
+        categories?: string[];
+        colors?: string[];
+        series: {
+          year: string;
+          data: {
+            name: string;
+            data: number[];
+          }[];
+        }[];
+        options?: ApexOptions;
+      }
+    | any;
 }
 
 export default function EcommerceYearlySales({ title, subheader, chart, ...other }: Props) {
   const { colors, categories, series, options } = chart;
-
+  const { user } = useAuthContext();
   const popover = usePopover();
 
   const [seriesData, setSeriesData] = useState('Tất cả');
+
+  const filteredSeries = series?.map((item: any) => ({
+    ...item,
+    data: item.data.filter((dataItem: any) =>
+      user?.ent_chucvu?.Role === 5 ? dataItem.name === user?.ent_khoicv?.KhoiCV : true
+    ),
+  }));
 
   const chartOptions = useChart({
     colors,
@@ -89,8 +99,15 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
           //   </ButtonBase>
           // }
         />
+        {/* {series?.map((item: any) => (
+          <Box key={item.year} sx={{ mt: 3, mx: 3 }}>
+            {item.year === seriesData && (
+              <Chart dir="ltr" type="area" series={item.data} options={chartOptions} height={364} />
+            )}
+          </Box>
+        ))} */}
 
-        {series?.map((item: any) => (
+        {filteredSeries?.map((item: any) => (
           <Box key={item.year} sx={{ mt: 3, mx: 3 }}>
             {item.year === seriesData && (
               <Chart dir="ltr" type="area" series={item.data} options={chartOptions} height={364} />

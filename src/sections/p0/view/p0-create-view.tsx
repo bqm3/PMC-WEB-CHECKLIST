@@ -23,7 +23,7 @@ export default function HSSECreateView() {
             href: paths.dashboard.root,
           },
           {
-            name: 'P0',
+            name: 'S0',
             href: paths.dashboard.p0.root,
           },
           { name: 'Tạo mới' },

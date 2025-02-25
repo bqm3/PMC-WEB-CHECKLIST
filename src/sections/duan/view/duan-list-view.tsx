@@ -349,7 +349,7 @@ export default function GiamsatListView() {
           />
           {
             user?.ID_Chucvu !== 2 && <Button variant="contained" startIcon={<Iconify icon="eva:refresh-fill" />} onClick={() => handleReload()}>
-              Reset dự án
+              Tổng quan dự án
             </Button>
           }
         </Stack>

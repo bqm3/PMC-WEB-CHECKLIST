@@ -298,7 +298,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Stack spacing={3}>
-        <Box>
+        {/* <Box>
           <Alert severity="warning">
             <Typography>
               Nên sử dụng trình duyệt Google Chrome để nhập các chỉ số để tránh gặp lỗi khi khai báo
@@ -307,9 +307,9 @@ export default function P0NewEditForm({ currentP0 }: Props) {
               Đối với các chỉ số không có dữ liệu thì sẽ không cần phải nhập (Mặc định là 0)
             </Typography>
           </Alert>
-        </Box>
+        </Box> */}
 
-        <Box mt={2}>
+        <Box >
           {(hasCarCardBalanceError || hasMotorcycleCardBalanceError) && (
             <Alert severity="error">
               {hasCarCardBalanceError && (

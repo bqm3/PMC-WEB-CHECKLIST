@@ -10,6 +10,7 @@ import Card, { CardProps } from '@mui/material/Card';
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -88,8 +89,8 @@ export default function ChecklistsHoanThanh({
   const nhomPopover = usePopover();
   const tangGiamPopover = usePopover();
   const topPopover = usePopover();
-  const showPopover = usePopover();
-
+  const { user } = useAuthContext();
+  
   const chartOptions = useChart({
     colors,
     stroke: {
@@ -129,6 +130,11 @@ export default function ChecklistsHoanThanh({
             {
               from: 0,
               to: 50,
+              color: '#e63838',
+            },
+            {
+              from: 50,
+              to: 90,
               color: '#e69138',
             },
           ],
@@ -300,26 +306,43 @@ export default function ChecklistsHoanThanh({
                 />
               </ButtonBase> */}
 
-              <ButtonBase
-                onClick={khoiPopover.onOpen} // Open the KhoiCV popover
-                sx={{
-                  pl: 1,
-                  py: 0.5,
-                  pr: 0.5,
-                  borderRadius: 1,
-                  typography: 'subtitle2',
-                  bgcolor: 'background.neutral',
-                }}
-              >
-                {STATUS_OPTIONS.find((option: any) => option.value === selectedKhoiCV)?.label}
-                <Iconify
-                  width={16}
-                  icon={
-                    khoiPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
-                  }
-                  sx={{ ml: 0.5 }}
-                />
-              </ButtonBase>
+              {`${user?.ent_chucvu?.Role}` !== `5` ? (
+                <ButtonBase
+                  onClick={khoiPopover.onOpen} // Open the KhoiCV popover
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {STATUS_OPTIONS.find((option: any) => option.value === selectedKhoiCV)?.label}
+                  <Iconify
+                    width={16}
+                    icon={
+                      khoiPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                    }
+                    sx={{ ml: 0.5 }}
+                  />
+                </ButtonBase>
+              ) : (
+                
+                <ButtonBase
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {STATUS_OPTIONS.find((option: any) => `${option.value}` === `${user?.ID_KhoiCV}`)?.label}
+                </ButtonBase>
+                
+              )}
             </Box>
           }
         />

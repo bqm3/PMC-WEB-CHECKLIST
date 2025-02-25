@@ -273,6 +273,7 @@ export type ISucongoai = {
   ID_User: string;
   Bienphapxuly: string;
   Tinhtrangxuly: string;
+  Mucdo: string;
   Ghichu: string;
   Ngayxuly: string;
   isDelete: string;

@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -90,6 +91,8 @@ export default function ChecklistsSuco({
   const tangGiamPopover = usePopover();
   const topPopover = usePopover();
 
+  const { user } = useAuthContext();
+
   const handleChartClick = (
     event: any,
     chartContext: any,
@@ -97,9 +100,8 @@ export default function ChecklistsSuco({
   ) => {
     if (dataPointIndex !== -1 && categories.length > 0) {
       const projectName = categories[dataPointIndex];
-      handleOpenModalSuCo(projectName, "su-co");
+      handleOpenModalSuCo(projectName, 'su-co');
     }
-    
   };
 
   const chartOptions = useChart({
@@ -109,7 +111,7 @@ export default function ChecklistsSuco({
       width: 0,
       colors: ['#f1c232'],
     },
-    
+
     yaxis: {
       title: {
         text: 'Số lượng sự cố',
@@ -316,26 +318,44 @@ export default function ChecklistsSuco({
                 />
               </ButtonBase> */}
 
-              <ButtonBase
-                onClick={khoiPopover.onOpen} // Open the KhoiCV popover
-                sx={{
-                  pl: 1,
-                  py: 0.5,
-                  pr: 0.5,
-                  borderRadius: 1,
-                  typography: 'subtitle2',
-                  bgcolor: 'background.neutral',
-                }}
-              >
-                {STATUS_OPTIONS.find((option: any) => option.value === selectedKhoiCV)?.label}
-                <Iconify
-                  width={16}
-                  icon={
-                    khoiPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+              {`${user?.ent_chucvu?.Role}` !== `5` ? (
+                <ButtonBase
+                  onClick={khoiPopover.onOpen} // Open the KhoiCV popover
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {STATUS_OPTIONS.find((option: any) => option.value === selectedKhoiCV)?.label}
+                  <Iconify
+                    width={16}
+                    icon={
+                      khoiPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                    }
+                    sx={{ ml: 0.5 }}
+                  />
+                </ButtonBase>
+              ) : (
+                <ButtonBase
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {
+                    STATUS_OPTIONS.find((option: any) => `${option.value}` === `${user?.ID_KhoiCV}`)
+                      ?.label
                   }
-                  sx={{ ml: 0.5 }}
-                />
-              </ButtonBase>
+                </ButtonBase>
+              )}
             </Box>
           }
         />
@@ -368,11 +388,7 @@ export default function ChecklistsSuco({
           </MenuItem>
         ))}
       </CustomPopover>
-      <CustomPopover
-        open={tangGiamPopover.open}
-        onClose={tangGiamPopover.onClose}
-      
-      >
+      <CustomPopover open={tangGiamPopover.open} onClose={tangGiamPopover.onClose}>
         {tangGiam?.map((item: any) => (
           <MenuItem
             selected={item.value === tangGiamPopover}

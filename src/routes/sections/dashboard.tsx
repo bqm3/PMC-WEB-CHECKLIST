@@ -99,13 +99,17 @@ const CreateEmployeePage = lazy(() => import('src/pages/dashboard/create-employe
 const ListEmployeePage = lazy(() => import('src/pages/dashboard/create-employee/list'));
 const ListEditEmployeePage = lazy(() => import('src/pages/dashboard/create-employee/edit'));
 const ListEditEmployeeError = lazy(() => import('src/pages/dashboard/create-employee/error'));
-const ListEditEmployeeResetPW = lazy(() => import('src/pages/dashboard/create-employee/reset-password'));
+const ListEditEmployeeResetPW = lazy(
+  () => import('src/pages/dashboard/create-employee/reset-password')
+);
 
 const CreateAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/new'));
 const ListAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/list'));
 const ListEditAccountPage = lazy(() => import('src/pages/dashboard/quanlytaikhoan/edit'));
 const ListEditAccountError = lazy(() => import('src/pages/dashboard/quanlytaikhoan/error'));
-const ListEditAccountResetPW = lazy(() => import('src/pages/dashboard/quanlytaikhoan/reset-password'));
+const ListEditAccountResetPW = lazy(
+  () => import('src/pages/dashboard/quanlytaikhoan/reset-password')
+);
 
 const EmployeeAccountPage = lazy(() => import('src/pages/dashboard/account/account'));
 
@@ -169,7 +173,6 @@ const P0PhanQuyenPage = lazy(() => import('src/pages/dashboard/p0/phanquyen'));
 const P0NewPage = lazy(() => import('src/pages/dashboard/p0/new'));
 const P0EditPage = lazy(() => import('src/pages/dashboard/p0/edit'));
 
-
 // Tòa nhà
 const ToanhaListsPage = lazy(() => import('src/pages/dashboard/toanha/list'));
 const ToanhaNewPage = lazy(() => import('src/pages/dashboard/toanha/new'));
@@ -179,7 +182,9 @@ const ToanhaEditPage = lazy(() => import('src/pages/dashboard/toanha/edit'));
 const CheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/list'));
 const TCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/tlist'));
 const DayCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/catrongngay'));
-const DayNotCheckListListsPage = lazy(() => import('src/pages/dashboard/checklist/catrongngay-not'));
+const DayNotCheckListListsPage = lazy(
+  () => import('src/pages/dashboard/checklist/catrongngay-not')
+);
 const CheckListNewPage = lazy(() => import('src/pages/dashboard/checklist/new'));
 const CheckListEditPage = lazy(() => import('src/pages/dashboard/checklist/edit'));
 const CaChecklistDetailPage = lazy(() => import('src/pages/dashboard/checklist/detail'));
@@ -187,6 +192,17 @@ const NotCaChecklistDetailPage = lazy(() => import('src/pages/dashboard/checklis
 
 const UserAdminProfilePage = lazy(() => import('src/pages/dashboard/userAdmin/profile'));
 // -----------------------------------------
+
+const DashboardIndex = () => {
+  const { user } = useAuthContext();
+  return user?.ent_chucvu?.Role === 10 ||
+    user?.ent_chucvu?.Role === 0 ||
+    user?.ent_chucvu?.Role === 5 ? (
+    <OverviewManagementPage />
+  ) : (
+    <OverviewAnalyticsPage />
+  );
+};
 
 export const dashboardRoutes = [
   {
@@ -202,7 +218,8 @@ export const dashboardRoutes = [
     ),
     children: [
       {
-        element: <OverviewAnalyticsPage />,
+        // element: <OverviewAnalyticsPage />,
+        element: <DashboardIndex />,
         index: true,
       },
       { path: 'ecommerce', element: <OverviewEcommercePage /> },

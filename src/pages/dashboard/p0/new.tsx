@@ -8,7 +8,7 @@ export default function P0CreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo báo cáo P0</title>
+        <title> Dashboard: Tạo báo cáo S0</title>
       </Helmet>
 
       <P0CreateView />

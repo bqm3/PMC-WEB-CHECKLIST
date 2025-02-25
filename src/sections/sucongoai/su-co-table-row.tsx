@@ -45,7 +45,8 @@ export default function AreaTableRow({
     Ngayxuly,
     ent_hangmuc,
     Bienphapxuly,
-    TenHangmuc
+    TenHangmuc,
+    Mucdo,
   } = row;
 
   const theme = useTheme();
@@ -83,6 +84,19 @@ export default function AreaTableRow({
       <TableCell> {Ngayxuly ? moment(Ngayxuly).format('DD-MM-YYYY') : ''} </TableCell>
       <TableCell> {Noidungsuco} </TableCell>
       <TableCell> {Bienphapxuly} </TableCell>
+      <TableCell>
+        <Label
+          variant="soft"
+          color={
+            (`${Mucdo}` === '0' && 'success') ||
+            (`${Mucdo}` === '1' && 'error') ||
+            'default'
+          }
+        >
+          {`${Mucdo}` === '0' && 'Bình thường'}
+          {`${Mucdo}` === '1' && 'Nghiêm trọng'}
+        </Label>
+      </TableCell>
       <TableCell>
         <Label
           variant="soft"

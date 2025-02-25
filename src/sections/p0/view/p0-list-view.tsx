@@ -94,7 +94,7 @@ export default function GiamsatListView() {
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <CustomBreadcrumbs
-          heading="Danh sách P0"
+          heading="Danh sách S0"
           links={[
             {
               name: 'Dashboard',

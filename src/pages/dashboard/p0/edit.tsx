@@ -14,7 +14,7 @@ export default function P0EditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Cập nhật P0</title>
+        <title> Dashboard: Cập nhật S0</title>
       </Helmet>
 
       <P0EditView id={`${id}`} />
