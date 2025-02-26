@@ -1089,7 +1089,7 @@ export default function OverviewAnalyticsView() {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <EcommerceWidgetSummary
-              title=  {`Tỉ lệ hoàn thành checklist ngày ${dataReportChecklistPercentWeek?.yesterdayDate ? dataReportChecklistPercentWeek?.yesterdayDate : ""}`}
+              title=  {`Tỉ lệ checklist ngày ${dataReportChecklistPercentWeek?.yesterdayDate ? dataReportChecklistPercentWeek?.yesterdayDate : ""}`}
               key="0"
               percent={
                 Number(dataReportChecklistPercentWeek?.lastWeekPercentage) -

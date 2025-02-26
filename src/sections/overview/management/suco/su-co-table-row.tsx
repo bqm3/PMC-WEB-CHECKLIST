@@ -38,9 +38,10 @@ type Props = {
   onSelectRow: VoidFunction;
   index: number;
   handleClickOpen: VoidFunction;
+  setDetailChecklist: any;
 };
 
-export default function AreaTableRow({ row, selected, onSelectRow, index, handleClickOpen }: Props) {
+export default function AreaTableRow({ row, selected, onSelectRow, index, handleClickOpen, setDetailChecklist }: Props) {
   const {
     ID_Checklist, Gioht, Ghichu, Anh, ent_checklist, Ngay, Ketqua
 
@@ -53,6 +54,37 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
   const popover = usePopover();
 
   const formattedTime = Gioht.slice(0, 5);
+
+  const newViewImage = (items: any[]) => {
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return null; // Không render gì nếu `items` không hợp lệ
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    return items.map((url: string, index: number) => (
+      <Avatar
+        key={`${url}_${index}`} // Đảm bảo key duy nhất
+        onClick={() => {
+          setDetailChecklist(url)
+          handleClickOpen()
+        }} // Hành động khi click vào ảnh
+        src={url} // Đường dẫn URL ảnh
+        alt={url} // Alt text fallback khi ảnh lỗi
+        variant="rounded" // Kiểu avatar bo góc
+        sx={{
+          width: 70,
+          height: 70,
+          cursor: 'pointer', // Con trỏ hiển thị dạng tay khi hover
+          border: '1px solid #ddd', // Thêm viền nhẹ
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Thêm bóng
+          transition: 'transform 0.2s ease-in-out', // Hiệu ứng hover
+          '&:hover': {
+            transform: 'scale(1.1)', // Phóng to nhẹ khi hover
+          },
+        }}
+      />
+    ));
+  };
 
   const backgroundColorStyle =
     index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[200];
@@ -80,7 +112,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
           }}
         />{' '}
       </TableCell>
-      <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
+      {/* <TableCell onClick={() => handleClickOpen()} sx={{ cursor: 'pointer' }}>
         {(Anh !== null && Anh !== undefined && Anh !== '') && (
           <Avatar
             // src={`https://lh3.googleusercontent.com/d/${Anh}=s1000?authuser=0`}
@@ -89,7 +121,27 @@ export default function AreaTableRow({ row, selected, onSelectRow, index, handle
             sx={{ width: 80, height: 80 }}
           />
         )}
-      </TableCell>
+      </TableCell> */}
+            <TableCell sx={{ width: 120, padding: 0 }}>
+              {Anh ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    overflowX: 'auto', // Cho phép cuộn ngang
+                    gap: 4,
+                    width: 120, // Đặt chiều rộng cố định
+                    whiteSpace: 'nowrap', // Ngăn hình ảnh xuống dòng
+                    padding: 4,
+                  }}
+                  // CSS cho thanh cuộn nhỏ
+                  className="custom-scrollbar"
+                >
+                  {newViewImage(Anh?.split(',').map((item: any) => getImageUrls(1, item)))}
+                </div>
+              ) : (
+                <></>
+              )}
+            </TableCell>
       <TableCell> {Ghichu} </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
