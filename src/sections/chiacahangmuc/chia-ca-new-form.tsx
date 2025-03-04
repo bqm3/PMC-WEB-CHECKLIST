@@ -15,6 +15,7 @@ import { paths } from 'src/routes/paths';
 // hooks
 import { useRouter } from 'src/routes/hooks';
 import { useResponsive } from 'src/hooks/use-responsive';
+import { useAuthContext } from 'src/auth/hooks';
 // _mock
 import { _tags, _roles, USER_GENDER_OPTIONS } from 'src/_mock';
 // api
@@ -58,8 +59,9 @@ export default function ChiaCaNewEditForm() {
   const [optionKhoiCV, setOptionKhoiCV] = useState<any>();
   const [optionToaNha, setOptionToaNha] = useState<any>([]);
   const [optionCalv, setOptionCalv] = useState<any>();
-  const [selectedChuky, setSelectedChuky] = useState(1);
-  const [chukyData, setChukyData] = useState<any>(1);
+  const [ngayThucHien, setNgaythuchien] = useState(1);
+  const [arrChukyData, setArrChukyData] = useState<any>([]);
+  const [chukyData, setChukyData] = useState<any>();
   const [areasData, setAreasData] = useState<IKhuvuc[]>([]);
 
   const [checkedStates, setCheckedStates] = useState<any>([]);
@@ -108,18 +110,34 @@ export default function ChiaCaNewEditForm() {
     const chukyDetail = arrChuky?.filter(
       (item: any) => `${event.target.value}` === `${item.ID_KhoiCV}`
     );
-    setChukyData(chukyDetail[0]?.Chuky || 0);
+    setArrChukyData(chukyDetail);
 
     setOptionKhoiCV(selectedKhoiCV);
   };
+
+  // const handleChangeKhoiCV = (event: any) => {
+  //   const selectedKhoiCV = KhoiCV.find((item: any) => item.ID_KhoiCV === event.target.value);
+  //   const arrChuky = ToaNha[0]?.ent_duan?.ent_duan_khoicv;
+  //   const chukyDetail = arrChuky?.filter(
+  //     (item: any) => `${event.target.value}` === `${item.ID_KhoiCV}`
+  //   );
+  //   setChukyData(chukyDetail[0]?.Chuky || 0);
+
+  //   setOptionKhoiCV(selectedKhoiCV);
+  // };
 
   const handleChangeCalv = (event: any) => {
     const selectedCalv = Calv.find((item: any) => item.ID_Calv === event.target.value);
     setOptionCalv(selectedCalv);
   };
 
-  const handleChukyChange = (event: any) => {
-    setSelectedChuky(event.target.value);
+  const handleArrChukyChange = (event: any) => {
+    const selectedItem = arrChukyData.find((item: { ID_Duan_KhoiCV: any; }) => item.ID_Duan_KhoiCV === event.target.value);
+    setChukyData(selectedItem);
+  };
+
+  const handleNgayThucHien = (event: any) => {
+    setNgaythuchien(event.target.value);
   };
 
   const handleToanhaChange = (event: any) => {
@@ -149,7 +167,9 @@ export default function ChiaCaNewEditForm() {
 
       // Apply work block filter if `optionKhoiCV` is selected
       if (optionKhoiCV) {
-        filteredAreas = filteredAreas.filter((kv) => kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV));
+        filteredAreas = filteredAreas.filter((kv) =>
+          kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV)
+        );
       }
 
       setAreasData(filteredAreas);
@@ -166,16 +186,15 @@ export default function ChiaCaNewEditForm() {
     }
   }, [khuvuc, optionKhoiCV, optionToaNha]);
 
-
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;
 
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
       `${index}` === `${buildingIndex}`
         ? buildingCheckedStates?.map((data: any) => ({
-          ...data,
-          checked: data.Important ? true : isChecked, // Prevent unchecking important items
-        }))
+            ...data,
+            checked: data.Important ? true : isChecked, // Prevent unchecking important items
+          }))
         : buildingCheckedStates
     );
 
@@ -187,8 +206,8 @@ export default function ChiaCaNewEditForm() {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: any) =>
       bIndex === buildingIndex
         ? buildingCheckedStates.map((area: any, aIndex: any) =>
-          aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
-        )
+            aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
+          )
         : buildingCheckedStates
     );
     setCheckedStates(updatedCheckedStates);
@@ -216,8 +235,9 @@ export default function ChiaCaNewEditForm() {
       .map((item: any) => item.ID_Hangmuc);
     const data = {
       ID_KhoiCV: optionKhoiCV?.ID_KhoiCV,
+      ID_Chuky: chukyData?.ID_Duan_KhoiCV,
       ID_Calv: optionCalv?.ID_Calv,
-      Ngaythu: selectedChuky,
+      Ngaythu: ngayThucHien,
       ID_Hangmucs: ID_HangmucCheckedTrue,
       Sochecklist: 100,
     };
@@ -416,23 +436,45 @@ export default function ChiaCaNewEditForm() {
             )}
 
             {optionKhoiCV && (
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Ngày thực thiện</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  name="KhoiCV"
-                  value={selectedChuky}
-                  label="Ngày thực thiện"
-                  onChange={handleChukyChange}
-                >
-                  {[...Array(Number(chukyData))].map((_, index) => (
-                    <MenuItem key={index + 1} value={index + 1}>
-                      {index + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Chu kỳ</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    name="Chuky"
+                    value={chukyData?.ID_Duan_KhoiCV || ""}
+                    label="Chu kỳ"
+                    onChange={handleArrChukyChange}
+                  >
+                    {arrChukyData.map((item: any, index: any) => (
+                      <MenuItem key={item.ID_Duan_KhoiCV} value={item.ID_Duan_KhoiCV}>
+                        {item?.Tenchuky}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                {chukyData && (
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Ngày thực thiện</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      name="Ngaythuchien"
+                      value={ngayThucHien}
+                      label="Ngày thực thiện"
+                      onChange={handleNgayThucHien}
+                    >
+                      {[...Array(Number(chukyData?.Chuky))].map((_, index) => (
+                        <MenuItem key={index + 1} value={index + 1}>
+                          {index + 1}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              </>
             )}
             {Calv?.length > 0 && (
               <FormControl fullWidth>

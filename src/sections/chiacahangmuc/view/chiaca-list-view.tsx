@@ -58,6 +58,7 @@ const TABLE_HEAD = [
   { id: 'ID_ThietLapCa', label: 'Mã thiết lập', width: 140 },
   { id: 'ID_Calv', label: 'Ca làm việc', width: 200 },
   { id: 'Sochecklist', label: 'Số checklist', width: 150 },
+  { id: 'Tenchuky', label: 'Chu kỳ', width: 150 },
   { id: 'Ngaythu', label: 'Ngày thực hiện', width: 140 },
   { id: 'ID_KhoiCV', label: 'Khối công việc', width: 200 },
   { id: '', width: 88 },

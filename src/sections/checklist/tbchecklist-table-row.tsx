@@ -104,6 +104,9 @@ export default function AreaTableRow({
         </Label>
       </TableCell>
       <TableCell>
+        {ent_thietlapca?.ent_duan_khoicv?.Tenchuky}
+      </TableCell>
+      <TableCell>
         {ent_thietlapca?.Ngaythu ? `Ngày ${ent_thietlapca?.Ngaythu}` : ''}
       </TableCell>
       <TableCell>

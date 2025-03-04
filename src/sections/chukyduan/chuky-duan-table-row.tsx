@@ -75,6 +75,7 @@ export default function CalvTableRow({
       </TableCell>
       <TableCell> {Ngaybatdau} </TableCell>
       <TableCell> {Chuky} </TableCell>
+      <TableCell> {row?.Tenchuky} </TableCell>
       <TableCell> 
       <Label
           variant="soft"

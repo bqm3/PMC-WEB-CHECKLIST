@@ -67,6 +67,7 @@ const TABLE_HEAD = [
   { id: 'ID_Duan', label: 'Dự án', width: 150 },
   { id: 'Ngaybatdau', label: 'Ngày bắt đầu', width: 150 },
   { id: 'Chuky', label: 'Chu kỳ', width: 150 },
+  { id: 'Tenchuky', label: 'Tên chu kỳ', width: 150 },
   { id: 'ID_KhoiCV', label: 'Khối làm việc', width: 150 },
   { id: '', width: 88 },
 ];

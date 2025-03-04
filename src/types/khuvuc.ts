@@ -236,6 +236,7 @@ export type IThietLapCa = {
   isDelte: string;
   ent_calv: ICalv;
   ent_duan: IDuan;
+  ent_duan_khoicv: IDuanKhoiCV;
 };
 
 export type IUser = {
@@ -407,6 +408,7 @@ export type IDuanKhoiCV = {
   ID_Duan: string;
   Ngaybatdau: string;
   Chuky: string;
+  Tenchuky:string;
   ent_duan: IDuan;
   ent_khoicv: IKhoiCV;
 };

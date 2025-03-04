@@ -65,15 +65,20 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
   const NewProductSchema = Yup.object().shape({
     ID_Duan: Yup.string(),
     ID_KhoiCV: Yup.string(),
+    KhoiCV: Yup.string(),
     Chuky: Yup.string().required('Phải có chu kỳ cho khối công việc'),
+    Tenchuky: Yup.string(),
     Ngaybatdau: Yup.mixed<any>().nullable().required('Phải có ngày bắt đầu'),
   });
+  
 
   const defaultValues = useMemo(
     () => ({
       ID_Duan: currentCycle?.ID_Duan || '',
       ID_KhoiCV: currentCycle?.ID_KhoiCV || '',
+      KhoiCV: currentCycle?.ent_khoicv?.KhoiCV || '',
       Chuky: currentCycle?.Chuky || '',
+      Tenchuky: currentCycle?.Tenchuky || '',
       Ngaybatdau: currentCycle?.Ngaybatdau || null,
     }),
     [currentCycle]
@@ -100,6 +105,18 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
       reset(defaultValues);
     }
   }, [currentCycle, defaultValues, reset]);
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'ID_KhoiCV' && value.ID_KhoiCV) {
+        const selectedKhoiCV = khoiCv.find(item => `${item.ID_KhoiCV}` === `${value.ID_KhoiCV}`);
+        if (selectedKhoiCV) {
+          setValue('KhoiCV', selectedKhoiCV.KhoiCV);
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, setValue, khoiCv]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -240,7 +257,9 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
                 </RHFSelect>
               )}
             </Stack>
+            <input type="hidden" {...methods.register('KhoiCV')} />
             <RHFTextField name="Chuky" label="Chu kỳ" />
+            <RHFTextField name="Tenchuky" label="Tên chu kỳ" />
             <RHFTextField type="date" value={values?.Ngaybatdau} name="Ngaybatdau" />
 
           </Stack>
