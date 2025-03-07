@@ -255,6 +255,7 @@ export type IUser = {
   Email: string;
   Password: string;
   PasswordPrivate: string;
+  isCheckketoan: string;
   isDelete: string;
   ent_khoicv: E_KhoiCV;
   ent_duan: IDuan;
@@ -409,6 +410,7 @@ export type IDuanKhoiCV = {
   Ngaybatdau: string;
   Chuky: string;
   Tenchuky:string;
+  isQuantrong: string;
   ent_duan: IDuan;
   ent_khoicv: IKhoiCV;
 };

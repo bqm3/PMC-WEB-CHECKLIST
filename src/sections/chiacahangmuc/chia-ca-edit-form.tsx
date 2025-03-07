@@ -156,9 +156,35 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   const handleArrChukyChange = (event: any) => {
     const selectedItem = arrChukyData.find(
-      (item: any) => item.ID_Duan_KhoiCV === event.target.value
+      (item: { ID_Duan_KhoiCV: any }) => item.ID_Duan_KhoiCV === event.target.value
     );
     setChukyData(selectedItem);
+
+    if (selectedItem && `${selectedItem?.isQuantrong}` === `1`) {
+      // Reset all checked states, keeping only the important items checked
+      const resetCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: false, // Only keep Important items checked
+        }))
+      );
+
+      setCheckedStates(resetCheckedStates);
+      // Set global select all to false
+      setIsSelectAllChecked(false);
+    } else {
+      // Reset all checked states, keeping only the important items checked
+      const resetCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: item?.Important ?? true, // Only keep Important items checked
+        }))
+      );
+
+      setCheckedStates(resetCheckedStates);
+      // Set global select all to false
+      setIsSelectAllChecked(false);
+    }
   };
 
   const handleNgayThucHien = (event: any) => {
@@ -207,8 +233,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
             Index: index,
             checked: khuvucCheck.some(
               (checkItem) =>
-                checkItem.ent_hangmuc.some((checkHm) => checkHm.ID_Hangmuc === hm.ID_Hangmuc) ||
-                `${hm.Important}` === '1'
+                checkItem.ent_hangmuc.some((checkHm) => checkHm.ID_Hangmuc === hm.ID_Hangmuc) 
             ),
           }))
         )
@@ -219,14 +244,36 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;
 
-    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
-      `${index}` === `${buildingIndex}`
-        ? buildingCheckedStates?.map((data: any) => ({
-            ...data,
-            checked: data.Important ? true : isChecked, // Prevent unchecking important items
-          }))
-        : buildingCheckedStates
-    );
+    let updatedCheckedStates = [];
+
+    // updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
+    //   `${index}` === `${buildingIndex}`
+    //     ? buildingCheckedStates?.map((data: any) => ({
+    //         ...data,
+    //         checked: data.Important ? true : isChecked, // Prevent unchecking important items
+    //       }))
+    //     : buildingCheckedStates
+    // );
+
+    if (chukyData?.isQuantrong) {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
+        `${index}` === `${buildingIndex}`
+          ? buildingCheckedStates?.map((data: any) => ({
+              ...data,
+              checked: isChecked, // Prevent unchecking important items
+            }))
+          : buildingCheckedStates
+      );
+    } else {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
+        `${index}` === `${buildingIndex}`
+          ? buildingCheckedStates?.map((data: any) => ({
+              ...data,
+              checked: data.Important ? true : isChecked, // Prevent unchecking important items
+            }))
+          : buildingCheckedStates
+      );
+    }
 
     setCheckedStates(updatedCheckedStates);
   };
@@ -246,13 +293,23 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   const handleSelectAllChange = (event: any) => {
     const isChecked = event.target.checked;
     setIsSelectAllChecked(isChecked);
+    let updatedCheckedStates = [];
 
-    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
-      buildingCheckedStates.map((item: any) => ({
-        ...item,
-        checked: item.Important ? true : isChecked, // Prevent unchecking important items
-      }))
-    );
+    if (chukyData?.isQuantrong) {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: isChecked, // Prevent unchecking important items
+        }))
+      );
+    } else {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: item.Important ? true : isChecked, // Prevent unchecking important items
+        }))
+      );
+    }
 
     setCheckedStates(updatedCheckedStates);
   };
@@ -385,7 +442,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
                           size="medium"
                           checked={areaCheckedStates[itemIndex]?.checked}
                           onChange={handleChildChange(areaIndex, itemIndex)}
-                          disabled={areaCheckedStates[itemIndex]?.Important} // Disable if Important is true
+                          disabled={`${chukyData?.isQuantrong}` === `1` ? false : areaCheckedStates[itemIndex]?.Important} // Disable if Important is true
                         />
                       }
                     />
@@ -421,7 +478,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   );
 
   const renderOptions = (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 }}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 ,   pointerEvents: 'none',}}>
       <Card>
         <Stack spacing={3} sx={{ p: 3 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
