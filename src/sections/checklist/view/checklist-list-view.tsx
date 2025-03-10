@@ -285,19 +285,17 @@ export default function ChecklistCalvListView() {
 
   const headers = [
     { label: 'Tên tòa nhà', key: 'tentoanha' },
-    { label: 'Mã khu vực', key: 'makhuvuc' },
-    { label: 'Mã QrCode khu vực', key: 'maqrcodekhuvuc' },
     { label: 'Tên khu vực', key: 'tenkhuvuc' },
-    { label: 'Mã QrCode hạng mục', key: 'maqrcodehangmuc' },
     { label: 'Tên hạng mục', key: 'tenhangmuc' },
     { label: 'Tên tầng', key: 'Tentang' },
     { label: 'Tên khối công việc', key: 'tenkhoicongviec' },
-    { label: 'Thứ tự check', key: 'thutucheck' },
-    { label: 'Mã checklist', key: 'macl' },
     { label: 'Tên checklist', key: 'tencl' },
     { label: 'Tiêu chuẩn checklist', key: 'tieuchuan' },
     { label: 'Giá trị định danh', key: 'Giatridinhdanh' },
-    { label: 'Giá trị nhận', key: 'Giatrinhan' },
+    { label: 'Giá trị lỗi', key: 'Giatriloi' },
+    { label: 'Nhập', key: 'Nhap' },
+    { label: 'Các giá trị nhận', key: 'Giatrinhan' },
+    { label: 'Quan trọng', key: 'Quantrong' },
   ];
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -324,21 +322,24 @@ export default function ChecklistCalvListView() {
   const prepareCsvData = () =>
     tableData?.map((item, index) => ({
       tentoanha: item?.ent_khuvuc?.ent_toanha?.Toanha || '',
-      makhuvuc: item?.ent_khuvuc?.Makhuvuc || '',
-      maqrcodekhuvuc: item?.ent_khuvuc?.MaQrCode || '',
+      // makhuvuc: item?.ent_khuvuc?.Makhuvuc || '',
+      // maqrcodekhuvuc: item?.ent_khuvuc?.MaQrCode || '',
       tenkhuvuc: item?.ent_khuvuc?.Tenkhuvuc || '',
-      maqrcodehangmuc: item?.ent_hangmuc?.MaQrCode || '',
+      // maqrcodehangmuc: item?.ent_hangmuc?.MaQrCode || '',
       tenhangmuc: item?.ent_hangmuc?.Hangmuc || '',
       Tentang: item?.ent_tang?.Tentang || '',
       tenkhoicongviec: Array.isArray(item?.ent_khuvuc?.ID_KhoiCVs)
         ? getKhoiCVNamesByIds(item?.ent_khuvuc?.ID_KhoiCVs)
         : getKhoiCVNamesByIds([item?.ent_khuvuc?.ID_KhoiCVs]) || '',
-      thutucheck: item?.Sothutu || '',
-      macl: item?.Maso || '',
+      // thutucheck: item?.Sothutu || '',
+      // macl: item?.Maso || '',
       tencl: item?.Checklist || '',
       tieuchuan: item?.Tieuchuan || '',
       Giatridinhdanh: item?.Giatridinhdanh || '',
       Giatrinhan: item?.Giatrinhan || '',
+      Giatriloi: item?.Giatriloi || '',
+      Nhap: item?.isCheck ? "X" : "",
+      Quantrong: item?.isImportant ? "X" : "",
     }));
 
 
