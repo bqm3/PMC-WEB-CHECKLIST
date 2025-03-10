@@ -236,6 +236,7 @@ export type IThietLapCa = {
   isDelte: string;
   ent_calv: ICalv;
   ent_duan: IDuan;
+  ent_duan_khoicv: IDuanKhoiCV;
 };
 
 export type IUser = {
@@ -254,6 +255,7 @@ export type IUser = {
   Email: string;
   Password: string;
   PasswordPrivate: string;
+  isCheckketoan: string;
   isDelete: string;
   ent_khoicv: E_KhoiCV;
   ent_duan: IDuan;
@@ -273,6 +275,7 @@ export type ISucongoai = {
   ID_User: string;
   Bienphapxuly: string;
   Tinhtrangxuly: string;
+  Mucdo: string;
   Ghichu: string;
   Ngayxuly: string;
   isDelete: string;
@@ -406,6 +409,8 @@ export type IDuanKhoiCV = {
   ID_Duan: string;
   Ngaybatdau: string;
   Chuky: string;
+  Tenchuky:string;
+  isQuantrong: string;
   ent_duan: IDuan;
   ent_khoicv: IKhoiCV;
 };

@@ -89,7 +89,7 @@ export function useNavData() {
             ];
           }
 
-          if (user?.ent_chucvu?.Role === 10 || user?.ent_chucvu?.Role === 0) {
+          if (user?.ent_chucvu?.Role === 10 || user?.ent_chucvu?.Role === 0 || user?.ent_chucvu?.Role === 5) {
             return [
               {
                 title: t('management'),

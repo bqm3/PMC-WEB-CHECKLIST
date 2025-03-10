@@ -244,7 +244,7 @@ export default function OverviewAnalyticsView() {
     categories: [],
     series: [],
   });
-  const [selectedYearSuCoNgoai, setSelectedYearSuCoNgoai] = useState('2024');
+  const [selectedYearSuCoNgoai, setSelectedYearSuCoNgoai] = useState('2025');
   const [selectedKhoiCVSuCoNgoai, setSelectedKhoiCVSuCoNgoai] = useState('all');
   const [selectedTangGiamSuCoNgoai, setSelectedTangGiamSuCoNgoai] = useState('desc');
 
@@ -260,6 +260,9 @@ export default function OverviewAnalyticsView() {
   // ==============
   const [dataDuanChecklist, setDataDuanChecklist] = useState<any>();
   const [showDuanChecklist, setShowDuanChecklist] = useState(false);
+
+  // ============= 21/02/2025 manhnd
+  const [showTilehoanthanhh, setShowTilehoanthanhh] = useState(false);
 
   // ===============
   const [dataReportChecklistPercentWeek, setDataReportChecklistPercentWeek] = useState<any>();
@@ -288,6 +291,16 @@ export default function OverviewAnalyticsView() {
     month: null,
     year: null,
   });
+
+  const filteredColumns =
+    `${user?.ent_chucvu?.Role}` === `5`
+      ? columns.filter(
+          (col: any) =>
+            col.field === 'id' ||
+            col.field === 'projectName' ||
+            `${col.field}` === `${user?.ent_khoicv?.KhoiCV}`
+        )
+      : columns;
 
   const [spreadsheetData, setSpreadsheetData] = useState<any>([]);
   const [messages, setMessages] = useState<any>([]); // Danh sách tin nhắn
@@ -401,7 +414,15 @@ export default function OverviewAnalyticsView() {
   const handleOpenModalSuCo = async (name: string, key: string) => {
     setSelectedCodeSuCo(name);
     await axios
-      .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/${key}?name=${name}`)
+      .get(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/${key}?name=${name}&khoi=${selectedKhoiCVSuco}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((data) => {
         setDataTableSuCo(data?.data?.data);
         setOpenModalSuCo(true);
@@ -551,6 +572,7 @@ export default function OverviewAnalyticsView() {
           {
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         )
@@ -577,6 +599,7 @@ export default function OverviewAnalyticsView() {
         .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
           },
         })
         .then((res) => {
@@ -594,6 +617,7 @@ export default function OverviewAnalyticsView() {
         .get(`https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-problem-percent-week`, {
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
           },
         })
         .then((res) => {
@@ -631,6 +655,7 @@ export default function OverviewAnalyticsView() {
           {
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         )
@@ -960,7 +985,8 @@ export default function OverviewAnalyticsView() {
               {
                 value: item.Tinh_trang,
                 style: {
-                  backgroundColor: item.Tinh_trang.trim() === 'Chưa tiến hành' ? 'yellow' : 'transparent',
+                  backgroundColor:
+                    item.Tinh_trang.trim() === 'Chưa tiến hành' ? 'yellow' : 'transparent',
                 },
               },
               { value: item.Ngay_bat_dau },
@@ -984,7 +1010,6 @@ export default function OverviewAnalyticsView() {
       setLoadingReport(false);
     }
   };
-
   const DownloadListDSduan = async () => {
     try {
       const response = await axios.get(
@@ -1025,7 +1050,7 @@ export default function OverviewAnalyticsView() {
           }}
         >
           <Typography variant="h4">
-            Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''}
+            Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''} {user?.ent_khoicv?.KhoiCV ? `- ${user?.ent_khoicv?.KhoiCV}` : ''}
           </Typography>
           <Box display="flex" gap={2} alignItems="center">
             {user?.ent_chucvu?.Role === 10 && (
@@ -1064,7 +1089,7 @@ export default function OverviewAnalyticsView() {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <EcommerceWidgetSummary
-              title="Tỉ lệ hoàn thành checklist"
+              title=  {`Tỉ lệ checklist ngày ${dataReportChecklistPercentWeek?.yesterdayDate ? dataReportChecklistPercentWeek?.yesterdayDate : ""}`}
               key="0"
               percent={
                 Number(dataReportChecklistPercentWeek?.lastWeekPercentage) -
@@ -1077,6 +1102,8 @@ export default function OverviewAnalyticsView() {
                   Number(dataReportChecklistPercentWeek?.lastWeekPercentage),
                 ],
               }}
+              compare = {` so với ngày ${dataReportChecklistPercentWeek?.previousYesterdayDate ? dataReportChecklistPercentWeek?.previousYesterdayDate : ""}`}
+              onClick={() => setShowTilehoanthanhh(true)}
             />
           </Grid>
 
@@ -1098,6 +1125,7 @@ export default function OverviewAnalyticsView() {
                 ],
                 colors: [theme.palette.error.light, theme.palette.error.main], // Màu đỏ cho sự cố
               }}
+              compare = " so với tuần trước"
             />
           </Grid>
           <Grid xs={12} md={4}>
@@ -1113,6 +1141,7 @@ export default function OverviewAnalyticsView() {
                 ],
                 colors: [theme.palette.error.light, theme.palette.error.main], // Màu đỏ cho sự cố ngoài
               }}
+              compare = " so với tuần trước"
             />
           </Grid>
 
@@ -1236,7 +1265,7 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-            //
+              //
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
@@ -1265,27 +1294,65 @@ export default function OverviewAnalyticsView() {
               top={top}
             />
           </Grid>
-          <Grid xs={12} md={12} lg={12}>
-            <Box sx={{ maxHeight: 450, width: '100%', my: 2 }}>
-              <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
-                Tỉ lệ hoàn thành checklist hôm qua
-              </Typography>
-              <DataGrid
-                rows={dataPercent}
-                columns={columns}
-                sx={{
-                  maxHeight: 450,
-                  overflowY: 'auto',
-                  '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
-                  '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
-                  'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
-                }}
-                disableRowSelectionOnClick
-              />
-            </Box>
-          </Grid>
+          {`${user?.ent_chucvu?.Role}` !== `5` && (
+            <Grid xs={12} md={12} lg={12}>
+              <Box sx={{ maxHeight: 450, width: '100%', my: 2 }}>
+                <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
+                  Tỉ lệ hoàn thành checklist hôm qua
+                </Typography>
+                <DataGrid
+                  rows={dataPercent}
+                  columns={columns}
+                  sx={{
+                    maxHeight: 450,
+                    overflowY: 'auto',
+                    '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
+                    '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
+                    'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
+                  }}
+                  disableRowSelectionOnClick
+                  hideFooter
+                />
+              </Box>
+            </Grid>
+          )}
         </Grid>
       </Container>
+
+      <Dialog
+        open={showTilehoanthanhh}
+        onClose={() => setShowTilehoanthanhh(false)}
+        fullWidth
+        maxWidth="lg"
+        PaperProps={{
+          sx: {
+            borderRadius: 0, // Loại bỏ bo góc
+          },
+        }}
+      >
+        <Typography sx={{ml: 1, pb: 1.5, fontWeight: '600', fontSize: 18 }}>
+          Tỉ lệ hoàn thành checklist hôm qua
+        </Typography>
+        <DataGrid
+          rows={dataPercent}
+          columns={filteredColumns}
+          sx={{
+            maxHeight: 450,
+            overflowY: 'auto',
+            '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
+            '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
+            'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
+          }}
+          disableRowSelectionOnClick
+          hideFooter
+        />
+
+        <DialogActions>
+          <Button color="inherit" variant="contained" onClick={() => setShowTilehoanthanhh(false)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog
         open={showDuanChecklist}

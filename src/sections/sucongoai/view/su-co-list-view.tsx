@@ -14,7 +14,16 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box, FormControl, InputLabel, Menu, MenuItem, Select, TextField, Grid } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  Menu,
+  MenuItem,
+  Select,
+  TextField,
+  Grid,
+} from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
@@ -39,6 +48,7 @@ import { getImageUrls } from 'src/utils/get-image';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
+import { useAuthContext } from 'src/auth/hooks';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -69,6 +79,8 @@ import FileManagerNewFolderDialog from '../file-manager-new-folder-dialog';
 import TableSelectedAction from '../table-selected-action';
 import TableHeadCustom from '../table-head-custom';
 
+import EmergencyPhoneDialog from '../sdtKhanCap';
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -78,6 +90,7 @@ const TABLE_HEAD = [
   { id: 'Ngayxuly', label: 'Ngày xử lý', width: 120 },
   { id: 'Noidungsuco', label: 'Thông tin', width: 300 },
   { id: 'Bienphapxuly', label: 'Biện pháp', width: 200 },
+  { id: 'Mucdo', label: 'Mức độ', width: 200 },
   { id: 'Tinhtrangxuly', label: 'Tình trạng', width: 100 },
   { id: '', width: 50 },
 ];
@@ -124,6 +137,8 @@ export default function SuCoListView() {
   const [tinhTrangXuLy, setTinhTrangXuLy] = useState(null);
   const [bienphapxuly, setBienphapxuly] = useState(null);
   const [ngayXuLy, setNgayXuLy] = useState(new Date());
+
+  const [sdtKhanCap, setSdtKhanCap] = useState();
 
   useEffect(() => {
     if (sucongoai.length > 0) {
@@ -175,6 +190,28 @@ export default function SuCoListView() {
     [table]
   );
 
+  const getSDTKhanCap = useCallback(async () => {
+    try {
+      const res = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/sdt-khan-cap`, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Safely access nested data with optional chaining
+      if (res.data?.SDTKhanCap) {
+        setSdtKhanCap(res.data.SDTKhanCap);
+      }
+    } catch (error) {
+      console.error('Error fetching emergency phone number:', error);
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    getSDTKhanCap();
+  }, [getSDTKhanCap]);
+
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
@@ -223,7 +260,12 @@ export default function SuCoListView() {
     await axios
       .put(
         `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
-        { ID_Hangmuc: selectedHangMuc, Tinhtrangxuly: tinhTrangXuLy, ngayXuLy, Bienphapxuly: bienphapxuly },
+        {
+          ID_Hangmuc: selectedHangMuc,
+          Tinhtrangxuly: tinhTrangXuLy,
+          ngayXuLy,
+          Bienphapxuly: bienphapxuly,
+        },
         {
           headers: {
             Accept: 'application/json',
@@ -290,6 +332,10 @@ export default function SuCoListView() {
     [handleFilters]
   );
 
+  const handlePhoneUpdated = (newPhone: any) => {
+    setSdtKhanCap(newPhone);
+  };
+
   const headers = [
     { label: 'STT', key: 'stt' },
     { label: 'Tên khu vực', key: 'Tenkhuvuc' },
@@ -316,14 +362,16 @@ export default function SuCoListView() {
               mb: { xs: 3, md: 5 },
             }}
           />
-          <LoadingButton
+
+          <EmergencyPhoneDialog currentPhone={sdtKhanCap} onSuccess={handlePhoneUpdated} />
+          {/* <LoadingButton
             loading={loading}
             variant="contained"
             startIcon={<Iconify icon="eva:cloud-upload-fill" />}
             onClick={upload.onTrue}
           >
             Upload
-          </LoadingButton>
+          </LoadingButton> */}
         </Stack>
 
         <Card>
@@ -638,7 +686,6 @@ function NhomTSDialog({
     }
   };
 
-
   return (
     <Dialog open={open} fullWidth maxWidth="md" onClose={onClose}>
       <DialogTitle>Cập nhật trạng thái</DialogTitle>
@@ -646,86 +693,84 @@ function NhomTSDialog({
       <DialogContent>
         <Stack spacing={3} sx={{ p: 2 }}>
           {dataSelect?.TenHangmuc === null && dataSelect?.ent_hangmuc?.Hangmuc === undefined ? (
-            <>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <FormControl fullWidth>
-                    <InputLabel id="toanha-label">Tòa nhà</InputLabel>
-                    <Select
-                      labelId="toanha-label"
-                      value={selectedToaNha}
-                      onChange={(event) => handleChangeText('ID_Toanha', event.target.value)}
-                      MenuProps={{
-                        PaperProps: {
-                          style: { maxHeight: 400 },
-                        },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>Chọn tòa nhà</em>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="toanha-label">Tòa nhà</InputLabel>
+                  <Select
+                    labelId="toanha-label"
+                    value={selectedToaNha}
+                    onChange={(event) => handleChangeText('ID_Toanha', event.target.value)}
+                    MenuProps={{
+                      PaperProps: {
+                        style: { maxHeight: 400 },
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Chọn tòa nhà</em>
+                    </MenuItem>
+                    {toanha?.map((item) => (
+                      <MenuItem key={item.ID_Toanha} value={item.ID_Toanha}>
+                        {item.Toanha}
                       </MenuItem>
-                      {toanha?.map((item) => (
-                        <MenuItem key={item.ID_Toanha} value={item.ID_Toanha}>
-                          {item.Toanha}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <FormControl fullWidth>
-                    <InputLabel id="khuvuc-label">Khu vực</InputLabel>
-                    <Select
-                      labelId="khuvuc-label"
-                      value={selectedKhuVuc}
-                      onChange={(event) => handleChangeText('ID_Khuvuc', event.target.value)}
-                      disabled={!selectedToaNha}
-                      MenuProps={{
-                        PaperProps: {
-                          style: { maxHeight: 400 },
-                        },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>Chọn khu vực</em>
-                      </MenuItem>
-                      {filteredKhuVuc.map((item) => (
-                        <MenuItem key={item.ID_Khuvuc} value={item.ID_Khuvuc}>
-                          {item.Tenkhuvuc}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel id="hangmuc-label">Hạng mục</InputLabel>
-                    <Select
-                      labelId="hangmuc-label"
-                      value={selectedHangMuc || ''}
-                      onChange={(event) => handleChangeText('ID_Hangmuc', event.target.value)}
-                      disabled={!selectedKhuVuc}
-                      MenuProps={{
-                        PaperProps: {
-                          style: { maxHeight: 400 },
-                        },
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>Chọn hạng mục</em>
-                      </MenuItem>
-                      {filteredHangMuc?.map((item) => (
-                        <MenuItem key={item.ID_Hangmuc} value={item.ID_Hangmuc}>
-                          {item.Hangmuc}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
-            </>
+
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="khuvuc-label">Khu vực</InputLabel>
+                  <Select
+                    labelId="khuvuc-label"
+                    value={selectedKhuVuc}
+                    onChange={(event) => handleChangeText('ID_Khuvuc', event.target.value)}
+                    disabled={!selectedToaNha}
+                    MenuProps={{
+                      PaperProps: {
+                        style: { maxHeight: 400 },
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Chọn khu vực</em>
+                    </MenuItem>
+                    {filteredKhuVuc.map((item) => (
+                      <MenuItem key={item.ID_Khuvuc} value={item.ID_Khuvuc}>
+                        {item.Tenkhuvuc}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="hangmuc-label">Hạng mục</InputLabel>
+                  <Select
+                    labelId="hangmuc-label"
+                    value={selectedHangMuc || ''}
+                    onChange={(event) => handleChangeText('ID_Hangmuc', event.target.value)}
+                    disabled={!selectedKhuVuc}
+                    MenuProps={{
+                      PaperProps: {
+                        style: { maxHeight: 400 },
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Chọn hạng mục</em>
+                    </MenuItem>
+                    {filteredHangMuc?.map((item) => (
+                      <MenuItem key={item.ID_Hangmuc} value={item.ID_Hangmuc}>
+                        {item.Hangmuc}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
           ) : (
             <TextField
               value={dataSelect?.TenHangmuc || dataSelect?.ent_hangmuc?.Hangmuc}
@@ -735,8 +780,14 @@ function NhomTSDialog({
           )}
 
           <TextField
-            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
-              }`}
+            value={`${dataSelect?.Mucdo}` === `1` ? 'Nghiêm trọng' : 'Bình thường'}
+            label="Mức độ"
+            disabled
+          />
+          <TextField
+            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${
+              dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
+            }`}
             label="Ngày sự cố"
             disabled
           />

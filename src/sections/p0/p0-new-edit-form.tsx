@@ -41,10 +41,10 @@ const fieldLabels: any = {
   Slxemay: 'Xe máy thường',
   Slxedapdien: 'Xe đạp điện',
   Slxedap: 'Xe đạp thường',
-  Sotheotodk: 'Thẻ xe ô tô phát hành',
-  Sothexemaydk: 'Thẻ xe máy phát hành',
-  Sltheoto: 'Thẻ xe ô tô còn lại',
-  Slthexemay: 'Thẻ xe máy còn lại',
+  Sotheotodk: 'Số lượng thẻ ô tô đã bàn giao',
+  Sothexemaydk: 'Số lượng thẻ xe máy đã bàn giao',
+  Sltheoto: 'Số lượng thẻ ô tô chưa sử dụng',
+  Slthexemay: 'Số lượng thẻ xe máy chưa sử dụng',
   Slscoto: 'Sự cố xe ô tô thường',
   Slscotodien: 'Sự cố xe ô tô điện',
   Slscxemaydien: 'Sự cố xe máy điện',
@@ -157,6 +157,27 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   });
 
   const { reset, watch, setValue, handleSubmit } = methods;
+
+  // Watch car-related values
+  const watchSotheotodk = watch('Sotheotodk') || 0;
+  const watchSlxeoto = watch('Slxeoto') || 0;
+  const watchSlxeotodien = watch('Slxeotodien') || 0;
+  const watchSltheoto = watch('Sltheoto') || 0;
+
+  // Watch motorcycle-related values
+  const watchSothexemaydk = watch('Sothexemaydk') || 0;
+  const watchSlxemay = watch('Slxemay') || 0;
+  const watchSlxemaydien = watch('Slxemaydien') || 0;
+  const watchSlthexemay = watch('Slthexemay') || 0;
+
+  // Calculate totals for validation
+  const totalCars = Number(watchSlxeoto) + Number(watchSlxeotodien) + Number(watchSltheoto);
+  const totalMotorcycles =
+    Number(watchSlxemay) + Number(watchSlxemaydien) + Number(watchSlthexemay);
+
+  // Check for validation errors
+  const hasCarCardBalanceError = Number(watchSotheotodk) !== totalCars;
+  const hasMotorcycleCardBalanceError = Number(watchSothexemaydk) !== totalMotorcycles;
 
   useEffect(() => {
     if (currentP0) {
@@ -277,7 +298,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Stack spacing={3}>
-        <Box>
+        {/* <Box>
           <Alert severity="warning">
             <Typography>
               Nên sử dụng trình duyệt Google Chrome để nhập các chỉ số để tránh gặp lỗi khi khai báo
@@ -286,7 +307,42 @@ export default function P0NewEditForm({ currentP0 }: Props) {
               Đối với các chỉ số không có dữ liệu thì sẽ không cần phải nhập (Mặc định là 0)
             </Typography>
           </Alert>
+        </Box> */}
+
+        <Box >
+          {(hasCarCardBalanceError || hasMotorcycleCardBalanceError) && (
+            <Alert severity="error">
+              {hasCarCardBalanceError && (
+                <>
+                  <Typography fontWeight="bold">
+                    Cảnh báo: Số lượng thẻ xe ô tô không khớp với số xe
+                  </Typography>
+                  <Typography>
+                    Tổng số xe ô tô thường ({watchSlxeoto}) + xe ô tô điện ({watchSlxeotodien}) +
+                    thẻ xe ô tô chưa sử dụng ({watchSltheoto}) = {totalCars}
+                  </Typography>
+                  <Typography>Thẻ ô tô đã bàn giao = {watchSotheotodk}</Typography>
+                  <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
+                </>
+              )}
+
+              {hasMotorcycleCardBalanceError && (
+                <>
+                  <Typography fontWeight="bold">
+                    Cảnh báo: Số lượng thẻ xe máy không khớp với số xe
+                  </Typography>
+                  <Typography>
+                    Tổng số xe máy thường ({watchSlxemay}) + xe máy điện ({watchSlxemaydien}) + thẻ xe
+                    chưa sử dụng ({watchSlthexemay}) = {totalMotorcycles}
+                  </Typography>
+                  <Typography>Thẻ xe máy đã bàn giao = {watchSothexemaydk}</Typography>
+                  <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
+                </>
+              )}
+            </Alert>
+          )}
         </Box>
+
         <Box rowGap={3} columnGap={2} display="grid">
           {Object.keys(fieldCategories).map((category) => (
             <div key={category}>

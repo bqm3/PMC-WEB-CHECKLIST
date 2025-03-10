@@ -124,12 +124,15 @@ export default function ManagementSuCoListView({ data }: Props) {
   );
 
   const [open, setOpen] = useState(false);
-  const [detailChecklist, setDetailChecklist] = useState<TbChecklistCalv>();
+  const [detailChecklist, setDetailChecklist] = useState<any>();
 
 
-  const handleClickOpen = (row: TbChecklistCalv) => {
+  // const handleClickOpen = (row: TbChecklistCalv) => {
+  //   setOpen(true);
+  //   setDetailChecklist(row);
+  // };
+  const handleClickOpen = () => {
     setOpen(true);
-    setDetailChecklist(row);
   };
   const handleClose = () => {
     setOpen(false);
@@ -184,7 +187,8 @@ export default function ManagementSuCoListView({ data }: Props) {
                       selected={table.selected.includes(row.ID_Checklist)}
                       onSelectRow={() => table.onSelectRow(row.ID_Checklist)}
                       index={index}
-                      handleClickOpen={() => handleClickOpen(row)}
+                      setDetailChecklist={setDetailChecklist}
+                      handleClickOpen={() => handleClickOpen()}
                     />
                   ))}
 
@@ -228,12 +232,20 @@ export default function ManagementSuCoListView({ data }: Props) {
           {/* <CloseIcon /> */}
         </IconButton>
         <DialogContent dividers>
-          <Image
+          {/* <Image
             minWidth={500}
             minHeight={500}
             alt={detailChecklist?.ent_checklist?.Checklist}
             // src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
             src={`${getImageUrls(3, detailChecklist?.Anh)}`}
+            ratio="1/1"
+          /> */}
+                    <Image
+            minWidth={500}
+            minHeight={500}
+            alt={detailChecklist}
+            // src={`https://lh3.googleusercontent.com/d/${detailChecklist?.Anh}=s1000?authuser=0`}
+            src={detailChecklist}
             ratio="1/1"
           />
         </DialogContent>

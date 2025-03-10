@@ -24,6 +24,7 @@ interface Props extends CardProps {
     series: number[];
     options?: ApexOptions;
   };
+  compare: string;
 }
 
 export default function EcommerceWidgetSummary({
@@ -33,6 +34,7 @@ export default function EcommerceWidgetSummary({
   key,
   chart,
   sx,
+  compare,
   ...other
 }: Props) {
   const theme = useTheme();
@@ -97,7 +99,8 @@ export default function EcommerceWidgetSummary({
       <Typography variant="subtitle2" component="div" noWrap>
         {fPercent(percent)}
         <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
-          {' so với tuần trước'}
+          {/* {' so với tuần trước'} */}
+          {compare}
         </Box>
       </Typography>
     </Stack>

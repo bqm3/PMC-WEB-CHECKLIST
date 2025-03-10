@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -57,8 +56,9 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   const [optionKhoiCV, setOptionKhoiCV] = useState<any>();
   const [optionToaNha, setOptionToaNha] = useState<any>([]);
   const [optionCalv, setOptionCalv] = useState<any>();
-  const [selectedChuky, setSelectedChuky] = useState(1);
-  const [chukyData, setChukyData] = useState<any>(1);
+  const [ngayThucHien, setNgaythuchien] = useState(1);
+  const [arrChukyData, setArrChukyData] = useState<any>([]);
+  const [chukyData, setChukyData] = useState<any>();
   const [areasData, setAreasData] = useState<IKhuvuc[]>([]);
 
   const [checkedStates, setCheckedStates] = useState<any>([]);
@@ -109,22 +109,43 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       const newCalv = calv?.filter((item: any) => `${item.ID_Calv}` === `${thietlapca?.ID_Calv}`);
 
       setOptionCalv(newCalv[0]);
-      setSelectedChuky(Number(thietlapca?.Ngaythu));
+      setNgaythuchien(Number(thietlapca?.Ngaythu));
+
       const selectedKhoiCV = KhoiCV?.filter(
         (item: any) => `${item.ID_KhoiCV}` === `${thietlapca?.ent_calv?.ID_KhoiCV}`
       );
       setOptionKhoiCV(selectedKhoiCV[0]);
 
+      // Get all cycles for this project and work block
       const arrChuky = thietlapca.ent_duan.ent_duan_khoicv;
       const chukyDetail = arrChuky.filter(
-        (item: any) => `${thietlapca?.ent_calv?.ID_KhoiCV}` === `${item.ID_KhoiCV}` && `${item.isDelete}` === "0"
+        (item: any) =>
+          `${thietlapca?.ent_calv?.ID_KhoiCV}` === `${item.ID_KhoiCV}` && `${item.isDelete}` === '0'
       );
-      setChukyData(chukyDetail[0].Chuky);
+
+      setArrChukyData(chukyDetail);
+      // Set the selected cycle based on ID_Chuky from thietlapca
+      const selectedChuky = chukyDetail.find(
+        (item: any) => `${item.ID_Duan_KhoiCV}` === `${thietlapca?.ent_duan_khoicv?.ID_Duan_KhoiCV}`
+      );
+
+      setChukyData(selectedChuky);
     }
   }, [thietlapca, KhoiCV, calv]);
 
   const handleChangeKhoiCV = (event: any) => {
     const selectedKhoiCV = KhoiCV?.find((item: any) => item.ID_KhoiCV === event.target.value);
+
+    // Get cycles for the selected work block
+    const arrChuky = ToaNha[0]?.ent_duan?.ent_duan_khoicv;
+    const chukyDetail = arrChuky?.filter(
+      (item: any) => `${event.target.value}` === `${item.ID_KhoiCV}`
+    );
+    setArrChukyData(chukyDetail);
+
+    // Reset chukyData when changing work block
+    setChukyData(undefined);
+
     setOptionKhoiCV(selectedKhoiCV);
   };
 
@@ -133,8 +154,41 @@ export default function ChiaCaNewEditForm({ id }: Props) {
     setOptionCalv(selectedCalv);
   };
 
-  const handleChukyChange = (event: any) => {
-    setSelectedChuky(event.target.value);
+  const handleArrChukyChange = (event: any) => {
+    const selectedItem = arrChukyData.find(
+      (item: { ID_Duan_KhoiCV: any }) => item.ID_Duan_KhoiCV === event.target.value
+    );
+    setChukyData(selectedItem);
+
+    if (selectedItem && `${selectedItem?.isQuantrong}` === `1`) {
+      // Reset all checked states, keeping only the important items checked
+      const resetCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: false, // Only keep Important items checked
+        }))
+      );
+
+      setCheckedStates(resetCheckedStates);
+      // Set global select all to false
+      setIsSelectAllChecked(false);
+    } else {
+      // Reset all checked states, keeping only the important items checked
+      const resetCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: item?.Important ?? true, // Only keep Important items checked
+        }))
+      );
+
+      setCheckedStates(resetCheckedStates);
+      // Set global select all to false
+      setIsSelectAllChecked(false);
+    }
+  };
+
+  const handleNgayThucHien = (event: any) => {
+    setNgaythuchien(event.target.value);
   };
 
   const handleToanhaChange = (event: any) => {
@@ -164,7 +218,9 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
       // Apply work block filter if `optionKhoiCV` is selected
       if (optionKhoiCV) {
-        filteredAreas = filteredAreas.filter((kv) => kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV));
+        filteredAreas = filteredAreas.filter((kv) =>
+          kv.ID_KhoiCVs.includes(optionKhoiCV.ID_KhoiCV)
+        );
       }
 
       setAreasData(filteredAreas);
@@ -177,8 +233,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
             Index: index,
             checked: khuvucCheck.some(
               (checkItem) =>
-                checkItem.ent_hangmuc.some((checkHm) => checkHm.ID_Hangmuc === hm.ID_Hangmuc) ||
-                `${hm.Important}` === '1'
+                checkItem.ent_hangmuc.some((checkHm) => checkHm.ID_Hangmuc === hm.ID_Hangmuc) 
             ),
           }))
         )
@@ -186,18 +241,39 @@ export default function ChiaCaNewEditForm({ id }: Props) {
     }
   }, [khuvuc, optionKhoiCV, khuvucCheck, optionToaNha]);
 
-
   const handleParentChange = (buildingIndex: any) => (event: any) => {
     const isChecked = event.target.checked;
 
-    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
-      `${index}` === `${buildingIndex}`
-        ? buildingCheckedStates?.map((data: any) => ({
-          ...data,
-          checked: data.Important ? true : isChecked, // Prevent unchecking important items
-        }))
-        : buildingCheckedStates
-    );
+    let updatedCheckedStates = [];
+
+    // updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
+    //   `${index}` === `${buildingIndex}`
+    //     ? buildingCheckedStates?.map((data: any) => ({
+    //         ...data,
+    //         checked: data.Important ? true : isChecked, // Prevent unchecking important items
+    //       }))
+    //     : buildingCheckedStates
+    // );
+
+    if (chukyData?.isQuantrong) {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
+        `${index}` === `${buildingIndex}`
+          ? buildingCheckedStates?.map((data: any) => ({
+              ...data,
+              checked: isChecked, // Prevent unchecking important items
+            }))
+          : buildingCheckedStates
+      );
+    } else {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
+        `${index}` === `${buildingIndex}`
+          ? buildingCheckedStates?.map((data: any) => ({
+              ...data,
+              checked: data.Important ? true : isChecked, // Prevent unchecking important items
+            }))
+          : buildingCheckedStates
+      );
+    }
 
     setCheckedStates(updatedCheckedStates);
   };
@@ -207,8 +283,8 @@ export default function ChiaCaNewEditForm({ id }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: any) =>
       bIndex === buildingIndex
         ? buildingCheckedStates.map((area: any, aIndex: any) =>
-          aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
-        )
+            aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
+          )
         : buildingCheckedStates
     );
     setCheckedStates(updatedCheckedStates);
@@ -217,13 +293,23 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   const handleSelectAllChange = (event: any) => {
     const isChecked = event.target.checked;
     setIsSelectAllChecked(isChecked);
+    let updatedCheckedStates = [];
 
-    const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
-      buildingCheckedStates.map((item: any) => ({
-        ...item,
-        checked: item.Important ? true : isChecked, // Prevent unchecking important items
-      }))
-    );
+    if (chukyData?.isQuantrong) {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: isChecked, // Prevent unchecking important items
+        }))
+      );
+    } else {
+      updatedCheckedStates = checkedStates.map((buildingCheckedStates: any) =>
+        buildingCheckedStates.map((item: any) => ({
+          ...item,
+          checked: item.Important ? true : isChecked, // Prevent unchecking important items
+        }))
+      );
+    }
 
     setCheckedStates(updatedCheckedStates);
   };
@@ -235,9 +321,11 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       .filter((item: any) => item.checked)
       .map((item: any) => item.ID_Hangmuc);
     const data = {
+      Tenchuky: chukyData?.Tenchuky,
       ID_KhoiCV: optionKhoiCV?.ID_KhoiCV,
+      ID_Chuky: chukyData?.ID_Duan_KhoiCV,
       ID_Calv: optionCalv?.ID_Calv,
-      Ngaythu: selectedChuky,
+      Ngaythu: ngayThucHien,
       ID_Hangmucs: ID_HangmucCheckedTrue,
       Sochecklist: 100,
     };
@@ -326,6 +414,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
                 borderRadius={1}
               >
                 <FormControlLabel
+                  title={`${area.Tenkhuvuc} - ${area.ent_toanha.Toanha}`}
                   key={area.ID_Khuvuc}
                   label={`${area.Tenkhuvuc} - ${area.ent_toanha.Toanha}`}
                   control={
@@ -336,6 +425,12 @@ export default function ChiaCaNewEditForm({ id }: Props) {
                       onChange={handleParentChange(areaIndex)}
                     />
                   }
+                  sx={{
+                    '.MuiFormControlLabel-label': {
+                      fontWeight: 'bold',
+                      fontSize: '17px',
+                    },
+                  }}
                 />
                 <div>
                   {area.ent_hangmuc.map((item, itemIndex) => (
@@ -347,7 +442,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
                           size="medium"
                           checked={areaCheckedStates[itemIndex]?.checked}
                           onChange={handleChildChange(areaIndex, itemIndex)}
-                          disabled={areaCheckedStates[itemIndex]?.Important} // Disable if Important is true
+                          disabled={`${chukyData?.isQuantrong}` === `1` ? false : areaCheckedStates[itemIndex]?.Important} // Disable if Important is true
                         />
                       }
                     />
@@ -383,8 +478,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   );
 
   const renderOptions = (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 }}>
-
+    <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 ,   pointerEvents: 'none',}}>
       <Card>
         <Stack spacing={3} sx={{ p: 3 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
@@ -409,14 +503,14 @@ export default function ChiaCaNewEditForm({ id }: Props) {
               </FormControl>
             )}
 
-            {KhoiCV?.length > 0 && optionKhoiCV && (
+            {KhoiCV?.length > 0 && (
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Khối công việc</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   name="KhoiCV"
-                  value={optionKhoiCV?.ID_KhoiCV}
+                  value={optionKhoiCV?.ID_KhoiCV || ''}
                   label="Khối công việc"
                   onChange={handleChangeKhoiCV}
                 >
@@ -430,32 +524,54 @@ export default function ChiaCaNewEditForm({ id }: Props) {
             )}
 
             {optionKhoiCV && (
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Ngày thực thiện</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  name="KhoiCV"
-                  value={selectedChuky}
-                  label="Ngày thực thiện"
-                  onChange={handleChukyChange}
-                >
-                  {[...Array(Number(chukyData))].map((_, index) => (
-                    <MenuItem key={index + 1} value={index + 1}>
-                      {index + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Chu kỳ</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    name="Chuky"
+                    value={chukyData?.ID_Duan_KhoiCV || ''}
+                    label="Chu kỳ"
+                    onChange={handleArrChukyChange}
+                  >
+                    {arrChukyData?.map((item: any) => (
+                      <MenuItem key={item.ID_Duan_KhoiCV} value={item.ID_Duan_KhoiCV}>
+                        {item?.Tenchuky}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                {chukyData && (
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Ngày thực thiện</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      name="Ngaythuchien"
+                      value={ngayThucHien}
+                      label="Ngày thực thiện"
+                      onChange={handleNgayThucHien}
+                    >
+                      {[...Array(Number(chukyData?.Chuky))].map((_, index) => (
+                        <MenuItem key={index + 1} value={index + 1}>
+                          {index + 1}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              </>
             )}
 
-            {Calv?.length > 0 && optionCalv && (
+            {Calv?.length > 0 && (
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Ca làm việc</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={optionCalv.ID_Calv}
+                  value={optionCalv?.ID_Calv || ''}
                   label="Ca làm việc"
                   onChange={handleChangeCalv}
                 >

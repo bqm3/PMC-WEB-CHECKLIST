@@ -38,12 +38,15 @@ import { useSettingsContext } from 'src/components/settings';
 import { useTable, getComparator } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 
+import DialogBase from 'src/sections/base/dialogBase';
+
 // types
 import { IBaoCaoTableFilters, IBaoCaoTableFilterValue, ITbChecklist } from 'src/types/khuvuc';
 //
 import StatisticalTableToolbar from '../statistical-table-toolbar';
 //
 import InvoicePDF from '../invoice-pdf';
+
 
 // ----------------------------------------------------------------------
 
@@ -80,6 +83,8 @@ export const OverviewReportView = () => {
   const [showModal, setShowModal] = useState<any>(false);
   const [spreadsheetData, setSpreadsheetData] = useState([]);
 
+  const [loadingDiaLog, setLoadingDiaLog] = useState<boolean>(false);
+
   const [filters, setFilters] = useState(defaultFilters);
 
   const STATUS_OPTIONS = useMemo(
@@ -109,56 +114,70 @@ export const OverviewReportView = () => {
 
   // xuat file words
   const handleExportReport = async () => {
-    setLoading(true);
-    // Chuyển đổi ngày tháng sang định dạng ISO mà không thay đổi giá trị
-    const startDate = new Date(filters.startDate ? filters.startDate : '');
-    const endDate = new Date(filters.endDate ? filters.endDate : '');
+    try {
+      setLoading(true);
+      setLoadingDiaLog(true);
+      // Chuyển đổi ngày tháng sang định dạng ISO mà không thay đổi giá trị
+      const startDate = new Date(filters.startDate ? filters.startDate : '');
+      const endDate = new Date(filters.endDate ? filters.endDate : '');
 
-    // Lấy giá trị ngày tháng mà không thay đổi
-    const startDateString = `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}T00:00:00.000Z`;
-    const endDateString = `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}T23:59:59.999Z`;
-    const response = await axios.post(
-      `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/reports/${indexBaoCao}`,
-      {
-        startDate: startDateString,
-        endDate: endDateString,
-        ID_KhoiCVs: filters.publish,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+      // Lấy giá trị ngày tháng mà không thay đổi
+      const startDateString = `${startDate.getFullYear()}-${(startDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}T00:00:00.000Z`;
+      const endDateString = `${endDate.getFullYear()}-${(endDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}T23:59:59.999Z`;
+      const response = await axios.post(
+        `https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/reports/${indexBaoCao}`,
+        {
+          startDate: startDateString,
+          endDate: endDateString,
+          ID_KhoiCVs: filters.publish,
         },
-        responseType: 'blob',
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          responseType: 'blob',
+        }
+      );
 
-    const blob = new Blob([response.data], {
-      type: response.headers['content-type'],
-    });
+      const blob = new Blob([response.data], {
+        type: response.headers['content-type'],
+      });
 
-    // Create a link element
-    const link = document.createElement('a');
-    // Set the download attribute with a filename
-    link.href = window.URL.createObjectURL(blob);
-    link.download =
-      (indexBaoCao === '1' && 'Tổng hợp ca.xlsx') ||
-      (indexBaoCao === '3' && 'Báo cáo checklist có vấn đề.xlsx') ||
-      (indexBaoCao === '2' && 'Bảng kê các sự cố khẩn cấp nằm ngoài Checklist.xlsx') ||
-      '';
+      // Create a link element
+      const link = document.createElement('a');
+      // Set the download attribute with a filename
+      link.href = window.URL.createObjectURL(blob);
+      link.download =
+        (indexBaoCao === '1' && 'Tổng hợp ca.xlsx') ||
+        (indexBaoCao === '3' && 'Báo cáo checklist có vấn đề.xlsx') ||
+        (indexBaoCao === '2' && 'Bảng kê các sự cố khẩn cấp nằm ngoài Checklist.xlsx') ||
+        '';
 
-    // Append the link to the body
-    document.body.appendChild(link);
+      // Append the link to the body
+      document.body.appendChild(link);
 
-    // Programmatically trigger a click on the link to download the file
-    link.click();
+      // Programmatically trigger a click on the link to download the file
+      link.click();
 
-    // Remove the link from the document
-    document.body.removeChild(link);
-    setLoading(false);
+      // Remove the link from the document
+      document.body.removeChild(link);
+      setLoading(false);
+    } catch (error) {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 4000,
+        message: error.message,
+      });
+
+      console.error('Error fetching Excel data:', error.message);
+    } finally {
+      setLoading(false);
+      setLoadingDiaLog(false);
+    }
   };
 
   // xuat file excel
@@ -508,6 +527,12 @@ export const OverviewReportView = () => {
           </Box>
         </Box>
       </Dialog>
+
+      <DialogBase
+        open={loadingDiaLog}
+        onClose={() => setLoadingDiaLog(false)}
+        message="Đang xử lý, vui lòng chờ..."
+      />
     </>
   );
 };

@@ -22,10 +22,11 @@ import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetDuan } from 'src/api/kh
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
 // types
 import { IKhoiCV, ICalv, IDuanKhoiCV, IDuan } from 'src/types/khuvuc';
 import axios from 'axios';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -65,16 +66,22 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
   const NewProductSchema = Yup.object().shape({
     ID_Duan: Yup.string(),
     ID_KhoiCV: Yup.string(),
+    KhoiCV: Yup.string(),
     Chuky: Yup.string().required('Phải có chu kỳ cho khối công việc'),
+    Tenchuky: Yup.string(),
     Ngaybatdau: Yup.mixed<any>().nullable().required('Phải có ngày bắt đầu'),
+    isQuantrong: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
       ID_Duan: currentCycle?.ID_Duan || '',
       ID_KhoiCV: currentCycle?.ID_KhoiCV || '',
+      KhoiCV: currentCycle?.ent_khoicv?.KhoiCV || '',
       Chuky: currentCycle?.Chuky || '',
+      Tenchuky: currentCycle?.Tenchuky || '',
       Ngaybatdau: currentCycle?.Ngaybatdau || null,
+      isQuantrong: currentCycle?.isQuantrong || '0',
     }),
     [currentCycle]
   );
@@ -101,22 +108,38 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
     }
   }, [currentCycle, defaultValues, reset]);
 
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'ID_KhoiCV' && value.ID_KhoiCV) {
+        const selectedKhoiCV = khoiCv.find((item) => `${item.ID_KhoiCV}` === `${value.ID_KhoiCV}`);
+        if (selectedKhoiCV) {
+          setValue('KhoiCV', selectedKhoiCV.KhoiCV);
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, setValue, khoiCv]);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentCycle !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`, data, {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
+          .put(
+            `https://checklist.pmcweb.vn/be/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`,
+            data,
+            {
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          )
           .then((res) => {
             reset();
             enqueueSnackbar({
               variant: 'success',
               autoHideDuration: 4000,
-              message: 'Cập nhật thành công'
+              message: 'Cập nhật thành công',
             });
             router.push(paths.dashboard.chukyduan.root);
           })
@@ -240,9 +263,26 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
                 </RHFSelect>
               )}
             </Stack>
+            <input type="hidden" {...methods.register('KhoiCV')} />
             <RHFTextField name="Chuky" label="Chu kỳ" />
+            <RHFTextField name="Tenchuky" label="Tên chu kỳ" />
             <RHFTextField type="date" value={values?.Ngaybatdau} name="Ngaybatdau" />
-
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={`${values.isQuantrong}` === '1'}
+                  onChange={(e) => {
+                    setValue('isQuantrong', e.target.checked ? '1' : '0');
+                  }}
+                  inputProps={{ 'aria-label': 'Bỏ checklist quan trọng' }}
+                />
+              }
+              label={
+                <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                  Bỏ checklist quan trọng
+                </Typography>
+              }
+            />
           </Stack>
         </Card>
       </Grid>

@@ -67,7 +67,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index }: Prop
   const formattedTime = Giosuco?.slice(0, 5);
 
   const backgroundColorStyle =
-    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[500];
+    index % 2 === 0 ? theme.palette.background.paper : theme.palette.grey[200];
 
   const renderPrimary = (
     <TableRow hover selected={selected} style={{ backgroundColor: backgroundColorStyle }}>

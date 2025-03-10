@@ -73,6 +73,9 @@ export default function CalvTableRow({
       <TableCell> {ent_calv.Tenca} </TableCell>
       <TableCell> {Sochecklist} </TableCell>
       <TableCell>
+         {row?.ent_duan_khoicv?.Tenchuky}
+      </TableCell>
+      <TableCell>
          Ngày {Ngaythu}
       </TableCell>
       <TableCell> 
