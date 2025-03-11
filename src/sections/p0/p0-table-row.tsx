@@ -26,7 +26,7 @@ type Props = {
 };
 
 export default function CalvTableRow({ row, selected, onViewRow }: Props) {
-  const { ID_P0, Ngaybc, ent_duan, ent_user_AN, ent_user_KT, Doanhthu, Ghichu } = row;
+  const { ID_P0, Ngaybc, ent_duan, ent_user_AN, ent_user_KT, Doanhthu, Ghichu, ent_user_DV } = row;
 
   const popover = usePopover();
 
@@ -34,6 +34,7 @@ export default function CalvTableRow({ row, selected, onViewRow }: Props) {
     <TableRow hover selected={selected}>
       <TableCell>{Ngaybc}</TableCell>
       <TableCell>{ent_user_AN?.Hoten}</TableCell>
+      <TableCell>{ent_user_DV?.Hoten}</TableCell>
       <TableCell>{ent_user_KT?.Hoten}</TableCell>
       <TableCell>{Doanhthu}</TableCell>
       <TableCell>{Ghichu}</TableCell>

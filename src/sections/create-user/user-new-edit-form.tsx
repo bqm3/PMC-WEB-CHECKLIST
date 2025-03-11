@@ -78,6 +78,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     Email: Yup.string().email('Chưa đúng định dạng Email').nullable(),
     Hoten: Yup.string().required('Phải có họ tên'),
     Ngaysinh: Yup.mixed<any>().nullable().required('Phải có ngày sinh'),
+    isCheckketoan: Yup.string(),
     // not required
   });
 
@@ -93,6 +94,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       Ngaysinh: currentUser?.Ngaysinh || new Date() || null || undefined,
       ID_Duan: currentUser?.ID_Duan || null || '',
       ID_KhoiCV: currentUser?.ID_KhoiCV || null || '',
+      isCheckketoan: currentUser?.isCheckketoan || '0',
     }),
     [currentUser]
   );
@@ -236,7 +238,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       // Cập nhật lại trạng thái checkedStates
       setCheckedStates(initialCheckedStates);
     }
-  }, [nhomduan, currentUser]);  // Dependency array gồm nhomduan và currentUser
+  }, [nhomduan, currentUser]); // Dependency array gồm nhomduan và currentUser
 
   // Handle change for parent checkboxes
   const handleParentChange = (buildingIndex: number) => (event: any) => {
@@ -245,12 +247,12 @@ export default function UserNewEditForm({ currentUser }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: number) =>
       index === buildingIndex
         ? {
-          ...buildingCheckedStates,
-          projects: buildingCheckedStates.projects.map((project: any) => ({
-            ...project,
-            checked: isChecked,
-          })),
-        }
+            ...buildingCheckedStates,
+            projects: buildingCheckedStates.projects.map((project: any) => ({
+              ...project,
+              checked: isChecked,
+            })),
+          }
         : buildingCheckedStates
     );
 
@@ -271,11 +273,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: number) =>
       bIndex === buildingIndex
         ? {
-          ...buildingCheckedStates,
-          projects: buildingCheckedStates.projects.map((project: any, pIndex: number) =>
-            pIndex === projectIndex ? { ...project, checked: isChecked } : project
-          ),
-        }
+            ...buildingCheckedStates,
+            projects: buildingCheckedStates.projects.map((project: any, pIndex: number) =>
+              pIndex === projectIndex ? { ...project, checked: isChecked } : project
+            ),
+          }
         : buildingCheckedStates
     );
 
@@ -485,13 +487,31 @@ export default function UserNewEditForm({ currentUser }: Props) {
           />
 
           {/* {currentUser === undefined && <RHFTextField name="Password" label="Mật khẩu" />} */}
-          {`${user?.ent_chucvu?.Role}` === '10' && <RHFTextField name="Password" label="Mật khẩu" />}
+          {`${user?.ent_chucvu?.Role}` === '10' && (
+            <RHFTextField name="Password" label="Mật khẩu" />
+          )}
           {`${user?.ent_chucvu?.Role}` === '1' && <RHFTextField name="Password" label="Mật khẩu" />}
 
           {(`${currentUser?.ent_chucvu?.Role}` === '2' ||
             `${currentUser?.ent_chucvu?.Role}` === '3') && (
-              <RHFTextField name="Password" label="Mật khẩu" />
+            <RHFTextField name="Password" label="Mật khẩu" />
+          )}
+          <Controller
+            name="isCheckketoan"
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    {...field}
+                    checked={`${field.value}` === `1`}
+                    onChange={(e) => field.onChange(e.target.checked ? '1' : '0')}
+                  />
+                }
+                label="Kế toán"
+              />
             )}
+          />
         </Box>
 
         {user?.ent_chucvu?.Role === 10 && renderChildren}

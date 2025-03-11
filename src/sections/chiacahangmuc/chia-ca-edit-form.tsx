@@ -478,7 +478,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   );
 
   const renderOptions = (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 ,   pointerEvents: 'none',}}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mb: 2 }}>
       <Card>
         <Stack spacing={3} sx={{ p: 3 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

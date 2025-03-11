@@ -56,7 +56,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
   const { users } = useGetUsers();
 
   const usersFilter = users.filter(i =>
-    (i.ID_KhoiCV === null || `${i.ID_KhoiCV}` === `3` || `${i.ID_KhoiCV}` === `4`) && (`${i.ent_chucvu?.Role}` !== `10` && `${i.ent_chucvu?.Role}` !== `0`)
+    (i.ID_KhoiCV === null || `${i.ID_KhoiCV}` === `3` || `${i.ID_KhoiCV}` === `4` || `${i.isCheckketoan}` === `1`) && (`${i.ent_chucvu?.Role}` !== `10` && `${i.ent_chucvu?.Role}` !== `0`)
   );
 
 
@@ -205,7 +205,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
             return (
               <FormControlLabel
                 key={item.ID_User}
-                label={`${item?.UserName} - ${item?.Hoten} (${item?.ent_chucvu?.Chucvu})`}
+                label={`${item?.UserName} - ${item?.Hoten} (${item?.ent_chucvu?.Chucvu}) ${`${item?.isCheckketoan}` === `1` ? " - Kế toán" : ''}`}
                 control={
                   <Checkbox
                     size="medium"

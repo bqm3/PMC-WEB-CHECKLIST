@@ -34,6 +34,7 @@ import P0TableRow from '../p0-table-row';
 const TABLE_HEAD = [
   { id: 'Ngaybc', label: 'Ngày gửi', width: 80 },
   { id: 'ent_user_AN', label: 'Người nhập (An ninh)', width: 150 },
+  { id: 'ent_user_DV', label: 'Người nhập (Dịch vụ)', width: 150 },
   { id: 'ent_user_KT', label: 'Người nhập (Kế toán)', width: 150 },
   { id: 'Doanhthu', label: 'Doanh thu', width: 100 },
   { id: 'Ghichu', label: 'Ghi chú', width: 100 },

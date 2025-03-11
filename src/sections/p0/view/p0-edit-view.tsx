@@ -30,10 +30,10 @@ export default function GiamsatEditView({ id }: Props) {
         heading="Xem chi tiết"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          {
-            name: currentP0?.Ghichu,
-            href: paths.dashboard.p0.root,
-          },
+          // {
+          //   name: currentP0?.Ghichu,
+          //   href: paths.dashboard.p0.root,
+          // },
           { name: currentP0?.Ngaybc },
         ]}
         sx={{

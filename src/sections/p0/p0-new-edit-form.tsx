@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState, useCallback } from 'react';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
@@ -29,6 +29,8 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // types
 import { IP0, IUser } from 'src/types/khuvuc';
 import moment from 'moment';
+import CardManagementDialog from './s0-thaydoithe-dialog';
+import LoadingDialog from './base-loading-dialog';
 
 type Props = {
   currentP0?: IP0;
@@ -41,10 +43,10 @@ const fieldLabels: any = {
   Slxemay: 'Xe máy thường',
   Slxedapdien: 'Xe đạp điện',
   Slxedap: 'Xe đạp thường',
-  Sotheotodk: 'Số lượng thẻ ô tô đã bàn giao',
-  Sothexemaydk: 'Số lượng thẻ xe máy đã bàn giao',
-  Sltheoto: 'Số lượng thẻ ô tô chưa sử dụng',
-  Slthexemay: 'Số lượng thẻ xe máy chưa sử dụng',
+  Sotheotodk: 'SL thẻ ô tô đã bàn giao',
+  Sothexemaydk: 'SL thẻ xe máy đã bàn giao',
+  Sltheoto: 'SL thẻ ô tô chưa sử dụng',
+  Slthexemay: 'SL thẻ xe máy chưa sử dụng',
   Slscoto: 'Sự cố xe ô tô thường',
   Slscotodien: 'Sự cố xe ô tô điện',
   Slscxemaydien: 'Sự cố xe máy điện',
@@ -57,10 +59,13 @@ const fieldLabels: any = {
   QuansoDB: 'Quân số định biên',
   Doanhthu: 'Doanh thu từ 16h hôm trước đến 16h hôm nay',
   Ghichu: 'Ghi chú',
+  Sltheotophanmem: 'SL thẻ ô tô sử dụng trên phần mềm',
+  Slthexemayphanmem: 'SL thẻ xe máy sử dụng trên phần mềm',
 };
 
 const fieldCategories: any = {
-  'Thông tin thẻ': ['Sotheotodk', 'Sothexemaydk', 'Sltheoto', 'Slthexemay'],
+  'Thông tin thẻ': ['Sotheotodk', 'Sothexemaydk'],
+  'Thông tin kiểm kê tại quầy': ['Sltheoto', 'Sltheotophanmem', 'Slthexemay', 'Slthexemayphanmem'],
   'Thông tin xe': ['Slxeoto', 'Slxeotodien', 'Slxemay', 'Slxemaydien', 'Slxedap', 'Slxedapdien'],
   'Sự cố': [
     'Slscoto',
@@ -84,21 +89,39 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const { user } = useAuthContext();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [open, setOpen] = useState(false);
   const [checkSubmit, setCheckSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [cardDialogOpen, setCardDialogOpen] = useState(false);
+  const [sothedk, setSothedk] = useState({
+    Sotheotodk: 0,
+    Sothexemaydk: 0,
+  });
 
   const isToday = moment(currentP0?.Ngaybc).isSame(moment(), 'day');
 
   const isFieldEditable = (fieldName: string) => {
     if (fieldName === 'Ghichu') return true;
+    if (['Sotheotodk', 'Sothexemaydk'].includes(fieldName)) return false;
 
     let check = false;
-    if (`${user?.ID_KhoiCV}` === `4` && fieldName === 'Doanhthu') {
+    if (
+      `${user?.ID_KhoiCV}` === `4` &&
+      ['Sltheoto', 'Slthexemay', 'Sltheotophanmem', 'Slthexemayphanmem'].includes(fieldName)
+    ) {
       check = true;
-    } else if (`${user?.ID_KhoiCV}` === `3` && fieldName !== 'Doanhthu') {
+    } else if (
+      `${user?.ID_KhoiCV}` === `3` &&
+      !['Sltheoto', 'Slthexemay', 'Sltheotophanmem', 'Slthexemayphanmem', 'Doanhthu'].includes(
+        fieldName
+      )
+    ) {
       check = true;
     } else if (`${user?.ID_KhoiCV}` === `null`) {
+      check = true;
+    } else if (`${user?.isCheckketoan}` === `1` && fieldName === 'Doanhthu') {
       check = true;
     }
     return check;
@@ -135,6 +158,8 @@ export default function P0NewEditForm({ currentP0 }: Props) {
       Sothexemaydk: currentP0?.Sothexemaydk ?? 0,
       Sltheoto: currentP0?.Sltheoto ?? 0,
       Slthexemay: currentP0?.Slthexemay ?? 0,
+      Sltheotophanmem: currentP0?.Sltheotophanmem ?? 0,
+      Slthexemayphanmem: currentP0?.Slthexemayphanmem ?? 0,
       Slscoto: currentP0?.Slscoto ?? 0,
       Slscotodien: currentP0?.Slscotodien ?? 0,
       Slscxemay: currentP0?.Slscxemay ?? 0,
@@ -160,20 +185,17 @@ export default function P0NewEditForm({ currentP0 }: Props) {
 
   // Watch car-related values
   const watchSotheotodk = watch('Sotheotodk') || 0;
-  const watchSlxeoto = watch('Slxeoto') || 0;
-  const watchSlxeotodien = watch('Slxeotodien') || 0;
   const watchSltheoto = watch('Sltheoto') || 0;
+  const watchSltheotophanmem = watch('Sltheotophanmem') || 0;
 
   // Watch motorcycle-related values
   const watchSothexemaydk = watch('Sothexemaydk') || 0;
-  const watchSlxemay = watch('Slxemay') || 0;
-  const watchSlxemaydien = watch('Slxemaydien') || 0;
   const watchSlthexemay = watch('Slthexemay') || 0;
+  const watchSlthexemayphanmem = watch('Slthexemayphanmem') || 0;
 
   // Calculate totals for validation
-  const totalCars = Number(watchSlxeoto) + Number(watchSlxeotodien) + Number(watchSltheoto);
-  const totalMotorcycles =
-    Number(watchSlxemay) + Number(watchSlxemaydien) + Number(watchSlthexemay);
+  const totalCars = Number(watchSltheoto) + Number(watchSltheotophanmem);
+  const totalMotorcycles = Number(watchSlthexemay) + Number(watchSlthexemayphanmem);
 
   // Check for validation errors
   const hasCarCardBalanceError = Number(watchSotheotodk) !== totalCars;
@@ -196,6 +218,14 @@ export default function P0NewEditForm({ currentP0 }: Props) {
     }
   };
 
+  const handleOpenCardDialog = () => {
+    setCardDialogOpen(true);
+  };
+
+  const handleCloseCardDialog = () => {
+    setCardDialogOpen(false);
+  };
+
   useEffect(() => {
     const handleCheck = async () => {
       try {
@@ -213,36 +243,38 @@ export default function P0NewEditForm({ currentP0 }: Props) {
     handleCheck();
   }, [accessToken]);
 
-  useEffect(() => {
-    const getSoThe = async () => {
-      if (
-        !currentP0 ||
-        (currentP0 && (Number(currentP0.Sotheotodk) <= 0 || Number(currentP0.Sothexemaydk) <= 0))
-      ) {
-        try {
-          const res = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/so-the-phat-hanh`, {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-
-          if (res.data.data) {
-            setValue('Sotheotodk', res.data.data.Sotheotodk || 0);
-            setValue('Sothexemaydk', res.data.data.Sothexemaydk || 0);
-          }
-        } catch (error) {
-          enqueueSnackbar({
-            variant: 'error',
-            autoHideDuration: 4000,
-            message: 'Có lỗi xảy ra',
-          });
+  const getSoThe = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `https://checklist.pmcweb.vn/be/api/v2/s0-thaydoithe/${user?.ID_Duan}`,
+        {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      }
-    };
+      );
 
+      if (res.data.data) {
+        setValue('Sotheotodk', res.data.data.sltheoto || 0);
+        setValue('Sothexemaydk', res.data.data.slthexemay || 0);
+        setSothedk({
+          Sotheotodk: res.data.data.sltheoto || 0,
+          Sothexemaydk: res.data.data.slthexemay || 0,
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar({
+        variant: 'error',
+        autoHideDuration: 4000,
+        message: 'Có lỗi xảy ra',
+      });
+    }
+  }, [user?.ID_Duan, accessToken, setValue, enqueueSnackbar]);
+
+  useEffect(() => {
     getSoThe();
-  }, [accessToken, enqueueSnackbar, setValue, currentP0]);
+  }, [getSoThe]);
 
   const handleApiRequest = async (method: string, url: string, data: any) => {
     setLoading(true);
@@ -309,36 +341,41 @@ export default function P0NewEditForm({ currentP0 }: Props) {
           </Alert>
         </Box> */}
 
-        <Box >
+        <Box>
           {(hasCarCardBalanceError || hasMotorcycleCardBalanceError) && (
             <Alert severity="error">
               {hasCarCardBalanceError && (
                 <>
                   <Typography fontWeight="bold">
-                    Cảnh báo: Số lượng thẻ xe ô tô không khớp với số xe
+                    Cảnh báo: Số lượng thẻ xe ô tô không khớp
                   </Typography>
                   <Typography>
-                    Tổng số xe ô tô thường ({watchSlxeoto}) + xe ô tô điện ({watchSlxeotodien}) +
-                    thẻ xe ô tô chưa sử dụng ({watchSltheoto}) = {totalCars}
+                    Tổng thẻ xe ô tô chưa sử dụng ({watchSltheoto}) + thẻ ô tô sử dụng trên phần
+                    mềm({watchSltheotophanmem}) = {totalCars}
                   </Typography>
                   <Typography>Thẻ ô tô đã bàn giao = {watchSotheotodk}</Typography>
-                  <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
+                  {/* <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography> */}
                 </>
               )}
 
               {hasMotorcycleCardBalanceError && (
                 <>
                   <Typography fontWeight="bold">
-                    Cảnh báo: Số lượng thẻ xe máy không khớp với số xe
+                    Cảnh báo: Số lượng thẻ xe máy không khớp
                   </Typography>
                   <Typography>
-                    Tổng số xe máy thường ({watchSlxemay}) + xe máy điện ({watchSlxemaydien}) + thẻ xe
-                    chưa sử dụng ({watchSlthexemay}) = {totalMotorcycles}
+                    Tổng thẻ xe chưa sử dụng ({watchSlthexemay}) + thẻ xe máy sử dụng trên phần mềm
+                    ({watchSlthexemayphanmem}) = {totalMotorcycles}
                   </Typography>
                   <Typography>Thẻ xe máy đã bàn giao = {watchSothexemaydk}</Typography>
-                  <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
+                  {/* <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography> */}
                 </>
               )}
+
+              {hasCarCardBalanceError ||
+                (hasMotorcycleCardBalanceError && (
+                  <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
+                ))}
             </Alert>
           )}
         </Box>
@@ -455,6 +492,20 @@ export default function P0NewEditForm({ currentP0 }: Props) {
 
   return (
     <FormProvider methods={methods}>
+      {(`${user?.ent_chucvu?.Role}` === `1` || `${user?.ent_chucvu?.Role}` === `10`) && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+          <Button
+            disabled={loading}
+            variant="contained"
+            size="large"
+            color="primary"
+            onClick={handleOpenCardDialog}
+          >
+            Thay đổi SL thẻ đã bàn giao
+          </Button>
+        </div>
+      )}
+
       <Grid container spacing={3}>
         {renderDetails}
         {renderActions}
@@ -477,6 +528,21 @@ export default function P0NewEditForm({ currentP0 }: Props) {
           <Button onClick={() => handleCloseDialog(false)}>Hủy</Button>
         </DialogActions>
       </Dialog>
+
+      <CardManagementDialog
+        open={cardDialogOpen}
+        getSoThe={getSoThe}
+        onClose={handleCloseCardDialog}
+        onSubmit={handleCloseCardDialog}
+        currentValues={sothedk}
+        setIsLoading={setIsLoading}
+      />
+
+      <LoadingDialog
+      open={isLoading}
+      message='Đang cập nhật'
+      description='Vui lòng chờ'
+      />
     </FormProvider>
   );
 }

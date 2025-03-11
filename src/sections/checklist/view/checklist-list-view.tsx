@@ -385,7 +385,7 @@ export default function ChecklistCalvListView() {
               startIcon={<Iconify icon="fa-cloud-download" />}
               onClick={upload.onTrue}
             >
-              Thêm mới
+              Upload
             </LoadingButton>
           </div>
         </Stack>

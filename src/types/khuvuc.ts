@@ -190,6 +190,8 @@ export type IP0 = {
   Sothexemaydk?: number;
   Sltheoto?: number;
   Slthexemay?: number;
+  Sltheotophanmem?: number;
+  Slthexemayphanmem?: number;
   Slscoto?: number;
   Slscotodien?: number;
   Slscxemay?: number;
@@ -207,6 +209,7 @@ export type IP0 = {
   isDelete?: number;
   ent_user_AN: IUser;
   ent_user_KT: IUser;
+  ent_user_DV: IUser;
   ent_duan: IDuan;
 };
 
