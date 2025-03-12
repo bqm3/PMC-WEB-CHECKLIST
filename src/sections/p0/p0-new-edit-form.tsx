@@ -65,7 +65,13 @@ const fieldLabels: any = {
 
 const fieldCategories: any = {
   'Thông tin thẻ': ['Sotheotodk', 'Sothexemaydk'],
-  'Thông tin kiểm kê tại quầy': ['Sltheoto', 'Sltheotophanmem', 'Slthexemay', 'Slthexemayphanmem'],
+  'Thông tin kiểm kê tại quầy': [
+    'Sltheoto',
+    'Sltheotophanmem',
+    'Slthexemay',
+    'Slthexemayphanmem',
+    'Doanhthu',
+  ],
   'Thông tin xe': ['Slxeoto', 'Slxeotodien', 'Slxemay', 'Slxemaydien', 'Slxedap', 'Slxedapdien'],
   'Sự cố': [
     'Slscoto',
@@ -77,7 +83,7 @@ const fieldCategories: any = {
     'Slsucokhac',
   ],
   'Thông tin khác': ['QuansoTT', 'QuansoDB', 'Slcongto'],
-  'Doanh thu': ['Doanhthu'],
+  // 'Doanh thu': ['Doanhthu'],
   'Ghi chú': ['Ghichu'],
 };
 
@@ -188,18 +194,31 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const watchSltheoto = watch('Sltheoto') || 0;
   const watchSltheotophanmem = watch('Sltheotophanmem') || 0;
 
+  const watchSlxeoto = watch('Slxeoto') || 0;
+  const watchSlxeotodien = watch('Slxeotodien') || 0;
+
   // Watch motorcycle-related values
   const watchSothexemaydk = watch('Sothexemaydk') || 0;
   const watchSlthexemay = watch('Slthexemay') || 0;
   const watchSlthexemayphanmem = watch('Slthexemayphanmem') || 0;
 
+  const watchSlxemay = watch('Slxemay') || 0;
+  const watchSlxemaydien = watch('Slxemaydien') || 0;
+
   // Calculate totals for validation
   const totalCars = Number(watchSltheoto) + Number(watchSltheotophanmem);
   const totalMotorcycles = Number(watchSlthexemay) + Number(watchSlthexemayphanmem);
 
+  const totalCars1 = Number(watchSltheoto) + Number(watchSlxeoto) + Number(watchSlxeotodien);
+  const totalMotorcycles1 =
+    Number(watchSlthexemay) + Number(watchSlxemay) + Number(watchSlxemaydien);
+
   // Check for validation errors
   const hasCarCardBalanceError = Number(watchSotheotodk) !== totalCars;
   const hasMotorcycleCardBalanceError = Number(watchSothexemaydk) !== totalMotorcycles;
+
+  const hasCarCardBalanceError1 = Number(watchSotheotodk) !== totalCars1;
+  const hasMotorcycleCardBalanceError1 = Number(watchSothexemaydk) !== totalMotorcycles1;
 
   useEffect(() => {
     if (currentP0) {
@@ -327,6 +346,62 @@ export default function P0NewEditForm({ currentP0 }: Props) {
     }
   });
 
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const VehicleCardBalanceAlert = () => {
+    const isKhoiCV3 = user?.ID_KhoiCV === 3;
+    
+    // Determine which error flags to use based on user type
+    const carError = isKhoiCV3 ? hasCarCardBalanceError1 : hasCarCardBalanceError;
+    const motorcycleError = isKhoiCV3 ? hasMotorcycleCardBalanceError1 : hasMotorcycleCardBalanceError;
+    
+    // Only render if there's an error
+    if (!carError && !motorcycleError) return null;
+    
+    return (
+      <Box>
+        <Alert severity="error">
+          {carError && (
+            <>
+              <Typography fontWeight="bold">
+                Cảnh báo: Số lượng thẻ xe ô tô không khớp
+              </Typography>
+              <Typography>
+                {isKhoiCV3 ? (
+                  <>Tổng thẻ xe ô tô chưa sử dụng ({watchSltheoto}) + xe ô tô thường ({watchSlxeoto}) + 
+                  xe ô tô điện ({watchSlxeotodien}) = {totalCars}</>
+                ) : (
+                  <>Tổng thẻ xe ô tô chưa sử dụng ({watchSltheoto}) + thẻ ô tô sử dụng trên phần
+                  mềm({watchSltheotophanmem}) = {totalCars}</>
+                )}
+              </Typography>
+              <Typography>Thẻ ô tô đã bàn giao = {watchSotheotodk}</Typography>
+            </>
+          )}
+  
+          {motorcycleError && (
+            <>
+              <Typography fontWeight="bold">
+                Cảnh báo: Số lượng thẻ xe máy không khớp
+              </Typography>
+              <Typography>
+                {isKhoiCV3 ? (
+                  <>Tổng thẻ xe chưa sử dụng ({watchSlthexemay}) + xe máy thường ({watchSlxemay}) +
+                  xe máy điện ({watchSlxemaydien}) = {totalMotorcycles}</>
+                ) : (
+                  <>Tổng thẻ xe chưa sử dụng ({watchSlthexemay}) + thẻ xe máy sử dụng trên phần mềm
+                  ({watchSlthexemayphanmem}) = {totalMotorcycles}</>
+                )}
+              </Typography>
+              <Typography>Thẻ xe máy đã bàn giao = {watchSothexemaydk}</Typography>
+            </>
+          )}
+  
+          <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
+        </Alert>
+      </Box>
+    );
+  };
+
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Stack spacing={3}>
@@ -341,44 +416,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
           </Alert>
         </Box> */}
 
-        <Box>
-          {(hasCarCardBalanceError || hasMotorcycleCardBalanceError) && (
-            <Alert severity="error">
-              {hasCarCardBalanceError && (
-                <>
-                  <Typography fontWeight="bold">
-                    Cảnh báo: Số lượng thẻ xe ô tô không khớp
-                  </Typography>
-                  <Typography>
-                    Tổng thẻ xe ô tô chưa sử dụng ({watchSltheoto}) + thẻ ô tô sử dụng trên phần
-                    mềm({watchSltheotophanmem}) = {totalCars}
-                  </Typography>
-                  <Typography>Thẻ ô tô đã bàn giao = {watchSotheotodk}</Typography>
-                  {/* <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography> */}
-                </>
-              )}
-
-              {hasMotorcycleCardBalanceError && (
-                <>
-                  <Typography fontWeight="bold">
-                    Cảnh báo: Số lượng thẻ xe máy không khớp
-                  </Typography>
-                  <Typography>
-                    Tổng thẻ xe chưa sử dụng ({watchSlthexemay}) + thẻ xe máy sử dụng trên phần mềm
-                    ({watchSlthexemayphanmem}) = {totalMotorcycles}
-                  </Typography>
-                  <Typography>Thẻ xe máy đã bàn giao = {watchSothexemaydk}</Typography>
-                  {/* <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography> */}
-                </>
-              )}
-
-              {hasCarCardBalanceError ||
-                (hasMotorcycleCardBalanceError && (
-                  <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
-                ))}
-            </Alert>
-          )}
-        </Box>
+        {VehicleCardBalanceAlert()}
 
         <Box rowGap={3} columnGap={2} display="grid">
           {Object.keys(fieldCategories).map((category) => (
@@ -538,11 +576,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
         setIsLoading={setIsLoading}
       />
 
-      <LoadingDialog
-      open={isLoading}
-      message='Đang cập nhật'
-      description='Vui lòng chờ'
-      />
+      <LoadingDialog open={isLoading} message="Đang cập nhật" description="Vui lòng chờ" />
     </FormProvider>
   );
 }
