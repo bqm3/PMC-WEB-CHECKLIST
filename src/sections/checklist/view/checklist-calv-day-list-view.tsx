@@ -63,6 +63,7 @@ const TABLE_HEAD = [
     { id: 'Ngay', label: 'Ngày checklist' },
     { id: 'Tong', label: 'Số Checklist' },
     { id: 'ID_Calv', label: 'Ca làm việc' },
+    { id: 'Tenchuky', label: 'Chu kỳ' },
     { id: 'ID_KhoiCV', label: 'Khối công việc' },
     { id: '', width: 50 },
 ];

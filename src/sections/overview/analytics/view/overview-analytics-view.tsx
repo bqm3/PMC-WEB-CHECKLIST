@@ -80,15 +80,15 @@ const columns: GridColDef<[number]>[] = [
     editable: true,
     // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
   },
-  {
-    field: 'Khối F&B',
-    headerName: 'Khối F&B',
-    // description: 'This column has a value getter and is not sortable.',
-    // sortable: false,
-    width: 150,
-    editable: true,
-    // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
-  },
+  // {
+  //   field: 'Khối F&B',
+  //   headerName: 'Khối F&B',
+  //   // description: 'This column has a value getter and is not sortable.',
+  //   // sortable: false,
+  //   width: 150,
+  //   editable: true,
+  //   // valueGetter: (value: any, row: any) => `${row?.firstName || ''} ${row?.lastName || ''}`,
+  // },
 ];
 
 const STORAGE_KEY = 'accessToken';
@@ -184,13 +184,18 @@ export default function OverviewAnalyticsView() {
   });
 
   useEffect(() => {
-    // Assuming khoiCV is set elsewhere in your component
-    khoiCV.forEach((khoi) => {
-      set_STATUS_OPTIONS((prevOptions) => [
-        ...prevOptions,
-        { value: khoi.ID_KhoiCV.toString(), label: khoi.KhoiCV },
-      ]);
-    });
+    // Filter and set all at once to avoid multiple state updates
+    const filteredOptions = [
+      { value: 'all', label: 'Tất cả' },
+      ...khoiCV
+        .filter(khoi => `${khoi.ID_KhoiCV}` !== `5`)
+        .map(khoi => ({ 
+          value: khoi.ID_KhoiCV.toString(), 
+          label: khoi.KhoiCV 
+        }))
+    ];
+        
+    set_STATUS_OPTIONS(filteredOptions);
   }, [khoiCV]);
 
   useEffect(() => {
@@ -213,19 +218,19 @@ export default function OverviewAnalyticsView() {
           const transformedRows = dataRes.map((project: any, index: number) => ({
             id: index + 1,
             date: project.date,
-            'Khối kỹ thuật': project.createdKhois['Khối kỹ thuật']?.completionRatio
+            'Khối kỹ thuật': project.createdKhois['Khối kỹ thuật']?.completionRatio != null
               ? `${project.createdKhois['Khối kỹ thuật']?.completionRatio} %`
               : null,
-            'Khối làm sạch': project.createdKhois['Khối làm sạch']?.completionRatio
+            'Khối làm sạch': project.createdKhois['Khối làm sạch']?.completionRatio != null
               ? `${project.createdKhois['Khối làm sạch']?.completionRatio} %`
               : null,
-            'Khối dịch vụ': project.createdKhois['Khối dịch vụ']?.completionRatio
+            'Khối dịch vụ': project.createdKhois['Khối dịch vụ']?.completionRatio != null
               ? `${project.createdKhois['Khối dịch vụ']?.completionRatio} %`
               : null,
-            'Khối an ninh': project.createdKhois['Khối an ninh']?.completionRatio
+            'Khối an ninh': project.createdKhois['Khối an ninh']?.completionRatio != null
               ? `${project.createdKhois['Khối an ninh']?.completionRatio} %`
               : null,
-            'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio
+            'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio != null
               ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
               : null,
           }));

@@ -115,12 +115,12 @@ const columns: GridColDef<[number]>[] = [
     width: 150,
     editable: true,
   },
-  {
-    field: 'Khối F&B',
-    headerName: 'Khối F&B',
-    width: 150,
-    editable: true,
-  },
+  // {
+  //   field: 'Khối F&B',
+  //   headerName: 'Khối F&B',
+  //   width: 150,
+  //   editable: true,
+  // },
 ];
 
 const months = [
@@ -198,7 +198,7 @@ const headerRow = [
   'Khối an ninh',
   'Khối làm sạch',
   'Khối dịch vụ',
-  'Khối F&B',
+  // 'Khối F&B',
 ];
 
 export default function OverviewAnalyticsView() {
@@ -278,6 +278,7 @@ export default function OverviewAnalyticsView() {
     ChartData | null | any
   >(null);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalSCN_lastWeek, setOpenModal_lastWeek] = useState(false);
   const [openModalSuCo, setOpenModalSuCo] = useState(false);
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedCodeSuCo, setSelectedCodeSuCo] = useState('');
@@ -306,6 +307,10 @@ export default function OverviewAnalyticsView() {
   const [messages, setMessages] = useState<any>([]); // Danh sách tin nhắn
   const [inputMessage, setInputMessage] = useState(''); // Tin nhắn người dùng nhập
   const [loading, setLoading] = useState(false); // Trạng thái đang gửi API
+
+  const handleCloseModal_lastWeek = () => {
+    setOpenModal_lastWeek(false);
+  };
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -435,9 +440,11 @@ export default function OverviewAnalyticsView() {
   const STATUS_OPTIONS = useMemo(
     () => [
       { value: 'all', label: 'Tất cả' },
-      ...khoiCV.map((khoi) => ({
-        value: khoi.ID_KhoiCV.toString(),
-        label: khoi.KhoiCV,
+      ...khoiCV
+        .filter(khoi => `${khoi.ID_KhoiCV}` !== `5`)
+        .map((khoi) => ({
+          value: khoi.ID_KhoiCV.toString(),
+          label: khoi.KhoiCV,
       })),
     ],
     [khoiCV]
@@ -495,9 +502,9 @@ export default function OverviewAnalyticsView() {
             'Khối an ninh': project.createdKhois['Khối an ninh']?.completionRatio
               ? `${project.createdKhois['Khối an ninh']?.completionRatio} %`
               : null,
-            'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio
-              ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
-              : null,
+            // 'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio
+            //   ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
+            //   : null,
           }));
 
           setDataPercent(transformedRows);
@@ -1142,6 +1149,7 @@ export default function OverviewAnalyticsView() {
                 colors: [theme.palette.error.light, theme.palette.error.main], // Màu đỏ cho sự cố ngoài
               }}
               compare = " so với tuần trước"
+              onClick={() => setOpenModal_lastWeek(true)}
             />
           </Grid>
 
@@ -1528,6 +1536,19 @@ export default function OverviewAnalyticsView() {
         {/* <DialogActions>
           <Button onClick={handleCloseModalAI}>Close</Button>
         </DialogActions> */}
+      </Dialog>
+
+      <Dialog open={openModalSCN_lastWeek} onClose={handleCloseModal_lastWeek} fullWidth maxWidth="lg">
+        <DialogTitle>Danh sách sự cố ngoài tuần trước: {selectedCode}</DialogTitle>
+        <DialogContent>
+          { dataReportExternalIncidentChecklistPercentWeek?.list && dataReportExternalIncidentChecklistPercentWeek?.list?.length > 0 && openModalSCN_lastWeek === true && (
+            // eslint-disable-next-line react/jsx-boolean-value
+            <SuCoNgoaiListView data={dataReportExternalIncidentChecklistPercentWeek?.list} tenduan = {true} />
+          )}
+        </DialogContent>
+        <DialogActions> 
+          <Button onClick={handleCloseModal_lastWeek}>Close</Button>
+        </DialogActions>
       </Dialog>
 
       <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="lg">

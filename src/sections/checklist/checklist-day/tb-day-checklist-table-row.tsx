@@ -29,6 +29,7 @@ export default function AreaTableRow({
     TongC,
     KhoiCV,
     ID_KhoiCV,
+    Chuky
   } = row;
 
 
@@ -47,6 +48,7 @@ export default function AreaTableRow({
       </TableCell>
 
       <TableCell> {Ca} </TableCell>
+      <TableCell> {Chuky} </TableCell>
       <TableCell>
         {' '}
         <Label

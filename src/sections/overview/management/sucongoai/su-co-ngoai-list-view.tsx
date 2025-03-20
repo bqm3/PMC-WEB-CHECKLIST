@@ -58,15 +58,7 @@ import TableHeadCustom from './table-head-custom';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'ID_Suco', label: 'Mã', width: 50 },
-  { id: 'ID_Hangmuc', label: 'Hạng mục' },
-  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 120 },
-  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 120 },
-  { id: 'Noidungsuco', label: 'Thông tin', width: 250 },
-  { id: 'Bienphapxuly', label: 'Biện pháp', width: 150 },
-  { id: 'Tinhtrangxuly', label: 'Tình trạng', width: 100 },
-];
+
 
 const defaultFilters: IKhuvucTableFilters = {
   name: '',
@@ -78,11 +70,33 @@ const defaultFilters: IKhuvucTableFilters = {
 
 type Props = {
   data: any;
+  tenduan ?: boolean;
 };
+
+const TABLE_HEAD = [
+  { id: 'ID_Suco', label: 'Mã', width: 50 },
+  { id: 'ID_Hangmuc', label: 'Hạng mục' },
+  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 120 },
+  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 120 },
+  { id: 'Noidungsuco', label: 'Thông tin', width: 250 },
+  { id: 'Bienphapxuly', label: 'Biện pháp', width: 150 },
+  { id: 'Tinhtrangxuly', label: 'Tình trạng', width: 100 },
+];
+
+const TABLE_HEAD2 = [
+  { id: 'Duan', label: 'Tên dự án', width: 150 },
+  { id: 'ID_Suco', label: 'Mã', width: 50 },
+  { id: 'ID_Hangmuc', label: 'Hạng mục' },
+  { id: 'Ngaysuco', label: 'Ngày sự cố', width: 120 },
+  { id: 'Ngayxuly', label: 'Ngày xử lý', width: 120 },
+  { id: 'Noidungsuco', label: 'Thông tin', width: 250 },
+  { id: 'Bienphapxuly', label: 'Biện pháp', width: 150 },
+  { id: 'Tinhtrangxuly', label: 'Tình trạng', width: 100 },
+];
 
 // ----------------------------------------------------------------------
 
-export default function SuCoNgoaiListView({ data }: Props) {
+export default function SuCoNgoaiListView({ data, tenduan = false}: Props) {
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -207,7 +221,7 @@ export default function SuCoNgoaiListView({ data }: Props) {
             <TableHeadCustom
               order={table.order}
               orderBy={table.orderBy}
-              headLabel={TABLE_HEAD}
+              headLabel={tenduan ? TABLE_HEAD2 : TABLE_HEAD}
               rowCount={data?.length}
               numSelected={table.selected.length}
               onSort={table.onSort}
@@ -229,6 +243,7 @@ export default function SuCoNgoaiListView({ data }: Props) {
                     selected={table.selected.includes(row.ID_Suco)}
                     onSelectRow={() => table.onSelectRow(row.ID_Suco)}
                     index={index}
+                    tenduan={tenduan}
                   />
                 ))}
 

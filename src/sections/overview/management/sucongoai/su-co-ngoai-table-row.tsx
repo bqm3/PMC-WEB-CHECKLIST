@@ -37,9 +37,16 @@ type Props = {
   selected: boolean;
   onSelectRow: VoidFunction;
   index: number;
+  tenduan?: boolean;
 };
 
-export default function AreaTableRow({ row, selected, onSelectRow, index }: Props) {
+export default function AreaTableRow({
+  row,
+  selected,
+  onSelectRow,
+  index,
+  tenduan = false,
+}: Props) {
   const {
     ID_Suco,
     ID_KV_CV,
@@ -55,7 +62,7 @@ export default function AreaTableRow({ row, selected, onSelectRow, index }: Prop
     ent_hangmuc,
     ent_user,
     TenHangmuc,
-    Bienphapxuly
+    Bienphapxuly,
   } = row;
   const theme = useTheme();
 
@@ -74,10 +81,8 @@ export default function AreaTableRow({ row, selected, onSelectRow, index }: Prop
       {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell> */}
-
-      <TableCell>
-        SC{ID_Suco}
-      </TableCell>
+      {tenduan && <TableCell>{row?.ent_duan?.Duan}</TableCell>}
+      <TableCell>SC{ID_Suco}</TableCell>
       <TableCell>{ent_hangmuc?.Hangmuc ? ent_hangmuc?.Hangmuc : TenHangmuc}</TableCell>
       <TableCell>
         <ListItemText

@@ -284,6 +284,7 @@ export type ISucongoai = {
   isDelete: string;
   ent_hangmuc: IHangMuc;
   ent_user: IUser;
+  ent_duan: IDuan;
 };
 
 export type ILoaiChiSo = {
@@ -481,6 +482,7 @@ export type IDayChecklistC = {
   ID_Calv: string;
   ID_Duan: string;
   ID_KhoiCV: string;
+  Chuky?: string;
 };
 
 export type IChecklist = {
