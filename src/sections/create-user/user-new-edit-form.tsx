@@ -54,6 +54,13 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const { duan } = useGetDuan();
 
   const { nhomduan } = useGetNhomDuAn();
+  const [ oldUserName, setOldUserName ] = useState("");
+
+  useEffect(() => {
+    if(currentUser){
+      setOldUserName(currentUser.UserName);
+    }
+  },[currentUser]);
 
   useEffect(() => {
     if (khoiCV?.length > 0) {
@@ -131,6 +138,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     const newData = {
       ...data,
       arr_Duan: selectedIds,
+      oldUserName,
     };
     try {
       if (currentUser !== undefined) {
