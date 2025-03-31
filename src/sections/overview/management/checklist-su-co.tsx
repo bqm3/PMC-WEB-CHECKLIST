@@ -318,7 +318,7 @@ export default function ChecklistsSuco({
                 />
               </ButtonBase> */}
 
-              {`${user?.ent_chucvu?.Role}` !== `5` ? (
+              {`${user?.ID_Chucvu}` !== `11` ? (
                 <ButtonBase
                   onClick={khoiPopover.onOpen} // Open the KhoiCV popover
                   sx={{

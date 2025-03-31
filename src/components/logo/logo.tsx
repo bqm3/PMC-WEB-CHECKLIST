@@ -39,6 +39,10 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       return logo;
     }
 
+    if (disabledLink || `${user?.ent_chucvu?.Role}` === `3`) {
+      return logo;
+    }
+
     const getDashboardLink = () => {
       if (!user) {
         return '/';

@@ -294,7 +294,7 @@ export default function OverviewAnalyticsView() {
   });
 
   const filteredColumns =
-    `${user?.ent_chucvu?.Role}` === `5`
+    `${user?.ID_Chucvu}` === `11`
       ? columns.filter(
           (col: any) =>
             col.field === 'id' ||
@@ -685,9 +685,13 @@ export default function OverviewAnalyticsView() {
 
   // Sự cố ngoài
   useEffect(() => {
+    if (!accessToken || !selectedYearSuCoNgoai || !selectedKhoiCVSuCoNgoai || !selectedChinhanh || !selectedTopSCN) {
+      return;
+    }
+  
     const handleTangGiam = async () => {
-      await axios
-        .get(
+      try {
+        const res = await axios.get(
           `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/dashboard?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}&chinhanh=${selectedChinhanh}&top=${selectedTopSCN}`,
           {
             headers: {
@@ -695,21 +699,15 @@ export default function OverviewAnalyticsView() {
               Authorization: `Bearer ${accessToken}`,
             },
           }
-        )
-        .then((res) => {
-          setDataTotalYearSuCoNgoai(res.data.data);
-        })
-        .catch((err) => console.log('err', err));
+        );
+        setDataTotalYearSuCoNgoai(res.data.data);
+      } catch (err) {
+        console.log('Lỗi khi gọi API:', err);
+      }
     };
-
+  
     handleTangGiam();
-  }, [
-    accessToken,
-    selectedYearSuCoNgoai,
-    selectedKhoiCVSuCoNgoai,
-    selectedChinhanh,
-    selectedTopSCN,
-  ]);
+  }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedChinhanh, selectedTopSCN]);
 
   const handleLinkHSSE = () => {
     const url =
@@ -1058,6 +1056,7 @@ export default function OverviewAnalyticsView() {
         >
           <Typography variant="h4">
             Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''} {user?.ent_khoicv?.KhoiCV ? `- ${user?.ent_khoicv?.KhoiCV}` : ''}
+            {user?.ent_chinhanh?.Tenchinhanh ? `- ${user?.ent_chinhanh?.Tenchinhanh}` : ''}
           </Typography>
           <Box display="flex" gap={2} alignItems="center">
             {user?.ent_chucvu?.Role === 10 && (

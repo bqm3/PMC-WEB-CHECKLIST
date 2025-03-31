@@ -188,13 +188,13 @@ export default function OverviewAnalyticsView() {
     const filteredOptions = [
       { value: 'all', label: 'Tất cả' },
       ...khoiCV
-        .filter(khoi => `${khoi.ID_KhoiCV}` !== `5`)
-        .map(khoi => ({ 
-          value: khoi.ID_KhoiCV.toString(), 
-          label: khoi.KhoiCV 
-        }))
+        .filter((khoi) => `${khoi.ID_KhoiCV}` !== `5`)
+        .map((khoi) => ({
+          value: khoi.ID_KhoiCV.toString(),
+          label: khoi.KhoiCV,
+        })),
     ];
-        
+
     set_STATUS_OPTIONS(filteredOptions);
   }, [khoiCV]);
 
@@ -218,21 +218,26 @@ export default function OverviewAnalyticsView() {
           const transformedRows = dataRes.map((project: any, index: number) => ({
             id: index + 1,
             date: project.date,
-            'Khối kỹ thuật': project.createdKhois['Khối kỹ thuật']?.completionRatio != null
-              ? `${project.createdKhois['Khối kỹ thuật']?.completionRatio} %`
-              : null,
-            'Khối làm sạch': project.createdKhois['Khối làm sạch']?.completionRatio != null
-              ? `${project.createdKhois['Khối làm sạch']?.completionRatio} %`
-              : null,
-            'Khối dịch vụ': project.createdKhois['Khối dịch vụ']?.completionRatio != null
-              ? `${project.createdKhois['Khối dịch vụ']?.completionRatio} %`
-              : null,
-            'Khối an ninh': project.createdKhois['Khối an ninh']?.completionRatio != null
-              ? `${project.createdKhois['Khối an ninh']?.completionRatio} %`
-              : null,
-            'Khối F&B': project.createdKhois['Khối F&B']?.completionRatio != null
-              ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
-              : null,
+            'Khối kỹ thuật':
+              project.createdKhois['Khối kỹ thuật']?.completionRatio != null
+                ? `${project.createdKhois['Khối kỹ thuật']?.completionRatio} %`
+                : null,
+            'Khối làm sạch':
+              project.createdKhois['Khối làm sạch']?.completionRatio != null
+                ? `${project.createdKhois['Khối làm sạch']?.completionRatio} %`
+                : null,
+            'Khối dịch vụ':
+              project.createdKhois['Khối dịch vụ']?.completionRatio != null
+                ? `${project.createdKhois['Khối dịch vụ']?.completionRatio} %`
+                : null,
+            'Khối an ninh':
+              project.createdKhois['Khối an ninh']?.completionRatio != null
+                ? `${project.createdKhois['Khối an ninh']?.completionRatio} %`
+                : null,
+            'Khối F&B':
+              project.createdKhois['Khối F&B']?.completionRatio != null
+                ? `${project.createdKhois['Khối F&B']?.completionRatio} %`
+                : null,
           }));
 
           setDataPercentDays(transformedRows);
@@ -552,9 +557,11 @@ export default function OverviewAnalyticsView() {
               gap: 2,
             }}
           >
-            <Button variant="contained" color="info" onClick={handleOpenChecklistReport}>
-              Báo cáo checklist
-            </Button>
+            {`${user?.ent_chucvu?.Role}` !== '3' && (
+              <Button variant="contained" color="info" onClick={handleOpenChecklistReport}>
+                Báo cáo checklist
+              </Button>
+            )}
 
             <LoadingButton
               loading={loading}
@@ -776,7 +783,9 @@ export default function OverviewAnalyticsView() {
                   onChange={(event) => {
                     const selectedValue = event.target.value;
                     handleSelectChange(selectedValue);
-                    const selectedItem = khoiCV.find((item) => `${item.ID_KhoiCV}` === selectedValue);
+                    const selectedItem = khoiCV.find(
+                      (item) => `${item.ID_KhoiCV}` === selectedValue
+                    );
                     handleSelectChangeTenKhoiCV(selectedItem?.KhoiCV || '');
                   }}
                   autoWidth

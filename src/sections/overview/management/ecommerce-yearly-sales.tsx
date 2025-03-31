@@ -43,7 +43,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
   const filteredSeries = series?.map((item: any) => ({
     ...item,
     data: item.data.filter((dataItem: any) =>
-      user?.ent_chucvu?.Role === 5 ? dataItem.name === user?.ent_khoicv?.KhoiCV : true
+      user?.ID_Chucvu === 11 ? dataItem.name === user?.ent_khoicv?.KhoiCV : true
     ),
   }));
 

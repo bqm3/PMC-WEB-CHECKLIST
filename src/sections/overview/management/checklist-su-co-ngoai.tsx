@@ -10,6 +10,7 @@ import Card, { CardProps } from '@mui/material/Card';
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -70,6 +71,8 @@ export default function ChecklistYearStatistics({
   const chinhanhPopover = usePopover();
   const tangGiamPopover = usePopover();
   const topPopover = usePopover();
+
+  const { user } = useAuthContext();
 
   const handleChartClick = (
     event: any,
@@ -156,7 +159,7 @@ export default function ChecklistYearStatistics({
           action={
             <Box sx={{ gap: 1, display: 'flex' }}>
               <ButtonBase
-                onClick={topPopover.onOpen} 
+                onClick={topPopover.onOpen}
                 sx={{
                   pl: 1,
                   py: 0.5,
@@ -195,28 +198,48 @@ export default function ChecklistYearStatistics({
                   sx={{ ml: 0.5 }}
                 />
               </ButtonBase>
-              <ButtonBase
-                onClick={chinhanhPopover.onOpen} // Open the KhoiCV popover
-                sx={{
-                  pl: 1,
-                  py: 0.5,
-                  pr: 0.5,
-                  borderRadius: 1,
-                  typography: 'subtitle2',
-                  bgcolor: 'background.neutral',
-                }}
-              >
-                {chiNhanhs.find((option: any) => option.value === selectedChiNhanh)?.label}
-                <Iconify
-                  width={16}
-                  icon={
-                    chinhanhPopover.open
-                      ? 'eva:arrow-ios-upward-fill'
-                      : 'eva:arrow-ios-downward-fill'
+
+              {`${user?.ID_Chucvu}` !== `14` ? (
+                <ButtonBase
+                  onClick={chinhanhPopover.onOpen} // Open the KhoiCV popover
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {chiNhanhs.find((option: any) => option.value === selectedChiNhanh)?.label}
+                  <Iconify
+                    width={16}
+                    icon={
+                      chinhanhPopover.open
+                        ? 'eva:arrow-ios-upward-fill'
+                        : 'eva:arrow-ios-downward-fill'
+                    }
+                    sx={{ ml: 0.5 }}
+                  />
+                </ButtonBase>
+              ) : (
+                <ButtonBase
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {
+                    chiNhanhs.find(
+                      (option: any) => `${option.value}` === `${user?.ID_Chinhanh}`
+                    )?.label
                   }
-                  sx={{ ml: 0.5 }}
-                />
-              </ButtonBase>
+                </ButtonBase>
+              )}
             </Box>
           }
         />
