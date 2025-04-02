@@ -1,4 +1,3 @@
-
 // @mui
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,6 +12,7 @@ import { IDuan, IUser } from 'src/types/khuvuc';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import TransferProjectDialog from './view/transfer-project-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ export default function CalvTableRow({
 
   const confirm = useBoolean();
 
-  const collapse = useBoolean();
+  const transferDialog = useBoolean();
 
   const popover = usePopover();
 
@@ -94,7 +94,7 @@ export default function CalvTableRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 200 }}
       >
         <MenuItem
           onClick={() => {
@@ -104,6 +104,15 @@ export default function CalvTableRow({
         >
           <Iconify icon="solar:eye-bold" />
           Xem
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            transferDialog.onTrue();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="mdi:transfer" />
+          Điều chuyển dự án
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -127,6 +136,12 @@ export default function CalvTableRow({
             Xóa
           </Button>
         }
+      />
+
+      <TransferProjectDialog
+        open={transferDialog.value}
+        onClose={transferDialog.onFalse}
+        user={row}
       />
     </>
   );

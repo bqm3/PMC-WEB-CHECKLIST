@@ -28,7 +28,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormProvider, { RHFTextField, RHFSelect, RHFRadioGroup } from 'src/components/hook-form';
 import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
-import { useGetChucvu, useGetDuan, useGetKhoiCV, useGetNhomDuAn } from 'src/api/khuvuc';
+import { useGetChucvu, useGetDuan, useGetKhoiCV, useGetNhomDuAn, useGetUserHistory } from 'src/api/khuvuc';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const { khoiCV } = useGetKhoiCV();
   const { chucVu } = useGetChucvu();
   const { duan } = useGetDuan();
-
+  const { userHistory } = useGetUserHistory(currentUser?.ID_User);
   const { nhomduan } = useGetNhomDuAn();
 
   const [selectedProject, setSelectedProject] = useState<any>(null);

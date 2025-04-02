@@ -1339,3 +1339,30 @@ export function useGetLoaiChiSoByDuan(){
 
   return memoizedValue;
 }
+
+export function useGetUserHistory(id: any){
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `https://checklist.pmcweb.vn/be/api/v2/user-history/${id}`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      userHistory: (data?.data as IHangMucChiSo[]) || [],
+      userHistoryLoading: isLoading,
+      userHistoryError: error,
+      userHistoryValidating: isValidating,
+      userHistoryEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
