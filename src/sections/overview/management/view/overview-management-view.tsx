@@ -50,6 +50,7 @@ import SuCoNgoaiListView from '../sucongoai/su-co-ngoai-list-view';
 import ManagementSuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import BankingExpensesCategories from '../banking-expenses-categories';
+import ThongKeTongHopDialog from './canhbao-xathai';
 
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
@@ -263,7 +264,8 @@ export default function OverviewAnalyticsView() {
 
   // ============= 21/02/2025 manhnd
   const [showTilehoanthanhh, setShowTilehoanthanhh] = useState(false);
-
+  // ============= hsse 
+  const [openHsse, setOpenHsse] = useState(false);
   // ===============
   const [dataReportChecklistPercentWeek, setDataReportChecklistPercentWeek] = useState<any>();
   const [dataReportProblemChecklistPercentWeek, setDataProblemChecklistPercentWeek] =
@@ -1064,6 +1066,9 @@ export default function OverviewAnalyticsView() {
                 {/* <Button variant="contained" color="warning" onClick={handleOpenChecklistAI}>
                   Ask PMC AI
                 </Button> */}
+                <Button variant="contained" color="info" onClick={() => setOpenHsse(true)}>
+                  Cảnh báo xả thải
+                </Button>
                 <Button variant="contained" color="info" onClick={fetchListDSduan}>
                   Danh sách dự án đang triển khai
                 </Button>
@@ -1743,6 +1748,11 @@ export default function OverviewAnalyticsView() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ThongKeTongHopDialog
+        open={openHsse}
+        onClose={() => setOpenHsse(false)}
+      />
     </>
   );
 }
