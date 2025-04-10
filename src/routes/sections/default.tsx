@@ -41,7 +41,7 @@ export const defaultRoutes = [
             </SimpleLayout>
         ),
         children: [
-            { path: 'gptprivacypolicy.html', element: <GptPage /> },
+            { path: 'gptprivacypolicy', element: <GptPage /> },
         ],
     },
 

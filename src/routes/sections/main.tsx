@@ -42,7 +42,6 @@ export const mainRoutes = [
     ),
     children: [
       { path: 'about-us', element: <AboutPage /> },
-      { path: 'gptprivacypolicy.html', element: <GptPage /> },
       { path: 'contact-us', element: <ContactPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       {
