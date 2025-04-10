@@ -349,14 +349,14 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   // eslint-disable-next-line react/no-unstable-nested-components
   const VehicleCardBalanceAlert = () => {
     const isKhoiCV3 = user?.ID_KhoiCV === 3;
-    
+
     // Determine which error flags to use based on user type
     const carError = isKhoiCV3 ? hasCarCardBalanceError1 : hasCarCardBalanceError;
     const motorcycleError = isKhoiCV3 ? hasMotorcycleCardBalanceError1 : hasMotorcycleCardBalanceError;
-    
+
     // Only render if there's an error
     if (!carError && !motorcycleError) return null;
-    
+
     return (
       <Box>
         <Alert severity="error">
@@ -367,17 +367,17 @@ export default function P0NewEditForm({ currentP0 }: Props) {
               </Typography>
               <Typography>
                 {isKhoiCV3 ? (
-                  <>Tổng thẻ xe ô tô chưa sử dụng ({watchSltheoto}) + xe ô tô thường ({watchSlxeoto}) + 
-                  xe ô tô điện ({watchSlxeotodien}) = {totalCars}</>
+                  <>Tổng thẻ xe ô tô chưa sử dụng ({watchSltheoto}) + xe ô tô thường ({watchSlxeoto}) +
+                    xe ô tô điện ({watchSlxeotodien}) = {totalCars}</>
                 ) : (
                   <>Tổng thẻ xe ô tô chưa sử dụng ({watchSltheoto}) + thẻ ô tô sử dụng trên phần
-                  mềm({watchSltheotophanmem}) = {totalCars}</>
+                    mềm({watchSltheotophanmem}) = {totalCars}</>
                 )}
               </Typography>
               <Typography>Thẻ ô tô đã bàn giao = {watchSotheotodk}</Typography>
             </>
           )}
-  
+
           {motorcycleError && (
             <>
               <Typography fontWeight="bold">
@@ -386,16 +386,16 @@ export default function P0NewEditForm({ currentP0 }: Props) {
               <Typography>
                 {isKhoiCV3 ? (
                   <>Tổng thẻ xe chưa sử dụng ({watchSlthexemay}) + xe máy thường ({watchSlxemay}) +
-                  xe máy điện ({watchSlxemaydien}) = {totalMotorcycles}</>
+                    xe máy điện ({watchSlxemaydien}) = {totalMotorcycles}</>
                 ) : (
                   <>Tổng thẻ xe chưa sử dụng ({watchSlthexemay}) + thẻ xe máy sử dụng trên phần mềm
-                  ({watchSlthexemayphanmem}) = {totalMotorcycles}</>
+                    ({watchSlthexemayphanmem}) = {totalMotorcycles}</>
                 )}
               </Typography>
               <Typography>Thẻ xe máy đã bàn giao = {watchSothexemaydk}</Typography>
             </>
           )}
-  
+
           <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
         </Alert>
       </Box>

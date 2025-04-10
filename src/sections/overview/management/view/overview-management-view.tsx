@@ -296,11 +296,11 @@ export default function OverviewAnalyticsView() {
   const filteredColumns =
     `${user?.ID_Chucvu}` === `11`
       ? columns.filter(
-          (col: any) =>
-            col.field === 'id' ||
-            col.field === 'projectName' ||
-            `${col.field}` === `${user?.ent_khoicv?.KhoiCV}`
-        )
+        (col: any) =>
+          col.field === 'id' ||
+          col.field === 'projectName' ||
+          `${col.field}` === `${user?.ent_khoicv?.KhoiCV}`
+      )
       : columns;
 
   const [spreadsheetData, setSpreadsheetData] = useState<any>([]);
@@ -445,7 +445,7 @@ export default function OverviewAnalyticsView() {
         .map((khoi) => ({
           value: khoi.ID_KhoiCV.toString(),
           label: khoi.KhoiCV,
-      })),
+        })),
     ],
     [khoiCV]
   );
@@ -688,7 +688,7 @@ export default function OverviewAnalyticsView() {
     if (!accessToken || !selectedYearSuCoNgoai || !selectedKhoiCVSuCoNgoai || !selectedChinhanh || !selectedTopSCN) {
       return;
     }
-  
+
     const handleTangGiam = async () => {
       try {
         const res = await axios.get(
@@ -705,7 +705,7 @@ export default function OverviewAnalyticsView() {
         console.log('Lỗi khi gọi API:', err);
       }
     };
-  
+
     handleTangGiam();
   }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedChinhanh, selectedTopSCN]);
 
@@ -1095,7 +1095,7 @@ export default function OverviewAnalyticsView() {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <EcommerceWidgetSummary
-              title=  {`Tỉ lệ checklist ngày ${dataReportChecklistPercentWeek?.yesterdayDate ? dataReportChecklistPercentWeek?.yesterdayDate : ""}`}
+              title={`Tỉ lệ checklist ngày ${dataReportChecklistPercentWeek?.yesterdayDate ? dataReportChecklistPercentWeek?.yesterdayDate : ""}`}
               key="0"
               percent={
                 Number(dataReportChecklistPercentWeek?.lastWeekPercentage) -
@@ -1108,7 +1108,7 @@ export default function OverviewAnalyticsView() {
                   Number(dataReportChecklistPercentWeek?.lastWeekPercentage),
                 ],
               }}
-              compare = {` so với ngày ${dataReportChecklistPercentWeek?.previousYesterdayDate ? dataReportChecklistPercentWeek?.previousYesterdayDate : ""}`}
+              compare={` so với ngày ${dataReportChecklistPercentWeek?.previousYesterdayDate ? dataReportChecklistPercentWeek?.previousYesterdayDate : ""}`}
               onClick={() => setShowTilehoanthanhh(true)}
             />
           </Grid>
@@ -1131,7 +1131,7 @@ export default function OverviewAnalyticsView() {
                 ],
                 colors: [theme.palette.error.light, theme.palette.error.main], // Màu đỏ cho sự cố
               }}
-              compare = " so với tuần trước"
+              compare=" so với tuần trước"
             />
           </Grid>
           <Grid xs={12} md={4}>
@@ -1147,7 +1147,7 @@ export default function OverviewAnalyticsView() {
                 ],
                 colors: [theme.palette.error.light, theme.palette.error.main], // Màu đỏ cho sự cố ngoài
               }}
-              compare = " so với tuần trước"
+              compare=" so với tuần trước"
               onClick={() => setOpenModal_lastWeek(true)}
             />
           </Grid>
@@ -1272,7 +1272,7 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-              //
+            //
             />
           </Grid>
           <Grid xs={12} md={12} lg={12}>
@@ -1337,7 +1337,7 @@ export default function OverviewAnalyticsView() {
           },
         }}
       >
-        <Typography sx={{ml: 1, pb: 1.5, fontWeight: '600', fontSize: 18 }}>
+        <Typography sx={{ ml: 1, pb: 1.5, fontWeight: '600', fontSize: 18 }}>
           Tỉ lệ hoàn thành checklist hôm qua
         </Typography>
         <DataGrid
@@ -1540,12 +1540,12 @@ export default function OverviewAnalyticsView() {
       <Dialog open={openModalSCN_lastWeek} onClose={handleCloseModal_lastWeek} fullWidth maxWidth="lg">
         <DialogTitle>Danh sách sự cố ngoài tuần trước: {selectedCode}</DialogTitle>
         <DialogContent>
-          { dataReportExternalIncidentChecklistPercentWeek?.list && dataReportExternalIncidentChecklistPercentWeek?.list?.length > 0 && openModalSCN_lastWeek === true && (
+          {dataReportExternalIncidentChecklistPercentWeek?.list && dataReportExternalIncidentChecklistPercentWeek?.list?.length > 0 && openModalSCN_lastWeek === true && (
             // eslint-disable-next-line react/jsx-boolean-value
-            <SuCoNgoaiListView data={dataReportExternalIncidentChecklistPercentWeek?.list} tenduan = {true} />
+            <SuCoNgoaiListView data={dataReportExternalIncidentChecklistPercentWeek?.list} tenduan={true} />
           )}
         </DialogContent>
-        <DialogActions> 
+        <DialogActions>
           <Button onClick={handleCloseModal_lastWeek}>Close</Button>
         </DialogActions>
       </Dialog>

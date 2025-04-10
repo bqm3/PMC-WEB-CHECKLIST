@@ -36,7 +36,7 @@ export default function EmergencyPhoneDialog({
 
   useEffect(() => {
     setPhoneNumber(currentPhone)
-  },[currentPhone])
+  }, [currentPhone])
 
   const handleOpen = (): void => {
     setOpen(true);

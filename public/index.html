@@ -41,7 +41,7 @@
       top: -30px;
       width: 15px;
       height: 15px;
-      opacity: 0.6;
+      opacity: 0.8;
       animation: snow-fall linear infinite;
       z-index: 9999;
     }
@@ -64,15 +64,15 @@
 
 <script>
   function createSnowflakes() {
-    const numberOfSnowflakes = 30; // Số lượng hoa
-    const images = ['🏵️', '🌸']; // Emoji hoa
+    const numberOfSnowflakes = 15; // Số lượng hoa
+    const flagUrl = 'https://flagcdn.com/w40/vn.png'; // cờ Việt Nam
 
     for (let i = 0; i < numberOfSnowflakes; i++) {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
 
       // Chọn emoji ngẫu nhiên
-      snowflake.textContent = images[Math.floor(Math.random() * images.length)];
+      snowflake.innerHTML = `<img src="${flagUrl}" style="width: ${Math.random() * 20 + 10}px;" />`;
 
       // Xác định kích thước và vị trí của mỗi hoa
       const size = Math.random() * 15 + 5; // Kích thước hoa (10px đến 30px)

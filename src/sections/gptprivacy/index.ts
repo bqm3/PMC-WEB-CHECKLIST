@@ -1,0 +1,1 @@
+export { default as GptView } from './gpt-view';
