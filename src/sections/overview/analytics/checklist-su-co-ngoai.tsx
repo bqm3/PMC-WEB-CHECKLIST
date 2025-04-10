@@ -52,18 +52,26 @@ export default function ChecklistYearStatistics({
   tangGiam,
   ...other
 }: Props) {
-  const { categories, colors, series, options } = chart;
+  const { categories, series, options, } = chart;
 
   const yearPopover = usePopover();
   const khoiPopover = usePopover();
   const tangGiamPopover = usePopover();
 
+  // Map lại đúng thứ tự: Đã xử lý (xanh), Đang xử lý (vàng), Chưa xử lý (đỏ)
+  const orderedSeries = [
+    series[0]?.data.find((s) => s.name === 'Đã xử lý'),
+    series[0]?.data.find((s) => s.name === 'Đang xử lý'),
+    series[0]?.data.find((s) => s.name === 'Chưa xử lý'),
+  ].filter(Boolean) as ApexAxisChartSeries; // ép kiểu chắc chắn
+
+
   const chartOptions = useChart({
-    colors: ['#FF0000', '#f1c232', '#00a76f'], // Red for "Chưa xử lý", Yellow for "Đang xử lý", Green for "Đã xử lý"
+    colors: ['#00a76f', '#f1c232', '#FF0000'], // Green, Yellow, Red
     stroke: {
       show: true,
       width: 0,
-      colors: ['#FF0000', '#f1c232', '#00a76f'],
+      colors: ['#00a76f', '#f1c232', '#FF0000'],
     },
     dataLabels: {
       enabled: true,
@@ -90,12 +98,13 @@ export default function ChecklistYearStatistics({
     },
     plotOptions: {
       bar: {
-        columnWidth: '50%', // Adjust this value to increase/decrease spacing
-        borderRadius: 4, // Optional: make bars rounded,
+        columnWidth: '50%',
+        borderRadius: 4,
       },
     },
     ...options,
   });
+
 
   const handleChangeSeries = useCallback(
     (newValue: string) => {
@@ -156,10 +165,11 @@ export default function ChecklistYearStatistics({
         {series.map((item) => (
           <Box key={item.type} sx={{ mt: 3, mx: 3 }}>
             {item.type === selectedYear && (
-              <Chart dir="ltr" type="bar" series={item.data} options={chartOptions} height={364} />
+              <Chart dir="ltr" type="bar" series={orderedSeries} options={chartOptions} height={364} />
             )}
           </Box>
         ))}
+
       </Card>
 
       <CustomPopover open={yearPopover.open} onClose={yearPopover.onClose} sx={{ width: 140 }}>

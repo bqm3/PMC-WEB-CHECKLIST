@@ -144,7 +144,7 @@ export default function GiamsatListView() {
           responseType: 'blob',
         }
       );
-  
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
 
       // Create a link element
@@ -164,16 +164,16 @@ export default function GiamsatListView() {
 
       // Release the blob URL after downloading
       window.URL.revokeObjectURL(url);
-  
+
       setCardDialogOpen(false);
       setLoadingReport(false);
     } catch (error) {
       console.error('Error downloading the file:', error);
-      
+
       // Optional: Add error handling to show a user-friendly message
       // For example, you might want to use a toast or notification library
       // toast.error('Failed to download the report. Please try again.');
-      
+
       setCardDialogOpen(false);
       setLoadingReport(false);
     }

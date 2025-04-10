@@ -19,6 +19,7 @@ const ROOTS = {
 export const paths = {
 
   comingSoon: '/coming-soon',
+  gptPrivacy: '/gptprivacypolicy',
   maintenance: '/maintenance',
   pricing: '/pricing',
   payment: '/payment',

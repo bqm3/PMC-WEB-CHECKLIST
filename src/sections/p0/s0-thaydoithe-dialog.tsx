@@ -85,34 +85,34 @@ export default function CardManagementDialog({
         lydothaydoi: formValues?.lydothaydoi,
       };
 
-      const dataOld =  {
+      const dataOld = {
         sotheotodk: formValues.Sotheotodk,
         sothexemaydk: formValues.Sothexemaydk
       }
-      
+
       if (dataToSubmit.lydothaydoi.trim() === '') {
         throw new Error(`Vui lòng nhập lý do`);
       }
-      
+
       // Here you would typically call your API to update the values
-      await axios.put(`https://checklist.pmcweb.vn/be/api/v2/s0-thaydoithe/update`, {data: dataToSubmit, dataOld }, {
+      await axios.put(`https://checklist.pmcweb.vn/be/api/v2/s0-thaydoithe/update`, { data: dataToSubmit, dataOld }, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      
+
       // For now, just pass the data to the parent component
       onSubmit(dataToSubmit);
       setFormValues(null);
       getSoThe();
-      
+
       enqueueSnackbar({
         variant: 'success',
         autoHideDuration: 4000,
         message: 'Cập nhật số lượng thẻ thành công!',
       });
-      
+
       onClose();
     } catch (error) {
       console.log(error);

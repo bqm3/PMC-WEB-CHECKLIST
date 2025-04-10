@@ -232,18 +232,18 @@ export default function ChiaCaNewEditForm() {
       updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
         `${index}` === `${buildingIndex}`
           ? buildingCheckedStates?.map((data: any) => ({
-              ...data,
-              checked: isChecked, // Prevent unchecking important items
-            }))
+            ...data,
+            checked: isChecked, // Prevent unchecking important items
+          }))
           : buildingCheckedStates
       );
     } else {
       updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: any) =>
         `${index}` === `${buildingIndex}`
           ? buildingCheckedStates?.map((data: any) => ({
-              ...data,
-              checked: data.Important ? true : isChecked, // Prevent unchecking important items
-            }))
+            ...data,
+            checked: data.Important ? true : isChecked, // Prevent unchecking important items
+          }))
           : buildingCheckedStates
       );
     }
@@ -256,8 +256,8 @@ export default function ChiaCaNewEditForm() {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: any) =>
       bIndex === buildingIndex
         ? buildingCheckedStates.map((area: any, aIndex: any) =>
-            aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
-          )
+          aIndex === areaIndex ? { ...area, checked: event.target.checked } : area
+        )
         : buildingCheckedStates
     );
     setCheckedStates(updatedCheckedStates);

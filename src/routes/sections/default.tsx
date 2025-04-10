@@ -31,65 +31,32 @@ const PostDetailsPage = lazy(() => import('src/pages/post/details'));
 
 // ----------------------------------------------------------------------
 
-export const mainRoutes = [
-  {
-    element: (
-      <MainLayout>
-        <Suspense fallback={<SplashScreen />}>
-          <Outlet />
-        </Suspense>
-      </MainLayout>
-    ),
-    children: [
-      { path: 'about-us', element: <AboutPage /> },
-      { path: 'contact-us', element: <ContactPage /> },
-      { path: 'faqs', element: <FaqsPage /> },
-      {
-        path: 'product',
+export const defaultRoutes = [
+    {
+        element: (
+            <SimpleLayout>
+                <Suspense fallback={<SplashScreen />}>
+                    <Outlet />
+                </Suspense>
+            </SimpleLayout>
+        ),
         children: [
-          { element: <ProductListPage />, index: true },
-          { path: 'list', element: <ProductListPage /> },
-          { path: ':id', element: <ProductDetailsPage /> },
-          { path: 'checkout', element: <ProductCheckoutPage /> },
+            { path: 'gptprivacypolicy', element: <GptPage /> },
         ],
-      },
-      {
-        path: 'post',
+    },
+
+    {
+        element: (
+            <CompactLayout>
+                <Suspense fallback={<SplashScreen />}>
+                    <Outlet />
+                </Suspense>
+            </CompactLayout>
+        ),
         children: [
-          { element: <PostListPage />, index: true },
-          { path: 'list', element: <PostListPage /> },
-          { path: ':title', element: <PostDetailsPage /> },
+            { path: '500', element: <Page500 /> },
+            { path: '404', element: <Page404 /> },
+            { path: '403', element: <Page403 /> },
         ],
-      },
-    ],
-  },
-  {
-    element: (
-      <SimpleLayout>
-        <Suspense fallback={<SplashScreen />}>
-          <Outlet />
-        </Suspense>
-      </SimpleLayout>
-    ),
-    children: [
-      { path: 'pricing', element: <PricingPage /> },
-      { path: 'payment', element: <PaymentPage /> },
-    ],
-  },
-  {
-    element: (
-      <CompactLayout>
-        <Suspense fallback={<SplashScreen />}>
-          <Outlet />
-        </Suspense>
-      </CompactLayout>
-    ),
-    children: [
-      { path: 'coming-soon', element: <ComingSoonPage /> },
-      { path: 'maintenance', element: <MaintenancePage /> },
-      { path: '500', element: <Page500 /> },
-      { path: '404', element: <Page404 /> },
-      { path: '403', element: <Page403 /> },
-    ],
-  },
+    },
 ];
