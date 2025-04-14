@@ -18,6 +18,9 @@ import {
   ListItem,
   Checkbox,
   Chip,
+  Menu,
+  MenuItem,
+  Paper,
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -54,6 +57,7 @@ import ManagementSuCoListView from '../suco/su-co-list-view';
 import EcommerceWidgetSummary from '../ecommerce-widget-summary';
 import BankingExpensesCategories from '../banking-expenses-categories';
 import ThongKeTongHopDialog from './canhbao-xathai';
+import ProjectsOverview from '../project-table';
 
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
@@ -269,7 +273,7 @@ export default function OverviewAnalyticsView() {
 
   // ============= 21/02/2025 manhnd
   const [showTilehoanthanhh, setShowTilehoanthanhh] = useState(false);
-  // ============= hsse 
+  // ============= hsse
   const [openHsse, setOpenHsse] = useState(false);
   // ===============
   const [dataReportChecklistPercentWeek, setDataReportChecklistPercentWeek] = useState<any>();
@@ -303,11 +307,11 @@ export default function OverviewAnalyticsView() {
   const filteredColumns =
     `${user?.ID_Chucvu}` === `11`
       ? columns.filter(
-        (col: any) =>
-          col.field === 'id' ||
-          col.field === 'projectName' ||
-          `${col.field}` === `${user?.ent_khoicv?.KhoiCV}`
-      )
+          (col: any) =>
+            col.field === 'id' ||
+            col.field === 'projectName' ||
+            `${col.field}` === `${user?.ent_khoicv?.KhoiCV}`
+        )
       : columns;
 
   const [spreadsheetData, setSpreadsheetData] = useState<any>([]);
@@ -448,7 +452,7 @@ export default function OverviewAnalyticsView() {
     () => [
       { value: 'all', label: 'Tất cả' },
       ...khoiCV
-        .filter(khoi => `${khoi.ID_KhoiCV}` !== `5`)
+        .filter((khoi) => `${khoi.ID_KhoiCV}` !== `5`)
         .map((khoi) => ({
           value: khoi.ID_KhoiCV.toString(),
           label: khoi.KhoiCV,
@@ -525,12 +529,15 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+        .get(
+          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-yesterday',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
         .then((res) => {
           const dataRes = res.data.avgCompletionRatios;
           setDataReportPercentChecklist(dataRes);
@@ -544,12 +551,15 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get('https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-a-week', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+        .get(
+          'https://checklist.pmcweb.vn/be/api/v2/tb_checklistc/report-checklist-percent-a-week',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
         .then((res) => {
           const dataRes = res.data.data;
           setDataReportPercentWeekChecklist(dataRes);
@@ -646,11 +656,14 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+        .get(
+          `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/report-external-incident-percent-week`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
         .then((res) => {
           setDataExternalIncidentChecklistPercentWeek(res.data.data);
         })
@@ -692,7 +705,13 @@ export default function OverviewAnalyticsView() {
 
   // Sự cố ngoài
   useEffect(() => {
-    if (!accessToken || !selectedYearSuCoNgoai || !selectedKhoiCVSuCoNgoai || !selectedChinhanh || !selectedTopSCN) {
+    if (
+      !accessToken ||
+      !selectedYearSuCoNgoai ||
+      !selectedKhoiCVSuCoNgoai ||
+      !selectedChinhanh ||
+      !selectedTopSCN
+    ) {
       return;
     }
 
@@ -714,7 +733,13 @@ export default function OverviewAnalyticsView() {
     };
 
     handleTangGiam();
-  }, [accessToken, selectedYearSuCoNgoai, selectedKhoiCVSuCoNgoai, selectedChinhanh, selectedTopSCN]);
+  }, [
+    accessToken,
+    selectedYearSuCoNgoai,
+    selectedKhoiCVSuCoNgoai,
+    selectedChinhanh,
+    selectedTopSCN,
+  ]);
 
   const handleLinkHSSE = () => {
     const url =
@@ -1049,6 +1074,97 @@ export default function OverviewAnalyticsView() {
     }
   };
 
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const DashboardMenu = () => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const openMenu = Boolean(anchorEl);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+      setAnchorEl(null);
+    };
+
+    const handleMenuItemClick = (action: any) => {
+      handleCloseMenu();
+      action();
+    };
+
+    return (
+      <div>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClick}
+          endIcon={<Iconify icon="material-symbols:keyboard-arrow-down" />}
+        >
+          Báo cáo
+        </Button>
+
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={openMenu}
+          onClose={handleCloseMenu}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem
+            onClick={() => handleMenuItemClick(() => router.push(paths.dashboard.p0.analytics))}
+          >
+            <Iconify icon="mdi:chart-box" style={{ marginRight: '8px' }} />
+            Báo cáo S0
+          </MenuItem>
+
+          <MenuItem onClick={() => handleMenuItemClick(() => setOpenHsse(true))}>
+            <Iconify icon="mdi:alert" style={{ marginRight: '8px' }} />
+            Cảnh báo xả thải
+          </MenuItem>
+
+          <MenuItem onClick={() => handleMenuItemClick(fetchExcelData)}>
+            <Iconify icon="mdi:file-document-outline" style={{ marginRight: '8px' }} />
+            Danh sách dự án
+          </MenuItem>
+
+          {user?.ent_chucvu?.Role === 10 && (
+            <>
+              <MenuItem onClick={() => handleMenuItemClick(fetchListDSduan)}>
+                <Iconify icon="mdi:folder-outline" style={{ marginRight: '8px' }} />
+                Danh sách dự án đang triển khai
+              </MenuItem>
+
+              <MenuItem onClick={() => handleMenuItemClick(handleOpenChecklistLocation)}>
+                <Iconify icon="mdi:map-marker" style={{ marginRight: '8px' }} />
+                Báo cáo vị trí
+              </MenuItem>
+
+              <MenuItem onClick={() => handleMenuItemClick(handleOpenChecklistMonth)}>
+                <Iconify icon="mdi:clipboard-check-outline" style={{ marginRight: '8px' }} />
+                Báo cáo checklist
+              </MenuItem>
+
+              <MenuItem onClick={() => handleMenuItemClick(handleShowDuanSCN)}>
+                <Iconify icon="mdi:format-list-bulleted" style={{ marginRight: '8px' }} />
+                Danh sách SCN
+              </MenuItem>
+            </>
+          )}
+        </Menu>
+      </div>
+    );
+  };
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -1062,53 +1178,21 @@ export default function OverviewAnalyticsView() {
           }}
         >
           <Typography variant="h4">
-            Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''} {user?.ent_khoicv?.KhoiCV ? `- ${user?.ent_khoicv?.KhoiCV}` : ''}
+            Hi, {user?.Hoten} {user?.ent_chucvu?.Chucvu ? `(${user?.ent_chucvu?.Chucvu})` : ''}{' '}
+            {user?.ent_khoicv?.KhoiCV ? `- ${user?.ent_khoicv?.KhoiCV}` : ''}
             {user?.ent_chinhanh?.Tenchinhanh ? `- ${user?.ent_chinhanh?.Tenchinhanh}` : ''}
           </Typography>
-          <Box display="flex" gap={2} alignItems="center">
-          <Button variant="contained" color="info" onClick={() => router.push(paths.dashboard.p0.analytics)}>
-            Báo cáo S0
-          </Button>
-          <Button variant="contained" color="info" onClick={() => setOpenHsse(true)}>
-            Cảnh báo xả thải
-          </Button>
-            {user?.ent_chucvu?.Role === 10 && (
-              <>
-                {/* <Button variant="contained" color="warning" onClick={handleOpenChecklistAI}>
-                  Ask PMC AI
-                </Button> */}
-                <Button variant="contained" color="info" onClick={fetchListDSduan}>
-                  Danh sách dự án đang triển khai
-                </Button>
-
-                <Button variant="contained" color="info" onClick={handleOpenChecklistLocation}>
-                  Báo cáo vị trí
-                </Button>
-                <Button variant="contained" color="info" onClick={handleOpenChecklistMonth}>
-                  Báo cáo checklist
-                </Button>
-                <Button variant="contained" color="info" onClick={handleShowDuanSCN}>
-                  Danh sách SCN
-                </Button>
-              </>
-            )}
-            <Button variant="contained" color="success" onClick={fetchExcelData}>
-              Danh sách dự án
-            </Button>
-            {/* <Button
-              variant="contained"
-              startIcon={<Iconify icon="eva:link-2-fill" />}
-              onClick={handleLinkHSSE}
-            >
-              Báo cáo HSSE
-            </Button> */}
-          </Box>
+          <DashboardMenu />
         </Grid>
 
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <EcommerceWidgetSummary
-              title={`Tỉ lệ checklist ngày ${dataReportChecklistPercentWeek?.yesterdayDate ? dataReportChecklistPercentWeek?.yesterdayDate : ""}`}
+              title={`Tỉ lệ checklist ngày ${
+                dataReportChecklistPercentWeek?.yesterdayDate
+                  ? dataReportChecklistPercentWeek?.yesterdayDate
+                  : ''
+              }`}
               key="0"
               percent={
                 Number(dataReportChecklistPercentWeek?.lastWeekPercentage) -
@@ -1121,7 +1205,11 @@ export default function OverviewAnalyticsView() {
                   Number(dataReportChecklistPercentWeek?.lastWeekPercentage),
                 ],
               }}
-              compare={` so với ngày ${dataReportChecklistPercentWeek?.previousYesterdayDate ? dataReportChecklistPercentWeek?.previousYesterdayDate : ""}`}
+              compare={` so với ngày ${
+                dataReportChecklistPercentWeek?.previousYesterdayDate
+                  ? dataReportChecklistPercentWeek?.previousYesterdayDate
+                  : ''
+              }`}
               onClick={() => setShowTilehoanthanhh(true)}
             />
           </Grid>
@@ -1258,6 +1346,7 @@ export default function OverviewAnalyticsView() {
               setShowMax={setShowMax}
             />
           </Grid>
+         
           <Grid xs={12} md={12} lg={12}>
             <ChecklistsSuCo
               title="Số lượng sự cố trong ngày"
@@ -1285,9 +1374,16 @@ export default function OverviewAnalyticsView() {
               top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-            //
+              //
             />
           </Grid>
+
+          <Grid xs={12} md={12} lg={12}>
+            <ProjectsOverview dataPercent={dataPercent} />
+          </Grid>
+          
+      
+
           <Grid xs={12} md={12} lg={12}>
             <ChecklistsSuCoNgoai
               title="Sự cố ngoài"
@@ -1314,28 +1410,6 @@ export default function OverviewAnalyticsView() {
               top={top}
             />
           </Grid>
-          {`${user?.ent_chucvu?.Role}` !== `5` && (
-            <Grid xs={12} md={12} lg={12}>
-              <Box sx={{ maxHeight: 450, width: '100%', my: 2 }}>
-                <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
-                  Tỉ lệ hoàn thành checklist hôm qua
-                </Typography>
-                <DataGrid
-                  rows={dataPercent}
-                  columns={columns}
-                  sx={{
-                    maxHeight: 450,
-                    overflowY: 'auto',
-                    '&::-webkit-scrollbar': { display: 'none' }, // Ẩn thanh cuộn trong WebKit
-                    '-ms-overflow-style': 'none', // Ẩn thanh cuộn trong IE và Edge
-                    'scrollbar-width': 'none', // Ẩn thanh cuộn trong Firefox
-                  }}
-                  disableRowSelectionOnClick
-                  hideFooter
-                />
-              </Box>
-            </Grid>
-          )}
         </Grid>
       </Container>
 
@@ -1550,13 +1624,23 @@ export default function OverviewAnalyticsView() {
         </DialogActions> */}
       </Dialog>
 
-      <Dialog open={openModalSCN_lastWeek} onClose={handleCloseModal_lastWeek} fullWidth maxWidth="lg">
+      <Dialog
+        open={openModalSCN_lastWeek}
+        onClose={handleCloseModal_lastWeek}
+        fullWidth
+        maxWidth="lg"
+      >
         <DialogTitle>Danh sách sự cố ngoài tuần trước: {selectedCode}</DialogTitle>
         <DialogContent>
-          {dataReportExternalIncidentChecklistPercentWeek?.list && dataReportExternalIncidentChecklistPercentWeek?.list?.length > 0 && openModalSCN_lastWeek === true && (
-            // eslint-disable-next-line react/jsx-boolean-value
-            <SuCoNgoaiListView data={dataReportExternalIncidentChecklistPercentWeek?.list} tenduan={true} />
-          )}
+          {dataReportExternalIncidentChecklistPercentWeek?.list &&
+            dataReportExternalIncidentChecklistPercentWeek?.list?.length > 0 &&
+            openModalSCN_lastWeek === true && (
+              // eslint-disable-next-line react/jsx-boolean-value
+              <SuCoNgoaiListView
+                data={dataReportExternalIncidentChecklistPercentWeek?.list}
+                tenduan
+              />
+            )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal_lastWeek}>Close</Button>
@@ -1757,10 +1841,7 @@ export default function OverviewAnalyticsView() {
         </DialogActions>
       </Dialog>
 
-      <ThongKeTongHopDialog
-        open={openHsse}
-        onClose={() => setOpenHsse(false)}
-      />
+      <ThongKeTongHopDialog open={openHsse} onClose={() => setOpenHsse(false)} />
     </>
   );
 }
