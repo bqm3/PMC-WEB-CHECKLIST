@@ -172,6 +172,7 @@ const AdminP0ListPage = lazy(() => import('src/pages/dashboard/p0/admin'));
 const P0PhanQuyenPage = lazy(() => import('src/pages/dashboard/p0/phanquyen'));
 const P0NewPage = lazy(() => import('src/pages/dashboard/p0/new'));
 const P0EditPage = lazy(() => import('src/pages/dashboard/p0/edit'));
+const P0AnalyticsView = lazy(() => import('src/pages/dashboard/p0/analytics'));
 
 // Tòa nhà
 const ToanhaListsPage = lazy(() => import('src/pages/dashboard/toanha/list'));
@@ -398,6 +399,7 @@ export const dashboardRoutes = [
           { path: 'phanquyen', element: <P0PhanQuyenPage /> },
           { path: ':id/edit', element: <P0EditPage /> },
           { path: 'new', element: <P0NewPage /> },
+          { path: 'analytics', element: <P0AnalyticsView /> },
         ],
       },
       {

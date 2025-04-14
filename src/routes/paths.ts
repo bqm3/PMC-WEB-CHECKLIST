@@ -246,6 +246,7 @@ export const paths = {
       phanquyen: `${ROOTS.DASHBOARD}/p0/phanquyen`,
       details: (id: string) => `${ROOTS.DASHBOARD}/p0/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/p0/${id}/edit`,
+      analytics: `${ROOTS.DASHBOARD}/p0/analytics`,
     },
     toanha: {
       root: `${ROOTS.DASHBOARD}/toanha`,

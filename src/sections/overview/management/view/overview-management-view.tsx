@@ -27,6 +27,9 @@ import Button from '@mui/material/Button';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Autocomplete from '@mui/material/Autocomplete';
+// routes
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 // utils
 import { getImageUrls } from 'src/utils/get-image';
 // hooks
@@ -208,6 +211,8 @@ export default function OverviewAnalyticsView() {
   const settings = useSettingsContext();
 
   const { user, logout } = useAuthContext();
+
+  const router = useRouter();
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
@@ -1061,14 +1066,17 @@ export default function OverviewAnalyticsView() {
             {user?.ent_chinhanh?.Tenchinhanh ? `- ${user?.ent_chinhanh?.Tenchinhanh}` : ''}
           </Typography>
           <Box display="flex" gap={2} alignItems="center">
+          <Button variant="contained" color="info" onClick={() => router.push(paths.dashboard.p0.analytics)}>
+            Báo cáo S0
+          </Button>
+          <Button variant="contained" color="info" onClick={() => setOpenHsse(true)}>
+            Cảnh báo xả thải
+          </Button>
             {user?.ent_chucvu?.Role === 10 && (
               <>
                 {/* <Button variant="contained" color="warning" onClick={handleOpenChecklistAI}>
                   Ask PMC AI
                 </Button> */}
-                <Button variant="contained" color="info" onClick={() => setOpenHsse(true)}>
-                  Cảnh báo xả thải
-                </Button>
                 <Button variant="contained" color="info" onClick={fetchListDSduan}>
                   Danh sách dự án đang triển khai
                 </Button>

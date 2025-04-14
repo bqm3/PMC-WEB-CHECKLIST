@@ -113,7 +113,7 @@ export default function EcommerceWidgetSummary({
           {title}
         </Typography>
 
-        {`${total}` === `undefined%` || `${total}` === `undefined` || `${total}` === `null` || `${total}` === `` ? (
+        {`${percent}` === `NaN` ||`${total}` === `undefined%` || `${total}` === `undefined` || `${total}` === `null` || `${total}` === `` ? (
           <CircularProgress />
         ) : (
           <>
