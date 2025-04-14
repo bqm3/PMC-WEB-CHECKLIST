@@ -45,7 +45,7 @@ interface Props extends CardProps {
   months: any;
   nhoms: any;
   tangGiam: any;
-  top: any;
+  top?: any;
   setShowMax: any;
   showMax: any;
 }
@@ -90,7 +90,7 @@ export default function ChecklistsHoanThanh({
   const tangGiamPopover = usePopover();
   const topPopover = usePopover();
   const { user } = useAuthContext();
-  
+
   const chartOptions = useChart({
     colors,
     stroke: {
@@ -202,26 +202,29 @@ export default function ChecklistsHoanThanh({
           subheader={subheader}
           action={
             <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap' }}>
-              <ButtonBase
-                onClick={topPopover.onOpen} // Open the KhoiCV popover
-                sx={{
-                  pl: 1,
-                  py: 0.5,
-                  pr: 0.5,
-                  borderRadius: 1,
-                  typography: 'subtitle2',
-                  bgcolor: 'background.neutral',
-                }}
-              >
-                {top.find((option: any) => option.value === selectedTop)?.label}
-                <Iconify
-                  width={16}
-                  icon={
-                    topPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
-                  }
-                  sx={{ ml: 0.5 }}
-                />
-              </ButtonBase>
+              {top && (
+                <ButtonBase
+                  onClick={topPopover.onOpen} // Open the KhoiCV popover
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {top.find((option: any) => option.value === selectedTop)?.label}
+                  <Iconify
+                    width={16}
+                    icon={
+                      topPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                    }
+                    sx={{ ml: 0.5 }}
+                  />
+                </ButtonBase>
+              )}
+
               <ButtonBase
                 onClick={nhomPopover.onOpen} // Open the KhoiCV popover
                 sx={{
@@ -328,7 +331,6 @@ export default function ChecklistsHoanThanh({
                   />
                 </ButtonBase>
               ) : (
-                
                 <ButtonBase
                   sx={{
                     pl: 1,
@@ -339,9 +341,11 @@ export default function ChecklistsHoanThanh({
                     bgcolor: 'background.neutral',
                   }}
                 >
-                  {STATUS_OPTIONS.find((option: any) => `${option.value}` === `${user?.ID_KhoiCV}`)?.label}
+                  {
+                    STATUS_OPTIONS.find((option: any) => `${option.value}` === `${user?.ID_KhoiCV}`)
+                      ?.label
+                  }
                 </ButtonBase>
-                
               )}
             </Box>
           }

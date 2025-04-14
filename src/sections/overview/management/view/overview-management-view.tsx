@@ -1317,7 +1317,8 @@ export default function OverviewAnalyticsView() {
             />
           </Grid>
 
-          <Grid xs={12} md={12} lg={12}>
+          {/* <Grid xs={12} md={12} lg={12}> */}
+          <Grid xs={12} md={6}>
             <ChecklistsHoanThanh
               title="Tỉ lệ hoàn thành checklist hôm trước"
               subheader="Hoàn thành checklist theo ca"
@@ -1341,13 +1342,13 @@ export default function OverviewAnalyticsView() {
               months={months}
               nhoms={nhoms}
               tangGiam={tangGiam}
-              top={top}
+              // top={top}
               showMax={showMax}
               setShowMax={setShowMax}
             />
           </Grid>
          
-          <Grid xs={12} md={12} lg={12}>
+          <Grid xs={12} md={6}>
             <ChecklistsSuCo
               title="Số lượng sự cố trong ngày"
               subheader="Số lượng sự cố chưa hoàn thành"
@@ -1371,7 +1372,7 @@ export default function OverviewAnalyticsView() {
               months={months}
               nhoms={nhoms}
               tangGiam={tangGiam}
-              top={top}
+              // top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
               //

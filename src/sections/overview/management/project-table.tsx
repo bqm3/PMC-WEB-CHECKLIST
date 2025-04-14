@@ -30,7 +30,7 @@ const ProjectTable = ({ title, data, columns }: ProjectTableProps) => (
   <Grid item xs={12} md={6} lg={3}>
     <Paper elevation={2} sx={{ height: '100%', borderRadius: 2 }}>
       <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
-        <Typography variant="subtitle1" fontWeight="bold">
+        <Typography variant="subtitle1" fontWeight="bold" align="center">
           {title}
         </Typography>
       </Box>

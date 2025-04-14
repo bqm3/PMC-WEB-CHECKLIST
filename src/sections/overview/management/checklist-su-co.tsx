@@ -50,7 +50,7 @@ interface Props extends CardProps {
   months: any;
   nhoms: any;
   tangGiam: any;
-  top: any;
+  top?: any;
   handleOpenModalSuCo: any;
   handleCloseModalSuCo: any;
 }
@@ -214,26 +214,28 @@ export default function ChecklistsSuco({
           subheader={subheader}
           action={
             <Box sx={{ gap: 1, display: 'flex', flexGrow: 1, flexWrap: 'wrap', width: 360 }}>
-              <ButtonBase
-                onClick={topPopover.onOpen} // Open the KhoiCV popover
-                sx={{
-                  pl: 1,
-                  py: 0.5,
-                  pr: 0.5,
-                  borderRadius: 1,
-                  typography: 'subtitle2',
-                  bgcolor: 'background.neutral',
-                }}
-              >
-                {top.find((option: any) => option.value === selectedTop)?.label}
-                <Iconify
-                  width={16}
-                  icon={
-                    topPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
-                  }
-                  sx={{ ml: 0.5 }}
-                />
-              </ButtonBase>
+              {top && (
+                <ButtonBase
+                  onClick={topPopover.onOpen} // Open the KhoiCV popover
+                  sx={{
+                    pl: 1,
+                    py: 0.5,
+                    pr: 0.5,
+                    borderRadius: 1,
+                    typography: 'subtitle2',
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {top.find((option: any) => option.value === selectedTop)?.label}
+                  <Iconify
+                    width={16}
+                    icon={
+                      topPopover.open ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'
+                    }
+                    sx={{ ml: 0.5 }}
+                  />
+                </ButtonBase>
+              )}
               <ButtonBase
                 onClick={nhomPopover.onOpen} // Open the KhoiCV popover
                 sx={{
