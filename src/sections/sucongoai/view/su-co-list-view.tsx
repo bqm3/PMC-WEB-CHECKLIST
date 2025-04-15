@@ -80,6 +80,7 @@ import TableSelectedAction from '../table-selected-action';
 import TableHeadCustom from '../table-head-custom';
 
 import EmergencyPhoneDialog from '../sdtKhanCap';
+import BansucoDialog from '../bansuco-table-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -363,7 +364,11 @@ export default function SuCoListView() {
             }}
           />
 
-          <EmergencyPhoneDialog currentPhone={sdtKhanCap} onSuccess={handlePhoneUpdated} />
+          <Box display="flex" alignItems="center" gap={2}>
+            <EmergencyPhoneDialog currentPhone={sdtKhanCap} onSuccess={handlePhoneUpdated} />
+            <BansucoDialog/>
+          </Box>
+
           {/* <LoadingButton
             loading={loading}
             variant="contained"
@@ -785,8 +790,9 @@ function NhomTSDialog({
             disabled
           />
           <TextField
-            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
-              }`}
+            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${
+              dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
+            }`}
             label="Ngày sự cố"
             disabled
           />

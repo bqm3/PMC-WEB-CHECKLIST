@@ -47,6 +47,7 @@ import Spreadsheet from 'react-spreadsheet';
 import { useGetKhoiCV, useGetDuanWeb } from 'src/api/khuvuc';
 import moment from 'moment';
 //
+import BansucoDialog from 'src/sections/sucongoai/bansuco-table-dialog';
 import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import EcommerceYearlySales from '../ecommerce-yearly-sales';
 import PercentChecklistWidgetSummary from '../percent-checklist-widget-summary';
@@ -1120,6 +1121,7 @@ export default function OverviewAnalyticsView() {
             horizontal: 'right',
           }}
         >
+          <BansucoDialog isMenu/>
           <MenuItem
             onClick={() => handleMenuItemClick(() => router.push(paths.dashboard.p0.analytics))}
           >
@@ -1137,7 +1139,7 @@ export default function OverviewAnalyticsView() {
             Danh sách dự án
           </MenuItem>
 
-          {user?.ent_chucvu?.Role === 10 && (
+          {`${user?.ent_chucvu?.Role}` === `10` && (
             <>
               <MenuItem onClick={() => handleMenuItemClick(fetchListDSduan)}>
                 <Iconify icon="mdi:folder-outline" style={{ marginRight: '8px' }} />
