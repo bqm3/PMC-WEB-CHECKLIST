@@ -72,7 +72,7 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
   const getCanhBaoColor = (idCanhbao: number) => {
     switch (idCanhbao) {
       case 1:
-        return '#ff9800'; // Màu cam cho cảnh báo dưới mức
+        return '#000000'; // Màu cam cho cảnh báo dưới mức
       case 2:
         return '#f44336'; // Màu đỏ cho cảnh báo vượt mức
       default:
