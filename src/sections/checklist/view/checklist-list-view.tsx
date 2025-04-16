@@ -717,15 +717,17 @@ function applyFilter({
   if (name) {
     inputData = inputData?.filter(
       (checklist) =>
-        `${checklist?.Checklist}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist?.MaQrCode}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist?.ent_hangmuc?.Hangmuc}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist?.ent_tang?.Tentang}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist?.ent_hangmuc?.MaQrCode}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist?.ent_khuvuc?.MaQrCode}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${checklist?.ent_khuvuc?.Tenkhuvuc}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${checklist?.Checklist}`?.normalize('NFC')?.toLowerCase().indexOf(name.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${checklist?.MaQrCode}`?.normalize('NFC')?.toLowerCase().indexOf(name.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${checklist?.ent_hangmuc?.Hangmuc}`?.normalize('NFC')?.toLowerCase().indexOf(name.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${checklist?.ent_tang?.Tentang}`?.normalize('NFC')?.toLowerCase().indexOf(name.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${checklist?.ent_hangmuc?.MaQrCode}`?.normalize('NFC')?.toLowerCase().indexOf(name.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${checklist?.ent_khuvuc?.MaQrCode}`?.normalize('NFC')?.toLowerCase().indexOf(name.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${checklist?.ent_khuvuc?.Tenkhuvuc}`?.normalize('NFC')?.toLowerCase().indexOf(name.normalize('NFC')?.toLowerCase()) !== -1
     );
   }
+
+  console.log("inputData",inputData)
   if (building.length) {
     inputData = inputData.filter((item) => building.includes(String(item?.ent_khuvuc?.ent_toanha?.ID_Toanha)));
   }

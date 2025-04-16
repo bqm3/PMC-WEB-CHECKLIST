@@ -729,9 +729,9 @@ function applyFilter({
   if (name) {
     inputData = inputData.filter(
       (order) =>
-        `${order.Tenkhuvuc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${order.MaQrCode}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        `${order.ent_toanha.Toanha}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        `${order.Tenkhuvuc}`?.normalize('NFC')?.toLowerCase().indexOf(name?.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${order.MaQrCode}`?.normalize('NFC')?.toLowerCase().indexOf(name?.normalize('NFC')?.toLowerCase()) !== -1 ||
+        `${order.ent_toanha.Toanha}`?.normalize('NFC')?.toLowerCase().indexOf(name?.normalize('NFC')?.toLowerCase()) !== -1
     );
   }
 
