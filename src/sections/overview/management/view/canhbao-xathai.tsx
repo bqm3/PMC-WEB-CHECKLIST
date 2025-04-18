@@ -22,6 +22,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import moment from 'moment';
 import axios from 'axios';
+import * as XLSX from 'xlsx';
+import Iconify from 'src/components/iconify';
 
 interface CanhBaoData {
   TenDuAn: string;
@@ -86,6 +88,43 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
     }
   };
 
+  // Chức năng export to Excel
+  const exportToExcel = () => {
+    // Định dạng dữ liệu cho Excel
+    const excelData = data.map((row, index) => ({
+      'STT': index + 1,
+      'Tên dự án': row.TenDuAn,
+      'Ngày ghi nhận': moment(row.NgayGhiNhan).format('DD/MM/YYYY'),
+      'Xả thải': row.XaThai,
+      'Chỉ số giấy phép': row.ChiSoGiayPhep,
+      'Chỉ số trung bình': row.ChiSoTrungBinh,
+      'Cảnh báo': row.CanhBao
+    }));
+
+    // Tạo workbook và worksheet
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Cảnh báo xả thải');
+
+    // Tự động điều chỉnh chiều rộng cột
+    const colWidths = [
+      { wch: 5 },  // STT
+      { wch: 30 }, // Tên dự án
+      { wch: 15 }, // Ngày ghi nhận
+      { wch: 10 }, // Xả thải
+      { wch: 20 }, // Chỉ số giấy phép
+      { wch: 20 }, // Chỉ số trung bình
+      { wch: 25 }  // Cảnh báo
+    ];
+    worksheet['!cols'] = colWidths;
+
+    // Tạo tên file với định dạng ngày tháng năm
+    const fileName = `Canh_Bao_Xa_Thai_${selectedDate.format('DD-MM-YYYY')}.xlsx`;
+
+    // Xuất file Excel
+    XLSX.writeFile(workbook, fileName);
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
       <DialogTitle>Báo cáo cảnh báo xả thải</DialogTitle>
@@ -96,22 +135,32 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
           </Alert>
         )}
 
-        <Box sx={{ mb: 3, mt: 1 }}>
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DatePicker
-              label="Chọn ngày"
-              value={selectedDate}
-              onChange={handleDateChange}
-              format="DD/MM/YYYY"
-              maxDate={moment()}
-              slotProps={{ 
-                textField: { 
-                  fullWidth: true,
-                //   helperText: "Không được chọn ngày trong tương lai"
-                } 
-              }}
-            />
-          </LocalizationProvider>
+        <Box sx={{ mb: 3, mt: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ width: '70%' }}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DatePicker
+                label="Chọn ngày"
+                value={selectedDate}
+                onChange={handleDateChange}
+                format="DD/MM/YYYY"
+                maxDate={moment()}
+                slotProps={{ 
+                  textField: { 
+                    fullWidth: true,
+                  } 
+                }}
+              />
+            </LocalizationProvider>
+          </Box>
+          <Button 
+            variant="outlined" 
+            color="primary"
+            startIcon={<Iconify icon="eva:download-outline" />}
+            onClick={exportToExcel}
+            disabled={loading || data.length === 0}
+          >
+            Xuất Excel
+          </Button>
         </Box>
 
         {loading ? (
@@ -148,6 +197,13 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
                     </TableCell>
                   </TableRow>
                 ))}
+                {data.length === 0 && !loading && (
+                  <TableRow>
+                    <TableCell colSpan={7} align="center">
+                      Không có dữ liệu
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -163,4 +219,4 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
   );
 };
 
-export default CanhBaoXaThaiDialog; 
+export default CanhBaoXaThaiDialog;
