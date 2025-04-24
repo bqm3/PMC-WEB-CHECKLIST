@@ -43,14 +43,16 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     <Scrollbar
       sx={{
         height: 1,
+        backgroundColor: (theme) => "#f3f6f4",
         '& .simplebar-content': {
           height: 1,
           display: 'flex',
           flexDirection: 'column',
+
         },
       }}
     >
-      <Logo sx={{ mt: 2, ml: 2}} />
+      <Logo sx={{ mt: 2, ml: 2 }} />
 
       <NavSectionVertical
         data={navData}

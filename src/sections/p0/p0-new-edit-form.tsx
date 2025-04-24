@@ -396,7 +396,21 @@ export default function P0NewEditForm({ currentP0 }: Props) {
             </>
           )}
 
-          <Typography>Vui lòng kiểm tra lại dữ liệu trước khi gửi</Typography>
+          <>
+            <Typography fontWeight="bold">
+              Hướng dẫn nhập liệu
+            </Typography>
+            <Typography>
+              - Chỉ giám đốc nhập Thông tin thẻ
+              <br />
+              - Dịch vụ nhập Thông tin kiểm kê tại quầy
+              <br />
+              - Kế toán nhập doanh thu <br />
+              - An ninh nhập thông tin xe, sự cố và ghi chú
+            </Typography>
+
+          </>
+
         </Alert>
       </Box>
     );
@@ -405,16 +419,6 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const renderDetails = (
     <Grid xs={12} md={12}>
       <Stack spacing={3}>
-        {/* <Box>
-          <Alert severity="warning">
-            <Typography>
-              Nên sử dụng trình duyệt Google Chrome để nhập các chỉ số để tránh gặp lỗi khi khai báo
-            </Typography>
-            <Typography>
-              Đối với các chỉ số không có dữ liệu thì sẽ không cần phải nhập (Mặc định là 0)
-            </Typography>
-          </Alert>
-        </Box> */}
 
         {VehicleCardBalanceAlert()}
 

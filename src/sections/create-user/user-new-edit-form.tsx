@@ -56,13 +56,13 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const { userHistory } = useGetUserHistory(currentUser?.ID_User);
 
   const { nhomduan } = useGetNhomDuAn();
-  const [ oldUserName, setOldUserName ] = useState("");
+  const [oldUserName, setOldUserName] = useState("");
 
   useEffect(() => {
-    if(currentUser){
+    if (currentUser) {
       setOldUserName(currentUser.UserName);
     }
-  },[currentUser]);
+  }, [currentUser]);
 
   useEffect(() => {
     if (khoiCV?.length > 0) {
@@ -257,12 +257,12 @@ export default function UserNewEditForm({ currentUser }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, index: number) =>
       index === buildingIndex
         ? {
-            ...buildingCheckedStates,
-            projects: buildingCheckedStates.projects.map((project: any) => ({
-              ...project,
-              checked: isChecked,
-            })),
-          }
+          ...buildingCheckedStates,
+          projects: buildingCheckedStates.projects.map((project: any) => ({
+            ...project,
+            checked: isChecked,
+          })),
+        }
         : buildingCheckedStates
     );
 
@@ -283,11 +283,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
     const updatedCheckedStates = checkedStates.map((buildingCheckedStates: any, bIndex: number) =>
       bIndex === buildingIndex
         ? {
-            ...buildingCheckedStates,
-            projects: buildingCheckedStates.projects.map((project: any, pIndex: number) =>
-              pIndex === projectIndex ? { ...project, checked: isChecked } : project
-            ),
-          }
+          ...buildingCheckedStates,
+          projects: buildingCheckedStates.projects.map((project: any, pIndex: number) =>
+            pIndex === projectIndex ? { ...project, checked: isChecked } : project
+          ),
+        }
         : buildingCheckedStates
     );
 
@@ -504,8 +504,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
           {(`${currentUser?.ent_chucvu?.Role}` === '2' ||
             `${currentUser?.ent_chucvu?.Role}` === '3') && (
-            <RHFTextField name="Password" label="Mật khẩu" />
-          )}
+              <RHFTextField name="Password" label="Mật khẩu" />
+            )}
           <Controller
             name="isCheckketoan"
             control={control}
@@ -524,8 +524,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
           />
         </Box>
 
-        {userHistory?.length > 0 && 
-        <TransferProjectDialog userHistory={userHistory} />}
+        {userHistory?.length > 0 &&
+          <TransferProjectDialog userHistory={userHistory} />}
 
         {user?.ent_chucvu?.Role === 10 && renderChildren}
 

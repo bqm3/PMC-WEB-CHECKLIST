@@ -366,7 +366,7 @@ export default function SuCoListView() {
 
           <Box display="flex" alignItems="center" gap={2}>
             <EmergencyPhoneDialog currentPhone={sdtKhanCap} onSuccess={handlePhoneUpdated} />
-            <BansucoDialog/>
+            <BansucoDialog />
           </Box>
 
           {/* <LoadingButton
@@ -790,9 +790,8 @@ function NhomTSDialog({
             disabled
           />
           <TextField
-            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${
-              dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
-            }`}
+            value={`${dataSelect?.Giosuco ? `${dataSelect.Giosuco} ` : ''}${dataSelect?.Ngaysuco ? moment(dataSelect.Ngaysuco).format('DD-MM-YYYY') : ''
+              }`}
             label="Ngày sự cố"
             disabled
           />

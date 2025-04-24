@@ -22,18 +22,17 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
   <title>PMC Checklist</title>
   <!-- <script type="text/javascript" src="/tet.js"></script> -->
-  <meta name="description"
-    content="Center quản lý checklist PMC" />
+  <meta name="description" content="Center quản lý checklist PMC" />
   <meta name="keywords" content="react,material,kit,application,dashboard,admin,template" />
- <!-- Google tag (gtag.js) -->
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-MRWE3XSMWV"></script>
- <script>
-   window.dataLayer = window.dataLayer || [];
-   function gtag() { dataLayer.push(arguments); }
-   gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MRWE3XSMWV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-   gtag('config', 'G-MRWE3XSMWV');
- </script>
+    gtag('config', 'G-MRWE3XSMWV');
+  </script>
   <style>
     body {
       margin: 0;
@@ -56,57 +55,98 @@
 
     @keyframes snow-fall {
       0% {
-            transform: translateY(0) rotate(0deg);
-          }
-          100% {
-            transform: translateY(100vh) rotate(360deg);
-          }
+        transform: translateY(0) rotate(0deg);
+      }
+
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+      }
     }
 
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      background-color: red;
+      z-index: 9999;
+    }
+
+    .marquee {
+      display: inline-block;
+      white-space: nowrap;
+      color: white;
+      font-size: 18px;
+      padding: 8px 0;
+      animation: scrollText 15s linear 1;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes scrollText {
+      from {
+        transform: translateX(100%);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
   </style>
 
-  
+  <script>
+    // Sau khi dòng chữ chạy xong (15s), ẩn container đi
+    setTimeout(() => {
+      const box = document.getElementById("marqueeBox");
+      if (box) {
+        box.style.display = "none";
+      }
+    }, 16000); // 15s animation + 1s buffer
+  </script>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+  <div class="marquee-container" id="marqueeBox">
+    <div class="marquee">
+      Kỷ niệm 50 năm Ngày Giải phóng miền Nam, thống nhất đất nước (30/4/1975 - 30/4/2025)
+    </div>
+  </div>
+  <script>
+    function createSnowflakes() {
+      const numberOfSnowflakes = 12; // Số lượng hoa
+      const flagUrl = 'https://flagcdn.com/w40/vn.png'; // cờ Việt Nam
 
-<script>
-  function createSnowflakes() {
-    const numberOfSnowflakes = 15; // Số lượng hoa
-    const flagUrl = 'https://flagcdn.com/w40/vn.png'; // cờ Việt Nam
+      for (let i = 0; i < numberOfSnowflakes; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
 
-    for (let i = 0; i < numberOfSnowflakes; i++) {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
+        // Chọn emoji ngẫu nhiên
+        snowflake.innerHTML = `<img src="${flagUrl}" style="width: ${Math.random() * 20 + 10}px;" />`;
 
-      // Chọn emoji ngẫu nhiên
-      snowflake.innerHTML = `<img src="${flagUrl}" style="width: ${Math.random() * 20 + 10}px;" />`;
+        // Xác định kích thước và vị trí của mỗi hoa
+        const size = Math.random() * 20 + 5; // Kích thước hoa (10px đến 30px)
+        snowflake.style.fontSize = `${size}px`;
+        snowflake.style.left = `${Math.random() * 95}vw`; // Vị trí ngang
+        snowflake.style.animationDuration = `${Math.random() * 20 + 5}s`; // Thời gian rơi
+        snowflake.style.animationDelay = `${Math.random() * 15}s`; // Thời gian trễ
 
-      // Xác định kích thước và vị trí của mỗi hoa
-      const size = Math.random() * 15 + 5; // Kích thước hoa (10px đến 30px)
-      snowflake.style.fontSize = `${size}px`;
-      snowflake.style.left = `${Math.random() * 95}vw`; // Vị trí ngang
-      snowflake.style.animationDuration = `${Math.random() * 20 + 5}s`; // Thời gian rơi
-      snowflake.style.animationDelay = `${Math.random() * 15}s`; // Thời gian trễ
+        // Thêm hoa vào body
+        document.body.appendChild(snowflake);
 
-      // Thêm hoa vào body
-      document.body.appendChild(snowflake);
-
-      // Xóa hoa sau khi rơi hết
-      snowflake.addEventListener('animationend', () => {
-        snowflake.remove();
-      });
+        // Xóa hoa sau khi rơi hết
+        snowflake.addEventListener('animationend', () => {
+          snowflake.remove();
+        });
+      }
     }
-  }
 
-  // Gọi hàm tạo hoa rơi mỗi 2 giây
-  // setInterval(createSnowflakes, 2000);
-  createSnowflakes(); // Gọi ngay khi tải trang
+    // Gọi hàm tạo hoa rơi mỗi 2 giây
+    // setInterval(createSnowflakes, 2000);
+    createSnowflakes(); // Gọi ngay khi tải trang
 
- 
-</script>
+
+  </script>
 
 </body>
 

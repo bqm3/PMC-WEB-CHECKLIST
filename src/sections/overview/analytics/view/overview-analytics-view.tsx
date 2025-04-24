@@ -161,15 +161,15 @@ export default function OverviewAnalyticsView() {
     series: [],
   });
 
-  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedYear, setSelectedYear] = useState('2025');
   const [selectedKhoiCV, setSelectedKhoiCV] = useState('all');
   const [selectedTangGiam, setSelectedTangGiam] = useState('asc');
 
-  const [selectedYearSuCoNgoai, setSelectedYearSuCoNgoai] = useState('2024');
+  const [selectedYearSuCoNgoai, setSelectedYearSuCoNgoai] = useState('2025');
   const [selectedKhoiCVSuCoNgoai, setSelectedKhoiCVSuCoNgoai] = useState('all');
   const [selectedTangGiamSuCoNgoai, setSelectedTangGiamSuCoNgoai] = useState('asc');
 
-  const [selectedYearSuCo, setSelectedYearSuCo] = useState('2024');
+  const [selectedYearSuCo, setSelectedYearSuCo] = useState('2025');
   const [selectedKhoiCVSuCo, setSelectedKhoiCVSuCo] = useState('all');
   const [selectedTangGiamSuCo, setSelectedTangGiamSuCo] = useState('asc');
 
@@ -576,7 +576,7 @@ export default function OverviewAnalyticsView() {
         {user?.ent_chucvu?.Role !== 3 && (
           <Grid container spacing={3}>
             <Grid xs={12} md={12} lg={12}>
-              <Box sx={{ maxHeight: 400, width: '100%', my: 4 }}>
+              <Box sx={{ maxHeight: 400, width: '100%', }}>
                 <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
                   Tỉ lệ hoàn thành checklist các ngày
                 </Typography>

@@ -74,6 +74,11 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     ID_Linhvuc: Yup.string().required('Phải có lĩnh vực dự án'),
     ID_Chinhanh: Yup.string().required('Phải có chi nhánh dự án'),
     Ngaybatdau: Yup.mixed<any>().nullable().required('Phải có bắt đầu'),
+    Ngayketthuc: Yup.date()
+      .nullable()
+      .transform((curr, orig) => (orig === '' ? null : curr))
+      .typeError('Ngày không hợp lệ'),
+
   });
 
   const defaultValues = useMemo(
@@ -86,6 +91,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       ID_Phanloai: currentDuan?.ID_Phanloai || '',
       Percent: currentDuan?.Percent || 0,
       Ngaybatdau: currentDuan?.Ngaybatdau || new Date(),
+      Ngayketthuc: currentDuan?.Ngayketthuc || null,
       Diachi: currentDuan?.Diachi || '',
       Vido: currentDuan?.Vido || '',
       Kinhdo: currentDuan?.Kinhdo || '',
@@ -169,6 +175,10 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     formData.append('Duan', data?.Duan);
     formData.append('Percent', `${data?.Percent}`);
     formData.append('Ngaybatdau', data?.Ngaybatdau);
+    if (data?.Ngayketthuc) {
+      formData.append('Ngayketthuc', new Date(data.Ngayketthuc).toISOString());
+    }
+
     formData.append('Diachi', data?.Diachi);
     formData.append('Vido', data?.Vido);
     formData.append('Kinhdo', data?.Kinhdo);
@@ -415,11 +425,27 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             </Box>
             <RHFTextField name="Duan" label="Tên dự án" />
             <RHFTextField name="Diachi" label="Địa chỉ" />
-            <DatePicker
-              label="Ngày bắt đầu"
-              value={new Date(values.Ngaybatdau)}
-              onChange={(newValue: any) => setValue('Ngaybatdau', newValue)}
-            />
+            <Box
+              rowGap={3}
+              columnGap={3}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+              }}
+            >
+              <DatePicker
+                label="Ngày bắt đầu"
+                value={new Date(values.Ngaybatdau)}
+                onChange={(newValue: any) => setValue('Ngaybatdau', newValue)}
+              />
+              <DatePicker
+                label="Ngày kết thúc"
+                value={values.Ngayketthuc ? new Date(values.Ngayketthuc) : null}
+                onChange={(newValue: any) => setValue('Ngayketthuc', newValue)}
+              />
+
+            </Box>
             <RHFTextField name="Vido" label="Vĩ độ" />
             <RHFTextField name="Kinhdo" label="Kinh độ" />
             <RHFTextField type='number' name="Percent" label="Tỉ lệ thông báo" />

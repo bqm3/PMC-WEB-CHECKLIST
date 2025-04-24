@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh, IHSSE, IDayChecklistC, IP0 } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh, IHSSE, IDayChecklistC, IP0, IPhanhe, ILoaisosanh } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -1228,6 +1228,54 @@ export function useGetChinhanh(){
       chinhanhLoading: isLoading,
       chinhanhError: error,
       chinhanhValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetPhanhe(){
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_phanhe/all';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      phanHe: (data?.data as IPhanhe[]) || [],
+      phanHeLoading: isLoading,
+      phanHeError: error,
+      phanHeValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetLoaisosanh(){
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_loaisosanh/all';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      loaiSoSanh: (data?.data as ILoaisosanh[]) || [],
+      loaiSoSanhLoading: isLoading,
+      loaiSoSanhError: error,
+      loaiSoSanhValidating: isValidating,
     }),
     [data, error, isLoading, isValidating]
   );

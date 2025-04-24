@@ -727,7 +727,7 @@ function applyFilter({
     );
   }
 
-  console.log("inputData",inputData)
+  console.log("inputData", inputData)
   if (building.length) {
     inputData = inputData.filter((item) => building.includes(String(item?.ent_khuvuc?.ent_toanha?.ID_Toanha)));
   }

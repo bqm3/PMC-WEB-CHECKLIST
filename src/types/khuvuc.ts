@@ -1,3 +1,5 @@
+import { is } from "date-fns/locale";
+
 export type IRoomFilterValue = string | string[] | null;
 
 export type IRoomFilters = {
@@ -111,6 +113,7 @@ export type IDuan = {
   ID_Chinhanh: string;
   ID_Linhvuc: string;
   Ngaybatdau: string;
+  Ngayketthuc?: Date;
   ID_Loaihinh: string;
   ID_Phanloai: string;
   Percent: number;
@@ -490,6 +493,7 @@ export type IChecklist = {
   ID_Khuvuc: string;
   ID_Hangmuc: string;
   ID_Tang: string;
+  ID_Phanhe: string;
   Sothutu: string;
   Maso: string;
   MaQrCode: string;
@@ -504,16 +508,16 @@ export type IChecklist = {
   isImportant: string;
   ID_User: string;
   sCalv: string;
-  calv_1: string;
-  calv_2: string;
-  calv_3: string;
-  calv_4: string;
+  ID_Loaisosanh: string;
+  Giatrisosanh: string;
   isDelete: string;
   ent_toanha: E_Toanha;
   ent_hangmuc: IHangMuc;
   ent_khuvuc: IKhuvuc;
   ent_tang: E_Tang;
   ent_calv: ICalv;
+  ent_phanhe: IPhanhe;
+  ent_loaisosanh: ILoaisosanh;
 };
 
 export type TbChecklistCalv = {
@@ -531,3 +535,16 @@ export type TbChecklistCalv = {
   tb_checklistc: ITbChecklist;
   ent_checklist: IChecklist;
 };
+
+
+export type IPhanhe = {
+  ID_Phanhe: string;
+  Phanhe: string;
+  isDelete: string;
+}
+
+export type ILoaisosanh = {
+  ID_Loaisosanh: string;
+  Noidung: string;
+  isDelete: string;
+}

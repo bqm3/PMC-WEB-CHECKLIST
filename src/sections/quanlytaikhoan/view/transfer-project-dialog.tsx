@@ -54,7 +54,7 @@ export default function TransferProjectDialog({ open, onClose, user }: Props) {
           },
         }
       );
-      
+
       enqueueSnackbar('Điều chuyển dự án thành công!');
       onClose();
     } catch (error: any) {
@@ -83,7 +83,7 @@ export default function TransferProjectDialog({ open, onClose, user }: Props) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Điều chuyển dự án</DialogTitle>
-      
+
       <DialogContent>
         <Stack spacing={3} sx={{ mt: 2 }}>
           {/* Thông tin hiện tại */}
@@ -165,8 +165,8 @@ export default function TransferProjectDialog({ open, onClose, user }: Props) {
 
       <DialogActions>
         <Button onClick={onClose}>Hủy</Button>
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           onClick={handleTransfer}
           disabled={!selectedProject || !selectedRole || !selectedDate}
         >

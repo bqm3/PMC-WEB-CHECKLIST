@@ -576,7 +576,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
                 name="ma_nv"
                 value={currentEmployee.ma_nv}
                 onChange={handleInputChange}
-                onKeyDown= {onKeyDown}
+                onKeyDown={onKeyDown}
                 variant="outlined"
                 required
                 InputProps={{
@@ -594,7 +594,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
                 name="ho_ten"
                 value={currentEmployee.ho_ten}
                 onChange={handleInputChange}
-                onKeyDown= {onKeyDown}
+                onKeyDown={onKeyDown}
                 variant="outlined"
                 required
                 InputProps={{
@@ -613,7 +613,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
                 name="khoi"
                 value={currentEmployee.khoi || ''}
                 onChange={handleInputChange}
-                onKeyDown= {onKeyDown}
+                onKeyDown={onKeyDown}
                 variant="outlined"
                 SelectProps={{
                   native: true,
@@ -639,7 +639,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
                 name="chuc_vu"
                 value={currentEmployee.chuc_vu}
                 onChange={handleInputChange}
-                onKeyDown= {onKeyDown}
+                onKeyDown={onKeyDown}
                 variant="outlined"
                 InputProps={{
                   startAdornment: (
@@ -656,7 +656,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
                 name="sdt"
                 value={currentEmployee.sdt}
                 onChange={handleInputChange}
-                onKeyDown= {onKeyDown}
+                onKeyDown={onKeyDown}
                 variant="outlined"
                 InputProps={{
                   startAdornment: (
@@ -673,7 +673,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
                 name="email"
                 value={currentEmployee.email}
                 onChange={handleInputChange}
-                onKeyDown= {onKeyDown}
+                onKeyDown={onKeyDown}
                 variant="outlined"
                 type="email"
                 InputProps={{

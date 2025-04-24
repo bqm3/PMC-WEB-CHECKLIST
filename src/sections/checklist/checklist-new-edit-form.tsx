@@ -26,6 +26,8 @@ import {
   useGetTang,
   useGetHangMuc,
   useGetCalv,
+  useGetLoaisosanh,
+  useGetPhanhe,
 } from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
@@ -34,8 +36,6 @@ import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/compo
 // types
 import { IToanha, IChecklist } from 'src/types/khuvuc';
 import axios from 'axios';
-// auth
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +47,6 @@ const STORAGE_KEY = 'accessToken';
 
 export default function ChecklistNewEditForm({ currentChecklist }: Props) {
   const router = useRouter();
-  const { user, logout } = useAuthContext();
 
   const mdUp = useResponsive('up', 'md');
 
@@ -55,20 +54,19 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
 
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
-  const { khoiCV } = useGetKhoiCV();
-  const { tang, tangLoading, tangEmpty } = useGetTang();
-  const { hangMuc, hangMucLoading, hangMucEmpty } = useGetHangMuc();
+  const { tang } = useGetTang();
+  const { hangMuc } = useGetHangMuc();
 
-  const [Calv, setCalv] = useState<any>([]);
   const [khuVuc, setKhuVuc] = useState<any>([]);
   const [toaNha, setToaNha] = useState<IToanha[]>([]);
   const [HangMuc, setHangMuc] = useState<any>([]);
 
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const { khuvuc, khuvucLoading, khuvucEmpty } = useGetKhuVuc();
-  const { toanha, toanhaLoading, toanhaEmpty } = useGetToanha();
+  const { khuvuc } = useGetKhuVuc();
+  const { toanha } = useGetToanha();
   const { calv } = useGetCalv();
+  const { loaiSoSanh } = useGetLoaisosanh();
+  const { phanHe } = useGetPhanhe();
 
   useEffect(() => {
     if (toanha?.length > 0) {
@@ -101,6 +99,9 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
       Ghichu: currentChecklist?.Ghichu || '',
       Tieuchuan: currentChecklist?.Tieuchuan || '',
       ID_Khuvuc: currentChecklist?.ID_Khuvuc || null || '',
+      ID_Phanhe: currentChecklist?.ID_Phanhe || null || '',
+      ID_Loaisosanh: currentChecklist?.ID_Loaisosanh || null || '',
+      Giatrisosanh: currentChecklist?.Giatrisosanh || null || '',
       ID_Toanha: currentChecklist?.ent_khuvuc?.ID_Toanha || null || '',
       ID_Hangmuc: currentChecklist?.ID_Hangmuc || null,
       ID_Tang: currentChecklist?.ID_Tang || null,
@@ -372,6 +373,33 @@ export default function ChecklistNewEditForm({ currentChecklist }: Props) {
           {!mdUp && <CardHeader title="Chi tiết" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+              <RHFSelect
+                name="ID_Phanhe"
+                label="Phân hệ"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {phanHe?.map((item: any) => (
+                  <MenuItem key={item?.ID_Phanhe} value={item?.ID_Phanhe}>
+                    {item?.Phanhe}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect
+                name="ID_Loaisosanh"
+                label="Loại so sánh"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {loaiSoSanh?.map((item: any) => (
+                  <MenuItem key={item?.ID_Loaisosanh} value={item?.ID_Loaisosanh}>
+                    {item?.Noidung}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFTextField name="Giatrisosanh" label="Giá trị so sánh" />
+            </Stack>
             <RHFTextField name="Checklist" label="Tên checklist *" />
             <RHFTextField name="MaQrCode" label="Mã Qr Code" />
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

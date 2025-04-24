@@ -93,10 +93,10 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
 
         const chiNhanhCompare = a.Tenchinhanh.localeCompare(b.Tenchinhanh, 'vi');
         if (chiNhanhCompare !== 0) return chiNhanhCompare;
-      
+
         return a.Loaihinh.localeCompare(b.Loaihinh, 'vi');
       });
-      
+
 
       setData2(sortedData);
     } catch (err: any) {

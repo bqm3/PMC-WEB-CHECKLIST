@@ -82,7 +82,7 @@ export default function P0_AnalyticsView() {
   const [loadingData3_2, setLoadingData3_2] = useState<boolean>(true);
   const [loadingData4, setLoadingData4] = useState<boolean>(true);
   const [loadingData7Days, setLoadingData7Days] = useState<boolean>(true);
-  
+
   // Overall loading state
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -638,7 +638,7 @@ export default function P0_AnalyticsView() {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-           {/* eslint-disable-next-line no-nested-ternary */}
+          {/* eslint-disable-next-line no-nested-ternary */}
           {loadingData3_2 ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
               <CircularProgress />

@@ -308,11 +308,11 @@ export default function OverviewAnalyticsView() {
   const filteredColumns =
     `${user?.ID_Chucvu}` === `11`
       ? columns.filter(
-          (col: any) =>
-            col.field === 'id' ||
-            col.field === 'projectName' ||
-            `${col.field}` === `${user?.ent_khoicv?.KhoiCV}`
-        )
+        (col: any) =>
+          col.field === 'id' ||
+          col.field === 'projectName' ||
+          `${col.field}` === `${user?.ent_khoicv?.KhoiCV}`
+      )
       : columns;
 
   const [spreadsheetData, setSpreadsheetData] = useState<any>([]);
@@ -1121,7 +1121,7 @@ export default function OverviewAnalyticsView() {
             horizontal: 'right',
           }}
         >
-          <BansucoDialog isMenu/>
+          <BansucoDialog isMenu />
           <MenuItem
             onClick={() => handleMenuItemClick(() => router.push(paths.dashboard.p0.analytics))}
           >
@@ -1190,11 +1190,10 @@ export default function OverviewAnalyticsView() {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <EcommerceWidgetSummary
-              title={`Tỉ lệ checklist ngày ${
-                dataReportChecklistPercentWeek?.yesterdayDate
-                  ? dataReportChecklistPercentWeek?.yesterdayDate
-                  : ''
-              }`}
+              title={`Tỉ lệ checklist ngày ${dataReportChecklistPercentWeek?.yesterdayDate
+                ? dataReportChecklistPercentWeek?.yesterdayDate
+                : ''
+                }`}
               key="0"
               percent={
                 Number(dataReportChecklistPercentWeek?.lastWeekPercentage) -
@@ -1207,11 +1206,10 @@ export default function OverviewAnalyticsView() {
                   Number(dataReportChecklistPercentWeek?.lastWeekPercentage),
                 ],
               }}
-              compare={` so với ngày ${
-                dataReportChecklistPercentWeek?.previousYesterdayDate
-                  ? dataReportChecklistPercentWeek?.previousYesterdayDate
-                  : ''
-              }`}
+              compare={` so với ngày ${dataReportChecklistPercentWeek?.previousYesterdayDate
+                ? dataReportChecklistPercentWeek?.previousYesterdayDate
+                : ''
+                }`}
               onClick={() => setShowTilehoanthanhh(true)}
             />
           </Grid>
@@ -1349,7 +1347,7 @@ export default function OverviewAnalyticsView() {
               setShowMax={setShowMax}
             />
           </Grid>
-         
+
           <Grid xs={12} md={6}>
             <ChecklistsSuCo
               title="Số lượng sự cố trong ngày"
@@ -1377,15 +1375,15 @@ export default function OverviewAnalyticsView() {
               // top={top}
               handleOpenModalSuCo={handleOpenModalSuCo}
               handleCloseModalSuCo={handleCloseModalSuCo}
-              //
+            //
             />
           </Grid>
 
           <Grid xs={12} md={12} lg={12}>
             <ProjectsOverview dataPercent={dataPercent} />
           </Grid>
-          
-      
+
+
 
           <Grid xs={12} md={12} lg={12}>
             <ChecklistsSuCoNgoai
