@@ -4,6 +4,8 @@ import { useMemo, useEffect, useState } from 'react';
 import { alpha } from '@mui/material/styles';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
+// hooks
+import { useResponsive } from 'src/hooks/use-responsive';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
@@ -14,23 +16,14 @@ import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Button, CircularProgress } from '@mui/material';
-// routes
-import { paths } from 'src/routes/paths';
-// hooks
-import { useResponsive } from 'src/hooks/use-responsive';
+import { Button, Checkbox, FormControlLabel } from '@mui/material';
 // _mock
-import { _tags, _roles, USER_GENDER_OPTIONS, _mapContact } from 'src/_mock';
-// api
-import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetChucvu } from 'src/api/khuvuc';
+import { _tags, _roles, _mapContact } from 'src/_mock';
 // components
 import { useSnackbar } from 'src/components/snackbar';
-import { useRouter } from 'src/routes/hooks';
-import FormProvider, { RHFSelect, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // types
 import { IDuan } from 'src/types/khuvuc';
-
-import ContactMap from './contact-map';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +35,6 @@ type Props = {
 const STORAGE_KEY = 'accessToken';
 
 export default function GiamsatNewEditForm({ currentDuan }: Props) {
-  const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
 
@@ -66,9 +58,14 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       .typeError("Giá trị phải là một số") // Thông báo lỗi nếu không phải số
       .min(0, "Giá trị phải lớn hơn hoặc bằng 0")
       .max(100, "Giá trị phải nhỏ hơn hoặc bằng 100"),
-    Diachi: Yup.mixed<any>().nullable().required('Khong'),
-    Vido: Yup.mixed<any>().nullable().required('Khong'),
-    Kinhdo: Yup.mixed<any>().nullable().required('Khong'),
+    Diachi: Yup.mixed<any>().nullable(),
+    Vido: Yup.mixed<any>().nullable(),
+    Kinhdo: Yup.mixed<any>().nullable(),
+    P0: Yup.mixed<any>().nullable(),
+    HSSE: Yup.mixed<any>().nullable(),
+    BeBoi: Yup.mixed<any>().nullable(),
+    Xathai: Yup.mixed<any>().nullable(),
+
     Logo: Yup.mixed<any>().nullable().required('Khong'),
     ID_Phanloai: Yup.string().required('Phải phân loại dự án'),
     ID_Linhvuc: Yup.string().required('Phải có lĩnh vực dự án'),
@@ -96,6 +93,11 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       Vido: currentDuan?.Vido || '',
       Kinhdo: currentDuan?.Kinhdo || '',
       Logo: currentDuan?.Logo || '',
+      P0: `${currentDuan?.P0}` === "1" ? "1" : "0",
+      HSSE: `${currentDuan?.HSSE}` === "1" ? "1" : "0",
+      BeBoi: `${currentDuan?.BeBoi}` === "1" ? "1" : "0",
+      Xathai: `${currentDuan?.Xathai}` === "1" ? "1" : "0",
+
     }),
     [currentDuan]
   );
@@ -183,6 +185,9 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
     formData.append('Vido', data?.Vido);
     formData.append('Kinhdo', data?.Kinhdo);
     formData.append('Logo', data?.Logo);
+    formData.append('P0', data?.P0);
+    formData.append('HSSE', data?.HSSE);
+    formData.append('BeBoi', data?.BeBoi);
 
     try {
       if (currentDuan !== undefined) {
@@ -273,7 +278,6 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       });
     }
   });
-
 
   const renderPlaceholder = (
     <Box gap={2}>
@@ -451,8 +455,78 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
             <RHFTextField type='number' name="Percent" label="Tỉ lệ thông báo" />
             <RHFTextField name="Logo" label="Đường dẫn logo dự án" />
             {renderPlaceholder}
+            <Box
+              rowGap={3}
+              columnGap={3}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(4, 1fr)',
+                sm: 'repeat(4, 1fr)',
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="P0"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox
+                        checked={value === "1"}
+                        onChange={(e) => onChange(e.target.checked ? '1' : "0")}
+                      />
+                    )}
+                  />
+                }
+                label="P0"
+              />
 
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="HSSE"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox
+                        checked={value === "1"}
+                        onChange={(e) => onChange(e.target.checked ? '1' : "0")}
+                      />
+                    )}
+                  />
+                }
+                label="HSSE"
+              />
 
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="BeBoi"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox
+                        checked={value === "1"}
+                        onChange={(e) => onChange(e.target.checked ? '1' : "0")}
+                      />
+                    )}
+                  />
+                }
+                label="Bể bơi"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="Xathai"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox
+                        checked={value === "1"}
+                        onChange={(e) => onChange(e.target.checked ? '1' : "0")}
+                      />
+                    )}
+                  />
+                }
+                label="Xả thải"
+              />
+            </Box>
           </Stack>
         </Card>
       </Grid>

@@ -577,7 +577,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
         <Box rowGap={3} columnGap={2} display="grid">
           {user?.ent_chucvu?.Role === 10 && (
             <>
-              <RHFTextField name="Ghichu" label="Ghi chu" />
+              <RHFTextField name="Ghichu" label="Ghi chú" />
 
               <Controller
                 name="Ngay_ghi_nhan"

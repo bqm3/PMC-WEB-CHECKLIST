@@ -112,6 +112,10 @@ export type IDuan = {
   ID_Nhom: string;
   ID_Chinhanh: string;
   ID_Linhvuc: string;
+  P0: string;
+  HSSE: string;
+  BeBoi: string;
+  Xathai: string;
   Ngaybatdau: string;
   Ngayketthuc?: Date;
   ID_Loaihinh: string;
@@ -127,6 +131,24 @@ export type IDuan = {
   ent_phanloai: IPhanloai;
   ent_duan_khoicv: IDuanKhoiCV[];
 };
+
+export type IBeboi = {
+  ID_Beboi: string;
+  ID_Duan: string;
+  Ngay_ghi_nhan: string;
+  Nguoi_tao: string;
+  ID_Checklist: string;
+  ID_ChecklistC: string;
+  Giatridinhdanh: string;
+  Giatrighinhan: string;
+  Giatrisosanh: string;
+  ID_Loaisosanh: string;
+  Duongdananh: string;
+  isDelete: string;
+  ent_duan: IDuan;
+  ent_checklist: IChecklist;
+  tb_checklistc: TbChecklistCalv;
+}
 
 export type IHSSE = {
   ID: number;
@@ -510,6 +532,7 @@ export type IChecklist = {
   sCalv: string;
   ID_Loaisosanh: string;
   Giatrisosanh: string;
+  isCanhbao: string;
   isDelete: string;
   ent_toanha: E_Toanha;
   ent_hangmuc: IHangMuc;

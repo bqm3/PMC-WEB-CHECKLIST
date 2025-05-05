@@ -263,6 +263,14 @@ export function useNavData() {
           ],
         },
         {
+          title: t('beboi'),
+          path: paths.dashboard.beboi.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('Tổng hợp'), path: paths.dashboard.beboi.admin },
+          ],
+        },
+        {
           title: t('baocaovitri'),
           path: paths.dashboard.general.location,
           icon: ICONS.analytics,
@@ -367,6 +375,17 @@ export function useNavData() {
             { title: t('create'), path: paths.dashboard.hsse.new },
           ]
         });
+        navigationData[0].items.push({
+          title: t('beboi'),
+          path: paths.dashboard.beboi.root,
+          icon: ICONS.tour,
+          children: [
+
+            // { title: t('phanquyen'), path: paths.dashboard.beboi.phanquyen },
+            { title: t('Dữ liệu'), path: paths.dashboard.beboi.root },
+            // { title: t('create'), path: paths.dashboard.beboi.new },
+          ]
+        });
       } else {
         navigationData[0].items.push({
           title: t('hsse'),
@@ -375,6 +394,15 @@ export function useNavData() {
           children: [
             { title: t('Dữ liệu'), path: paths.dashboard.hsse.root },
             { title: t('create'), path: paths.dashboard.hsse.new }
+          ]
+        });
+        navigationData[0].items.push({
+          title: t('beboi'),
+          path: paths.dashboard.beboi.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('Dữ liệu'), path: paths.dashboard.beboi.root },
+            // { title: t('create'), path: paths.dashboard.beboi.new }
           ]
         });
       }
@@ -390,6 +418,17 @@ export function useNavData() {
           { title: t('phanquyen'), path: paths.dashboard.hsse.phanquyen },
           { title: t('Dữ liệu'), path: paths.dashboard.hsse.root },
           { title: t('create'), path: paths.dashboard.hsse.new },
+        ]
+      });
+      navigationData[0].items.push({
+        title: t('Bể bơi'),
+        path: paths.dashboard.beboi.root,
+        icon: ICONS.tour,
+        children: [
+
+          // { title: t('phanquyen'), path: paths.dashboard.beboi.phanquyen },
+          { title: t('Dữ liệu'), path: paths.dashboard.beboi.root },
+          // { title: t('create'), path: paths.dashboard.beboi.new },
         ]
       });
     }

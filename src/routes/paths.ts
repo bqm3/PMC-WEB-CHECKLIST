@@ -239,6 +239,14 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/hsse/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/hsse/${id}/edit`,
     },
+    beboi: {
+      root: `${ROOTS.DASHBOARD}/beboi`,
+      admin: `${ROOTS.DASHBOARD}/beboi/admin`,
+      new: `${ROOTS.DASHBOARD}/beboi/new`,
+      phanquyen: `${ROOTS.DASHBOARD}/beboi/phanquyen`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/beboi/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/beboi/${id}/edit`,
+    },
     p0: {
       root: `${ROOTS.DASHBOARD}/p0`,
       admin: `${ROOTS.DASHBOARD}/p0/admin`,

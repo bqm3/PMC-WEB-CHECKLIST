@@ -166,6 +166,13 @@ const HSSEPhanQuyenPage = lazy(() => import('src/pages/dashboard/hsse/phanquyen'
 const HSSENewPage = lazy(() => import('src/pages/dashboard/hsse/new'));
 const HSSEEditPage = lazy(() => import('src/pages/dashboard/hsse/edit'));
 
+// BeBoi
+const BeBoiListsPage = lazy(() => import('src/pages/dashboard/beboi/list'));
+const AdminBeBoiListPage = lazy(() => import('src/pages/dashboard/beboi/admin'));
+const BeBoiPhanQuyenPage = lazy(() => import('src/pages/dashboard/beboi/phanquyen'));
+const BeBoiNewPage = lazy(() => import('src/pages/dashboard/beboi/new'));
+const BeBoiEditPage = lazy(() => import('src/pages/dashboard/beboi/edit'));
+
 // P0
 const P0ListsPage = lazy(() => import('src/pages/dashboard/p0/list'));
 const AdminP0ListPage = lazy(() => import('src/pages/dashboard/p0/admin'));
@@ -388,6 +395,17 @@ export const dashboardRoutes = [
           { path: 'phanquyen', element: <HSSEPhanQuyenPage /> },
           { path: ':id/edit', element: <HSSEEditPage /> },
           { path: 'new', element: <HSSENewPage /> },
+        ],
+      },
+      {
+        path: 'beboi',
+        children: [
+          { element: <BeBoiListsPage />, index: true },
+          { path: 'list', element: <BeBoiListsPage /> },
+          { path: 'admin', element: <AdminBeBoiListPage /> },
+          { path: 'phanquyen', element: <BeBoiPhanQuyenPage /> },
+          { path: ':id/edit', element: <BeBoiEditPage /> },
+          { path: 'new', element: <BeBoiNewPage /> },
         ],
       },
       {
