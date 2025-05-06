@@ -213,6 +213,15 @@ export function useNavData() {
     if (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || (user?.ID_Duan !== null && user?.ent_chucvu?.Role !== 3)) {
       navigationData[1].items.unshift(
         {
+          title: t('Tài liệu phân hệ'),
+          path: paths.dashboard.tailieuphanhe.root,
+          icon: ICONS.blog,
+          children: [
+            { title: t('create'), path: paths.dashboard.tailieuphanhe.new },
+            { title: t('Danh sách tài liệu'), path: paths.dashboard.tailieuphanhe.root },
+          ],
+        },
+        {
           title: t('building'),
           path: paths.dashboard.toanha.root,
           icon: ICONS.banking,
@@ -221,6 +230,7 @@ export function useNavData() {
             { title: t('Danh sách tòa nhà'), path: paths.dashboard.toanha.root },
           ],
         },
+
         {
           title: t('tang'),
           path: paths.dashboard.tang.root,
@@ -262,14 +272,7 @@ export function useNavData() {
             { title: t('Tổng hợp'), path: paths.dashboard.hsse.admin },
           ],
         },
-        {
-          title: t('beboi'),
-          path: paths.dashboard.beboi.root,
-          icon: ICONS.tour,
-          children: [
-            { title: t('Tổng hợp'), path: paths.dashboard.beboi.admin },
-          ],
-        },
+
         {
           title: t('baocaovitri'),
           path: paths.dashboard.general.location,
@@ -376,7 +379,7 @@ export function useNavData() {
           ]
         });
         navigationData[0].items.push({
-          title: t('beboi'),
+          title: t('Bể bơi'),
           path: paths.dashboard.beboi.root,
           icon: ICONS.tour,
           children: [
@@ -397,7 +400,7 @@ export function useNavData() {
           ]
         });
         navigationData[0].items.push({
-          title: t('beboi'),
+          title: t('Bể bơi'),
           path: paths.dashboard.beboi.root,
           icon: ICONS.tour,
           children: [

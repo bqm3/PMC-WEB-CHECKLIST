@@ -1,46 +1,34 @@
-import { useState, useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
+import React from 'react';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
+import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import Card, { CardProps } from '@mui/material/Card';
-import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Chart, { useChart } from 'src/components/chart';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useTheme } from '@mui/material/styles';
+
 import { useResponsive } from 'src/hooks/use-responsive';
-import { ApexOptions } from 'apexcharts';
+import Chart, { useChart } from 'src/components/chart';
 
-// ----------------------------------------------------------------------
-
-interface ProjectDataItem {
-  label: string;
-  value: string;
-  completed?: number;
-  total?: number;
-  percentage?: number;
-}
-
-interface ChartConfig {
-  colors?: string[];
-  series: ProjectDataItem[];
-  options?: ApexOptions;
-}
-
-interface CustomProjectChartProps extends CardProps {
-  title?: string;
+interface CustomProjectChartProps {
+  title: string;
   isLoading?: boolean;
   subheader?: string;
-  chart: ChartConfig;
+  chart: {
+    series: { label: string; value: string }[];
+    colors?: string[];
+    options?: any;
+  };
+  [key: string]: any;
 }
 
-export default function CustomProjectChart({ 
-  title, 
-  isLoading = false, 
-  subheader, 
-  chart, 
-  ...other 
+export default function CustomProjectChart({
+  title,
+  isLoading = false,
+  subheader,
+  chart,
+  ...other
 }: CustomProjectChartProps) {
   const theme = useTheme();
   const smUp = useResponsive('up', 'sm');
@@ -52,7 +40,7 @@ export default function CustomProjectChart({
       ...item,
       completed,
       total,
-      percentage: total > 0 ? (completed / total) * 100 : 0
+      percentage: total > 0 ? (completed / total) * 100 : 0,
     };
   });
 
@@ -67,13 +55,13 @@ export default function CustomProjectChart({
   const chartLabels = parsedData.map(item => item.label);
 
   const chartOptions = useChart({
-    colors: chart.colors,
+    chart: {
+      type: 'pie',
+    },
     labels: chartLabels,
+    colors: chart.colors,
     stroke: {
       colors: [theme.palette.background.paper],
-    },
-    fill: {
-      opacity: 0.8,
     },
     legend: {
       position: 'right',
@@ -88,8 +76,8 @@ export default function CustomProjectChart({
         formatter: (value: number, { seriesIndex }: { seriesIndex: number }) => {
           const item = parsedData[seriesIndex];
           return `${item.completed}/${value} (${item.percentage?.toFixed(1)}%)`;
-        }
-      }
+        },
+      },
     },
     responsive: [
       {
@@ -114,12 +102,8 @@ export default function CustomProjectChart({
           my: 5,
           '& .apexcharts-legend': {
             m: 'auto',
-            height: { sm: 160 },
             flexWrap: { sm: 'wrap' },
             width: { xs: 240, sm: '50%' },
-          },
-          '& .apexcharts-datalabels-group': {
-            display: 'none',
           },
         }}
       >
@@ -130,10 +114,10 @@ export default function CustomProjectChart({
         ) : (
           <Chart
             dir="ltr"
-            type="polarArea"
+            type="pie"
             series={chartSeries}
             options={chartOptions}
-            height={smUp ? 360 : 500}
+            height={smUp ? 380 : 540}
           />
         )}
       </Box>
@@ -170,36 +154,6 @@ export default function CustomProjectChart({
             )}
           </Stack>
         </Grid>
-
-        {/* <Grid item xs={6}>
-          <Stack sx={{ py: 2, borderRight: `dashed 1px ${theme.palette.divider}`, borderTop: `dashed 1px ${theme.palette.divider}` }}>
-            <Box component="span" sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>
-              Số lượng dự án nhập 
-            </Box>
-            {isLoading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress size={24} />
-              </Box>
-            ) : (
-              completedProjects
-            )}
-          </Stack>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Stack sx={{ py: 2, borderTop: `dashed 1px ${theme.palette.divider}` }}>
-            <Box component="span" sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>
-              Tỷ lệ
-            </Box>
-            {isLoading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress size={24} />
-              </Box>
-            ) : (
-              `${completionRate.toFixed(1)}%`
-            )}
-          </Stack>
-        </Grid> */}
       </Grid>
     </Card>
   );

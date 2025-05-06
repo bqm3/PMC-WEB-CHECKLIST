@@ -46,6 +46,7 @@ const TABLE_HEAD = [
   { id: 'Giatridinhdanh', label: 'Giá trị định danh' },
   { id: 'Giatrighinhan', label: 'Giá trị ghi nhận' },
   { id: 'Giatrisosanh', label: 'Giá trị so sánh' },
+  { id: 'Tyle', label: 'Tỷ lệ' },
   { id: 'Nguoitao', label: 'Người gửi' },
   { id: '', width: 10 },
 ];
@@ -58,15 +59,12 @@ const defaultFilters: IChecklistTableFilters = {
   building: [],
 };
 
-const STORAGE_KEY = 'accessToken';
 
 export default function HSSENewEditForm({ currentBeBoi }: Props) {
   const table = useTable({ defaultOrderBy: 'ID_Beboi' });
 
-  const settings = useSettingsContext();
   const confirm = useBoolean();
 
-  const accessToken = localStorage.getItem(STORAGE_KEY);
   const [filters, setFilters] = useState(defaultFilters);
   const [tableData, setTableData] = useState<IBeboi[]>([]);
 

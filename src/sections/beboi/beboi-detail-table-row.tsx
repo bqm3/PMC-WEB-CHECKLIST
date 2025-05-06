@@ -28,18 +28,26 @@ export default function BeBoiDetailTableRow({
   row,
   selected,
 }: Props) {
-  const { ID_Beboi, ID_Duan, Ngay_ghi_nhan, Nguoi_tao, ID_Checklist, ID_ChecklistC, ID_Loaisosanh, ent_duan, ent_checklist, tb_checklistc, Giatridinhdanh, Giatrighinhan, Giatrisosanh } = row;
+  const { ID_Beboi, ID_Duan, Ngay_ghi_nhan, Nguoi_tao, ID_Checklist, ID_ChecklistC, Tyle, VuotChuan, ent_duan, ent_checklist, tb_checklistc, Giatridinhdanh, Giatrighinhan, Giatrisosanh } = row;
+  console.log('row', row)
 
 
   const popover = usePopover();
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
+    <TableRow hover selected={selected}
+      sx={{
+        backgroundColor: VuotChuan ? 'error.lighter' : 'inherit',
+        '&:hover': {
+          backgroundColor: VuotChuan ? 'error.light' : 'action.hover',
+        },
+      }}>
 
       <TableCell>{ent_checklist?.Checklist}</TableCell>
       <TableCell>{Giatridinhdanh}</TableCell>
       <TableCell>{Giatrighinhan} {ent_checklist?.Giatrinhan}</TableCell>
       <TableCell>{Giatrisosanh}</TableCell>
+      <TableCell>{Tyle} {Tyle ? '%' : ''}</TableCell>
       <TableCell>{Nguoi_tao}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover?.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

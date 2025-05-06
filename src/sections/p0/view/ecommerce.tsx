@@ -15,11 +15,11 @@ interface EcommerceYearlySalesProps {
   [key: string]: any;
 }
 
-export default function EcommerceYearlySales({ 
-  title, 
-  subheader, 
-  chart, 
-  ...other 
+export default function EcommerceYearlySales({
+  title,
+  subheader,
+  chart,
+  ...other
 }: EcommerceYearlySalesProps) {
   // Process the 7-day data to prepare it for the chart
   const processedData = React.useMemo(() => {
@@ -34,7 +34,7 @@ export default function EcommerceYearlySales({
     }
 
     // Sort data by date (oldest to newest)
-    const sortedData = [...chart.data].sort((a, b) => 
+    const sortedData = [...chart.data].sort((a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
@@ -89,7 +89,7 @@ export default function EcommerceYearlySales({
         title: {
           text: 'Tỉ lệ (%)',
         },
-        decimalsInFloat: 2, 
+        decimalsInFloat: 2,
         min: 0,
         max: Math.max(...(processedData.series[0]?.data || [0])) * 1.2, // Add 20% padding to max value
       },
@@ -99,8 +99,13 @@ export default function EcommerceYearlySales({
           text: 'Số dự án',
         },
         min: 0,
-        max: Math.max(...(processedData.series[1]?.data || [0])) * 1.2, // Add 20% padding to max value
+        max: Math.ceil(Math.max(...(processedData.series[1]?.data || [0])) * 1.2), // Làm tròn max lên
+        tickAmount: 6, // Tùy chọn: số hàng trên trục (bạn có thể điều chỉnh 5–10)
+        labels: {
+          formatter: (val: number) => Math.round(val).toString()
+        }
       }
+
     ],
     stroke: {
       curve: 'smooth',

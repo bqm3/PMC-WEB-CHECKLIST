@@ -151,6 +151,11 @@ export const paths = {
       new: `${ROOTS.DASHBOARD}/tang/new`,
       details: (id: string) => `${ROOTS.DASHBOARD}/tang/${id}`,
     },
+    tailieuphanhe: {
+      root: `${ROOTS.DASHBOARD}/tailieuphanhe`,
+      new: `${ROOTS.DASHBOARD}/tailieuphanhe/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/tailieuphanhe/${id}`,
+    },
     hangmuc: {
       root: `${ROOTS.DASHBOARD}/hangmuc`,
       new: `${ROOTS.DASHBOARD}/hangmuc/new`,

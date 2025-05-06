@@ -1,5 +1,5 @@
 
-import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh, IHSSE, IDayChecklistC, IP0, IPhanhe, ILoaisosanh, IBeboi } from 'src/types/khuvuc';
+import { IKhuvuc, IToanha, IKhoiCV, IHangMuc, IChecklist, ICalv, E_Tang, IGiamsat, IChucvu, IDuan, IUser, ITang, ITbChecklist, TbChecklistCalv, IThietLapCa, IDuanKhoiCV, ISucongoai, ILocation, ILoaiChiSo, IHangMucChiSo, IChinhanh, IHSSE, IDayChecklistC, IP0, IPhanhe, ILoaisosanh, IBeboi, ITailieuphanhe } from 'src/types/khuvuc';
 // utils
 import { endpoints, fetcher } from 'src/utils/axios';
 import { useEffect, useMemo } from 'react';
@@ -222,6 +222,33 @@ export function useGetTang() {
       tangError: error,
       tangValidating: isValidating,
       tangEmpty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetTaiLieuPhanHe() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = 'https://checklist.pmcweb.vn/be/api/v2/ent_tailieuphanhe/by-duan';
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      tailieuphanhe: (data?.data as ITailieuphanhe[]) || [],
+      tailieuphanheLoading: isLoading,
+      tailieuphanheError: error,
+      tailieuphanheValidating: isValidating,
+      tailieuphanheEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );

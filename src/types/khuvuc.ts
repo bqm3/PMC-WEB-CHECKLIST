@@ -142,6 +142,8 @@ export type IBeboi = {
   Giatridinhdanh: string;
   Giatrighinhan: string;
   Giatrisosanh: string;
+  Tyle: string;
+  VuotChuan: string;
   ID_Loaisosanh: string;
   Duongdananh: string;
   isDelete: string;
@@ -360,6 +362,15 @@ export type ITang = {
   ID_User: string;
   ent_duan: IDuan;
   ent_user: IUser;
+};
+
+export type ITailieuphanhe = {
+  ID_Duongdantl: string;
+  ID_Phanhe: string;
+  ID_Duan: string;
+  Duongdan: string;
+  Ghichu: string;
+  ent_phanhe: IPhanhe;
 };
 
 export type E_Khuvuc_KhoiCV = {

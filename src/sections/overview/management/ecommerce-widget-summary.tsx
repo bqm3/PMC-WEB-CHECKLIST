@@ -107,18 +107,18 @@ export default function EcommerceWidgetSummary({
   );
 
   return (
-    <Card sx={{ display: 'flex', alignItems: 'center', p: 3, ...sx }} {...other}>
+    <Card sx={{ display: 'flex', alignItems: 'center', p: 2, ...sx }} {...other}>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle2" sx={{ mb: 2 }}>
           {title}
         </Typography>
 
-        {`${percent}` === `NaN` ||`${total}` === `undefined%` || `${total}` === `undefined` || `${total}` === `null` || `${total}` === `` ? (
+        {`${percent}` === `NaN` || `${total}` === `undefined%` || `${total}` === `undefined` || `${total}` === `null` || `${total}` === `` ? (
           <CircularProgress />
         ) : (
           <>
             {' '}
-            <Typography variant="h3" gutterBottom>
+            <Typography variant="h4" gutterBottom>
               {' '}
               {total}{' '}
             </Typography>{' '}
@@ -131,8 +131,8 @@ export default function EcommerceWidgetSummary({
         type="line"
         series={[{ data: series }]}
         options={chartOptions}
-        width={96}
-        height={64}
+        width={80}
+        height={50}
       />
     </Card>
   );

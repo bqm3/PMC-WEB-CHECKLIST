@@ -91,9 +91,11 @@ export default function P0_AnalyticsView() {
   const [data3_1, setData3_1] = useState<any>();
   const [data3_2, setData3_2] = useState<ProjectNotSent[]>([]);
   const [data4, setData4] = useState<any>();
+  const [data7, setData7] = useState<any>();
   const [data7Days, setData7Days] = useState<SevenDayData[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [projectsNotSentDialogOpen, setProjectsNotSentDialogOpen] = useState(false);
+  const [projectsNotReportDialogOpen, setProjectsNotReportDialogOpen] = useState(false);
 
   const getAnalytics1 = useCallback(async (): Promise<void> => {
     try {
@@ -102,6 +104,18 @@ export default function P0_AnalyticsView() {
       setData1(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu analytics 1:', error.message);
+    } finally {
+      setLoadingData1(false);
+    }
+  }, []);
+
+  const getAnalytics7 = useCallback(async (): Promise<void> => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/7`);
+      setData7(response.data || []);
+    } catch (error: any) {
+      console.error('Lỗi khi lấy dữ liệu analytics 7:', error.message);
     } finally {
       setLoadingData1(false);
     }
@@ -176,10 +190,11 @@ export default function P0_AnalyticsView() {
         getAnalytics3_2(),
         getAnalytics4(),
         getAnalytics7Days(),
+        getAnalytics7()
       ]);
     };
     fetchData();
-  }, [getAnalytics1, getAnalytics2, getAnalytics3_1, getAnalytics3_2, getAnalytics4, getAnalytics7Days]);
+  }, [getAnalytics1, getAnalytics2, getAnalytics3_1, getAnalytics3_2, getAnalytics4, getAnalytics7Days, getAnalytics7]);
 
   // Check if all data is loaded
   useEffect(() => {
@@ -204,6 +219,10 @@ export default function P0_AnalyticsView() {
 
   const handleOpenProjectsNotSentDialog = useCallback(() => {
     setProjectsNotSentDialogOpen(true);
+  }, []);
+
+  const handleOpenProjectsNotReportDialog = useCallback(() => {
+    setProjectsNotReportDialogOpen(true);
   }, []);
 
   const hasAnomalyData = (data2?.thieuThe?.length || 0) > 0 || (data2?.thuaThe?.length || 0) > 0;
@@ -283,10 +302,10 @@ export default function P0_AnalyticsView() {
         </Box>
       </Grid>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+      <Grid container spacing={2}>
+        <Grid item xs={6} md={3.5}>
           {loadingData1 ? (
-            <Card sx={{ p: 3, height: '100%' }}>
+            <Card sx={{ p: 2, height: '100%' }}>
               <Skeleton variant="text" width="80%" height={30} sx={{ mb: 1 }} />
               <Skeleton variant="text" width="60%" height={40} sx={{ mb: 2 }} />
               <Skeleton variant="rectangular" width="100%" height={100} />
@@ -308,9 +327,9 @@ export default function P0_AnalyticsView() {
           )}
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={6} md={2.8}>
           {loadingData2 ? (
-            <Card sx={{ p: 3, height: '100%' }}>
+            <Card sx={{ p: 2, height: '100%' }}>
               <Skeleton variant="text" width="70%" height={30} sx={{ mb: 2 }} />
               <Box mt={2}>
                 <Stack spacing={2.5}>
@@ -387,9 +406,9 @@ export default function P0_AnalyticsView() {
           )}
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={6} md={2.8}>
           {loadingData3_1 || loadingData3_2 ? (
-            <Card sx={{ p: 3, height: '100%' }}>
+            <Card sx={{ p: 2, height: '100%' }}>
               <Skeleton variant="text" width="60%" height={30} sx={{ mb: 2 }} />
               <Box mt={2}>
                 <Stack spacing={2}>
@@ -428,66 +447,104 @@ export default function P0_AnalyticsView() {
               onClick={handleOpenProjectsNotSentDialog}
             >
               <Typography variant="subtitle1" gutterBottom>
-                Thông tin xe
+                Thông tin xe  {" "} {data3_1?.NgayBC || '-'}
               </Typography>
 
               <Box mt={2}>
                 <Stack spacing={2}>
-                  {/* Dòng ngày báo cáo */}
-                  <Stack direction="row" spacing={1.5} alignItems="center">
+                  {/* Hàng 1: Chưa gửi */}
+                  <Stack direction="row" spacing={1} alignItems="center">
                     <Box
                       component="span"
                       sx={{
                         width: 10,
                         height: 10,
                         borderRadius: '50%',
-                        bgcolor: 'red',
+                        bgcolor: 'error.main',
                       }}
                     />
-                    <Typography variant="body2">Ngày:</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Các dự án chưa gửi:
+                    </Typography>
                     <Typography variant="h6" color="error.main">
-                      {data3_1?.NgayBC || '-'}
+                      {data3_1?.SoDuAnKhongNhapXe || 0}
                     </Typography>
                   </Stack>
 
-                  {/* Dòng thống kê dự án */}
-                  <Stack
-                    direction="row"
-                    spacing={4}
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    {/* Chưa gửi */}
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Box
-                        component="span"
-                        sx={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: '50%',
-                          bgcolor: 'error.main',
-                        }}
-                      />
-                      <Typography variant="body2" color="text.secondary">
-                        Các dự án chưa gửi:
-                      </Typography>
-                      <Typography variant="h6" color="error.main">
-                        {data3_1?.SoDuAnKhongNhapXe || 0}
-                      </Typography>
-                    </Stack>
+                  {/* Hàng 2: Đã gửi */}
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Box
+                      component="span"
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: '50%',
+                        bgcolor: 'success.main',
+                      }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      Đã gửi:
+                    </Typography>
+                    <Typography variant="h6" color="success.main">
+                      {(data3_1?.TongSoDuAn || 0) - (data3_1?.SoDuAnKhongNhapXe || 0)} / {data3_1?.TongSoDuAn || 0}
+                    </Typography>
+                  </Stack>
+                </Stack>
 
-                    {/* Đã gửi */}
+              </Box>
+            </Card>
+          )}
+        </Grid>
+
+        <Grid item xs={6} md={2.8}>
+          {loadingData3_1 || loadingData3_2 ? (
+            <Card sx={{ p: 2, height: '100%' }}>
+              <Skeleton variant="text" width="60%" height={30} sx={{ mb: 2 }} />
+              <Box mt={2}>
+                <Stack spacing={2}>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Skeleton variant="circular" width={10} height={10} />
+                    <Skeleton variant="text" width="20%" height={24} />
+                    <Skeleton variant="text" width="30%" height={30} />
+                  </Stack>
+                  <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-between">
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography variant="body2" color="text.secondary">
-                        Đã gửi:
-                      </Typography>
-                      <Typography variant="h6" color="success.main">
-                        {(data3_1?.TongSoDuAn || 0) - (data3_1?.SoDuAnKhongNhapXe || 0)} /{' '}
-                        {data3_1?.TongSoDuAn || 0}
-                      </Typography>
+                      <Skeleton variant="circular" width={10} height={10} />
+                      <Skeleton variant="text" width="60%" height={24} />
+                      <Skeleton variant="text" width="20%" height={24} />
+                    </Stack>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Skeleton variant="text" width="40%" height={24} />
+                      <Skeleton variant="text" width="40%" height={24} />
                     </Stack>
                   </Stack>
                 </Stack>
+              </Box>
+            </Card>
+          ) : (
+            <Card
+              sx={{
+                p: 3,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                // justifyContent: 'center',
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'action.hover',
+                },
+              }}
+              onClick={handleOpenProjectsNotReportDialog}
+            >
+              <Typography variant="subtitle1" gutterBottom>
+                Dự án chưa báo cáo
+              </Typography>
+
+              <Box mt={2}>
+                <Typography variant="h4" color="success.main">
+                  {data7?.length}
+                </Typography>
+
               </Box>
             </Card>
           )}
@@ -497,7 +554,7 @@ export default function P0_AnalyticsView() {
       <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12} md={5}>
           {loadingData4 ? (
-            <Card sx={{ p: 3, height: '100%' }}>
+            <Card sx={{ p: 2, height: '100%' }}>
               <Skeleton variant="text" width="70%" height={30} sx={{ mb: 2 }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
                 <CircularProgress />
@@ -527,7 +584,7 @@ export default function P0_AnalyticsView() {
 
         <Grid item xs={12} md={7} lg={7}>
           {loadingData7Days ? (
-            <Card sx={{ p: 3, height: '100%' }}>
+            <Card sx={{ p: 2, height: '100%' }}>
               <Skeleton variant="text" width="60%" height={30} sx={{ mb: 1 }} />
               <Skeleton variant="text" width="40%" height={20} sx={{ mb: 2 }} />
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
@@ -670,6 +727,67 @@ export default function P0_AnalyticsView() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setProjectsNotSentDialogOpen(false)} color="primary">
+            Đóng
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={projectsNotReportDialogOpen}
+        onClose={() => setProjectsNotReportDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
+              component="span"
+              sx={{
+                width: 12,
+                height: 12,
+                borderRadius: '50%',
+                bgcolor: 'error.main',
+                mr: 1,
+              }}
+            />
+            Danh sách dự án chưa thực hiện P0
+          </Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          {/* eslint-disable-next-line no-nested-ternary */}
+          {!data7 ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+              <CircularProgress />
+            </Box>
+          ) : data7 && data7.length > 0 ? (
+            <TableContainer component={Paper}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell width="10%">STT</TableCell>
+                    <TableCell>Tên dự án</TableCell>
+                    <TableCell>Chi nhánh</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data7.map((project: any, index: number) => (
+                    <TableRow key={`project-${index}`}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{project?.Duan}</TableCell>
+                      <TableCell>{project?.Tenchinhanh}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography variant="body1" align="center" py={3}>
+              Không có dự án nào chưa gửi dữ liệu
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setProjectsNotReportDialogOpen(false)} color="primary">
             Đóng
           </Button>
         </DialogActions>

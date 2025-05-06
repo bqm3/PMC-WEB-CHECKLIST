@@ -125,6 +125,10 @@ const KhuvucEditPage = lazy(() => import('src/pages/dashboard/khuvuc/edit'));
 const TangListsPage = lazy(() => import('src/pages/dashboard/tang/list'));
 const TangNewPage = lazy(() => import('src/pages/dashboard/tang/new'));
 
+// Tang
+const TaiLieuPhanHeListsPage = lazy(() => import('src/pages/dashboard/tailieuphanhe/list'));
+const TaiLieuPhanHeNewPage = lazy(() => import('src/pages/dashboard/tailieuphanhe/new'));
+
 // Hạng mục
 const HangMucListsPage = lazy(() => import('src/pages/dashboard/hangmuc/list'));
 const HangMucNewPage = lazy(() => import('src/pages/dashboard/hangmuc/new'));
@@ -351,6 +355,14 @@ export const dashboardRoutes = [
           { element: <TangListsPage />, index: true },
           { path: 'list', element: <TangListsPage /> },
           { path: 'new', element: <TangNewPage /> },
+        ],
+      },
+      {
+        path: 'tailieuphanhe',
+        children: [
+          { element: <TaiLieuPhanHeListsPage />, index: true },
+          { path: 'list', element: <TaiLieuPhanHeListsPage /> },
+          { path: 'new', element: <TaiLieuPhanHeNewPage /> },
         ],
       },
       {

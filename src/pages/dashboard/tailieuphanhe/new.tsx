@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { TangListView } from 'src/sections/tang/view';
+import { TangCreateView } from 'src/sections/tailieuphanhe/view';
 
 // ----------------------------------------------------------------------
 
-export default function TangListPage() {
+export default function AreaCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tầng</title>
+        <title> Dashboard: Tạo mới</title>
       </Helmet>
 
-      <TangListView />
+      <TangCreateView />
     </>
   );
 }
