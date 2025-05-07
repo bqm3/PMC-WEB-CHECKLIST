@@ -302,7 +302,7 @@ export default function ChiaCaNewEditForm() {
       Sochecklist: 100,
     };
     await axios
-      .post(`https://checklist.pmcweb.vn/be/api/v2/ent_thietlapca/create`, data, {
+      .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_thietlapca/create`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

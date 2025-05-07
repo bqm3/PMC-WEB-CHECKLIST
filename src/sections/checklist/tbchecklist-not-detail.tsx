@@ -63,7 +63,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
       try {
         const accessToken = localStorage.getItem(STORAGE_KEY);
         const response = await axios.put(
-          `https://checklist.pmcweb.vn/be/api/v2/ent_checklist/filter-mul-web/${id}`,
+          `${process.env.REACT_APP_HOST_API}/api/v2/ent_checklist/filter-mul-web/${id}`,
           { dataHangmuc: dataChecklistC?.ID_Hangmucs, ID_KhoiCV: dataChecklistC?.ID_KhoiCV },
           {
             headers: {

@@ -104,27 +104,27 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
 
   useEffect(() => {
     const resPhanloai = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_phanloai/all').then((res) => {
+      await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_phanloai/all`).then((res) => {
         setPhanloai(res.data.data)
       })
     }
     const resChinhanh = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_chinhanh/all').then((res) => {
+      await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_chinhanh/all`).then((res) => {
         setChinhanh(res.data.data)
       })
     }
     const resLinhvuc = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_linhvuc/all').then((res) => {
+      await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_linhvuc/all`).then((res) => {
         setLinhvuc(res.data.data)
       })
     }
     const resLoaihinh = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_loaihinh/all').then((res) => {
+      await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_loaihinh/all`).then((res) => {
         setLoaihinh(res.data.data)
       })
     }
     const resNhom = async () => {
-      await axios.get('https://checklist.pmcweb.vn/be/api/v2/ent_nhom/all').then((res) => {
+      await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_nhom/all`).then((res) => {
         setNhom(res.data.data)
       })
     }
@@ -193,7 +193,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       if (currentDuan !== undefined) {
         // Sending a PUT request with FormData
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, formData, {
+          .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_duan/update/${currentDuan.ID_Duan}`, formData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -233,7 +233,7 @@ export default function GiamsatNewEditForm({ currentDuan }: Props) {
       } else {
         // Sending a POST request with FormData
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/create`, formData, {
+          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_duan/create`, formData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

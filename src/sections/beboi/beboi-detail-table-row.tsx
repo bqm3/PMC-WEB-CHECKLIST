@@ -28,9 +28,7 @@ export default function BeBoiDetailTableRow({
   row,
   selected,
 }: Props) {
-  const { ID_Beboi, ID_Duan, Ngay_ghi_nhan, Nguoi_tao, ID_Checklist, ID_ChecklistC, Tyle, VuotChuan, ent_duan, ent_checklist, tb_checklistc, Giatridinhdanh, Giatrighinhan, Giatrisosanh } = row;
-  console.log('row', row)
-
+  const { ID_Beboi, ID_Duan, Ngay_ghi_nhan, Nguoi_tao, ID_Checklist, ID_Loaisosanh, ID_ChecklistC, Tyle, VuotChuan, ent_duan, ent_checklist, tb_checklistc, Giatridinhdanh, Giatrighinhan, Giatrisosanh } = row;
 
   const popover = usePopover();
 
@@ -45,7 +43,7 @@ export default function BeBoiDetailTableRow({
 
       <TableCell>{ent_checklist?.Checklist}</TableCell>
       <TableCell>{Giatridinhdanh}</TableCell>
-      <TableCell>{Giatrighinhan} {ent_checklist?.Giatrinhan}</TableCell>
+      <TableCell>{Giatrighinhan} {(`${ID_Loaisosanh}` === "0" || ID_Loaisosanh === null) ? "" : ent_checklist?.Giatrinhan}</TableCell>
       <TableCell>{Giatrisosanh}</TableCell>
       <TableCell>{Tyle} {Tyle ? '%' : ''}</TableCell>
       <TableCell>{Nguoi_tao}</TableCell>

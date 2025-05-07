@@ -151,10 +151,11 @@ export default function BaoCaoListView() {
 
     await axios
       .put(
-        'https://checklist.pmcweb.vn/be/api/v2/duan-loaics/update',
+        `${process.env.REACT_APP_HOST_API}/api/v2/duan-loaics/update`,
         {
           ID_LoaiCS: idsString,
         },
+
         {
           headers: {
             Accept: 'application/json',
@@ -184,7 +185,7 @@ export default function BaoCaoListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/api/v2/tb_sucongoai/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

@@ -97,7 +97,7 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.post('https://checklist.pmcweb.vn/be/api/v2/ent_user/check-auth', [], {
+        const res = await axios.post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/check-auth`, [], {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -150,7 +150,7 @@ export function AuthProvider({ children }: Props) {
         Password,
       };
 
-      const urlHttp = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/login';
+      const urlHttp = `${process.env.REACT_APP_HOST_API}/api/v2/ent_user/login`;
       const res = await axios.post(urlHttp, data);
       const { token, user } = res.data;
 

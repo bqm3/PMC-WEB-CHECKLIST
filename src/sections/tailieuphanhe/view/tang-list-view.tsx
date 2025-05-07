@@ -126,7 +126,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_khuvuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -170,7 +170,7 @@ export default function AreaListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Duongdantl));
     await axios
-      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_tang/delete-mul`, deleteRows, {
+      .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_tailieuphanhe/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -212,6 +212,14 @@ export default function AreaListView() {
         }
       });
   }, [accessToken, enqueueSnackbar, dataFiltered.length, dataInPage.length, table, tableData]);
+
+  const handleViewRow = useCallback(
+    (id: string) => {
+      console.log('paths.dashboard.tailieuphanhe.details(id)', paths.dashboard.tailieuphanhe.details(id))
+      router.push(paths.dashboard.tailieuphanhe.details(id));
+    },
+    [router]
+  );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -325,7 +333,7 @@ export default function AreaListView() {
                         selected={table.selected.includes(row.ID_Duongdantl)}
                         onSelectRow={() => table.onSelectRow(row.ID_Duongdantl)}
                         onDeleteRow={() => handleDeleteRow(row.ID_Duongdantl)}
-                      // onViewRow={() => handleViewRow(row.ID_Duongdantl)}
+                        onViewRow={() => handleViewRow(row.ID_Duongdantl)}
                       />
                     ))}
 

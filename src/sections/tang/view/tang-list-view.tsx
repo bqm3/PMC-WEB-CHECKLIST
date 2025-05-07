@@ -127,7 +127,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_khuvuc/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_khuvuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -171,7 +171,7 @@ export default function AreaListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Tang));
     await axios
-      .put(`https://checklist.pmcweb.vn/be/api/v2/ent_tang/delete-mul`, deleteRows, {
+      .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_tang/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

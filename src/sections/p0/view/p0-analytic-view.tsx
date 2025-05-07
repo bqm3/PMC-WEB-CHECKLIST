@@ -100,7 +100,7 @@ export default function P0_AnalyticsView() {
   const getAnalytics1 = useCallback(async (): Promise<void> => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/1`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/analytics/1`);
       setData1(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu analytics 1:', error.message);
@@ -112,7 +112,7 @@ export default function P0_AnalyticsView() {
   const getAnalytics7 = useCallback(async (): Promise<void> => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/7`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/analytics/7`);
       setData7(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu analytics 7:', error.message);
@@ -124,7 +124,7 @@ export default function P0_AnalyticsView() {
   const getAnalytics2 = useCallback(async (): Promise<void> => {
     try {
       setLoadingData2(true);
-      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/2`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/analytics/2`);
       setData2(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu analytics 2:', error.message);
@@ -136,7 +136,7 @@ export default function P0_AnalyticsView() {
   const getAnalytics3_1 = useCallback(async (): Promise<void> => {
     try {
       setLoadingData3_1(true);
-      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/3`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/analytics/3`);
       setData3_1(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu analytics 3:', error.message);
@@ -148,7 +148,7 @@ export default function P0_AnalyticsView() {
   const getAnalytics3_2 = useCallback(async (): Promise<void> => {
     try {
       setLoadingData3_2(true);
-      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/4`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/analytics/4`);
       setData3_2(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu analytics 3:', error.message);
@@ -160,7 +160,7 @@ export default function P0_AnalyticsView() {
   const getAnalytics4 = useCallback(async (): Promise<void> => {
     try {
       setLoadingData4(true);
-      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/5`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/analytics/5`);
       setData4(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu analytics 3:', error.message);
@@ -172,7 +172,7 @@ export default function P0_AnalyticsView() {
   const getAnalytics7Days = useCallback(async (): Promise<void> => {
     try {
       setLoadingData7Days(true);
-      const response = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/p0/analytics/6`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/analytics/6`);
       setData7Days(response.data || []);
     } catch (error: any) {
       console.error('Lỗi khi lấy dữ liệu 7 ngày:', error.message);

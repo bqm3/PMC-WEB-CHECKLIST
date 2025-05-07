@@ -17,13 +17,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import Iconify from 'src/components/iconify';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import moment from 'moment';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
-import Iconify from 'src/components/iconify';
 
 interface CanhBaoData {
   TenDuAn: string;
@@ -57,7 +57,7 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
       setLoading(true);
       setError(null);
 
-      const response = await axios.get('https://checklist.pmcweb.vn/be/api/v2/hsse/canhbao-xathai', {
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/hsse/canhbao-xathai`, {
         params: {
           Ngay: selectedDate.format('YYYY/MM/DD'),
         },
@@ -80,7 +80,7 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
       setLoading(true);
       setError(null);
 
-      const response = await axios.get('https://checklist.pmcweb.vn/be/api/v2/hsse/duan-khongnhap-xathai', {
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/hsse/duan-khongnhap-xathai`, {
         params: {
           p_ngay: selectedDate.format('YYYY/MM/DD'),
         },

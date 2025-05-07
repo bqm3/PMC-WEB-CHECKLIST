@@ -64,13 +64,15 @@ export default function AreaNewEditForm({ currentTang }: Props) {
   }, [phanHe]);
 
   const NewProductSchema = Yup.object().shape({
-    Duongdan: Yup.string().required('Phải có tên tầng'),
+    Duongdan: Yup.string().required('Phải có đường dẫn'),
+    Tenduongdan: Yup.string().required('Phải có tên đường dẫn'),
     Ghichu: Yup.mixed().nullable(),
   });
 
   const defaultValues = useMemo(
     () => ({
       Duongdan: currentTang?.Duongdan || '',
+      Tenduongdan: currentTang?.Tenduongdan || '',
       Ghichu: currentTang?.Ghichu || '',
       ID_Phanhe: currentTang?.ID_Phanhe || null,
     }),
@@ -100,48 +102,45 @@ export default function AreaNewEditForm({ currentTang }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      axios
-        .post(`https://checklist.pmcweb.vn/be/api/v2/ent_tailieuphanhe/create`, data, {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((res) => {
-          reset();
-          enqueueSnackbar('Tạo mới thành công!');
-        })
-        .catch((error) => {
-          if (error.response) {
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 4000,
-              message: `${error.response.data.message}`,
-            });
-          } else if (error.request) {
-            // Lỗi không nhận được phản hồi từ server
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 4000,
-              message: `Không nhận được phản hồi từ máy chủ`,
-            });
-          } else {
-            // Lỗi khi cấu hình request
-            enqueueSnackbar({
-              variant: 'error',
-              autoHideDuration: 4000,
-              message: `Lỗi gửi yêu cầu`,
-            });
-          }
-        });
-    } catch (error) {
-      enqueueSnackbar({
-        variant: 'error',
-        autoHideDuration: 4000,
-        message: `Lỗi gửi yêu cầu`,
+      const isUpdate = !!currentTang?.ID_Duongdantl;
+      const url = `${process.env.REACT_APP_HOST_API}/api/v2/ent_tailieuphanhe/${isUpdate ? `${currentTang.ID_Duongdantl}` : 'create'}`;
+      const method = isUpdate ? 'put' : 'post';
+
+      await axios({
+        method,
+        url,
+        data,
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
+
+      reset();
+      enqueueSnackbar('Thành công!');
+    } catch (error) {
+      if (error.response) {
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: `${error.response.data.message}`,
+        });
+      } else if (error.request) {
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: `Không nhận được phản hồi từ máy chủ`,
+        });
+      } else {
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: `Lỗi gửi yêu cầu`,
+        });
+      }
     }
   });
+
 
 
   const renderDetails = (
@@ -180,6 +179,7 @@ export default function AreaNewEditForm({ currentTang }: Props) {
               )}
             </Stack>
 
+            <RHFTextField name="Tenduongdan" label="Tên đường dẫn " />
             <RHFTextField name="Duongdan" label="Đường dẫn " />
             <RHFTextField name="Ghichu" label="Ghi chú" multiline rows={3} />
           </Stack>

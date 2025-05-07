@@ -135,7 +135,7 @@ export default function GiamsatListView() {
     try {
       setLoadingReport(true);
       const response = await axios.get(
-        `https://checklist.pmcweb.vn/be/api/v2/p0/export-excel/?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
+        `${process.env.REACT_APP_HOST_API}/api/v2/p0/export-excel/?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}`,
         {
           headers: {
             'Content-Type': 'application/json',

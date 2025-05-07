@@ -30,7 +30,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 type Props = {
   row: ITailieuphanhe;
   selected: boolean;
-  // onViewRow: VoidFunction;
+  onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
 };
@@ -38,7 +38,7 @@ type Props = {
 export default function AreaTableRow({
   row,
   selected,
-  // onViewRow,
+  onViewRow,
   onSelectRow,
   onDeleteRow,
 }: Props) {
@@ -46,6 +46,7 @@ export default function AreaTableRow({
     ID_Duongdantl,
     ID_Phanhe,
     ID_Duan,
+    Tenduongdan,
     Duongdan,
     Ghichu
   } = row;
@@ -79,7 +80,7 @@ export default function AreaTableRow({
 
       <TableCell>
         <a href={Duongdan} target="_blank" rel="noopener noreferrer">
-          {Duongdan}
+          {Tenduongdan}
         </a>
       </TableCell>
 
@@ -98,9 +99,9 @@ export default function AreaTableRow({
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton> */}
 
-        {/* <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
-        </IconButton> */}
+        </IconButton>
       </TableCell>
     </TableRow>
   );
@@ -118,38 +119,19 @@ export default function AreaTableRow({
       >
         <MenuItem
           onClick={() => {
-            // onViewRow();
+            onViewRow();
             popover.onClose();
           }}
         >
           <Iconify icon="solar:eye-bold" />
           Xem
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Xóa
-        </MenuItem>
+
 
 
       </CustomPopover>
 
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="PMC thông báo"
-        content="Bạn có thực sự muốn xóa không?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Xóa
-          </Button>
-        }
-      />
+
     </>
   );
 }

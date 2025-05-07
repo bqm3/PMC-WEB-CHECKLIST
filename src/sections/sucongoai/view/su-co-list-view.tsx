@@ -193,7 +193,7 @@ export default function SuCoListView() {
 
   const getSDTKhanCap = useCallback(async () => {
     try {
-      const res = await axios.get(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/sdt-khan-cap`, {
+      const res = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_duan/sdt-khan-cap`, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -216,7 +216,7 @@ export default function SuCoListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/api/v2/tb_sucongoai/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -260,7 +260,7 @@ export default function SuCoListView() {
   const handleUpdate = async (id: string) => {
     await axios
       .put(
-        `https://checklist.pmcweb.vn/be/api/v2/tb_sucongoai/status/${id}`,
+        `${process.env.REACT_APP_HOST_API}/api/v2/tb_sucongoai/status/${id}`,
         {
           ID_Hangmuc: selectedHangMuc,
           Tinhtrangxuly: tinhTrangXuLy,

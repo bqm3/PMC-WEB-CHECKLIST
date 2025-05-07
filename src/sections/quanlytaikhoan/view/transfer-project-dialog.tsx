@@ -46,7 +46,7 @@ export default function TransferProjectDialog({ open, onClose, user }: Props) {
         Ngay: convertToVietnamDate(selectedDate)
       }
       await axios.post(
-        `https://checklist.pmcweb.vn/be/api/v2/user-history/create`, data,
+        `${process.env.REACT_APP_HOST_API}/api/v2/user-history/create`, data,
         {
           headers: {
             Accept: 'application/json',

@@ -368,6 +368,7 @@ export type ITailieuphanhe = {
   ID_Duongdantl: string;
   ID_Phanhe: string;
   ID_Duan: string;
+  Tenduongdan: string;
   Duongdan: string;
   Ghichu: string;
   ent_phanhe: IPhanhe;

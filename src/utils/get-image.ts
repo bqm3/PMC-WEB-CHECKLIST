@@ -1,4 +1,4 @@
-const BASE_URL_IMAGE = "https://checklist.pmcweb.vn/be/upload"
+const BASE_URL_IMAGE = `${process.env.REACT_APP_HOST_API}/upload`
 
 export default function funcBaseUri_Image(key: any, image: any) {
   let uri = '';

@@ -140,7 +140,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`https://checklist.pmcweb.vn/be/api/v2/ent_duan/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_duan/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -212,7 +212,7 @@ export default function GiamsatListView() {
       };
 
       // Gọi API đăng nhập
-      const urlHttp = 'https://checklist.pmcweb.vn/be/api/v2/ent_user/login';
+      const urlHttp = `${process.env.REACT_APP_HOST_API}/api/v2/ent_user/login`;
       const res = await axios.post(urlHttp, data);
 
       // Kiểm tra nếu đăng nhập thành công
@@ -241,7 +241,7 @@ export default function GiamsatListView() {
   const handleViewRowDuan = useCallback(
     async (id: string) => {
       try {
-        const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/update/${id}`, [], {
+        const res = await axios.put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/duan/update/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -282,7 +282,7 @@ export default function GiamsatListView() {
 
   const handleReload = useCallback(async () => {
     try {
-      const res = await axios.put(`https://checklist.pmcweb.vn/be/api/v2/ent_user/duan/clear`, [], {
+      const res = await axios.put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/duan/clear`, [], {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

@@ -186,7 +186,7 @@ export default function DayChecklistCalvListView() {
 
     const handleFilterSubmit = async () => {
         await axios
-            .post(`https://checklist.pmcweb.vn/be/api/v2/tb_day_checkListc/date`, dateFilter, {
+            .post(`${process.env.REACT_APP_HOST_API}/api/v2/tb_day_checkListc/date`, dateFilter, {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${accessToken}`,
@@ -257,7 +257,7 @@ export default function DayChecklistCalvListView() {
                 endDate: filters.endDate,
                 tenBoPhan: khoiText,
             };
-            const response = await axios.post('https://checklist.pmcweb.vn/be/api/v2/tb_day_checkListc/baocao', data, {
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/api/v2/tb_day_checkListc/baocao`, data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -335,7 +335,8 @@ export default function DayChecklistCalvListView() {
                     onChange={handleFilterStatus}
                     sx={{
                         px: 2.5,
-                        boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+                        boxShadow: (theme) => `inset 0 - 2px 0 0 ${alpha(theme.palette.grey[500], 0.08)
+                            }`,
                     }}
                 >
                     {STATUS_OPTIONS.map((tab) => (
@@ -359,16 +360,16 @@ export default function DayChecklistCalvListView() {
                                 >
                                     {tab.value === 'all' && tb_day_checkList?.length}
                                     {tab.value === '1' &&
-                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV}` === '1').length}
+                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV} ` === '1').length}
 
                                     {tab.value === '2' &&
-                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV}` === '2').length}
+                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV} ` === '2').length}
                                     {tab.value === '3' &&
-                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV}` === '3').length}
+                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV} ` === '3').length}
                                     {tab.value === '4' &&
-                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV}` === '4').length}
+                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV} ` === '4').length}
                                     {tab.value === '5' &&
-                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV}` === '5').length}
+                                        tb_day_checkList?.filter((item) => `${item.ID_KhoiCV} ` === '5').length}
                                 </Label>
                             }
                         />
@@ -537,12 +538,12 @@ function applyFilter({
     if (name) {
         inputData = inputData?.filter(
             (checklist) =>
-                `${checklist?.Ca}`?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+                `${checklist?.Ca} `?.toLowerCase().indexOf(name.toLowerCase()) !== -1
 
         );
     }
     if (status !== 'all') {
-        inputData = inputData.filter((tbchecklist) => `${tbchecklist.ID_KhoiCV}` === `${status}`);
+        inputData = inputData.filter((tbchecklist) => `${tbchecklist.ID_KhoiCV} ` === `${status} `);
     }
 
     if (!dateError) {

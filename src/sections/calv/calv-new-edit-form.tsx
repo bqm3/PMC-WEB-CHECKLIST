@@ -100,7 +100,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
     try {
       if (currentCalv !== undefined) {
         await axios
-          .put(`https://checklist.pmcweb.vn/be/api/v2/ent_calv/update/${currentCalv.ID_Calv}`, data, {
+          .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_calv/update/${currentCalv.ID_Calv}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -140,7 +140,7 @@ export default function ArticleNewEditForm({ currentCalv }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/ent_calv/create`, data, {
+          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_calv/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

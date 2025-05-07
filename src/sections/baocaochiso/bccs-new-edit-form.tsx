@@ -101,7 +101,7 @@ export default function ChiSoNewEditForm({ currentLoaiCS }: Props) {
       if (currentLoaiCS !== undefined) {
         await axios
           .put(
-            `https://checklist.pmcweb.vn/be/api/v2/hangmuc-chiso/update/${currentLoaiCS.ID_Hangmuc_Chiso}`,
+            `${process.env.REACT_APP_HOST_API}/api/v2/hangmuc-chiso/update/${currentLoaiCS.ID_Hangmuc_Chiso}`,
             data,
             {
               headers: {
@@ -144,7 +144,7 @@ export default function ChiSoNewEditForm({ currentLoaiCS }: Props) {
           });
       } else {
         axios
-          .post(`https://checklist.pmcweb.vn/be/api/v2/hangmuc-chiso/create`, data, {
+          .post(`${process.env.REACT_APP_HOST_API}/api/v2/hangmuc-chiso/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
