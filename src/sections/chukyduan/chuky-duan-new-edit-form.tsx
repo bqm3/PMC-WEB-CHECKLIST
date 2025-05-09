@@ -125,7 +125,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
       if (currentCycle !== undefined) {
         await axios
           .put(
-            `${process.env.REACT_APP_HOST_API}/api/v2/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`,
+            `${process.env.REACT_APP_HOST_API}/ent_duan_khoicv/update/${currentCycle.ID_Duan_KhoiCV}`,
             data,
             {
               headers: {
@@ -168,7 +168,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
           });
       } else {
         axios
-          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_duan_khoicv/create`, data, {
+          .post(`${process.env.REACT_APP_HOST_API}/ent_duan_khoicv/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

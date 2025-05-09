@@ -72,6 +72,7 @@ export default function CalvTableRow({
 
       <TableCell>{UserName}</TableCell>
       <TableCell sx={{ alignItems: 'center' }}>{ent_chucvu?.Chucvu}</TableCell>
+      <TableCell sx={{ alignItems: 'center' }}>{ent_khoicv?.KhoiCV}</TableCell>
 
       <TableCell sx={{ alignItems: 'center' }}>{Hoten}</TableCell>
       <TableCell sx={{ alignItems: 'center' }}>{Email}</TableCell>

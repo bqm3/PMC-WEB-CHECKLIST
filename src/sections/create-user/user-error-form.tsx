@@ -68,7 +68,7 @@ export default function UserErrorForm() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/error`, data, {
+        .put(`${process.env.REACT_APP_HOST_API}/ent_user/error`, data, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

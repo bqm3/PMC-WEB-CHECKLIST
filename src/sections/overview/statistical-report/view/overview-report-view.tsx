@@ -129,7 +129,7 @@ export const OverviewReportView = () => {
         .toString()
         .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}T23:59:59.999Z`;
       const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/reports/${indexBaoCao}`,
+        `${process.env.REACT_APP_HOST_API}/tb_checklistc/reports/${indexBaoCao}`,
         {
           startDate: startDateString,
           endDate: endDateString,
@@ -195,7 +195,7 @@ export const OverviewReportView = () => {
         .toString()
         .padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}T23:59:59.999Z`;
       const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/preview-reports/${indexBaoCao}`,
+        `${process.env.REACT_APP_HOST_API}/tb_checklistc/preview-reports/${indexBaoCao}`,
         {
           startDate: startDateString,
           endDate: endDateString,
@@ -220,7 +220,7 @@ export const OverviewReportView = () => {
   const handleExportStatistical = async () => {
     setLoading(true);
     const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/thong-ke`,
+      `${process.env.REACT_APP_HOST_API}/tb_checklistc/thong-ke`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -258,7 +258,7 @@ export const OverviewReportView = () => {
   const handleExportAllArticleImportant = async () => {
     setLoading(true);
     const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/report-article-important`,
+      `${process.env.REACT_APP_HOST_API}/tb_checklistc/report-article-important`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,
@@ -296,7 +296,7 @@ export const OverviewReportView = () => {
 
   const handlePreviewExportAllArticleImportant = async () => {
     const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/preview-report-article-important`,
+      `${process.env.REACT_APP_HOST_API}/tb_checklistc/preview-report-article-important`,
       {
         startDate: filters.startDate,
         endDate: filters.endDate,

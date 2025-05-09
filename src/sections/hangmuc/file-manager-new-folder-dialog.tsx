@@ -84,7 +84,7 @@ export default function FileManagerNewFolderDialog({
     }
 
     try {
-      await axios.post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_hangmuc/uploads`, formData, {
+      await axios.post(`${process.env.REACT_APP_HOST_API}/ent_hangmuc/uploads`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${accessToken}`,

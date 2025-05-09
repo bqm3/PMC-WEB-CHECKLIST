@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import { FormGroup } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -50,6 +51,10 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const [Duan, setDuan] = useState<IDuan[]>([]);
   const [Chucvu, setChucvu] = useState<IChucvu[]>([]);
 
+  const [areasData, setAreasData] = useState<any>([]);
+  const [checkedStates, setCheckedStates] = useState<any>([]);
+  const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
+
   const { khoiCV } = useGetKhoiCV();
   const { chucVu } = useGetChucvu();
   const { duan } = useGetDuan();
@@ -57,6 +62,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const { nhomduan } = useGetNhomDuAn();
   const [oldUserName, setOldUserName] = useState("");
+  const [selectedKhoiIDs, setSelectedKhoiIDs] = useState<number[]>([]);
 
   useEffect(() => {
     if (currentUser) {
@@ -81,6 +87,14 @@ export default function UserNewEditForm({ currentUser }: Props) {
       setChucvu(chucVu);
     }
   }, [chucVu]);
+
+  const handleToggle = (id: number) => {
+    const newSelected = selectedKhoiIDs.includes(id)
+      ? selectedKhoiIDs.filter((item) => item !== id)
+      : [...selectedKhoiIDs, id];
+
+    setSelectedKhoiIDs(newSelected);
+  };
 
   const NewUserSchema = Yup.object().shape({
     UserName: Yup.string().required('Tài khoản là bắt buộc'),
@@ -124,6 +138,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   useEffect(() => {
     if (currentUser) {
+      const ids = currentUser?.arr_Khoi?.split(",").map((id) => Number(id.trim()));
+      setSelectedKhoiIDs(ids);
       reset(defaultValues);
     }
   }, [currentUser, defaultValues, reset]);
@@ -136,16 +152,18 @@ export default function UserNewEditForm({ currentUser }: Props) {
         .filter((project: any) => project.checked)
         .map((project: any) => project.ID_Duan)
     );
+    const khoiString = selectedKhoiIDs.join(",");
 
     const newData = {
       ...data,
       arr_Duan: selectedIds,
+      arr_Khoi: khoiString,
       oldUserName,
     };
     try {
       if (currentUser !== undefined) {
         await axios
-          .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/update/${currentUser?.ID_User}`, newData, {
+          .put(`${process.env.REACT_APP_HOST_API}/ent_user/update/${currentUser?.ID_User}`, newData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -181,7 +199,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           });
       } else {
         await axios
-          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/register`, newData, {
+          .post(`${process.env.REACT_APP_HOST_API}/ent_user/register`, newData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -224,10 +242,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
       // }
     }
   });
-
-  const [areasData, setAreasData] = useState<any>([]);
-  const [checkedStates, setCheckedStates] = useState<any>([]);
-  const [isSelectAllChecked, setIsSelectAllChecked] = useState(false);
 
   useEffect(() => {
     if (nhomduan) {
@@ -522,8 +536,23 @@ export default function UserNewEditForm({ currentUser }: Props) {
               />
             )}
           />
-        </Box>
 
+
+        </Box>
+        <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
+          {KhoiCV.map((item: any) => (
+            <FormControlLabel
+              key={item?.ID_KhoiCV}
+              control={
+                <Checkbox
+                  checked={selectedKhoiIDs.includes(item?.ID_KhoiCV)}
+                  onChange={() => handleToggle(item?.ID_KhoiCV)}
+                />
+              }
+              label={item?.KhoiCV}
+            />
+          ))}
+        </FormGroup>
         {userHistory?.length > 0 &&
           <TransferProjectDialog userHistory={userHistory} />}
 

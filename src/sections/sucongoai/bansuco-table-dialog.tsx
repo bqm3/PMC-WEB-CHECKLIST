@@ -74,7 +74,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/bansuco`);
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/bansuco`);
       if (response.data.success) {
         setEmployees(response.data.data);
       } else {
@@ -119,7 +119,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
     try {
       if (formMode === 'add') {
         const response = await axios.post(
-          `${process.env.REACT_APP_HOST_API}/api/v2/bansuco/create`,
+          `${process.env.REACT_APP_HOST_API}/bansuco/create`,
           currentEmployee
         );
         if (response.data.success) {
@@ -131,7 +131,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
         }
       } else {
         const response = await axios.put(
-          `${process.env.REACT_APP_HOST_API}/api/v2/bansuco/update/${currentEmployee.id}`,
+          `${process.env.REACT_APP_HOST_API}/bansuco/update/${currentEmployee.id}`,
           currentEmployee
         );
         if (response.data.success) {
@@ -163,7 +163,7 @@ export default function BansucoDialog({ isMenu = false }: BansucoDialogProps) {
       if (!employeeToDelete) return;
 
       const response = await axios.put(
-        `${process.env.REACT_APP_HOST_API}/api/v2/bansuco/delete/${employeeToDelete.id}`
+        `${process.env.REACT_APP_HOST_API}/bansuco/delete/${employeeToDelete.id}`
       );
       if (response.data.success) {
         setSnackbar({

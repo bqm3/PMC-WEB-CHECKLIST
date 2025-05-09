@@ -95,7 +95,7 @@ export default function CardManagementDialog({
       }
 
       // Here you would typically call your API to update the values
-      await axios.put(`${process.env.REACT_APP_HOST_API}/api/v2/s0-thaydoithe/update`, { data: dataToSubmit, dataOld }, {
+      await axios.put(`${process.env.REACT_APP_HOST_API}/s0-thaydoithe/update`, { data: dataToSubmit, dataOld }, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

@@ -194,7 +194,7 @@ export default function ChecklistCalvListView() {
 
   const handleFilterSubmit = async () => {
     await axios
-      .post(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/date`, dateFilter, {
+      .post(`${process.env.REACT_APP_HOST_API}/tb_checklistc/date`, dateFilter, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -265,7 +265,7 @@ export default function ChecklistCalvListView() {
         endDate: filters.endDate,
         tenBoPhan: khoiText,
       };
-      const response = await axios.post(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/baocao`, data, {
+      const response = await axios.post(`${process.env.REACT_APP_HOST_API}/tb_checklistc/baocao`, data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -315,7 +315,7 @@ export default function ChecklistCalvListView() {
   const handleOpenChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/open/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/tb_checklistc/open/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -360,7 +360,7 @@ export default function ChecklistCalvListView() {
   const handleRemoveChecklistC = useCallback(
     async (id: string) => {
       await axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/tb_checklistc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

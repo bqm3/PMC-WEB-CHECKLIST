@@ -60,7 +60,7 @@ export default function EmergencyPhoneDialog({
     setLoading(true);
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_HOST_API}/api/v2/ent_duan/update-sdt-khan-cap`,
+        `${process.env.REACT_APP_HOST_API}/ent_duan/update-sdt-khan-cap`,
         { SDTKhanCap: phoneNumber },
         {
           headers: {

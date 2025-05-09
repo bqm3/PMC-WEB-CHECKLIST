@@ -1,11 +1,30 @@
 import { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 // @mui
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import { Stack } from '@mui/material';
+import {
+  Button,
+  Stack,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Alert,
+  Box,
+  TextField,
+} from '@mui/material';
+import Iconify from 'src/components/iconify';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -29,7 +48,7 @@ import { IChecklistTableFilters, IHSSE } from 'src/types/khuvuc';
 //
 import HSSETableRow from '../hsse-admin-table-row';
 import DuanTableToolbar from '../hsse-table-toolbar';
-import DuanTableFiltersResult from '../hsse-table-filters-result'
+import DuanTableFiltersResult from '../hsse-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -66,6 +85,11 @@ export default function GiamsatListView() {
   const { hsse } = useGetHSSEAll();
 
   const [tableData, setTableData] = useState<IHSSE[]>([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [warnings, setWarnings] = useState<{ [key: string]: string[] }>({});
+  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (hsse?.length > 0) {
@@ -107,6 +131,49 @@ export default function GiamsatListView() {
     setFilters(defaultFilters);
   }, []);
 
+  const handleFetchWarnings = async () => {
+    setOpen(true);
+    setLoading(true);
+    setError('');
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_HOST_API}/hsse/admin-warning`);
+      setWarnings(res.data);
+    } catch (err: any) {
+      setError('Lỗi khi tải dữ liệu cảnh báo HSSE.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredWarnings = Object.entries(warnings).filter(([project]) =>
+    project.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleExportExcel = () => {
+    const data: { project: string; warning: string }[] = [];
+
+    filteredWarnings.forEach(([project, issues]) => {
+      issues.forEach((issue: string) => {
+        data.push({ project, warning: issue });
+      });
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Cảnh báo HSSE');
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: 'application/octet-stream',
+    });
+
+    saveAs(blob, `HSSE_CanhBao_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -121,9 +188,12 @@ export default function GiamsatListView() {
               { name: 'Tổng hợp' },
             ]}
             sx={{
-              mb: { xs: 3, md: 5 },
+              mb: { xs: 1, md: 2 },
             }}
           />
+          <Button variant="contained" onClick={handleFetchWarnings}>
+            Cảnh báo HSSE
+          </Button>
         </Stack>
 
         <DuanTableToolbar
@@ -157,9 +227,6 @@ export default function GiamsatListView() {
                   rowCount={tableData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(checked, tableData?.map((row) => row.ID))
-                // }
                 />
 
                 <TableBody>
@@ -201,28 +268,54 @@ export default function GiamsatListView() {
         </Card>
       </Container>
 
-      {/* <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      /> */}
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="md">
+        <DialogTitle>Cảnh báo HSSE ngày hôm qua</DialogTitle>
+        <DialogContent sx={{ pb: 2 }}>
+          {!loading && error && <Alert severity="error">{error}</Alert>}
+
+          {!loading && !error && Object.keys(warnings).length === 0 && (
+            <Typography>Không có cảnh báo nào.</Typography>
+          )}
+
+          {!loading && !error && Object.keys(warnings).length > 0 && (
+            <>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <TextField
+                  label="Tìm kiếm dự án"
+                  variant="outlined"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  sx={{ flexGrow: 1, mr: 2 }}
+                />
+                <Button variant="outlined" onClick={handleExportExcel}>
+                  Xuất Excel
+                </Button>
+              </Box>
+
+              {filteredWarnings.length === 0 ? (
+                <Typography>Không tìm thấy dự án phù hợp.</Typography>
+              ) : (
+                filteredWarnings.map(([project, issues]) => (
+                  <Accordion key={project}>
+                    <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                      <Typography fontWeight="bold">{project}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul>
+                        {issues.map((issue, idx) => (
+                          <li key={idx}>
+                            <Typography>{issue}</Typography>
+                          </li>
+                        ))}
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                ))
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

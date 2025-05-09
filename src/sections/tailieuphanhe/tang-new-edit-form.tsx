@@ -103,7 +103,7 @@ export default function AreaNewEditForm({ currentTang }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const isUpdate = !!currentTang?.ID_Duongdantl;
-      const url = `${process.env.REACT_APP_HOST_API}/api/v2/ent_tailieuphanhe/${isUpdate ? `${currentTang.ID_Duongdantl}` : 'create'}`;
+      const url = `${process.env.REACT_APP_HOST_API}/ent_tailieuphanhe/${isUpdate ? `${currentTang.ID_Duongdantl}` : 'create'}`;
       const method = isUpdate ? 'put' : 'post';
 
       await axios({

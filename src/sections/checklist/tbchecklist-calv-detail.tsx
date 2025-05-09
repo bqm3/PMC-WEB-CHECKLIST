@@ -189,7 +189,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_checklist/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

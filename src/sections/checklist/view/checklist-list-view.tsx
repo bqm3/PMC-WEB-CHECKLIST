@@ -179,7 +179,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_checklist/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/ent_checklist/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -222,7 +222,7 @@ export default function ChecklistCalvListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Checklist));
     await axios
-      .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_checklist/delete-mul`, deleteRows, {
+      .put(`${process.env.REACT_APP_HOST_API}/ent_checklist/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

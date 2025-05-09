@@ -57,7 +57,7 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
       setLoading(true);
       setError(null);
 
-      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/hsse/canhbao-xathai`, {
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/hsse/canhbao-xathai`, {
         params: {
           Ngay: selectedDate.format('YYYY/MM/DD'),
         },
@@ -80,7 +80,7 @@ const CanhBaoXaThaiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
       setLoading(true);
       setError(null);
 
-      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/hsse/duan-khongnhap-xathai`, {
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/hsse/duan-khongnhap-xathai`, {
         params: {
           p_ngay: selectedDate.format('YYYY/MM/DD'),
         },

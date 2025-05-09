@@ -248,7 +248,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   useEffect(() => {
     const handleCheck = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/p0/check`, {
+        const res = await axios.get(`${process.env.REACT_APP_HOST_API}/p0/check`, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -265,7 +265,7 @@ export default function P0NewEditForm({ currentP0 }: Props) {
   const getSoThe = useCallback(async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/api/v2/s0-thaydoithe/${user?.ID_Duan}`,
+        `${process.env.REACT_APP_HOST_API}/s0-thaydoithe/${user?.ID_Duan}`,
         {
           headers: {
             Accept: 'application/json',
@@ -338,11 +338,11 @@ export default function P0NewEditForm({ currentP0 }: Props) {
       };
       await handleApiRequest(
         'put',
-        `${process.env.REACT_APP_HOST_API}/api/v2/p0/update/${currentP0?.ID_P0}`,
+        `${process.env.REACT_APP_HOST_API}/p0/update/${currentP0?.ID_P0}`,
         dataReq
       );
     } else {
-      await handleApiRequest('post', `${process.env.REACT_APP_HOST_API}/api/v2/p0/create`, data);
+      await handleApiRequest('post', `${process.env.REACT_APP_HOST_API}/p0/create`, data);
     }
   });
 

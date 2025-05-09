@@ -156,7 +156,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
       if (currentArticle !== undefined) {
         await axios
           .put(
-            `${process.env.REACT_APP_HOST_API}/api/v2/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`,
+            `${process.env.REACT_APP_HOST_API}/ent_hangmuc/update/${currentArticle.ID_Hangmuc}`,
             data,
             {
               headers: {
@@ -199,7 +199,7 @@ export default function ArticleNewEditForm({ currentArticle }: Props) {
           });
       } else {
         axios
-          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_hangmuc/create`, data, {
+          .post(`${process.env.REACT_APP_HOST_API}/ent_hangmuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

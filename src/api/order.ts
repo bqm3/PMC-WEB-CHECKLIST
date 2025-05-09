@@ -68,7 +68,7 @@ export function useGetOrderBookingServiceDetail(id: string) {
 
 
 export function useGetOrderDetail(id: string) {
-  const URL = id ? [`${process.env.REACT_APP_HOST_API}/api/v2/orders/${id}` ] : null;
+  const URL = id ? [`${process.env.REACT_APP_HOST_API}/orders/${id}` ] : null;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({

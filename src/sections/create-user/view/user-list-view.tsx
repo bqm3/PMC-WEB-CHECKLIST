@@ -65,11 +65,12 @@ const TABLE_HEAD = [
   { id: 'ID_User', label: 'Mã ', width: 50 },
   { id: 'UserName', label: 'Tài khoản', width: 150 },
   { id: 'ID_Chucvu', label: 'Chức vụ', width: 150 },
+  { id: 'ID_KhoiCV', label: 'Khối', width: 150 },
   { id: 'Hoten', label: 'Họ tên', width: 150 },
   { id: 'Email', label: 'Email', width: 150 },
   { id: 'Sodienthoai', label: 'Số điện thoại', width: 150 },
   { id: 'ID_Duan', label: 'Dự án', width: 150 },
-  { id: '', width: 40 },
+  { id: '', width: 10 },
 ];
 
 const defaultFilters: IKhuvucTableFilters = {
@@ -102,7 +103,7 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { users, userLoading, userEmpty } = useGetUsers();
+  const { users } = useGetUsers();
 
   const [tableData, setTableData] = useState<IUser[]>([]);
 
@@ -143,7 +144,7 @@ export default function GiamsatListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/ent_user/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

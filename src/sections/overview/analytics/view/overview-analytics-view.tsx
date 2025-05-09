@@ -207,7 +207,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleDataPercent = async () => {
       await axios
-        .get(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/percent-checklist-days`, {
+        .get(`${process.env.REACT_APP_HOST_API}/tb_checklistc/percent-checklist-days`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -251,7 +251,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhoiCV = async () => {
       await axios
-        .get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_checklist/total`, {
+        .get(`${process.env.REACT_APP_HOST_API}/ent_checklist/total`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -269,7 +269,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_khuvuc/total`, {
+        .get(`${process.env.REACT_APP_HOST_API}/ent_khuvuc/total`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -287,7 +287,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/list-checklist-error-project`, {
+        .get(`${process.env.REACT_APP_HOST_API}/tb_checklistc/list-checklist-error-project`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -305,7 +305,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalKhuvuc = async () => {
       await axios
-        .get(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/list-checklist`, {
+        .get(`${process.env.REACT_APP_HOST_API}/tb_checklistc/list-checklist`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -323,7 +323,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handleTotalHangmuc = async () => {
       await axios
-        .get(`${process.env.REACT_APP_HOST_API}/api/v2/ent_hangmuc/total`, {
+        .get(`${process.env.REACT_APP_HOST_API}/ent_hangmuc/total`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -341,7 +341,7 @@ export default function OverviewAnalyticsView() {
   useEffect(() => {
     const handlePercent = async () => {
       await axios
-        .get(`${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/percent`, {
+        .get(`${process.env.REACT_APP_HOST_API}/tb_checklistc/percent`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -360,7 +360,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/year?year=${selectedYear}&khoi=${selectedKhoiCV}&tangGiam=${selectedTangGiam}`,
+          `${process.env.REACT_APP_HOST_API}/tb_checklistc/year?year=${selectedYear}&khoi=${selectedKhoiCV}&tangGiam=${selectedTangGiam}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -382,7 +382,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/year-su-co?year=${selectedYearSuCo}&khoi=${selectedKhoiCVSuCo}`,
+          `${process.env.REACT_APP_HOST_API}/tb_checklistc/year-su-co?year=${selectedYearSuCo}&khoi=${selectedKhoiCVSuCo}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -404,7 +404,7 @@ export default function OverviewAnalyticsView() {
     const handleTangGiam = async () => {
       await axios
         .get(
-          `${process.env.REACT_APP_HOST_API}/api/v2/tb_sucongoai/dashboard-by-duan?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
+          `${process.env.REACT_APP_HOST_API}/tb_sucongoai/dashboard-by-duan?year=${selectedYearSuCoNgoai}&khoi=${selectedKhoiCVSuCoNgoai}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -498,7 +498,7 @@ export default function OverviewAnalyticsView() {
     try {
       setLoadingReport(true);
       const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/api/v2/tb_checklistc/report-checklist-month?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}&ID_KhoiCV=${dataChecklistMonth.khoicv}&ID_Duan=${user?.ID_Duan}&TenKhoiCV=${dataChecklistMonth.tenkhoicv}`,
+        `${process.env.REACT_APP_HOST_API}/tb_checklistc/report-checklist-month?year=${dataChecklistMonth.year}&month=${dataChecklistMonth.month}&ID_KhoiCV=${dataChecklistMonth.khoicv}&ID_Duan=${user?.ID_Duan}&TenKhoiCV=${dataChecklistMonth.tenkhoicv}`,
         null, // Use null as the second parameter because POST requests without a body can pass null
         { responseType: 'blob' } // Important to specify responseType as blob
       );

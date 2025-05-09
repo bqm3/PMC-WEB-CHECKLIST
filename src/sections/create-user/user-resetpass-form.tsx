@@ -57,7 +57,7 @@ export default function ResetPassForm() {
     try {
       setIsSubmitting(true);
       axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/reset-password`, data, {
+        .put(`${process.env.REACT_APP_HOST_API}/ent_user/reset-password`, data, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

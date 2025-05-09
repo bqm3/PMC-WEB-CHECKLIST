@@ -281,6 +281,7 @@ export type IUser = {
   Ngaysinh: Date | null;
   Sodienthoai: string;
   arr_Duan: string;
+  arr_Khoi: string;
   Gioitinh: string;
   Email: string;
   Password: string;

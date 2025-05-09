@@ -102,7 +102,7 @@ export default function GiamsatNewEditForm({ currentToanha }: Props) {
       if (currentToanha !== undefined) {
         await axios
           .put(
-            `${process.env.REACT_APP_HOST_API}/api/v2/ent_toanha/update/${currentToanha.ID_Toanha}`,
+            `${process.env.REACT_APP_HOST_API}/ent_toanha/update/${currentToanha.ID_Toanha}`,
             data,
             {
               headers: {
@@ -145,7 +145,7 @@ export default function GiamsatNewEditForm({ currentToanha }: Props) {
           });
       } else {
         axios
-          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_toanha/create`, data, {
+          .post(`${process.env.REACT_APP_HOST_API}/ent_toanha/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

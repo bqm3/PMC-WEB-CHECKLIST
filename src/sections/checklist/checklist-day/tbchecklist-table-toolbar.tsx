@@ -9,6 +9,7 @@ import { ITbChecklistTableFilters, ITbChecklistTableFilterValue } from 'src/type
 // components
 import Iconify from 'src/components/iconify';
 import { usePopover } from 'src/components/custom-popover';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -160,9 +161,9 @@ export default function TbChecklistTableToolbar({
           {/* <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton> */}
-          {/* <Button style={{ width: '150px' }} variant="contained" onClick={() => setShowModal(true)}>
+          <Button style={{ width: '150px' }} variant="contained" onClick={() => setShowModal(true)}>
             Tra cứu
-          </Button> */}
+          </Button>
         </Stack>
 
         {/* {canReset && (

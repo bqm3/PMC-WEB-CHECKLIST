@@ -86,7 +86,7 @@ export default function FileManagerNewFolderDialog({
 
     if (isNewFolder) {
       await axios
-        .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_checklist/uploads`, formData, {
+        .post(`${process.env.REACT_APP_HOST_API}/ent_checklist/uploads`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${accessToken}`,

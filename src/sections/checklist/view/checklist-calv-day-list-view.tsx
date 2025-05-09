@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 // @mui
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -56,6 +57,7 @@ import {
 import ChecklistTableRow from '../checklist-day/tb-day-checklist-table-row';
 import ChecklistTableToolbar from '../checklist-day/tbchecklist-table-toolbar';
 import ChecklistTableFiltersResult from '../checklist-day/tbchecklist-table-filters-result';
+
 
 // ----------------------------------------------------------------------
 
@@ -185,13 +187,26 @@ export default function DayChecklistCalvListView() {
 
 
     const handleFilterSubmit = async () => {
-        await axios
-            .post(`${process.env.REACT_APP_HOST_API}/api/v2/tb_day_checkListc/date`, dateFilter, {
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
+
+        const queryParams = new URLSearchParams({
+            fromDate: dateFilter.startDate
+                ? moment(dateFilter.startDate).format("YYYY-MM-DD")
+                : moment().startOf("month").format("YYYY-MM-DD"),
+
+            toDate: dateFilter.endDate
+                ? moment(dateFilter.endDate).format("YYYY-MM-DD")
+                : moment().format("YYYY-MM-DD"),
+        }).toString();
+
+
+        const url = `${process.env.REACT_APP_HOST_API}/tb_checklistc/day?page=0&limit=300&${queryParams}`;
+
+        axios.get(url, {
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
             .then((res) => {
                 setTableData(res.data.data);
                 setShowModal(false);
@@ -257,7 +272,7 @@ export default function DayChecklistCalvListView() {
                 endDate: filters.endDate,
                 tenBoPhan: khoiText,
             };
-            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/api/v2/tb_day_checkListc/baocao`, data, {
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/tb_day_checkListc/baocao`, data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -296,7 +311,6 @@ export default function DayChecklistCalvListView() {
 
 
     const handleViewNot = useCallback((Ngay: string, ID_Calv: string) => {
-        console.log('Ngay, ID_Calv', Ngay, ID_Calv)
         const url = paths.dashboard.checklist.catrongngaydetail(Ngay, ID_Calv);
         window.open(url, '_blank');
     }, []);
@@ -474,9 +488,7 @@ export default function DayChecklistCalvListView() {
                             value={dateFilter.startDate}
                             onChange={(date) => handleDateChange(date, 'startDate')} // Gọi hàm với type 'startDate'
                             slotProps={{ textField: { fullWidth: true } }}
-                            sx={{
-                                maxWidth: { md: 200 },
-                            }}
+
                         />
 
                         <DatePicker
@@ -484,9 +496,7 @@ export default function DayChecklistCalvListView() {
                             value={dateFilter.endDate}
                             onChange={(date) => handleDateChange(date, 'endDate')} // Gọi hàm với type 'endDate'
                             slotProps={{ textField: { fullWidth: true } }}
-                            sx={{
-                                maxWidth: { md: 200 },
-                            }}
+
                         />
                     </Stack>
                 </DialogContent>

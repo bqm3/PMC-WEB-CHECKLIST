@@ -95,7 +95,7 @@ export default function GiamsatNewEditForm({ id }: Props) {
   const onSubmit = async () => {
     setLoading(true);
     await axios
-      .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/set-up/${id}`, checkedStates, {
+      .put(`${process.env.REACT_APP_HOST_API}/ent_user/set-up/${id}`, checkedStates, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

@@ -488,7 +488,7 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
   useEffect(() => {
     const handleCheck = async () => {
       await axios
-        .post(`${process.env.REACT_APP_HOST_API}/api/v2/hsse/check`, [], {
+        .post(`${process.env.REACT_APP_HOST_API}/hsse/check`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -553,20 +553,20 @@ export default function HSSENewEditForm({ currentHSSE }: Props) {
       if (currentHSSE) {
         await handleApiRequest(
           'put',
-          `${process.env.REACT_APP_HOST_API}/api/v2/hsse/update/psh/${currentHSSE?.ID}`,
+          `${process.env.REACT_APP_HOST_API}/hsse/update/psh/${currentHSSE?.ID}`,
           dataReq
         );
       } else {
-        await handleApiRequest('post', `${process.env.REACT_APP_HOST_API}/api/v2/hsse/create/psh`, data);
+        await handleApiRequest('post', `${process.env.REACT_APP_HOST_API}/hsse/create/psh`, data);
       }
     } else if (currentHSSE) {
       await handleApiRequest(
         'put',
-        `${process.env.REACT_APP_HOST_API}/api/v2/hsse/update/${currentHSSE?.ID}`,
+        `${process.env.REACT_APP_HOST_API}/hsse/update/${currentHSSE?.ID}`,
         dataReq
       );
     } else {
-      await handleApiRequest('post', `${process.env.REACT_APP_HOST_API}/api/v2/hsse/create`, data);
+      await handleApiRequest('post', `${process.env.REACT_APP_HOST_API}/hsse/create`, data);
     }
   });
 

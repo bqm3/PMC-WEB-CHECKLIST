@@ -124,7 +124,7 @@ export default function ToanhaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_toanha/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/ent_toanha/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

@@ -111,7 +111,7 @@ export default function AreaNewEditForm({ currentTang }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       axios
-        .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_tang/create`, data, {
+        .post(`${process.env.REACT_APP_HOST_API}/ent_tang/create`, data, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

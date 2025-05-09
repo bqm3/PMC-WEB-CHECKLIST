@@ -126,7 +126,7 @@ export default function AreaListView() {
   const handleDeleteRow = useCallback(
     async (id: string) => {
       await axios
-        .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_khuvuc/delete/${id}`, [], {
+        .put(`${process.env.REACT_APP_HOST_API}/ent_khuvuc/delete/${id}`, [], {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -170,7 +170,7 @@ export default function AreaListView() {
   const handleDeleteRows = useCallback(async () => {
     const deleteRows = tableData.filter((row) => table.selected.includes(row.ID_Duongdantl));
     await axios
-      .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_tailieuphanhe/delete-mul`, deleteRows, {
+      .put(`${process.env.REACT_APP_HOST_API}/ent_tailieuphanhe/delete-mul`, deleteRows, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

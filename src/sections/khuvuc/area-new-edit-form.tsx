@@ -133,7 +133,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
     try {
       if (currentArea !== undefined) {
         await axios
-          .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
+          .put(`${process.env.REACT_APP_HOST_API}/ent_khuvuc/update/${currentArea.ID_Khuvuc}`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -173,7 +173,7 @@ export default function AreaNewEditForm({ currentArea }: Props) {
           });
       } else {
         axios
-          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_khuvuc/create`, data, {
+          .post(`${process.env.REACT_APP_HOST_API}/ent_khuvuc/create`, data, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

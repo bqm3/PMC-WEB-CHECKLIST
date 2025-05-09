@@ -140,7 +140,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
     try {
       if (currentUser !== undefined) {
         await axios
-          .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/update/${currentUser?.ID_User}`, newData, {
+          .put(`${process.env.REACT_APP_HOST_API}/ent_user/update/${currentUser?.ID_User}`, newData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,
@@ -176,7 +176,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
           });
       } else {
         await axios
-          .post(`${process.env.REACT_APP_HOST_API}/api/v2/ent_user/register`, newData, {
+          .post(`${process.env.REACT_APP_HOST_API}/ent_user/register`, newData, {
             headers: {
               Accept: 'application/json',
               Authorization: `Bearer ${accessToken}`,

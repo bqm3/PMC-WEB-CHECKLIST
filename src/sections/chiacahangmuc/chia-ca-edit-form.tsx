@@ -330,7 +330,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       Sochecklist: 100,
     };
     await axios
-      .put(`${process.env.REACT_APP_HOST_API}/api/v2/ent_thietlapca/update/${id}`, data, {
+      .put(`${process.env.REACT_APP_HOST_API}/ent_thietlapca/update/${id}`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,

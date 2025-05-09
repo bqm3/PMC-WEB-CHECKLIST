@@ -56,7 +56,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
 
   useEffect(() => {
     const handleGet = async () => {
-      await axios.get(`${process.env.REACT_APP_HOST_API}/api/v2/hsse`, {
+      await axios.get(`${process.env.REACT_APP_HOST_API}/hsse`, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -122,7 +122,7 @@ export default function ChiaCaNewEditForm({ id }: Props) {
       ID_Users
     };
     await axios
-      .post(`${process.env.REACT_APP_HOST_API}/api/v2/hsse/create-role`, data, {
+      .post(`${process.env.REACT_APP_HOST_API}/hsse/create-role`, data, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
