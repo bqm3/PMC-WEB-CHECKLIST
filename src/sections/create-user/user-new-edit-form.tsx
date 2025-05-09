@@ -89,9 +89,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
   }, [chucVu]);
 
   const handleToggle = (id: number) => {
-    const newSelected = selectedKhoiIDs?.includes(id)
-      ? selectedKhoiIDs.filter((item) => item !== id)
-      : [...selectedKhoiIDs, id];
+    const current = Array.isArray(selectedKhoiIDs) ? selectedKhoiIDs : [];
+
+    const newSelected = current.includes(id)
+      ? current.filter((item) => item !== id)
+      : [...current, id];
 
     setSelectedKhoiIDs(newSelected);
   };
@@ -138,11 +140,19 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   useEffect(() => {
     if (currentUser) {
-      const ids = currentUser?.arr_Khoi?.split(",").map((id) => Number(id.trim()));
+      const ids = currentUser.arr_Khoi
+        ? currentUser.arr_Khoi
+          .split(",")
+          .map((id) => Number(id.trim()))
+          .filter((id) => !Number.isNaN(id))
+        : [];
+
       setSelectedKhoiIDs(ids);
       reset(defaultValues);
     }
   }, [currentUser, defaultValues, reset]);
+
+
 
   const values = watch();
 
