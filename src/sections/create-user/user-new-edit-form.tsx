@@ -89,7 +89,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
   }, [chucVu]);
 
   const handleToggle = (id: number) => {
-    const newSelected = selectedKhoiIDs.includes(id)
+    const newSelected = selectedKhoiIDs?.includes(id)
       ? selectedKhoiIDs.filter((item) => item !== id)
       : [...selectedKhoiIDs, id];
 
@@ -540,12 +540,12 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
         </Box>
         <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
-          {KhoiCV.map((item: any) => (
+          {KhoiCV?.map((item: any) => (
             <FormControlLabel
               key={item?.ID_KhoiCV}
               control={
                 <Checkbox
-                  checked={selectedKhoiIDs.includes(item?.ID_KhoiCV)}
+                  checked={selectedKhoiIDs?.includes(item?.ID_KhoiCV)}
                   onChange={() => handleToggle(item?.ID_KhoiCV)}
                 />
               }
