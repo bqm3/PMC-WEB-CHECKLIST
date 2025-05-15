@@ -177,6 +177,7 @@ const AdminBeBoiListPage = lazy(() => import('src/pages/dashboard/beboi/admin'))
 const BeBoiPhanQuyenPage = lazy(() => import('src/pages/dashboard/beboi/phanquyen'));
 const BeBoiNewPage = lazy(() => import('src/pages/dashboard/beboi/new'));
 const BeBoiEditPage = lazy(() => import('src/pages/dashboard/beboi/edit'));
+const BeBoiAnalyticsView = lazy(() => import('src/pages/dashboard/beboi/analytics'));
 
 // P0
 const P0ListsPage = lazy(() => import('src/pages/dashboard/p0/list'));
@@ -420,6 +421,7 @@ export const dashboardRoutes = [
           { path: 'phanquyen', element: <BeBoiPhanQuyenPage /> },
           { path: ':id/edit', element: <BeBoiEditPage /> },
           { path: 'new', element: <BeBoiNewPage /> },
+          { path: 'analytics', element: <BeBoiAnalyticsView/>},
         ],
       },
       {
