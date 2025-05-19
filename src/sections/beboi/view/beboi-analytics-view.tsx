@@ -63,6 +63,7 @@ export default function BeBoi_AnalyticsView() {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState(moment().subtract(1, 'days'));
+  const [selectedDate2, setSelectedDate2] = useState(moment().subtract(1, 'days'));
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialog3, setOpenDialog3] = useState(false);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
@@ -97,18 +98,20 @@ export default function BeBoi_AnalyticsView() {
   };
 
   // Lấy danh sách chi nhánh duy nhất
-  const uniqueBranches = Array.from(new Set(data4?.map((item: any) => item.ent_chinhanh?.Tenchinhanh) || [])) as string[];
+  const uniqueBranches = Array.from(
+    new Set(data4?.map((item: any) => item.ent_chinhanh?.Tenchinhanh) || [])
+  ) as string[];
 
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm và chi nhánh
   const filteredData = data4?.filter((item: any) => {
-    const matchesSearch = 
+    const matchesSearch =
       item.Duan?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.Diachi?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.ent_nhom?.Tennhom?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.ent_phanloaida?.Phanloai?.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesBranch = !filterBranch || item.ent_chinhanh?.Tenchinhanh === filterBranch;
-    
+
     return matchesSearch && matchesBranch;
   });
 
@@ -194,7 +197,8 @@ export default function BeBoi_AnalyticsView() {
     async (date: string, id_duan: string): Promise<void> => {
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_HOST_API}/beboi/analytics`,{
+          `${process.env.REACT_APP_HOST_API}/beboi/analytics`,
+          {
             p_ngay: date,
             p_ID_Duan: id_duan,
             type: 4,
@@ -214,25 +218,19 @@ export default function BeBoi_AnalyticsView() {
     [accessToken]
   );
 
-    const getData4 = useCallback(
-    async (): Promise<void> => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_HOST_API}/beboi/duan`,
-          {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setData4(response.data || []);
-      } catch (error: any) {
-        console.error('Lỗi khi lấy dữ liệu analytics 3:', error.message);
-      }
-    },
-    [accessToken]
-  );
+  const getData4 = useCallback(async (): Promise<void> => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_HOST_API}/beboi/duan`, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setData4(response.data || []);
+    } catch (error: any) {
+      console.error('Lỗi khi lấy dữ liệu analytics 3:', error.message);
+    }
+  }, [accessToken]);
 
   const handleViewDetail = (project: any) => {
     setSelectedProject(project);
@@ -245,12 +243,12 @@ export default function BeBoi_AnalyticsView() {
       await Promise.all([
         getAnalytics1(selectedDate.format('YYYY/MM/DD')),
         getAnalytics2(),
-        getAnalytics3(selectedDate.format('YYYY/MM/DD')),
+        getAnalytics3(selectedDate2.format('YYYY/MM/DD')),
         getData4(),
       ]);
     };
     fetchData();
-  }, [getAnalytics1, getAnalytics2, getAnalytics3, getData4, selectedDate]);
+  }, [getAnalytics1, getAnalytics2, getAnalytics3, getData4, selectedDate, selectedDate2]);
 
   useEffect(() => {
     if (!loadingData1 && !loadingData2 && !loadingData3) {
@@ -374,7 +372,66 @@ export default function BeBoi_AnalyticsView() {
     );
   };
 
- 
+  const handleExportCompletedList = () => {
+    if (!data1 || data1.length === 0) return;
+
+    // Chuẩn bị dữ liệu cho worksheet
+    const wsData: any[] = [];
+    wsData.push([
+      '',
+      `DANH SÁCH DỰ ÁN ĐÃ NHẬP CHECKLIST BỂ BƠI NGÀY ${selectedDate.format('DD/MM/YYYY')}`,
+      '',
+      '',
+    ]);
+    wsData.push([]); // dòng trống
+    wsData.push(['STT', 'ID Dự án', 'Chi nhánh', 'Tên dự án']);
+
+    data1.forEach((item: any, index: number) => {
+      wsData.push([index + 1, item.ID_Duan, item.Tenchinhanh, item.Duan]);
+    });
+
+    // Tạo worksheet và merge cell
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    ws['!merges'] = [
+      { s: { r: 0, c: 1 }, e: { r: 0, c: 3 } }, // merge tiêu đề
+    ];
+
+    // Tạo workbook và xuất file
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'DS Đã nhập checklist');
+    XLSX.writeFile(wb, `DS_Da_nhap_checklist_beboi_${selectedDate.format('YYYY-MM-DD')}.xlsx`);
+  };
+
+  const handleExportIncompleteList = () => {
+    if (!data3 || data3.length === 0) return;
+
+    // Chuẩn bị dữ liệu cho worksheet
+    const wsData: any[] = [];
+    wsData.push([
+      '',
+      `DANH SÁCH DỰ ÁN CHƯA NHẬP CHECKLIST BỂ BƠI NGÀY ${selectedDate2.format('DD/MM/YYYY')}`,
+      '',
+      '',
+    ]);
+    wsData.push([]); // dòng trống
+    wsData.push(['STT', 'ID Dự án', 'Chi nhánh', 'Tên dự án']);
+
+    data3.forEach((item: any, index: number) => {
+      wsData.push([index + 1, item.ID_Duan, item.Tenchinhanh, item.Duan]);
+    });
+
+    // Tạo worksheet và merge cell
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    ws['!merges'] = [
+      { s: { r: 0, c: 1 }, e: { r: 0, c: 3 } }, // merge tiêu đề
+    ];
+
+    // Tạo workbook và xuất file
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'DS Chưa nhập checklist');
+    XLSX.writeFile(wb, `DS_Chua_nhap_checklist_beboi_${selectedDate2.format('YYYY-MM-DD')}.xlsx`);
+  };
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid
@@ -622,10 +679,10 @@ export default function BeBoi_AnalyticsView() {
                     </Stack>
                     <LocalizationProvider dateAdapter={AdapterMoment}>
                       <DatePicker
-                        value={selectedDate}
+                        value={selectedDate2}
                         onChange={(newValue) => {
                           if (newValue) {
-                            setSelectedDate(newValue);
+                            setSelectedDate2(newValue);
                           }
                         }}
                         format="DD/MM/YYYY"
@@ -717,6 +774,14 @@ export default function BeBoi_AnalyticsView() {
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
           <Button
+            onClick={() => handleExportCompletedList()}
+            variant="contained"
+            color="success"
+            sx={{ borderRadius: 2 }}
+          >
+            Export Excel
+          </Button>
+          <Button
             onClick={() => setOpenDialog(false)}
             variant="contained"
             color="success"
@@ -745,7 +810,7 @@ export default function BeBoi_AnalyticsView() {
             fontWeight: 'bold',
           }}
         >
-          Danh sách dự án chưa nhập checklist bể bơi ngày {selectedDate.format('DD/MM/YYYY')}
+          {selectedDate2.format('DD/MM/YYYY')}
         </DialogTitle>
         <DialogContent sx={{ mt: 2 }}>
           <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
@@ -771,6 +836,14 @@ export default function BeBoi_AnalyticsView() {
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
           <Button
+            onClick={() => handleExportIncompleteList()}
+            variant="contained"
+            color="error"
+            sx={{ borderRadius: 2 }}
+          >
+            Export Excel
+          </Button>
+          <Button
             onClick={() => setOpenDialog3(false)}
             variant="contained"
             color="error"
@@ -785,8 +858,10 @@ export default function BeBoi_AnalyticsView() {
         <Typography variant="h5" sx={{ mb: 3, color: 'primary.main', fontWeight: 'bold' }}>
           Danh sách dự án
         </Typography>
-        
-        <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'space-between' }}>
+
+        <Box
+          sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'space-between' }}
+        >
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             <TextField
               label="Tìm kiếm"
@@ -800,7 +875,7 @@ export default function BeBoi_AnalyticsView() {
               sx={{ minWidth: 200 }}
               placeholder="Tìm theo tên, địa chỉ, nhóm..."
             />
-            
+
             <TextField
               select
               label="Chi nhánh"
@@ -839,37 +914,39 @@ export default function BeBoi_AnalyticsView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any) => (
-                <TableRow key={item.ID_Duan} hover>
-                  <TableCell>{item.ID_Duan}</TableCell>
-                  <TableCell>{item.Duan}</TableCell>
-                  <TableCell>{item.ent_chinhanh?.Tenchinhanh}</TableCell>
-                  <TableCell>{item.Diachi}</TableCell>
-                  <TableCell>{item.ent_nhom?.Tennhom || '-'}</TableCell>
-                  <TableCell>{item.ent_phanloaida?.Phanloai}</TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>
-                    <Tooltip title="Xem chi tiết">
-                      <IconButton
-                        onClick={() => handleViewDetail(item)}
-                        size="small"
-                        sx={{
-                          color: 'primary.main',
-                          width: 32,
-                          height: 32,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          '&:hover': {
-                            backgroundColor: 'primary.lighter',
-                          },
-                        }}
-                      >
-                        <Iconify icon="solar:eye-bold" width={20} height={20} />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {filteredData
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((item: any) => (
+                  <TableRow key={item.ID_Duan} hover>
+                    <TableCell>{item.ID_Duan}</TableCell>
+                    <TableCell>{item.Duan}</TableCell>
+                    <TableCell>{item.ent_chinhanh?.Tenchinhanh}</TableCell>
+                    <TableCell>{item.Diachi}</TableCell>
+                    <TableCell>{item.ent_nhom?.Tennhom || '-'}</TableCell>
+                    <TableCell>{item.ent_phanloaida?.Phanloai}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      <Tooltip title="Xem chi tiết">
+                        <IconButton
+                          onClick={() => handleViewDetail(item)}
+                          size="small"
+                          sx={{
+                            color: 'primary.main',
+                            width: 32,
+                            height: 32,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            '&:hover': {
+                              backgroundColor: 'primary.lighter',
+                            },
+                          }}
+                        >
+                          <Iconify icon="solar:eye-bold" width={20} height={20} />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           <TablePagination
@@ -909,7 +986,9 @@ export default function BeBoi_AnalyticsView() {
           Chi tiết dự án {selectedProject?.Duan}
         </DialogTitle>
         <DialogContent sx={{ mt: 2, p: 3 }}>
-          <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box
+            sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+          >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Typography variant="subtitle1">Chọn ngày:</Typography>
               <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -948,20 +1027,43 @@ export default function BeBoi_AnalyticsView() {
             </Button>
           </Box>
 
-          <TableContainer component={Paper} sx={{ borderRadius: 2, maxHeight: 'calc(90vh - 250px)' }}>
+          <TableContainer
+            component={Paper}
+            sx={{ borderRadius: 2, maxHeight: 'calc(90vh - 250px)' }}
+          >
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '5%' }}>STT</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '15%' }}>Khu vực</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '15%' }}>Hạng mục</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '20%' }}>Checklist</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>Ca</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>Giá trị định danh</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>Giá trị ghi nhận</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>Giá trị so sánh</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>Giờ HT</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>Đánh giá</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '5%' }}>
+                    STT
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '15%' }}>
+                    Khu vực
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '15%' }}>
+                    Hạng mục
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '20%' }}>
+                    Checklist
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>
+                    Ca
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>
+                    Giá trị định danh
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>
+                    Giá trị ghi nhận
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>
+                    Giá trị so sánh
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>
+                    Giờ HT
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', bgcolor: 'background.paper', width: '10%' }}>
+                    Đánh giá
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -983,12 +1085,21 @@ export default function BeBoi_AnalyticsView() {
                           px: 1,
                           py: 0.5,
                           borderRadius: 1,
-                          // eslint-disable-next-line no-nested-ternary
-                          bgcolor: item.Danhgia === 'Bình thường' ? 'success.lighter' : 
-                                  item.Danhgia === 'Giảm >10%' ? 'error.lighter' : 'warning.lighter',
-                          // eslint-disable-next-line no-nested-ternary
-                          color: item.Danhgia === 'Bình thường' ? 'success.dark' : 
-                                item.Danhgia === 'Giảm >10%' ? 'error.dark' : 'warning.dark',
+                          bgcolor:
+                            // eslint-disable-next-line no-nested-ternary
+                            item.Danhgia === 'Bình thường'
+                              ? 'success.lighter'
+                              : item.Danhgia === 'Giảm >10%'
+                              ? 'error.lighter'
+                              : 'warning.lighter',
+
+                          color:
+                            // eslint-disable-next-line no-nested-ternary
+                            item.Danhgia === 'Bình thường'
+                              ? 'success.dark'
+                              : item.Danhgia === 'Giảm >10%'
+                              ? 'error.dark'
+                              : 'warning.dark',
                           fontWeight: 'bold',
                         }}
                       >
