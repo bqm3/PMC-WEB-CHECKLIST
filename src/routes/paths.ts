@@ -251,6 +251,7 @@ export const paths = {
       phanquyen: `${ROOTS.DASHBOARD}/beboi/phanquyen`,
       details: (id: string) => `${ROOTS.DASHBOARD}/beboi/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/beboi/${id}/edit`,
+      analytics: `${ROOTS.DASHBOARD}/beboi/analytics`,
     },
     p0: {
       root: `${ROOTS.DASHBOARD}/p0`,
