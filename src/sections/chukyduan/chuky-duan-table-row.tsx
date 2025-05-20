@@ -42,7 +42,7 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { ID_KhoiCV, ID_Duan, Ngaybatdau, Chuky, ent_duan, ent_khoicv, ID_Duan_KhoiCV } = row;
+  const { ID_KhoiCV, ID_Duan, Ngaybatdau, Chuky, ent_duan, ent_khoicv, ID_Duan_KhoiCV, ent_phanhe } = row;
 
   const confirm = useBoolean();
 
@@ -74,10 +74,11 @@ export default function CalvTableRow({
         {ent_duan.Duan}
       </TableCell>
       <TableCell> {Ngaybatdau} </TableCell>
+      <TableCell> {ent_phanhe?.Phanhe} </TableCell>
       <TableCell> {Chuky} </TableCell>
       <TableCell> {row?.Tenchuky} </TableCell>
-      <TableCell> 
-      <Label
+      <TableCell>
+        <Label
           variant="soft"
           color={
             (`${ID_KhoiCV}` === '1' && 'success') ||
