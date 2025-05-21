@@ -122,7 +122,8 @@ export function palette(mode: 'light' | 'dark') {
     },
     background: {
       paper: '#FFFFFF',
-      default: '#FFFFFF',
+      default: alpha('#f5f5f5', 0.8),
+      // default: '#FFFFFF',
       neutral: GREY[200],
     },
     action: {

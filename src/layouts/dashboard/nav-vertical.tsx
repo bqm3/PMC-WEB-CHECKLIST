@@ -8,6 +8,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 // components
 import Logo from 'src/components/logo';
+import Logo2 from 'src/components/logo/logo2';
 import Scrollbar from 'src/components/scrollbar';
 import { usePathname } from 'src/routes/hooks';
 import { NavSectionVertical } from 'src/components/nav-section';
@@ -43,7 +44,8 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     <Scrollbar
       sx={{
         height: 1,
-        backgroundColor: (theme) => "#f3f6f4",
+        // backgroundColor: (theme) => "#f3f6f4",
+        backgroundColor: (theme) => "#005069",
         '& .simplebar-content': {
           height: 1,
           display: 'flex',
@@ -52,7 +54,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         },
       }}
     >
-      <Logo sx={{ mt: 2, ml: 2 }} />
+      <Logo2 sx={{ mt: 2, ml: 2 }} />
 
       <NavSectionVertical
         data={navData}

@@ -26,6 +26,8 @@ const NavItem = forwardRef<HTMLDivElement, Props>(
 
     const subItem = depth !== 1;
 
+    const highlightColor = '#FFD700';
+
     const renderContent = (
       <StyledItem
         disableGutters
@@ -36,12 +38,27 @@ const NavItem = forwardRef<HTMLDivElement, Props>(
         disabled={disabled}
         config={config}
         {...other}
+        sx={{
+          // Khi hover, nếu là item cha thì màu chữ và icon vẫn trắng:
+          '&:hover': {
+            color: depth === 1 ? 'white' : undefined,
+            [`& .MuiSvgIcon-root`]: {
+              color: depth === 1 ? 'white' : undefined,
+            },
+          },
+        }}
       >
         {icon && (
           <StyledIcon
             size={config.iconSize}
             sx={{
+              // eslint-disable-next-line no-nested-ternary
+              color: depth === 1 ? (active ? highlightColor : 'white') : undefined,
+              transition: 'color 0.3s',
               ...(subItem && { mr: 1.5 }),
+              '&:hover': {
+                color: depth === 1 ? 'white' : undefined,
+              },
             }}
           >
             {icon}
@@ -57,6 +74,8 @@ const NavItem = forwardRef<HTMLDivElement, Props>(
                 px: 0.5,
                 mt: 0.5,
               }),
+
+              //
             }}
             primary={title}
             primaryTypographyProps={{
@@ -66,6 +85,9 @@ const NavItem = forwardRef<HTMLDivElement, Props>(
               textAlign: 'center',
               textTransform: 'capitalize',
               fontWeight: active ? 'fontWeightBold' : 'fontWeightSemiBold',
+
+              // eslint-disable-next-line no-nested-ternary
+              color: depth === 1 ? (active ? highlightColor : 'white') : undefined,
               ...(subItem && {
                 textAlign: 'unset',
                 fontSize: theme.typography.body2.fontSize,

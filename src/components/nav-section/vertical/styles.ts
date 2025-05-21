@@ -12,6 +12,8 @@ type StyledItemProps = Omit<NavItemProps, 'item'> & {
   config: NavConfigProps;
 };
 
+const highlightColor = '#FFD700';
+
 export const StyledItem = styled(ListItemButton, {
   shouldForwardProp: (prop) => prop !== 'active',
 })<StyledItemProps>(({ active, depth, config, theme }) => {
@@ -19,17 +21,23 @@ export const StyledItem = styled(ListItemButton, {
 
   const deepSubItem = depth > 2;
 
-  const activeStyles = {
+ const activeStyles = {
     root: {
-      color:
-        theme.palette.mode === 'light' ? 'white' : theme.palette.primary.light,
-      backgroundColor: theme.palette.action.selected,
+      color: highlightColor, // chỉ đổi màu chữ và icon khi active
       '&:hover': {
-        backgroundColor: theme.palette.action.disabled,
+        color: highlightColor,
+        '& .MuiListItemIcon-root': {
+          color: highlightColor,
+        },
       },
+      '& .MuiListItemIcon-root': {
+        color: highlightColor,
+      },
+      backgroundColor: 'inherit', // giữ nguyên background
     },
     sub: {
-      color: theme.palette.action.disabled,
+      // color: theme.palette.action.disabled,
+      color: 'white',
       backgroundColor: 'transparent',
       '&:hover': {
         backgroundColor: theme.palette.action.disabledOpacity,
@@ -43,7 +51,8 @@ export const StyledItem = styled(ListItemButton, {
     marginBottom: config.itemGap,
     borderRadius: config.itemRadius,
     minHeight: config.itemRootHeight,
-    color: theme.palette.text.secondary,
+    // color: theme.palette.text.secondary,
+     color: 'white',
 
     // Active root item
     ...(active && {
@@ -87,13 +96,13 @@ export const StyledDotIcon = styled('span')<StyledDotIconProps>(({ active, theme
   width: 4,
   height: 4,
   borderRadius: '50%',
-  backgroundColor: theme.palette.action.disabled,
+   backgroundColor: active ? highlightColor : "white",
   transition: theme.transitions.create(['transform'], {
     duration: theme.transitions.duration.shorter,
   }),
   ...(active && {
     transform: 'scale(2)',
-    backgroundColor: theme.palette.action.selected,
+    // backgroundColor: theme.palette.action.selected,
   }),
 }));
 
@@ -112,11 +121,15 @@ export const StyledSubheader = styled(ListSubheader)<StyledSubheaderProps>(({ co
   paddingTop: theme.spacing(2),
   marginBottom: config.itemGap,
   paddingBottom: theme.spacing(1),
-  color: theme.palette.text.disabled,
+  // color: theme.palette.text.disabled,
+  color: 'white', 
   transition: theme.transitions.create(['color'], {
     duration: theme.transitions.duration.shortest,
   }),
+  // '&:hover': {
+  //   color: theme.palette.text.primary,
+  // },
   '&:hover': {
-    color: theme.palette.text.primary,
+    color: 'white', // ✅ Giữ nguyên màu khi hover
   },
 }));
