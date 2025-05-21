@@ -18,13 +18,13 @@ import { useResponsive } from 'src/hooks/use-responsive';
 // _mock
 import { _tags, _roles } from 'src/_mock';
 // api
-import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetDuan } from 'src/api/khuvuc';
+import { useGetKhuVuc, useGetToanha, useGetKhoiCV, useGetDuan, useGetPhanhe } from 'src/api/khuvuc';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
 // types
-import { IKhoiCV, ICalv, IDuanKhoiCV, IDuan } from 'src/types/khuvuc';
+import { IKhoiCV, ICalv, IDuanKhoiCV, IDuan, IPhanhe } from 'src/types/khuvuc';
 import axios from 'axios';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
@@ -46,9 +46,11 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const [khoiCv, setKhoiCv] = useState<IKhoiCV[]>([]);
+  const [PhanHe, setPhanHe] = useState<IPhanhe[]>([]);
   const [duAn, setDuan] = useState<IDuan[]>([]);
 
   const { khoiCV } = useGetKhoiCV();
+  const { phanHe } = useGetPhanhe();
   const { duan } = useGetDuan();
 
   useEffect(() => {
@@ -56,6 +58,12 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
       setKhoiCv(khoiCV);
     }
   }, [khoiCV]);
+
+  useEffect(() => {
+    if (phanHe?.length > 0) {
+      setPhanHe(phanHe);
+    }
+  }, [phanHe]);
 
   useEffect(() => {
     if (duan?.length > 0) {
@@ -66,6 +74,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
   const NewProductSchema = Yup.object().shape({
     ID_Duan: Yup.string(),
     ID_KhoiCV: Yup.string(),
+    ID_Phanhe: Yup.string(),
     KhoiCV: Yup.string(),
     Chuky: Yup.string().required('Phải có chu kỳ cho khối công việc'),
     Tenchuky: Yup.string(),
@@ -77,6 +86,7 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
     () => ({
       ID_Duan: currentCycle?.ID_Duan || '',
       ID_KhoiCV: currentCycle?.ID_KhoiCV || '',
+      ID_Phanhe: currentCycle?.ID_Phanhe || '',
       KhoiCV: currentCycle?.ent_khoicv?.KhoiCV || '',
       Chuky: currentCycle?.Chuky || '',
       Tenchuky: currentCycle?.Tenchuky || '',
@@ -258,6 +268,22 @@ export default function ArticleNewEditForm({ currentCycle }: Props) {
                   {khoiCv?.map((item) => (
                     <MenuItem key={`${item?.ID_KhoiCV}`} value={`${item?.ID_KhoiCV}`}>
                       {item?.KhoiCV}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+            </Stack>
+            <Stack spacing={1.5}>
+              {PhanHe?.length > 0 && (
+                <RHFSelect
+                  name="ID_Phanhe"
+                  label="Phân hệ"
+                  InputLabelProps={{ shrink: true }}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                >
+                  {PhanHe?.map((item) => (
+                    <MenuItem key={`${item?.ID_Phanhe}`} value={`${item?.ID_Phanhe}`}>
+                      {item?.Phanhe}
                     </MenuItem>
                   ))}
                 </RHFSelect>

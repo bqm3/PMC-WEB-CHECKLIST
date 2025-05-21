@@ -449,12 +449,14 @@ export type IDuanKhoiCV = {
   ID_Duan_KhoiCV: string;
   ID_KhoiCV: string;
   ID_Duan: string;
+  ID_Phanhe: string;
   Ngaybatdau: string;
   Chuky: string;
   Tenchuky:string;
   isQuantrong: string;
   ent_duan: IDuan;
   ent_khoicv: IKhoiCV;
+  ent_phanhe: IPhanhe;
 };
 
 export type ICalv = {
