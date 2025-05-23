@@ -64,6 +64,7 @@ export default function BeBoi_AnalyticsView() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState(moment().subtract(1, 'days'));
   const [selectedDate2, setSelectedDate2] = useState(moment().subtract(1, 'days'));
+  const [selectedDate3, setSelectedDate3] = useState(moment().subtract(1, 'days'));
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialog3, setOpenDialog3] = useState(false);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
@@ -80,6 +81,7 @@ export default function BeBoi_AnalyticsView() {
   const [data3, setData3] = useState<any>(); // BeBoi_Danhsachdachualam
   const [data4, setData4] = useState<any>(); // Danh sách dự án nhập bể bơi
   const [data5, setData5] = useState<any>(); // St_ThongTinBeBoi
+  const [data6, setData6] = useState<any>(); // Beboi_duan_csbt
   const yesterday = moment().subtract(1, 'days').format('YYYY/MM/DD');
 
   // Thêm state cho phân trang
@@ -114,6 +116,8 @@ export default function BeBoi_AnalyticsView() {
 
     return matchesSearch && matchesBranch;
   });
+
+  const isWarningProject = (idDuan: string) => data6?.some((item: any) => item.ID_Duan === idDuan);
 
   const getAnalytics1 = useCallback(
     async (date: string): Promise<void> => {
@@ -218,6 +222,30 @@ export default function BeBoi_AnalyticsView() {
     [accessToken]
   );
 
+  const getAnalytics6 = useCallback(
+    async (date: string): Promise<void> => {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_HOST_API}/beboi/analytics`,
+          {
+            p_ngay: date,
+            type: 5,
+          },
+          {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setData6(response.data || []);
+      } catch (error: any) {
+        console.error('Lỗi khi lấy dữ liệu analytics 4:', error.message);
+      }
+    },
+    [accessToken]
+  );
+
   const getData4 = useCallback(async (): Promise<void> => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_HOST_API}/beboi/duan`, {
@@ -245,10 +273,20 @@ export default function BeBoi_AnalyticsView() {
         getAnalytics2(),
         getAnalytics3(selectedDate2.format('YYYY/MM/DD')),
         getData4(),
+        getAnalytics6(selectedDate3.format('YYYY/MM/DD')),
       ]);
     };
     fetchData();
-  }, [getAnalytics1, getAnalytics2, getAnalytics3, getData4, selectedDate, selectedDate2]);
+  }, [
+    getAnalytics1,
+    getAnalytics2,
+    getAnalytics3,
+    getData4,
+    getAnalytics6,
+    selectedDate,
+    selectedDate2,
+    selectedDate3
+  ]);
 
   useEffect(() => {
     if (!loadingData1 && !loadingData2 && !loadingData3) {
@@ -855,9 +893,43 @@ export default function BeBoi_AnalyticsView() {
       </Dialog>
 
       <Box sx={{ mt: 4 }}>
-        <Typography variant="h5" sx={{ mb: 3, color: 'primary.main', fontWeight: 'bold' }}>
+        <Typography variant="h5" sx={{ mb: 1, color: 'primary.main', fontWeight: 'bold' }}>
           Danh sách dự án
         </Typography>
+
+        {/* Box chứa chú ý + DatePicker trên 1 dòng */}
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h6" sx={{ color: 'orange', fontWeight: 'bold', mr: 2 }}>
+            Chú ý: Dự án có checklist bể bơi bất thường màu vàng ngày
+          </Typography>
+
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DatePicker
+              value={selectedDate3}
+              onChange={(newValue) => {
+                if (newValue) {
+                  setSelectedDate3(newValue);
+                }
+              }}
+              format="DD/MM/YYYY"
+              maxDate={moment()}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: {
+                    width: '150px',
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1.5,
+                    },
+                  },
+                  onClick: (e: React.MouseEvent) => {
+                    e.stopPropagation();
+                  },
+                },
+              }}
+            />
+          </LocalizationProvider>
+        </Box>
 
         <Box
           sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'space-between' }}
@@ -917,7 +989,11 @@ export default function BeBoi_AnalyticsView() {
               {filteredData
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((item: any) => (
-                  <TableRow key={item.ID_Duan} hover>
+                  <TableRow
+                    key={item.ID_Duan}
+                    hover
+                    sx={{ background: isWarningProject(item.ID_Duan) ? '#FFF3CD' : 'white' }}
+                  >
                     <TableCell>{item.ID_Duan}</TableCell>
                     <TableCell>{item.Duan}</TableCell>
                     <TableCell>{item.ent_chinhanh?.Tenchinhanh}</TableCell>
