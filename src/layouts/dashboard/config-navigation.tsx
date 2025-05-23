@@ -58,7 +58,7 @@ export function useNavData() {
           if (!user) return [];
 
           // Kiểm tra nếu user có ID_Duan
-          if (user.ID_Duan !== null && user?.ID_Chucvu !== 15) {
+          if (user.ID_Duan !== null && user?.ID_Chucvu !== 13) {
             return [
               {
                 title: t('analytics'),
@@ -73,7 +73,7 @@ export function useNavData() {
             ];
           }
 
-          if ( user?.ID_Chucvu === 15) {
+          if ( user?.ID_Chucvu === 13) {
             return [
               {
                 title: t('analytics'),
@@ -125,7 +125,8 @@ export function useNavData() {
       {
         subheader: t('management'),
         items:
-          ( user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ID_Duan !== null ) && ( user?.ID_Chucvu !== 15)
+          // eslint-disable-next-line no-nested-ternary
+          ( user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ID_Duan !== null ) && ( user?.ID_Chucvu !== 13 )
             ? [
               // KHU VUC
               {
@@ -203,7 +204,7 @@ export function useNavData() {
                 ],
               },
             ]
-            : [
+            : ( user?.ID_Duan !== null ? [
                 {
                 title: t('checklist'),
                 path: paths.dashboard.checklist.root,
@@ -215,7 +216,7 @@ export function useNavData() {
                   { title: t('Ca trong ngày'), path: paths.dashboard.checklist.catrongngay },
                 ],
               },
-            ],
+            ] : [])
       },
 
       {
@@ -232,7 +233,7 @@ export function useNavData() {
     ];
 
     // Kiểm tra nếu Role là 1, 2, 10, 4 hoặc user.ID_Duan không phải null
-    if ((user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || (user?.ID_Duan !== null && user?.ent_chucvu?.Role !== 3)) && user?.ID_Chucvu !== 15) {
+    if ((user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || (user?.ID_Duan !== null && user?.ent_chucvu?.Role !== 3)) && user?.ID_Chucvu !== 13) {
       navigationData[1].items.unshift(
         {
           title: t('Tài liệu phân hệ'),
@@ -387,7 +388,7 @@ export function useNavData() {
 
       );
     }
-    if ((user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ent_chucvu?.Role === 3) && user?.ID_Chucvu !== 15) {
+    if ((user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ent_chucvu?.Role === 3) && user?.ID_Chucvu !== 13) {
       if (user?.ent_chucvu?.Role === 1) {
         navigationData[0].items.push({
           title: t('hsse'),
@@ -433,7 +434,7 @@ export function useNavData() {
       }
     }
 
-    if ((user?.ent_chucvu?.Role === 10 && user?.ID_Duan !== null) && user?.ID_Chucvu !== 15) {
+    if ((user?.ent_chucvu?.Role === 10 && user?.ID_Duan !== null) && user?.ID_Chucvu !== 13) {
       navigationData[0].items.push({
         title: t('hsse'),
         path: paths.dashboard.hsse.root,
@@ -460,7 +461,7 @@ export function useNavData() {
 
 
 
-    if ((user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ent_chucvu?.Role === 3) && user?.ID_Chucvu !== 15) {
+    if ((user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ent_chucvu?.Role === 3) && user?.ID_Chucvu !== 13) {
       if (user?.ent_chucvu?.Role === 1) {
         navigationData[0].items.push({
           title: t('p0'),
