@@ -1166,6 +1166,9 @@ export default function OverviewAnalyticsView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+        <Box display="flex" justifyContent="center">
+          <Typography variant="h4">BÁO CÁO CHECKLIST</Typography>
+        </Box>
         <Grid
           container
           direction="row"

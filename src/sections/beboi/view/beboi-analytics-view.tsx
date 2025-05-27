@@ -285,7 +285,7 @@ export default function BeBoi_AnalyticsView() {
     getAnalytics6,
     selectedDate,
     selectedDate2,
-    selectedDate3
+    selectedDate3,
   ]);
 
   useEffect(() => {
@@ -472,6 +472,9 @@ export default function BeBoi_AnalyticsView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <Box display="flex" justifyContent="center">
+        <Typography variant="h4">BÁO CÁO BỂ BƠI</Typography>
+      </Box>
       <Grid
         container
         direction="row"

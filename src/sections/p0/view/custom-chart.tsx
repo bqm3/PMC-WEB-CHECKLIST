@@ -63,6 +63,39 @@ export default function CustomProjectChart({
     stroke: {
       colors: [theme.palette.background.paper],
     },
+    // Remove center text and show percentages on chart
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: false, // Hide center labels completely
+          },
+        },
+        dataLabels: {
+          offset: -10,
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter(val: number, opts: any) {
+        // Show percentage directly on chart slices
+        return `${val.toFixed(1)}%`;
+      },
+      style: {
+        fontSize: '12px',
+        fontWeight: 'bold',
+        colors: ['#fff'],
+      },
+      dropShadow: {
+        enabled: true,
+        top: 1,
+        left: 1,
+        blur: 1,
+        color: '#000',
+        opacity: 0.45,
+      },
+    },
     legend: {
       position: 'right',
       itemMargin: {
