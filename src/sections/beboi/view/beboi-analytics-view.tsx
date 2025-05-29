@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import {
   Box,
   Button,
-  LinearProgress,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -19,7 +18,6 @@ import {
   Typography,
   Card,
   Stack,
-  CircularProgress,
   Skeleton,
   TextField,
   TablePagination,
@@ -65,6 +63,7 @@ export default function BeBoi_AnalyticsView() {
   const [selectedDate, setSelectedDate] = useState(moment().subtract(1, 'days'));
   const [selectedDate2, setSelectedDate2] = useState(moment().subtract(1, 'days'));
   const [selectedDate3, setSelectedDate3] = useState(moment().subtract(1, 'days'));
+  const [selectedDate4, setSelectedDate4] = useState(moment().subtract(1, 'days'));
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialog3, setOpenDialog3] = useState(false);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
@@ -82,6 +81,7 @@ export default function BeBoi_AnalyticsView() {
   const [data4, setData4] = useState<any>(); // Danh sách dự án nhập bể bơi
   const [data5, setData5] = useState<any>(); // St_ThongTinBeBoi
   const [data6, setData6] = useState<any>(); // Beboi_duan_csbt
+  const [data7, setData7] = useState<any>(); // BEBOI_Canhbao
   const yesterday = moment().subtract(1, 'days').format('YYYY/MM/DD');
 
   // Thêm state cho phân trang
@@ -90,6 +90,11 @@ export default function BeBoi_AnalyticsView() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBranch, setFilterBranch] = useState('');
 
+  const [page1, setPage1] = useState(0);
+  const [rowsPerPage1, setRowsPerPage1] = useState(10);
+  const [searchTerm1, setSearchTerm1] = useState('');
+  const [filterBranch1, setFilterBranch1] = useState('');
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -97,6 +102,15 @@ export default function BeBoi_AnalyticsView() {
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleChangePage1 = (event: unknown, newPage: number) => {
+    setPage1(newPage);
+  };
+
+  const handleChangeRowsPerPage1 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage1(parseInt(event.target.value, 10));
+    setPage1(0);
   };
 
   // Lấy danh sách chi nhánh duy nhất
@@ -113,6 +127,16 @@ export default function BeBoi_AnalyticsView() {
       item.ent_phanloaida?.Phanloai?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesBranch = !filterBranch || item.ent_chinhanh?.Tenchinhanh === filterBranch;
+
+    return matchesSearch && matchesBranch;
+  });
+
+  const filteredData6 = data7?.filter((item: any) => {
+    const matchesSearch =
+      item.Tenchinhanh?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Duan?.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const matchesBranch = !filterBranch1 || item.Tenchinhanh === filterBranch1;
 
     return matchesSearch && matchesBranch;
   });
@@ -222,7 +246,7 @@ export default function BeBoi_AnalyticsView() {
     [accessToken]
   );
 
-  const getAnalytics6 = useCallback(
+  const getAnalytics5 = useCallback(
     async (date: string): Promise<void> => {
       try {
         const response = await axios.post(
@@ -245,6 +269,27 @@ export default function BeBoi_AnalyticsView() {
     },
     [accessToken]
   );
+
+  const getAnalytics6 = useCallback(async (date: string): Promise<void> => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/beboi/analytics`,
+        {
+          p_ngay: date,
+          type: 6,
+        },
+        {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setData7(response.data || []);
+    } catch (error: any) {
+      console.error('Lỗi khi lấy dữ liệu analytics 4:', error.message);
+    }
+  }, [accessToken]);
 
   const getData4 = useCallback(async (): Promise<void> => {
     try {
@@ -273,7 +318,8 @@ export default function BeBoi_AnalyticsView() {
         getAnalytics2(),
         getAnalytics3(selectedDate2.format('YYYY/MM/DD')),
         getData4(),
-        getAnalytics6(selectedDate3.format('YYYY/MM/DD')),
+        getAnalytics5(selectedDate3.format('YYYY/MM/DD')),
+        getAnalytics6(selectedDate4.format('YYYY/MM/DD')),
       ]);
     };
     fetchData();
@@ -282,10 +328,12 @@ export default function BeBoi_AnalyticsView() {
     getAnalytics2,
     getAnalytics3,
     getData4,
+    getAnalytics5,
     getAnalytics6,
     selectedDate,
     selectedDate2,
     selectedDate3,
+    selectedDate4
   ]);
 
   useEffect(() => {
@@ -894,6 +942,97 @@ export default function BeBoi_AnalyticsView() {
           </Button>
         </DialogActions>
       </Dialog>
+
+            <Box sx={{ mt: 4 }}>
+        {/* Box chứa chú ý + DatePicker trên 1 dòng */}
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h6" sx={{ color: 'orange', fontWeight: 'bold', mr: 2 }}>
+            Checklist bể bơi bất thường ngày
+          </Typography>
+
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DatePicker
+              value={selectedDate4}
+              onChange={(newValue) => {
+                if (newValue) {
+                  setSelectedDate4(newValue);
+                }
+              }}
+              format="DD/MM/YYYY"
+              maxDate={moment()}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: {
+                    width: '150px',
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1.5,
+                    },
+                  },
+                  onClick: (e: React.MouseEvent) => {
+                    e.stopPropagation();
+                  },
+                },
+              }}
+            />
+          </LocalizationProvider>
+        </Box>
+
+        <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold' }}>Dự án</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Tên chi nhánh</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Ngày ghi nhận</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Tên ca</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Checklist</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Giá trị định danh</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Giá trị so sánh</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Giá trị ghi nhận</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Dánh giá</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Giờ</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Khu vực</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Hạng mục</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredData6
+                ?.slice(page1 * rowsPerPage1, page1 * rowsPerPage1 + rowsPerPage1)
+                .map((item: any) => (
+                  <TableRow
+                    key={`${item.ID_Duan} - ${item.Gioht}`}
+                    hover
+                  >
+                    <TableCell>{item.Duan}</TableCell>
+                    <TableCell>{item.Tenchinhanh}</TableCell>
+                    <TableCell>{item.Ngay_ghi_nhan}</TableCell>
+                    <TableCell>{item.Tenca}</TableCell>
+                    <TableCell>{item.Checklist}</TableCell>
+                    <TableCell>{item.Giatridinhdanh}</TableCell>
+                    <TableCell>{item.Giatrisosanh}</TableCell>
+                    <TableCell>{item.Giatrighinhan}</TableCell>
+                    <TableCell>{item.Danhgia}</TableCell>
+                    <TableCell>{item.Gioht}</TableCell>
+                    <TableCell>{item.Tenkhuvuc}</TableCell>
+                    <TableCell>{item.Hangmuc}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={filteredData6?.length || 0}
+            rowsPerPage={rowsPerPage1}
+            page={page1}
+            onPageChange={handleChangePage1}
+            onRowsPerPageChange={handleChangeRowsPerPage1}
+            labelRowsPerPage="Số dòng mỗi trang:"
+            labelDisplayedRows={({ from, to, count }) => `${from}-${to} trên ${count}`}
+          />
+        </TableContainer>
+      </Box>
 
       <Box sx={{ mt: 4 }}>
         <Typography variant="h5" sx={{ mb: 1, color: 'primary.main', fontWeight: 'bold' }}>
