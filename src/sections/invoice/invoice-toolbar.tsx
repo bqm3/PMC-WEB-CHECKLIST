@@ -55,7 +55,7 @@ export default function InvoiceToolbar({
         spacing={3}
         direction={{ xs: 'column', sm: 'row' }}
         alignItems={{ xs: 'flex-end', sm: 'center' }}
-        sx={{ mb: { xs: 3, md: 5 } }}
+        sx={{ mb: { xs: 1, md: 3 } }}
       >
         <Stack direction="row" spacing={1} flexGrow={1} sx={{ width: 1 }}>
           <Tooltip title="Edit">

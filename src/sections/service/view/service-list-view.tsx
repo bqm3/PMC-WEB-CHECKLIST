@@ -169,7 +169,7 @@ export default function TypeRoomListView() {
               Create Service
             </Button>
           }
-          sx={{ mb: { xs: 3, md: 5 } }}
+          sx={{ mb: { xs: 1, md: 3 } }}
         />
 
         <Card>

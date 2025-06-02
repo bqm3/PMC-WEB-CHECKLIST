@@ -68,8 +68,7 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { page, rowsPerPage } = table;
-  const { p0, p0Count } = useGetP0_ByDuan(page, rowsPerPage);
+  const { p0, p0Count } = useGetP0_ByDuan(0, 100);
   const [cardDialogOpen, setCardDialogOpen] = useState(false);
   const [loadingReport, setLoadingReport] = useState<any>();
   const [dataChecklistMonth, setDataChecklistMonth] = useState<any>({
@@ -83,13 +82,19 @@ export default function GiamsatListView() {
     if (p0?.length > 0) {
       setTableData(p0);
     }
-  }, [p0, page, rowsPerPage]);
+  }, [p0,]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
+
+  const dataInPage = dataFiltered.slice(
+    table.page * table.rowsPerPage,
+    table.page * table.rowsPerPage + table.rowsPerPage
+  );
+
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -192,7 +197,7 @@ export default function GiamsatListView() {
             { name: 'Danh sách' },
           ]}
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 1, md: 3 },
           }}
         />
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
@@ -216,11 +221,7 @@ export default function GiamsatListView() {
               />
 
               <TableBody>
-                {dataFiltered
-                  // .slice(
-                  //   table.page * table.rowsPerPage,
-                  //   table.page * table.rowsPerPage + table.rowsPerPage
-                  // )
+                {dataInPage
                   .map((row) => (
                     <P0TableRow
                       key={row.ID_P0}
@@ -232,7 +233,7 @@ export default function GiamsatListView() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, dataFiltered?.length, dataFiltered?.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                 />
 
                 <TableNoData notFound={notFound} />
@@ -276,7 +277,7 @@ export default function GiamsatListView() {
         </Dialog>
 
         <TablePaginationCustom
-          count={p0Count}
+          count={dataFiltered.length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}

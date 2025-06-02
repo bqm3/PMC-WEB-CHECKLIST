@@ -65,7 +65,7 @@ export default function PostListHomeView() {
         justifyContent="space-between"
         alignItems={{ xs: 'flex-end', sm: 'center' }}
         direction={{ xs: 'column', sm: 'row' }}
-        sx={{ mb: { xs: 3, md: 5 } }}
+        sx={{ mb: { xs: 1, md: 3 } }}
       >
         <PostSearch
           query={debouncedQuery}

@@ -40,7 +40,7 @@ export default function CheckoutSteps({ steps, activeStep, sx, ...other }: Props
       activeStep={activeStep}
       connector={<StepConnector />}
       sx={{
-        mb: { xs: 3, md: 5 },
+        mb: { xs: 1, md: 3 },
         ...sx,
       }}
       {...other}

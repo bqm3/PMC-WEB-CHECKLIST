@@ -46,8 +46,8 @@ export default function ChatView() {
 
   const participants: IChatParticipant[] = conversation
     ? conversation.participants.filter(
-        (participant: IChatParticipant) => participant.id !== `${user?.id}`
-      )
+      (participant: IChatParticipant) => participant.id !== `${user?.id}`
+    )
     : [];
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export default function ChatView() {
       <Typography
         variant="h4"
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       >
         Chat

@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-import { FormGroup } from '@mui/material';
+import { Autocomplete, FormGroup, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -63,6 +63,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const { nhomduan } = useGetNhomDuAn();
   const [oldUserName, setOldUserName] = useState("");
   const [selectedKhoiIDs, setSelectedKhoiIDs] = useState<number[]>([]);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+
+  const handleSelectChange = (event: any, newValue: any) => {
+    setSelectedProject(newValue);
+  };
 
   useEffect(() => {
     if (currentUser) {
@@ -98,6 +103,16 @@ export default function UserNewEditForm({ currentUser }: Props) {
     setSelectedKhoiIDs(newSelected);
   };
 
+  useEffect(() => {
+    if (currentUser?.ID_Duan && Duan?.length > 0) {
+      const found = Duan.find((d) => d.ID_Duan === currentUser.ID_Duan);
+      if (found) {
+        setSelectedProject(found);
+      }
+    }
+  }, [currentUser, Duan]);
+
+
   const NewUserSchema = Yup.object().shape({
     UserName: Yup.string().required('Tài khoản là bắt buộc'),
     Email: Yup.string().email('Chưa đúng định dạng Email').nullable(),
@@ -117,11 +132,11 @@ export default function UserNewEditForm({ currentUser }: Props) {
       Sodienthoai: currentUser?.Sodienthoai || '',
       Gioitinh: currentUser?.Gioitinh || '',
       Ngaysinh: currentUser?.Ngaysinh || new Date() || null || undefined,
-      ID_Duan: currentUser?.ID_Duan || null || '',
+      ID_Duan: currentUser?.ID_Duan || selectedProject?.ID_Duan || '',
       ID_KhoiCV: currentUser?.ID_KhoiCV || null || '',
       isCheckketoan: currentUser?.isCheckketoan || '0',
     }),
-    [currentUser]
+    [currentUser, selectedProject]
   );
 
   const methods = useForm({
@@ -249,7 +264,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
         autoHideDuration: 4000,
         message: `Lỗi gửi yêu cầu`,
       });
-      // }
     }
   });
 
@@ -460,24 +474,25 @@ export default function UserNewEditForm({ currentUser }: Props) {
               ))}
             </RHFSelect>
           )}
-          {Duan?.length > 0 && (
-            <RHFSelect
-              fullWidth
-              name="ID_Duan"
-              label="Dự án"
-              InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {Duan?.map((option) => (
-                <MenuItem key={option.ID_Duan} value={option.ID_Duan}>
-                  {option.Duan}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-          )}
+          <Autocomplete
+            options={Duan}
+            getOptionLabel={(option) => option.Duan} // Hiển thị tên dự án
+            value={selectedProject} // Giá trị hiện tại
+            onChange={handleSelectChange} // Xử lý khi chọn
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                placeholder="Tìm kiếm dự án..."
+                fullWidth
+              />
+            )}
+            renderOption={(props, option) => (
+              <li {...props} key={option.ID_Duan}>
+                {option.Duan}
+              </li>
+            )}
+          />
 
           {Chucvu?.length > 0 && (
             <RHFSelect
@@ -489,7 +504,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
             >
               {Chucvu?.map((option) => (
                 <MenuItem key={option.ID_Chucvu} value={option.ID_Chucvu}>
-                  {option.Chucvu}
+                  {option.Chucvu} {option?.Ghichu ? `(${option?.Ghichu})` : ""}
                 </MenuItem>
               ))}
             </RHFSelect>

@@ -47,7 +47,7 @@ export default function RoomDetailsView({ id }: Props) {
       value={currentTab}
       onChange={handleChangeTab}
       sx={{
-        mb: { xs: 3, md: 5 },
+        mb: { xs: 1, md: 3 },
       }}
     >
       {ROOM_DETAILS_TABS.map((tab) => (

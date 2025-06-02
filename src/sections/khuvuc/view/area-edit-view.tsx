@@ -7,7 +7,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 // api
 import { useGetRoom } from 'src/api/product';
-import {useGetKhuVucDetail} from 'src/api/khuvuc'
+import { useGetKhuVucDetail } from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 
@@ -41,7 +41,7 @@ export default function AreaEditView({ id }: Props) {
           { name: currentArea?.Tenkhuvuc },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 

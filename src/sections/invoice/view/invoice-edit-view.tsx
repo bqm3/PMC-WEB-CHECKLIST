@@ -37,7 +37,7 @@ export default function InvoiceEditView({ id }: Props) {
           { name: currentInvoice?.invoiceNumber },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 

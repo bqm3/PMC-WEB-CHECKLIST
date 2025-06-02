@@ -125,7 +125,7 @@ export default function CalendarView() {
       onResetFilters={handleResetFilters}
       //
       results={dataFiltered.length}
-      sx={{ mb: { xs: 3, md: 5 } }}
+      sx={{ mb: { xs: 1, md: 3 } }}
     />
   );
 
@@ -137,7 +137,7 @@ export default function CalendarView() {
           alignItems="center"
           justifyContent="space-between"
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 1, md: 3 },
           }}
         >
           <Typography variant="h4">Calendar</Typography>

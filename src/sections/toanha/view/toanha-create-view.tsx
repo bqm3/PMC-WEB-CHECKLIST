@@ -29,7 +29,7 @@ export default function ToanhaCreateView() {
           { name: 'Tạo mới' },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 

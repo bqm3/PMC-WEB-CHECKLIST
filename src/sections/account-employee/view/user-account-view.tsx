@@ -52,7 +52,7 @@ export default function AccountView() {
           { name: 'Account' },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 
@@ -60,7 +60,7 @@ export default function AccountView() {
         value={currentTab}
         onChange={handleChangeTab}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       >
         {TABS.map((tab) => (

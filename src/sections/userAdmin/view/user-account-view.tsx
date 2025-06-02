@@ -23,7 +23,7 @@ const TABS = [
     label: 'Thông tin cá nhân',
     icon: <Iconify icon="solar:user-id-bold" width={24} />,
   },
-  
+
   {
     value: 'security',
     label: 'Đổi mật khẩu',
@@ -51,7 +51,7 @@ export default function AccountView() {
           { name: 'Người dùng', href: paths.dashboard.userAdmin.root },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 
@@ -59,7 +59,7 @@ export default function AccountView() {
         value={currentTab}
         onChange={handleChangeTab}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       >
         {TABS.map((tab) => (

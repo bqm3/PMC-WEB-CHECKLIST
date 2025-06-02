@@ -37,7 +37,7 @@ export default function NavUpgrade() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-        <Avatar alt={user?.UserName} sx={{ mr: 2 }}>
+          <Avatar alt={user?.UserName} sx={{ mr: 2 }}>
             {user?.UserName?.charAt(0).toUpperCase()}
           </Avatar>
           <Label
@@ -52,12 +52,12 @@ export default function NavUpgrade() {
               borderBottomLeftRadius: 2,
             }}
           >
-            {user?.ent_chucvu?.Chucvu }
+            {user?.ent_chucvu?.Chucvu}
           </Label>
         </Box>
 
         <Stack spacing={0.5} sx={{ mt: 1.5, mb: 2 }}>
-          <Typography variant="subtitle2" noWrap>
+          <Typography variant="subtitle2" sx={{ color: 'white' }} noWrap>
             {user?.UserName}
           </Typography>
 

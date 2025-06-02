@@ -3,7 +3,7 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 // @mui
 import Grid from '@mui/material/Unstable_Grid2';
 import Stack from '@mui/material/Stack';
-import { Box, CircularProgress, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Card, CardActions, CardHeader, CircularProgress, MenuItem, Select, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -543,7 +543,7 @@ export default function OverviewAnalyticsView() {
           alignItems="center"
           justifyContent="space-between"
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 1, md: 3 },
           }}
         >
           <Typography variant="h4">Hi, {user?.ent_duan?.Duan}</Typography>
@@ -553,7 +553,7 @@ export default function OverviewAnalyticsView() {
             alignItems="center"
             justifyContent="space-between"
             sx={{
-              mb: { xs: 3, md: 5 },
+              mb: { xs: 1, md: 3 },
               gap: 2,
             }}
           >
@@ -576,12 +576,21 @@ export default function OverviewAnalyticsView() {
         {user?.ent_chucvu?.Role !== 3 && (
           <Grid container spacing={3}>
             <Grid xs={12} md={12} lg={12}>
-              <Box sx={{ maxHeight: 400, width: '100%', }}>
-                <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
-                  Tỉ lệ hoàn thành checklist các ngày
-                </Typography>
-                <DataGrid rows={dataPercentDays} columns={columns} />
-              </Box>
+              <Card>
+                <CardHeader
+                  title={
+                    <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
+                      Tỉ lệ hoàn thành checklist các ngày
+                    </Typography>}
+
+                />
+                <CardActions>
+                  <DataGrid sx={{
+                    backgroundColor: theme.palette.background.paper,
+                  }} rows={dataPercentDays} columns={columns} />
+                </CardActions>
+
+              </Card>
             </Grid>
 
             <Grid xs={12} md={12} lg={12}>

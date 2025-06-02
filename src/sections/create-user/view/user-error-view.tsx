@@ -7,7 +7,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 // api
 import { useGetRoom } from 'src/api/product';
-import {useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail} from 'src/api/khuvuc'
+import { useGetKhuVucDetail, useGetHangMucDetail, useGetChecklistDetail, useGetUserDetail } from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 
@@ -38,7 +38,7 @@ export default function UserErrorView({ id }: Props) {
           },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 
