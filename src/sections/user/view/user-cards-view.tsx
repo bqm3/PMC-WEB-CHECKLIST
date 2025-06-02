@@ -37,7 +37,7 @@ export default function UserCardsView() {
             New User
           </Button>
         }
-        sx={{ mb: { xs: 3, md: 5 } }}
+        sx={{ mb: { xs: 1, md: 3 } }}
       />
 
       <UserCardList users={_userCards} />

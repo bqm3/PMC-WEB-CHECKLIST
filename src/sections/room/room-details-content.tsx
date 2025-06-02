@@ -105,7 +105,7 @@ export default function RoomDetailsContent({ data, images }: Props) {
           md: 'repeat(2, 1fr)',
         }}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       >
         <m.div

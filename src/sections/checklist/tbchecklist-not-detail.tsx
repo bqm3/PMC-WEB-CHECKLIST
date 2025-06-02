@@ -107,7 +107,7 @@ export default function TbChecklistCalvListView({ currentChecklist, dataChecklis
             { name: 'Danh sách' },
           ]}
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 1, md: 3 },
           }}
         />
       </Stack>

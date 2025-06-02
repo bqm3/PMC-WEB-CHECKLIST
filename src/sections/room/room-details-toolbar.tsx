@@ -43,7 +43,7 @@ export default function RoomDetailsToolbar({
         spacing={1.5}
         direction="row"
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
           ...sx,
         }}
         {...other}

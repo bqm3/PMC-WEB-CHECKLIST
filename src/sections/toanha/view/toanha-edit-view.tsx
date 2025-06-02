@@ -7,7 +7,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { paths } from 'src/routes/paths';
 // api
 import { useGetRoom } from 'src/api/product';
-import {useGetGiamsatDetail, useGetToanha, useGetToanhaDetail} from 'src/api/khuvuc'
+import { useGetGiamsatDetail, useGetToanha, useGetToanhaDetail } from 'src/api/khuvuc'
 // components
 import { useSettingsContext } from 'src/components/settings';
 
@@ -39,7 +39,7 @@ export default function GiamsatEditView({ id }: Props) {
           { name: currentToanha?.Toanha },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 

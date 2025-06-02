@@ -253,13 +253,13 @@ export default function OrderBookingListView() {
             },
           ]}
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 1, md: 3 },
           }}
         />
 
         <Card
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 1, md: 3 },
           }}
         >
           <Scrollbar>

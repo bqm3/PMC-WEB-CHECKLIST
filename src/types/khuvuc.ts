@@ -353,6 +353,7 @@ export type IBaocaochiso = {
 export type IChucvu = {
   ID_Chucvu: string;
   Chucvu: string;
+  Ghichu: string;
   Role: number;
 };
 

@@ -36,7 +36,7 @@ export default function ServiceEditView({ id }: Props) {
           { name: currentProduct?.name },
         ]}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 

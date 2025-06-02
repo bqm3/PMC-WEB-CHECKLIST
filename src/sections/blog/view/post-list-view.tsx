@@ -106,7 +106,7 @@ export default function PostListView() {
           </Button>
         }
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       />
 
@@ -116,7 +116,7 @@ export default function PostListView() {
         alignItems={{ xs: 'flex-end', sm: 'center' }}
         direction={{ xs: 'column', sm: 'row' }}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       >
         <PostSearch
@@ -134,7 +134,7 @@ export default function PostListView() {
         value={filters.publish}
         onChange={handleFilterPublish}
         sx={{
-          mb: { xs: 3, md: 5 },
+          mb: { xs: 1, md: 3 },
         }}
       >
         {['all', 'published', 'draft'].map((tab) => (
