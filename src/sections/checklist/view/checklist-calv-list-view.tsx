@@ -32,6 +32,7 @@ import { useGetCalv, useGetTb_Checklist, useGetKhoiCV } from 'src/api/khuvuc';
 import { fTimestamp } from 'src/utils/format-time';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useAuthContext } from 'src/auth/hooks';
 // components
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -85,6 +86,7 @@ const STORAGE_KEY = 'accessToken';
 // ----------------------------------------------------------------------
 
 export default function ChecklistCalvListView() {
+  const { user } = useAuthContext();
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -541,6 +543,7 @@ export default function ChecklistCalvListView() {
                     onViewNot={() => handleViewNot(row.ID_ChecklistC)}
                     onOpenChecklist={() => handleOpenChecklistC(row.ID_ChecklistC)}
                     onRemoveChecklist={() => handleRemoveChecklistC(row.ID_ChecklistC)}
+                    user={user}
                   />
                 ))}
 

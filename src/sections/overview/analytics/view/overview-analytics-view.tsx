@@ -603,6 +603,7 @@ export default function OverviewAnalyticsView() {
               />
             </Grid>
 
+            {`${user?.ID_Chucvu}` !== `13` && 
             <Grid xs={12} md={12} lg={12}>
               <ChecklistsSuCo
                 title="Sự cố checklist "
@@ -620,8 +621,9 @@ export default function OverviewAnalyticsView() {
                 STATUS_OPTIONS={STATUS_OPTIONS}
                 tangGiam={tangGiam}
               />
-            </Grid>
+            </Grid>}
 
+            {`${user?.ID_Chucvu}` !== `13` && 
             <Grid xs={12} md={12} lg={12}>
               <ChecklistsSuCoNgoai
                 title="Sự cố ngoài checklist "
@@ -639,7 +641,7 @@ export default function OverviewAnalyticsView() {
                 STATUS_OPTIONS={STATUS_OPTIONS}
                 tangGiam={tangGiam}
               />
-            </Grid>
+            </Grid>}
 
             {dataTotalKhuvuc && (
               <Grid xs={12} md={6} lg={4}>
@@ -692,6 +694,7 @@ export default function OverviewAnalyticsView() {
               )}
             </Grid>
 
+            {`${user?.ID_Chucvu}` !== `13` && (
             <Grid xs={12} md={12} lg={12}>
               {dataTotalErrorWeek && (
                 <BankingRecentTransitions
@@ -710,7 +713,9 @@ export default function OverviewAnalyticsView() {
                 />
               )}
             </Grid>
+            )}
 
+            {`${user?.ID_Chucvu}` !== `13` && (
             <Grid xs={12} md={12} lg={12}>
               {dataTotalErrorWeek && (
                 <ChecklistRecentTransitions
@@ -727,7 +732,7 @@ export default function OverviewAnalyticsView() {
                   ]}
                 />
               )}
-            </Grid>
+            </Grid>)}
           </Grid>
         )}
       </Container>

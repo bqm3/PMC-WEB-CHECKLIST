@@ -40,6 +40,7 @@ import {
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
+import { useAuthContext } from 'src/auth/hooks';
 
 // types
 import { IChecklistTableFilters, IHSSE } from 'src/types/khuvuc';
@@ -72,6 +73,7 @@ const defaultFilters: IChecklistTableFilters = {
 // ----------------------------------------------------------------------
 const STORAGE_KEY = 'accessToken';
 export default function GiamsatListView() {
+  const { user } = useAuthContext();
   const accessToken = localStorage.getItem(STORAGE_KEY);
   const table = useTable({ defaultOrderBy: 'Ngay_ghi_nhan' });
 
@@ -318,6 +320,7 @@ export default function GiamsatListView() {
             >
               Export Excel
             </LoadingButton>
+            {`${user?.ent_chucvu?.Role}` === `10` && (
             <LoadingButton
               color="success"
               size="large"
@@ -327,6 +330,8 @@ export default function GiamsatListView() {
             >
               Import Excel
             </LoadingButton>
+            )}
+
           </Stack>
         </Stack>
 

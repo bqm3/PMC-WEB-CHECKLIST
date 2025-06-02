@@ -37,6 +37,7 @@ type Props = {
   // onDeleteRow: VoidFunction;
   onOpenChecklist: VoidFunction;
   onRemoveChecklist: VoidFunction;
+  user: any
 };
 
 export default function AreaTableRow({
@@ -49,6 +50,7 @@ export default function AreaTableRow({
   onOpenChecklist,
   onRemoveChecklist,
   calv,
+  user
 }: Props) {
   const {
     ID_ChecklistC,
@@ -172,28 +174,31 @@ export default function AreaTableRow({
           <Iconify icon="eva:close-circle-fill" />
           Chưa checklist
         </MenuItem>
-        {`${Tinhtrang}` === '1' && (
-          <MenuItem
-            onClick={() => {
-              confirm.onTrue();
+        {`${user?.ID_Chucvu}` !== `13` && (
+          <>
+            {Tinhtrang === '1' && (
+              <MenuItem
+                onClick={() => {
+                  confirm.onTrue();
+                }}
+              >
+                <Iconify color="error" icon="mdi:lock-open-outline" />
+                Mở ca
+              </MenuItem>
+            )}
 
-            }}
-          >
-            <Iconify color="error" icon="mdi:lock-open-outline" />
-            Mở ca
-          </MenuItem>
+            <MenuItem
+              onClick={() => {
+                confirm2.onTrue();
+                popover2.onClose();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="solar:trash-bin-trash-bold" />
+              Xóa
+            </MenuItem>
+          </>
         )}
-
-        <MenuItem
-          onClick={() => {
-            confirm2.onTrue();
-            popover2.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Xóa
-        </MenuItem>
 
         <ConfirmDialog
           open={confirm.value}
