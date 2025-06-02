@@ -3,7 +3,16 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 // @mui
 import Grid from '@mui/material/Unstable_Grid2';
 import Stack from '@mui/material/Stack';
-import { Box, Card, CardActions, CardHeader, CircularProgress, MenuItem, Select, TextField } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardActions,
+  CardHeader,
+  CircularProgress,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -563,14 +572,16 @@ export default function OverviewAnalyticsView() {
               </Button>
             )}
 
-            <LoadingButton
-              loading={loading}
-              variant="contained"
-              startIcon={<Iconify icon="eva:link-2-fill" />}
-              onClick={handleLinkHSSE}
-            >
-              Báo cáo HSSE
-            </LoadingButton>
+            {`${user?.ID_Chucvu}` !== `13` && (
+              <LoadingButton
+                loading={loading}
+                variant="contained"
+                startIcon={<Iconify icon="eva:link-2-fill" />}
+                onClick={handleLinkHSSE}
+              >
+                Báo cáo HSSE
+              </LoadingButton>
+            )}
           </Grid>
         </Grid>
         {user?.ent_chucvu?.Role !== 3 && (
@@ -581,15 +592,18 @@ export default function OverviewAnalyticsView() {
                   title={
                     <Typography sx={{ pb: 1.5, fontWeight: '600', fontSize: 18 }}>
                       Tỉ lệ hoàn thành checklist các ngày
-                    </Typography>}
-
+                    </Typography>
+                  }
                 />
                 <CardActions>
-                  <DataGrid sx={{
-                    backgroundColor: theme.palette.background.paper,
-                  }} rows={dataPercentDays} columns={columns} />
+                  <DataGrid
+                    sx={{
+                      backgroundColor: theme.palette.background.paper,
+                    }}
+                    rows={dataPercentDays}
+                    columns={columns}
+                  />
                 </CardActions>
-
               </Card>
             </Grid>
 
@@ -612,45 +626,47 @@ export default function OverviewAnalyticsView() {
               />
             </Grid>
 
-            {`${user?.ID_Chucvu}` !== `13` && 
-            <Grid xs={12} md={12} lg={12}>
-              <ChecklistsSuCo
-                title="Sự cố checklist "
-                subheader="Số lượng sự cố"
-                chart={{
-                  categories: dataTotalYearSuCo?.categories,
-                  series: dataTotalYearSuCo?.series,
-                }}
-                selectedYear={selectedYearSuCo}
-                selectedKhoiCV={selectedKhoiCVSuCo}
-                selectedTangGiam={selectedTangGiamSuCo}
-                onYearChange={setSelectedYearSuCo}
-                onTangGiamChange={setSelectedTangGiamSuCo}
-                onKhoiChange={setSelectedKhoiCVSuCo}
-                STATUS_OPTIONS={STATUS_OPTIONS}
-                tangGiam={tangGiam}
-              />
-            </Grid>}
+            {`${user?.ID_Chucvu}` !== `13` && (
+              <Grid xs={12} md={12} lg={12}>
+                <ChecklistsSuCo
+                  title="Sự cố checklist "
+                  subheader="Số lượng sự cố"
+                  chart={{
+                    categories: dataTotalYearSuCo?.categories,
+                    series: dataTotalYearSuCo?.series,
+                  }}
+                  selectedYear={selectedYearSuCo}
+                  selectedKhoiCV={selectedKhoiCVSuCo}
+                  selectedTangGiam={selectedTangGiamSuCo}
+                  onYearChange={setSelectedYearSuCo}
+                  onTangGiamChange={setSelectedTangGiamSuCo}
+                  onKhoiChange={setSelectedKhoiCVSuCo}
+                  STATUS_OPTIONS={STATUS_OPTIONS}
+                  tangGiam={tangGiam}
+                />
+              </Grid>
+            )}
 
-            {`${user?.ID_Chucvu}` !== `13` && 
-            <Grid xs={12} md={12} lg={12}>
-              <ChecklistsSuCoNgoai
-                title="Sự cố ngoài checklist "
-                subheader="Số lượng sự cố ngoài"
-                chart={{
-                  categories: dataTotalYearSuCoNgoai?.categories,
-                  series: dataTotalYearSuCoNgoai?.series,
-                }}
-                selectedYear={selectedYearSuCoNgoai}
-                selectedKhoiCV={selectedKhoiCVSuCoNgoai}
-                selectedTangGiam={selectedTangGiamSuCoNgoai}
-                onYearChange={setSelectedYearSuCoNgoai}
-                onTangGiamChange={setSelectedTangGiamSuCoNgoai}
-                onKhoiChange={setSelectedKhoiCVSuCoNgoai}
-                STATUS_OPTIONS={STATUS_OPTIONS}
-                tangGiam={tangGiam}
-              />
-            </Grid>}
+            {`${user?.ID_Chucvu}` !== `13` && (
+              <Grid xs={12} md={12} lg={12}>
+                <ChecklistsSuCoNgoai
+                  title="Sự cố ngoài checklist "
+                  subheader="Số lượng sự cố ngoài"
+                  chart={{
+                    categories: dataTotalYearSuCoNgoai?.categories,
+                    series: dataTotalYearSuCoNgoai?.series,
+                  }}
+                  selectedYear={selectedYearSuCoNgoai}
+                  selectedKhoiCV={selectedKhoiCVSuCoNgoai}
+                  selectedTangGiam={selectedTangGiamSuCoNgoai}
+                  onYearChange={setSelectedYearSuCoNgoai}
+                  onTangGiamChange={setSelectedTangGiamSuCoNgoai}
+                  onKhoiChange={setSelectedKhoiCVSuCoNgoai}
+                  STATUS_OPTIONS={STATUS_OPTIONS}
+                  tangGiam={tangGiam}
+                />
+              </Grid>
+            )}
 
             {dataTotalKhuvuc && (
               <Grid xs={12} md={6} lg={4}>
@@ -704,44 +720,45 @@ export default function OverviewAnalyticsView() {
             </Grid>
 
             {`${user?.ID_Chucvu}` !== `13` && (
-            <Grid xs={12} md={12} lg={12}>
-              {dataTotalErrorWeek && (
-                <BankingRecentTransitions
-                  title="Sự cố ngày hôm trước"
-                  tableData={dataTotalErrorWeek}
-                  handleViewRow={handleClickOpen}
-                  tableLabels={[
-                    { id: 'checklistName', label: 'Tên checklist' },
-                    { id: 'Ngay', label: 'Ngày' },
-                    { id: 'calv', label: 'Ca làm việc' },
-                    { id: 'note', label: 'Ghi chú' },
-                    { id: 'Giamsat', label: 'Giám sát' },
-                    { id: 'image', label: 'Ảnh' },
-                    { id: '' },
-                  ]}
-                />
-              )}
-            </Grid>
+              <Grid xs={12} md={12} lg={12}>
+                {dataTotalErrorWeek && (
+                  <BankingRecentTransitions
+                    title="Sự cố ngày hôm trước"
+                    tableData={dataTotalErrorWeek}
+                    handleViewRow={handleClickOpen}
+                    tableLabels={[
+                      { id: 'checklistName', label: 'Tên checklist' },
+                      { id: 'Ngay', label: 'Ngày' },
+                      { id: 'calv', label: 'Ca làm việc' },
+                      { id: 'note', label: 'Ghi chú' },
+                      { id: 'Giamsat', label: 'Giám sát' },
+                      { id: 'image', label: 'Ảnh' },
+                      { id: '' },
+                    ]}
+                  />
+                )}
+              </Grid>
             )}
 
             {`${user?.ID_Chucvu}` !== `13` && (
-            <Grid xs={12} md={12} lg={12}>
-              {dataTotalErrorWeek && (
-                <ChecklistRecentTransitions
-                  title="Các checklist lỗi"
-                  tableData={dataChecklistsError}
-                  tableLabels={[
-                    { id: 'checklistName', label: 'Tên checklist' },
-                    { label: 'Giá trị định danh', id: 'Giatridinhdanh' },
-                    { label: 'Giá trị nhận', id: 'Giatrinhan' },
-                    { label: 'Tầng', id: 'Tentang' },
-                    { label: 'Số thứ tự', id: 'Sothutu' },
-                    { label: 'Mã số', id: 'Maso' },
-                    { label: 'Hạng mục', id: 'Hangmuc' },
-                  ]}
-                />
-              )}
-            </Grid>)}
+              <Grid xs={12} md={12} lg={12}>
+                {dataTotalErrorWeek && (
+                  <ChecklistRecentTransitions
+                    title="Các checklist lỗi"
+                    tableData={dataChecklistsError}
+                    tableLabels={[
+                      { id: 'checklistName', label: 'Tên checklist' },
+                      { label: 'Giá trị định danh', id: 'Giatridinhdanh' },
+                      { label: 'Giá trị nhận', id: 'Giatrinhan' },
+                      { label: 'Tầng', id: 'Tentang' },
+                      { label: 'Số thứ tự', id: 'Sothutu' },
+                      { label: 'Mã số', id: 'Maso' },
+                      { label: 'Hạng mục', id: 'Hangmuc' },
+                    ]}
+                  />
+                )}
+              </Grid>
+            )}
           </Grid>
         )}
       </Container>
