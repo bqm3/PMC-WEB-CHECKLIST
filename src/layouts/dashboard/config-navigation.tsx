@@ -108,6 +108,7 @@ export function useNavData() {
               },
             ];
           }
+
           if (user?.ent_chucvu?.Role === 4) {
             return [
               {
@@ -125,6 +126,7 @@ export function useNavData() {
       {
         subheader: t('management'),
         items:
+          // eslint-disable-next-line no-nested-ternary
           (user?.ent_chucvu?.Role === 1 || user?.ent_chucvu?.Role === 2 || user?.ID_Duan !== null) && (user?.ID_Chucvu !== 13)
             ? [
               // KHU VUC
@@ -203,7 +205,7 @@ export function useNavData() {
                 ],
               },
             ]
-            : [
+            : (user?.ID_Duan !== null ? [
               {
                 title: t('checklist'),
                 path: paths.dashboard.checklist.root,
@@ -215,7 +217,7 @@ export function useNavData() {
                   { title: t('Ca trong ngày'), path: paths.dashboard.checklist.catrongngay },
                 ],
               },
-            ],
+            ] : [])
       },
 
       {

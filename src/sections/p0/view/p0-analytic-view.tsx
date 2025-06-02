@@ -281,6 +281,9 @@ export default function P0_AnalyticsView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      <Box display="flex" justifyContent="center">
+        <Typography variant="h4">BÁO CÁO S0</Typography>
+      </Box>
       <Grid
         container
         direction="row"
