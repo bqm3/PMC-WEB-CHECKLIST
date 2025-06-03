@@ -27,6 +27,7 @@ type Props = {
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
+  onFilterProjectStatus: (status: string) => void;
   departmentOptions: {
     value: string;
     label: string;
@@ -40,6 +41,7 @@ export default function OrderTableToolbar({
   //
   canReset,
   onResetFilters,
+  onFilterProjectStatus
 }: Props) {
   const popover = usePopover();
 
@@ -59,6 +61,43 @@ export default function OrderTableToolbar({
     },
     [onFilters]
   );
+
+    // Handler cho việc filter dự án đóng
+  const handleFilterClosedProjects = useCallback(() => {
+    onFilterProjectStatus('closed');
+    popover.onClose();
+  }, [onFilterProjectStatus, popover]);
+
+  // Handler cho việc filter dự án không báo cáo
+  const handleFilterNoReportProjects = useCallback(() => {
+    onFilterProjectStatus('no_report');
+    popover.onClose();
+  }, [onFilterProjectStatus, popover]);
+
+  // Handler để hiển thị tất cả dự án
+  const handleShowAllProjects = useCallback(() => {
+    onFilterProjectStatus('all');
+    popover.onClose();
+  }, [onFilterProjectStatus, popover]);
+
+  // Handler để hiển thị dự án hoạt động
+  const handleFilterActiveProjects = useCallback(() => {
+    onFilterProjectStatus('active');
+    popover.onClose();
+  }, [onFilterProjectStatus, popover]);
+
+  // const getProjectStatusText = () => {
+  //   switch (filters.projectStatus) {
+  //     case 'closed':
+  //       return 'Dự án đóng';
+  //     case 'no_report':
+  //       return 'Dự án không báo cáo';
+  //     case 'active':
+  //       return 'Dự án hoạt động';
+  //     default:
+  //       return 'Tất cả dự án';
+  //   }
+  // };
 
   return (
     <>
@@ -145,33 +184,26 @@ export default function OrderTableToolbar({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 200 }}
       >
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+        <MenuItem onClick={handleShowAllProjects}>
+          <Iconify icon="mdi:view-list" />
+          Tất cả dự án
         </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:import-bold" />
-          Import
+        <MenuItem onClick={handleFilterActiveProjects}>
+          <Iconify icon="mdi:check-circle" />
+          Dự án hoạt động
         </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:export-bold" />
-          Export
+        <MenuItem onClick={handleFilterClosedProjects}>
+          <Iconify icon="mdi:folder-lock" />
+          Dự án đóng
+        </MenuItem>
+
+        <MenuItem onClick={handleFilterNoReportProjects}>
+          <Iconify icon="mdi:file-cancel" />
+          Dự án không báo cáo
         </MenuItem>
       </CustomPopover>
     </>

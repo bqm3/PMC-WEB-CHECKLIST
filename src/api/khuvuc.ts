@@ -428,7 +428,7 @@ export function useGetDuanWeb() {
         Authorization: `Bearer ${accessToken}`,
       },
     }).then((res) => res.json());
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetCher);
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetCher);
 
   const memoizedValue = useMemo(
     () => ({
@@ -437,8 +437,9 @@ export function useGetDuanWeb() {
       duanError: error,
       duanValidating: isValidating,
       duanEmpty: !isLoading && !data?.length,
+      reloadDuan: mutate,
     }),
-    [data, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating, mutate ]
   );
 
   return memoizedValue;

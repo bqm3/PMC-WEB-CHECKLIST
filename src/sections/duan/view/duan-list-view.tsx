@@ -66,6 +66,7 @@ const defaultFilters: IChecklistTableFilters = {
   startDate: null,
   endDate: null,
   building: [],
+  projectStatus: 'all',
 };
 
 const STORAGE_KEY = 'accessToken';
@@ -87,7 +88,7 @@ export default function GiamsatListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { duan, duanLoading, duanEmpty } = useGetDuanWeb();
+  const { duan, duanLoading, duanEmpty, reloadDuan } = useGetDuanWeb();
 
   const { chinhanh } = useGetChinhanh();
 
@@ -203,6 +204,13 @@ export default function GiamsatListView() {
     [router]
   );
 
+  const handleFilterProjectStatus = useCallback(
+    (status: string) => {
+      handleFilters('projectStatus', status);
+    },
+    [handleFilters]
+  );
+
   const handleUpdateSuccess = useCallback(async () => {
     try {
       // Dữ liệu gửi lên API đăng nhập
@@ -222,18 +230,13 @@ export default function GiamsatListView() {
 
         localStorage.setItem('accessToken', token); // Lưu token vào sessionStorage
         window.location.reload(); // Reload lại trang
-      } else {
-        enqueueSnackbar({
-          variant: 'error',
-          autoHideDuration: 4000,
-          message: 'Đăng nhập lại không thành công. Vui lòng thử lại!',
-        });
       }
     } catch (error) {
+      console.log(error )
       enqueueSnackbar({
         variant: 'error',
         autoHideDuration: 4000,
-        message: 'Đăng nhập lại không thành công. Vui lòng thử lại!',
+        message: error.response?.data?.message || 'Có lỗi xảy!',
       });
     }
   }, [user, enqueueSnackbar]);
@@ -241,12 +244,16 @@ export default function GiamsatListView() {
   const handleViewRowDuan = useCallback(
     async (id: string) => {
       try {
-        const res = await axios.put(`${process.env.REACT_APP_HOST_API}/ent_user/duan/update/${id}`, [], {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const res = await axios.put(
+          `${process.env.REACT_APP_HOST_API}/ent_user/duan/update/${id}`,
+          [],
+          {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
         // Lưu ID_Duan vào localStorage
         // localStorage.setItem('ID_Duan', id);
@@ -317,13 +324,40 @@ export default function GiamsatListView() {
         });
       }
     }
-  }, [accessToken, enqueueSnackbar, handleUpdateSuccess])
+  }, [accessToken, enqueueSnackbar, handleUpdateSuccess]);
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       handleFilters('status', newValue);
     },
     [handleFilters]
+  );
+
+  const handleOpenClose = useCallback(
+    async (id: string, action: string, type: string) => {
+      try {
+        await axios.put(
+          `${process.env.REACT_APP_HOST_API}/ent_duan/update-action/${id}?action=${action}&type=${type}`,
+          [],
+          {
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        await reloadDuan();
+        enqueueSnackbar('Thành công!');
+      } catch (error) {
+        enqueueSnackbar({
+          variant: 'error',
+          autoHideDuration: 4000,
+          message: error.message || 'Có lỗi xảy ra',
+        });
+      }
+    },
+    [accessToken, enqueueSnackbar, reloadDuan]
   );
 
   return (
@@ -347,11 +381,15 @@ export default function GiamsatListView() {
               mb: { xs: 1, md: 3 },
             }}
           />
-          {
-            user?.ID_Chucvu !== 2 && <Button variant="contained" startIcon={<Iconify icon="eva:refresh-fill" />} onClick={() => handleReload()}>
+          {user?.ID_Chucvu !== 2 && (
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:refresh-fill" />}
+              onClick={() => handleReload()}
+            >
               Tổng quan dự án
             </Button>
-          }
+          )}
         </Stack>
 
         <Card>
@@ -359,6 +397,7 @@ export default function GiamsatListView() {
             filters={filters}
             onFilters={handleFilters}
             departmentOptions={DEPARTMENT_OPTIONS}
+            onFilterProjectStatus={handleFilterProjectStatus}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
@@ -422,6 +461,7 @@ export default function GiamsatListView() {
                         onDeleteRow={() => handleDeleteRow(row.ID_Duan)}
                         onViewRow={() => handleViewRow(row.ID_Duan)}
                         onViewDuAnRow={() => handleViewRowDuan(row.ID_Duan)}
+                        handleOpenClose={handleOpenClose}
                         user={user}
                       />
                     ))}
@@ -508,9 +548,27 @@ function applyFilter({
     );
   }
 
-
   if (building.length) {
     inputData = inputData.filter((item) => building.includes(String(item?.ID_Chinhanh)));
+  }
+
+  if (filters.projectStatus && filters.projectStatus !== 'all') {
+    switch (filters.projectStatus) {
+      case 'closed':
+        // Dự án đóng: isDelete = 2
+        inputData = inputData.filter((item) => item?.isDelete === 2);
+        break;
+      case 'no_report':
+        // Dự án không báo cáo: isBaocao = 1
+        inputData = inputData.filter((item) => item?.isBaoCao === 1);
+        break;
+      case 'active':
+        // Dự án hoạt động: không phải đóng và có báo cáo
+        inputData = inputData.filter((item) => item?.isDelete !== 2 && item?.isBaoCao !== 1);
+        break;
+      default:
+        break;
+    }
   }
 
   return inputData;

@@ -26,7 +26,8 @@ type Props = {
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewDuAnRow: VoidFunction;
-  user: any
+  handleOpenClose: (id: string, action: string, type: string) => void;
+  user: any;
 };
 
 export default function CalvTableRow({
@@ -36,9 +37,10 @@ export default function CalvTableRow({
   onSelectRow,
   onDeleteRow,
   onViewDuAnRow,
-  user
+  handleOpenClose,
+  user,
 }: Props) {
-  const { ID_Duan, Duan, Diachi, ent_chinhanh } = row;
+  const { ID_Duan, Duan, Diachi, ent_chinhanh, isBaoCao, isDelete } = row;
 
   const confirm = useBoolean();
 
@@ -47,8 +49,11 @@ export default function CalvTableRow({
   const popover = usePopover();
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
-
+    <TableRow
+      hover
+      selected={selected}
+      sx={{ backgroundColor: isDelete === 2 ? '#FFF3CD' : 'transparent' }}
+    >
       <TableCell>
         <Box
           onClick={user?.ID_Chucvu === 1 ? onViewRow : onViewDuAnRow}
@@ -80,7 +85,6 @@ export default function CalvTableRow({
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
-
       </TableCell>
     </TableRow>
   );
@@ -138,19 +142,63 @@ export default function CalvTableRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 150 }}
       >
-        {
-          user?.ID_Chucvu === 1 && <MenuItem
-            onClick={() => {
-              onViewRow();
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:eye-bold" />
-            Xem
-          </MenuItem>
-        }
+        {user?.ID_Chucvu === 1 && (
+          <>
+            <MenuItem
+              onClick={() => {
+                onViewRow();
+                popover.onClose();
+              }}
+            >
+              <Iconify icon="solar:eye-bold" />
+              Xem
+            </MenuItem>
+            {isDelete === 0 ? (
+              <MenuItem
+                onClick={() => {
+                  handleOpenClose(ID_Duan, 'close', 'close');
+                  popover.onClose();
+                }}
+              >
+                <Iconify icon="mdi:lock-outline" />
+                Đóng dự án
+              </MenuItem>
+            ) : (
+              <MenuItem
+                onClick={() => {
+                  handleOpenClose(ID_Duan, 'open', 'close');
+                  popover.onClose();
+                }}
+              >
+                <Iconify icon="mdi:lock-open-outline" />
+                Mở dự án
+              </MenuItem>
+            )}
+            {isBaoCao === 0 ? (
+              <MenuItem
+                onClick={() => {
+                  handleOpenClose(ID_Duan, 'no-report', 'baocao');
+                  popover.onClose();
+                }}
+              >
+                <Iconify icon="mdi:file-remove-outline" />
+                Không báo cáo
+              </MenuItem>
+            ) : (
+              <MenuItem
+                onClick={() => {
+                  handleOpenClose(ID_Duan, 'report', 'baocao');
+                  popover.onClose();
+                }}
+              >
+                <Iconify icon="mdi:file-document-edit-outline" />
+                Báo cáo
+              </MenuItem>
+            )}
+          </>
+        )}
 
         <MenuItem
           onClick={() => {
@@ -162,8 +210,8 @@ export default function CalvTableRow({
           Xem dự án
         </MenuItem>
 
-        {
-          user?.ID_Chucvu === 1 && <MenuItem
+        {user?.ID_Chucvu === 1 && (
+          <MenuItem
             onClick={() => {
               confirm.onTrue();
               popover.onClose();
@@ -173,8 +221,7 @@ export default function CalvTableRow({
             <Iconify icon="solar:trash-bin-trash-bold" />
             Xóa
           </MenuItem>
-        }
-
+        )}
       </CustomPopover>
 
       <ConfirmDialog

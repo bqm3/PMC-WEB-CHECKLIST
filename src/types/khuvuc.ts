@@ -23,6 +23,7 @@ export type IChecklistTableFilters = {
   startDate: Date | null;
   endDate: Date | null;
   building: string[];
+  projectStatus?: string,
 };
 
 export type IBaoCaoTableFilterValue = string | null | string[] | Date;
@@ -130,6 +131,8 @@ export type IDuan = {
   ent_loaihinh: ILoaihinh;
   ent_phanloai: IPhanloai;
   ent_duan_khoicv: IDuanKhoiCV[];
+  isBaoCao: number;
+  isDelete: number;
 };
 
 export type IBeboi = {
