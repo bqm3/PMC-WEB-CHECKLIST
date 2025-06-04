@@ -190,11 +190,19 @@ export default function P0_AnalyticsView() {
         getAnalytics3_2(),
         getAnalytics4(),
         getAnalytics7Days(),
-        getAnalytics7()
+        getAnalytics7(),
       ]);
     };
     fetchData();
-  }, [getAnalytics1, getAnalytics2, getAnalytics3_1, getAnalytics3_2, getAnalytics4, getAnalytics7Days, getAnalytics7]);
+  }, [
+    getAnalytics1,
+    getAnalytics2,
+    getAnalytics3_1,
+    getAnalytics3_2,
+    getAnalytics4,
+    getAnalytics7Days,
+    getAnalytics7,
+  ]);
 
   // Check if all data is loaded
   useEffect(() => {
@@ -268,9 +276,17 @@ export default function P0_AnalyticsView() {
   );
 
   // Show global loading indicator while all data is being fetched initially
-  if (isLoading && (!data1 && !data2 && !data3_1 && !data3_2 && !data4 && !data7Days)) {
+  if (isLoading && !data1 && !data2 && !data3_1 && !data3_2 && !data4 && !data7Days) {
     return (
-      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          py: 10,
+        }}
+      >
         <CircularProgress />
         <Typography variant="body2" sx={{ mt: 2 }}>
           Đang tải dữ liệu...
@@ -420,7 +436,12 @@ export default function P0_AnalyticsView() {
                     <Skeleton variant="text" width="20%" height={24} />
                     <Skeleton variant="text" width="30%" height={30} />
                   </Stack>
-                  <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-between">
+                  <Stack
+                    direction="row"
+                    spacing={4}
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
                     <Stack direction="row" spacing={1} alignItems="center">
                       <Skeleton variant="circular" width={10} height={10} />
                       <Skeleton variant="text" width="60%" height={24} />
@@ -450,7 +471,7 @@ export default function P0_AnalyticsView() {
               onClick={handleOpenProjectsNotSentDialog}
             >
               <Typography variant="subtitle1" gutterBottom>
-                Thông tin xe  {" "} {data3_1?.NgayBC || '-'}
+                Thông tin xe {data3_1?.NgayBC || '-'}
               </Typography>
 
               <Box mt={2}>
@@ -489,11 +510,29 @@ export default function P0_AnalyticsView() {
                       Đã gửi:
                     </Typography>
                     <Typography variant="h6" color="success.main">
-                      {(data3_1?.TongSoDuAn || 0) - (data3_1?.SoDuAnKhongNhapXe || 0)} / {data3_1?.TongSoDuAn || 0}
+                      {(data3_1?.TongSoDuAn || 0) - (data3_1?.SoDuAnKhongNhapXe || 0)} /{' '}
+                      {data3_1?.TongSoDuAn || 0}
+                    </Typography>
+                  </Stack>
+
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Box
+                      component="span"
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: '50%',
+                        bgcolor: 'success.main',
+                      }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      Dự án không phải nhập thông tin xe:
+                    </Typography>
+                    <Typography variant="h6" color="success.main">
+                      {(data1?.yesterday?.SoDA || 0) - (data3_1?.TongSoDuAn || 0)}
                     </Typography>
                   </Stack>
                 </Stack>
-
               </Box>
             </Card>
           )}
@@ -510,7 +549,12 @@ export default function P0_AnalyticsView() {
                     <Skeleton variant="text" width="20%" height={24} />
                     <Skeleton variant="text" width="30%" height={30} />
                   </Stack>
-                  <Stack direction="row" spacing={4} alignItems="center" justifyContent="space-between">
+                  <Stack
+                    direction="row"
+                    spacing={4}
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
                     <Stack direction="row" spacing={1} alignItems="center">
                       <Skeleton variant="circular" width={10} height={10} />
                       <Skeleton variant="text" width="60%" height={24} />
@@ -547,7 +591,6 @@ export default function P0_AnalyticsView() {
                 <Typography variant="h4" color="success.main">
                   {data7?.length}
                 </Typography>
-
               </Box>
             </Card>
           )}
@@ -559,7 +602,14 @@ export default function P0_AnalyticsView() {
           {loadingData4 ? (
             <Card sx={{ p: 2, height: '100%' }}>
               <Skeleton variant="text" width="70%" height={30} sx={{ mb: 2 }} />
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 300,
+                }}
+              >
                 <CircularProgress />
               </Box>
             </Card>
@@ -590,7 +640,14 @@ export default function P0_AnalyticsView() {
             <Card sx={{ p: 2, height: '100%' }}>
               <Skeleton variant="text" width="60%" height={30} sx={{ mb: 1 }} />
               <Skeleton variant="text" width="40%" height={20} sx={{ mb: 2 }} />
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 300,
+                }}
+              >
                 <CircularProgress />
               </Box>
             </Card>
@@ -599,7 +656,7 @@ export default function P0_AnalyticsView() {
               title="Tỉ lệ nhập"
               subheader="7 ngày trước"
               chart={{
-                data: data7Days
+                data: data7Days,
               }}
             />
           )}
