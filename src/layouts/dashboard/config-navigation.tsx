@@ -298,6 +298,15 @@ export function useNavData() {
         },
 
         {
+          title: t('phanhe'),
+          path: paths.dashboard.phanhe.root,
+          icon: ICONS.tour,
+          children: [
+            { title: t('Tổng hợp'), path: paths.dashboard.phanhe.admin },
+          ],
+        },
+
+        {
           title: t('baocaovitri'),
           path: paths.dashboard.general.location,
           icon: ICONS.analytics,

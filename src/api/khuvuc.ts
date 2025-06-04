@@ -1524,3 +1524,59 @@ export function useGetUserHistory(id: any){
 
   return memoizedValue;
 }
+
+export function useGetThamSoPhanHeAll() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `${process.env.REACT_APP_HOST_API}/ent_thamsophanhe`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      ThamSophanhe: (data?.data as any[]) || [],
+      ThamSophanheLoading: isLoading,
+      ThamSophanheError: error,
+      ThamSophanheValidating: isValidating,
+      ThamSophanheEmpty: !isLoading && !data?.length,
+      ThamSophanheMutate: mutate
+    }),
+    [data, error, isLoading, isValidating, mutate]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetPhanHeAll() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `${process.env.REACT_APP_HOST_API}/ent_phanhe`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      phanhe: (data?.data as any[]) || [],
+      phanheLoading: isLoading,
+      phanheError: error,
+      phanheValidating: isValidating,
+      phanheEmpty: !isLoading && !data?.length,
+      phanheMutate: mutate
+    }),
+    [data, error, isLoading, isValidating, mutate]
+  );
+
+  return memoizedValue;
+}

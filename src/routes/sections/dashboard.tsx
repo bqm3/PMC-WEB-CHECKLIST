@@ -171,6 +171,10 @@ const HSSEPhanQuyenPage = lazy(() => import('src/pages/dashboard/hsse/phanquyen'
 const HSSENewPage = lazy(() => import('src/pages/dashboard/hsse/new'));
 const HSSEEditPage = lazy(() => import('src/pages/dashboard/hsse/edit'));
 
+
+// Phanhe
+const AdminPhanHeListPage = lazy(() => import('src/pages/dashboard/phanhe/admin'));
+
 // BeBoi
 const BeBoiListsPage = lazy(() => import('src/pages/dashboard/beboi/list'));
 const AdminBeBoiListPage = lazy(() => import('src/pages/dashboard/beboi/admin'));
@@ -410,6 +414,12 @@ export const dashboardRoutes = [
           { path: 'phanquyen', element: <HSSEPhanQuyenPage /> },
           { path: ':id/edit', element: <HSSEEditPage /> },
           { path: 'new', element: <HSSENewPage /> },
+        ],
+      },
+      {
+        path: 'phanhe',
+        children: [
+          { path: 'admin', element: <AdminPhanHeListPage /> },
         ],
       },
       {
