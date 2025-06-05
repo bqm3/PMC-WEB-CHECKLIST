@@ -176,7 +176,7 @@ export default function AreaTableRow({
         </MenuItem>
         {`${user?.ID_Chucvu}` !== `13` && (
           <>
-            {Tinhtrang === '1' && (
+            {`${Tinhtrang}` === '1' && (
               <MenuItem
                 onClick={() => {
                   confirm.onTrue();
