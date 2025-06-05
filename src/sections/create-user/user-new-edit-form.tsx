@@ -181,6 +181,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
     const newData = {
       ...data,
+      ID_Duan: selectedProject?.ID_Duan || "",
       arr_Duan: selectedIds,
       arr_Khoi: khoiString,
       oldUserName,
