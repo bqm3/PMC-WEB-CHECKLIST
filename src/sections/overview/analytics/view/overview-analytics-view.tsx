@@ -49,6 +49,7 @@ import ChecklistRecentTransitions from '../checklist-recent-transitions';
 import ChecklistsHoanThanh from '../checklist-hoan-thanh';
 import ChecklistsSuCo from '../checklist-su-co';
 import ChecklistsSuCoNgoai from '../checklist-su-co-ngoai';
+import CustomerRequestDialog from '../yeucau_khachhang/yeucau-khachhang';
 
 // ==========================================================
 
@@ -146,6 +147,8 @@ export default function OverviewAnalyticsView() {
   const accessToken = localStorage.getItem(STORAGE_KEY);
 
   const upload = useBoolean();
+
+  const [isOpenYC, setIsOpenYC] = useState(false);
 
   const [loading, setLoading] = useState<Boolean | any>(false);
   const [dataPercentDays, setDataPercentDays] = useState<any>([]);
@@ -567,6 +570,11 @@ export default function OverviewAnalyticsView() {
             }}
           >
             {`${user?.ent_chucvu?.Role}` !== '3' && (
+              <Button variant="contained" color="info" onClick={() => setIsOpenYC(true)}>
+                Yêu cầu
+              </Button>
+            )}
+            {`${user?.ent_chucvu?.Role}` !== '3' && (
               <Button variant="contained" color="info" onClick={handleOpenChecklistReport}>
                 Báo cáo checklist
               </Button>
@@ -858,6 +866,9 @@ export default function OverviewAnalyticsView() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <CustomerRequestDialog isOpen = {isOpenYC} setIsOpen = {setIsOpenYC}
+      />
     </>
   );
 }

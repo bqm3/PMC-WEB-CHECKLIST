@@ -1580,3 +1580,32 @@ export function useGetPhanHeAll() {
 
   return memoizedValue;
 }
+
+
+export function useGetYeuCauKH() {
+  const accessToken = localStorage.getItem(STORAGE_KEY);
+  const URL = `${process.env.REACT_APP_HOST_API}/yeucau-kh`;
+  const fetCher = (url: string) =>
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((res) => res.json());
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetCher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      yeucau: (data?.data as any[]) || [],
+      yeucauLoading: isLoading,
+      yeucauError: error,
+      yeucauValidating: isValidating,
+      yeucauEmpty: !isLoading && !data?.length,
+      yeucauMutate: mutate
+    }),
+    [data, error, isLoading, isValidating, mutate]
+  );
+
+  return memoizedValue;
+}
