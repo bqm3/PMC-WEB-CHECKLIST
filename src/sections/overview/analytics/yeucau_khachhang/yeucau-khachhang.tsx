@@ -226,13 +226,13 @@ export default function CustomerRequestDialog({ isOpen, setIsOpen }: CustomerReq
     [yeucauMutate, enqueueSnackbar]
   );
 
-  const deleteRequest = useCallback(
-    async (id: number, MoTaCongViec: string) => {
+  const actionRequest = useCallback(
+    async (id: number, MoTaCongViec: string, TrangThai: number) => {
       setLoadingDelete(true);
       try {
         const formData = {
           MoTaCongViec,
-          TrangThai: 3,
+          TrangThai,
           images: []
         } as unknown as FeedbackFormData
 
@@ -266,11 +266,11 @@ export default function CustomerRequestDialog({ isOpen, setIsOpen }: CustomerReq
     setIsFormOpen(true);
   }, []);
 
-  const handleDelete = useCallback(
-    async (id: number, MoTaCongViec: string) => {
-      await deleteRequest(id, MoTaCongViec);
+  const handleAction = useCallback(
+    async (id: number, MoTaCongViec: string, Trangthai: number) => {
+      await actionRequest(id, MoTaCongViec, Trangthai);
     },
-    [deleteRequest]
+    [actionRequest]
   );
 
   const handleFiltersChange = useCallback((newFilters: IChecklistTableFilters) => {
@@ -306,6 +306,7 @@ export default function CustomerRequestDialog({ isOpen, setIsOpen }: CustomerReq
         phanhe={phanhe}
         onSubmit={handleFormSubmit}
         loading={loadingCreate || loadingUpdate}
+        user={user}
       />
     ),
     [
@@ -316,6 +317,7 @@ export default function CustomerRequestDialog({ isOpen, setIsOpen }: CustomerReq
       handleFormSubmit,
       loadingCreate,
       loadingUpdate,
+      user
     ]
   );
 
@@ -461,7 +463,7 @@ export default function CustomerRequestDialog({ isOpen, setIsOpen }: CustomerReq
                             selected={table.selected.includes(`${row.ID_YeuCau}`)}
                             onViewRow={() => handleViewRow(`${row.ID_YeuCau}`)}
                             onEditRow={() => handleEdit(row)}
-                            onDeleteRow={handleDelete}
+                            onActionRow={handleAction}
                             user={user}
                           />
                         ))}

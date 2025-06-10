@@ -63,6 +63,7 @@ interface CreateFormDialogProps {
   phanhe: any[];
   onSubmit: (formData: FormData, isEdit: boolean, requestId?: number) => Promise<boolean>;
   loading: boolean;
+  user: any
 }
 
 const INITIAL_FORM_DATA: FormData = {
@@ -325,6 +326,7 @@ export default function CreateFormDialog({
   phanhe,
   onSubmit,
   loading,
+  user
 }: CreateFormDialogProps) {
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -416,11 +418,14 @@ export default function CreateFormDialog({
           images: editingRequest.images || [],
         });
       } else {
-        setFormData(INITIAL_FORM_DATA);
+        setFormData({
+          ...INITIAL_FORM_DATA,
+          TenKhachHang: user?.Hoten || '',
+        });
       }
       setFormErrors({});
     }
-  }, [isOpen, editingRequest]);
+  }, [isOpen, editingRequest, user]);
 
   return (
     <Dialog open={isOpen} onClose={handleClose} maxWidth="md" fullWidth>

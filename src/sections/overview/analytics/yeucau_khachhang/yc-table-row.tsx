@@ -5,7 +5,14 @@ import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
+} from '@mui/material';
 import Chip from '@mui/material/Chip';
 
 // hooks
@@ -25,9 +32,11 @@ import moment from 'moment';
 // Trạng thái mapping
 const TRANG_THAI_MAP = {
   0: { label: 'Chờ xử lý', color: 'warning' as const },
-  1: { label: 'Đang xử lý', color: 'info' as const },
-  2: { label: 'Hoàn thành', color: 'success' as const },
-  3: { label: 'Hủy', color: 'error' as const },
+  1: { label: 'Xác nhận thông tin', color: 'info' as const },
+  2: { label: 'Đang xử lý', color: 'info' as const },
+  3: { label: 'Hoàn thành', color: 'success' as const },
+  4: { label: 'Hủy', color: 'error' as const },
+  5: { label: 'Chưa hoàn thành', color: 'error' as const },
 } as const;
 
 type Props = {
@@ -35,7 +44,7 @@ type Props = {
   selected: boolean;
   onViewRow: VoidFunction;
   onEditRow?: VoidFunction;
-onDeleteRow?: (id: number, MoTaCongViec: string) => void;
+  onActionRow?: (id: number, MoTaCongViec: string, TrangThai: number) => void;
   user?: any;
 };
 
@@ -44,7 +53,7 @@ export default function YCTableRow({
   selected,
   onViewRow,
   onEditRow,
-  onDeleteRow,
+  onActionRow,
   user,
 }: Props) {
   const { ID_YeuCau, TenKhachHang, Tenyeucau, NoiDung, TrangThai, createdAt, ent_duan } = row;
@@ -52,15 +61,24 @@ export default function YCTableRow({
   const popover = usePopover();
   const confirm = useBoolean();
   const [cancelReason, setCancelReason] = useState('');
+  const [action, setAction] = useState<number>();
 
-  const handleDelete = () => {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const handleOpenDialog = (act: number) => {
+    setAction(act);
     confirm.onTrue();
     popover.onClose();
   };
 
-  const handleConfirmDelete = () => {
-    onDeleteRow?.(ID_YeuCau, cancelReason);
+  const handleCloseDialog = () => {
     confirm.onFalse();
+    setCancelReason('');
+  };
+
+  const handleConfirm = (trangThai: number) => {
+    onActionRow?.(ID_YeuCau, cancelReason, trangThai);
+    confirm.onFalse();
+    setCancelReason('');
   };
 
   const truncateText = (text: string, maxLength: number = 50) => {
@@ -122,6 +140,13 @@ export default function YCTableRow({
           Xem chi tiết
         </MenuItem>
 
+        {TrangThai === 3 && (
+          <MenuItem onClick={() => handleOpenDialog(2)} sx={{ color: 'error.main' }}>
+            <Iconify icon="solar:info-circle-bold" />
+            Chưa hoàn thành
+          </MenuItem>
+        )}
+
         {[0, 1, 4, 5, 10].includes(user?.ent_chucvu?.Role) && (
           <>
             {/* {onEditRow && (
@@ -136,24 +161,29 @@ export default function YCTableRow({
               </MenuItem>
             )} */}
 
-            {onDeleteRow && (
-              <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-                <Iconify icon="solar:trash-bin-trash-bold" />
-                Hủy
+            {TrangThai === 0 && (
+              <MenuItem onClick={() => handleConfirm(1)} sx={{ color: 'info.main' }}>
+                <Iconify icon="eva:checkmark-circle-2-fill" />
+                Xác nhận
               </MenuItem>
             )}
+
+            <MenuItem onClick={() => handleOpenDialog(1)} sx={{ color: 'error.main' }}>
+              <Iconify icon="solar:trash-bin-trash-bold" />
+              Hủy
+            </MenuItem>
           </>
         )}
       </CustomPopover>
 
-      <Dialog open={confirm.value} onClose={confirm.onFalse}>
-        <DialogTitle>Hủy yêu cầu</DialogTitle>
+      <Dialog open={confirm.value} onClose={handleCloseDialog} fullWidth maxWidth="md">
+        <DialogTitle>{action === 1 ? 'Hủy yêu cầu' : 'Chưa hoàn thành'}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Vui lòng nhập lý do hủy yêu cầu này:</DialogContentText>
+          <DialogContentText>Vui lòng nhập lý do :</DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label="Lý do hủy"
+            label="Lý do"
             fullWidth
             multiline
             rows={3}
@@ -162,17 +192,17 @@ export default function YCTableRow({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={confirm.onFalse}>Hủy</Button>
+          <Button onClick={handleCloseDialog}>Hủy</Button>
           <Button
             onClick={() => {
-              handleConfirmDelete();
-              setCancelReason('');
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              action === 1 ? handleConfirm(4) : handleConfirm(5);
             }}
             color="error"
             variant="contained"
             disabled={!cancelReason.trim()}
           >
-            Xác nhận hủy
+            Xác nhận
           </Button>
         </DialogActions>
       </Dialog>

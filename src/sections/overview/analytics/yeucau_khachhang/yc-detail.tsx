@@ -58,16 +58,20 @@ interface DetailDialogProps {
 // Constants
 const TRANG_THAI_MAP = {
   0: { label: 'Chờ xử lý', color: 'warning' as const },
-  1: { label: 'Đang xử lý', color: 'info' as const },
-  2: { label: 'Hoàn thành', color: 'success' as const },
-  3: { label: 'Hủy', color: 'error' as const },
+  1: { label: 'Xác nhận thông tin', color: 'info' as const },
+  2: { label: 'Đang xử lý', color: 'info' as const },
+  3: { label: 'Hoàn thành', color: 'success' as const },
+  4: { label: 'Hủy', color: 'error' as const },
+  5: { label: 'Chưa hoàn thành', color: 'error' as const },
 } as const;
 
 const STATUS_OPTIONS = [
   { value: '0', label: 'Chờ xử lý' },
-  { value: '1', label: 'Đang xử lý' },
-  { value: '2', label: 'Hoàn thành' },
-  { value: '3', label: 'Hủy' },
+  { value: '1', label: 'Xác nhận thông tin' },
+  { value: '2', label: 'Đang xử lý' },
+  { value: '3', label: 'Hoàn thành' },
+  { value: '4', label: 'Hủy' },
+  { value: '5', label: 'Chưa hoàn thành' },
 ] as const;
 
 const MAX_IMAGES = 3;
@@ -471,10 +475,12 @@ const FeedbackItem = React.memo(
     feedback,
     onDelete,
     deleting,
+    isCheckRole,
   }: {
     feedback: any;
     onDelete: (id: number) => void;
     deleting: boolean;
+    isCheckRole: any;
   }) => {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -503,25 +509,27 @@ const FeedbackItem = React.memo(
             }}
           >
             {/* Delete Button */}
-            <Tooltip title="Xóa phản hồi" placement="top">
-              <IconButton
-                size="small"
-                sx={{
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                  color: 'error.main',
-                  backgroundColor: 'rgba(211, 47, 47, 0.04)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(211, 47, 47, 0.12)',
-                  },
-                }}
-                onClick={handleDeleteClick}
-                disabled={deleting}
-              >
-                {deleting ? <CircularProgress size={16} color="error" /> : <Trash2 size={16} />}
-              </IconButton>
-            </Tooltip>
+            {isCheckRole && (
+              <Tooltip title="Xóa phản hồi" placement="top">
+                <IconButton
+                  size="small"
+                  sx={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    color: 'error.main',
+                    backgroundColor: 'rgba(211, 47, 47, 0.04)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(211, 47, 47, 0.12)',
+                    },
+                  }}
+                  onClick={handleDeleteClick}
+                  disabled={deleting}
+                >
+                  {deleting ? <CircularProgress size={16} color="error" /> : <Trash2 size={16} />}
+                </IconButton>
+              </Tooltip>
+            )}
 
             <Box sx={{ mb: 2, pr: 5 }}>
               {' '}
@@ -595,10 +603,12 @@ const FeedbackList = React.memo(
     feedbacks,
     onDeleteFeedback,
     deletingFeedbacks,
+    isCheckRole,
   }: {
     feedbacks: any[];
     onDeleteFeedback: (id: number) => void;
     deletingFeedbacks: Set<number>;
+    isCheckRole: any;
   }) => {
     if (!feedbacks?.length) {
       return (
@@ -616,6 +626,7 @@ const FeedbackList = React.memo(
             feedback={feedback}
             onDelete={onDeleteFeedback}
             deleting={deletingFeedbacks.has(feedback.ID_XuLy)}
+            isCheckRole={isCheckRole}
           />
         ))}
       </Box>
@@ -629,7 +640,7 @@ export default function DetailDialog({
   onClose,
   requestId,
   user,
-  mutate
+  mutate,
 }: DetailDialogProps) {
   const { enqueueSnackbar } = useSnackbar();
   const [request, setRequest] = useState<any>(null);
@@ -740,11 +751,9 @@ export default function DetailDialog({
         setFormData({ MoTaCongViec: '', TrangThai: '0', images: [] });
         setFormErrors({});
       }
-
     } catch (err) {
       enqueueSnackbar('Không thể gửi phản hồi. Vui lòng thử lại.', { variant: 'error' });
       console.error('Error sending feedback:', err);
-
     } finally {
       mutate();
       setLoadingFeedback(false);
@@ -879,12 +888,13 @@ export default function DetailDialog({
                     feedbacks={request.lb_xuly}
                     onDeleteFeedback={handleDeleteFeedback}
                     deletingFeedbacks={deletingFeedbacks}
+                    isCheckRole={isCheckRole}
                   />
                 </Grid>
               </InfoSection>
 
               {/* New Feedback Form */}
-              {(isCheckRole && `${request.TrangThai}` !== `3`) && (
+              {isCheckRole && `${request.TrangThai}` !== `3` && (
                 <InfoSection title="Thêm phản hồi mới">
                   <Grid item xs={12}>
                     <FormControl fullWidth error={!!formErrors.TrangThai}>
@@ -941,7 +951,7 @@ export default function DetailDialog({
         <Button onClick={handleClose} color="inherit">
           Đóng
         </Button>
-        {(isCheckRole && `${request.TrangThai}` !== `3`) && (
+        {isCheckRole && `${request.TrangThai}` !== `3` && (
           <Button
             onClick={handleSubmit}
             variant="contained"
