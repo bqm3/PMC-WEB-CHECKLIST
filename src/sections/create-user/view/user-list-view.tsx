@@ -447,7 +447,7 @@ function applyFilter({
   }
 
   if (status !== 'all') {
-    inputData = inputData?.filter((order) => `${order?.ID_Chucvu}` === status);
+    inputData = inputData?.filter((order) => `${order?.ent_chucvu?.Role}` === status);
   }
 
   return inputData;

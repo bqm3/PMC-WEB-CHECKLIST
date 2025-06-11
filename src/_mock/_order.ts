@@ -27,9 +27,9 @@ export const KHUVUC_STATUS_OPTIONS = [
 ];
 
 export const PERMISSION_STATUS_OPTIONS = [
-  { value: '2', label: 'Giám đốc dự án' },
-  { value: '3', label: 'Kỹ sư trưởng' },
-  { value: '4', label: 'Giám sát' },
+  { value: '1', label: 'Giám đốc dự án' },
+  { value: '2', label: 'Kỹ sư trưởng' },
+  { value: '3', label: 'Giám sát' },
 ];
 
 export const ROLE_STATUS_OPTIONS = [
